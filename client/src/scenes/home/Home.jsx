@@ -21,7 +21,7 @@ const Home = () => {
         <HomeCarousel content={recommended_programmes}/>
 
         <Box display="flex" justifyContent="space-around" width="100%" height="100%">
-            <Box width="45%" height="100%" display="flex" flexDirection="column" alignItems="center" > {/* ----------some spacing issue harcoded with a <br/>*/}
+            <Box width="45%" height="100%" display="flex" flexDirection="column" alignItems="center" > 
                 {/* announcements */}
                 <Section header="Announcement" rows={announcements} rowColor="#AEAEFF" highlight={true}></Section>
                 {/* tasks */}
