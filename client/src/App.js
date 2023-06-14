@@ -3,11 +3,11 @@ import { CssBaseline, Box, ThemeProvider } from "@mui/material";
 import { theme } from "./theme"
 
 
-import Home from "./scenes/home/Home"
-import Explore from "./scenes/explore/Explore";
 import SideNavbar from "./global/SideNavbar";
 import Topbar from "./global/Topbar";
-
+import Home from "./scenes/home/Home"
+import Explore from "./scenes/explore/Explore";
+import Profile from "./scenes/profile/Profile";
 
 
 function App() {
@@ -19,10 +19,11 @@ function App() {
         <div className="app">
             <SideNavbar enrolled={programmes_enrolled}></SideNavbar>
             <main className="content">
-                <Topbar></Topbar>
+                <Topbar acctInfo={acctInfo}></Topbar>
                 <Routes>
                     <Route path="/" element={<Home/>}></Route>
                     <Route path="/explore" element={<Explore programmes={Programmes_available}/>}></Route>
+                    <Route path="/profile" element={<Profile peerReviews={peerReviews} history={history} acctInfo={acctInfo}/>}></Route>
                 </Routes>
             </main>
         </div>
@@ -32,6 +33,12 @@ function App() {
 }
 
 export default App;
+
+const acctInfo = {
+    acctId : 1,
+    name : "NEO SHYH RUEY",
+    email : "srneo.2022@scis.smu.edu.sg"
+}
 
 const programmes_enrolled = {
     programID1 : {
@@ -96,5 +103,61 @@ const Programmes_available = {
         media : "../../images/home/mentorship_3.jpg",
         criteria : {1 : "criteria 3", 2 : "criteria 4"},
         link : "https://youtu.be/dQw4w9WgXcQ",
+    }
+}
+
+
+const peerReviews = {
+    reviewID1 : {
+        RID : 1,
+        programmeName : "Heap-2023",
+        reviewer : "Leonard",
+        reviewerRole : "Mentor",
+        date : "12/2/2023",
+        rating : "3.7/5",
+        comments : "comment 1"
+    },
+    reviewID2 : {
+        RID : 2,
+        programmeName : "Heap-2023",
+        reviewer : "Leonard",
+        reviewerRole : "Mentee",
+        date : "12/2/2023",
+        rating : "3.7/5",
+        comments : "comment 2"
+    },
+    reviewID3 : {
+        RID : 3,
+        programmeName : "Heap-2023",
+        reviewer : "Leonard",
+        reviewerRole : "Mentor",
+        date : "12/2/2023",
+        rating : "3.7/5",
+        comments : "comment 3"
+    },
+}
+
+
+const history = {
+    historyID1 : {
+        HID : 1,
+        role : "mentor",
+        startDate : "19/2/2022",
+        completionDate : "20/2/2023",
+        programmeName : "Heap2023"
+    },
+    historyID2 : {
+        HID : 2,
+        role : "mentor",
+        startDate : "19/2/2022",
+        completionDate : "20/2/2023",
+        programmeName : "Heap2024"
+    },
+    historyID3 : {
+        HID : 3,
+        role : "mentee",
+        startDate : "19/2/2022",
+        completionDate : "20/2/2023",
+        programmeName : "Heap2025"
     }
 }

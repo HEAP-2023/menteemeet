@@ -17,8 +17,11 @@ const ProfileOverlayTab = ({acctInfo}) => {
     display="flex" flexDirection="column" alignItems="center"
     p="10px" zIndex="2" justifyContent="space-evenly">
 
-        <AccountCircleOutlinedIcon fontSize="large" sx={{transform : "scale(2)"}}/>
+        <IconButton component={Link}  to={"/profile"}>
+            <AccountCircleOutlinedIcon fontSize="large" sx={{transform : "scale(2)"}}/>
+        </IconButton>
         <SectionHeader text={name} margin="10px"/>
+        
         <Typography sx={{width:"130px", overflowWrap:"break-word"}}>{email}</Typography>
 
         <Box display="flex" flexDirection="column" >
@@ -28,12 +31,16 @@ const ProfileOverlayTab = ({acctInfo}) => {
                     Account Settings
                 </Typography>
             </Box>
+
+
             <Box display="flex">
                 <ChangeCircleOutlinedIcon/>
                 <Typography>
                     Switch view
                 </Typography>
             </Box>
+
+
             <Box display="flex">
                 <LogoutOutlinedIcon/>
                 <Typography>
