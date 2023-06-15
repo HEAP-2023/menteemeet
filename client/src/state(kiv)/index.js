@@ -76,7 +76,7 @@ export const userSlice = createSlice({
         removeCreated : (state, action) => {
             state.programmesCreated = state.programmesCreated.filter(p => p.id !== action.payload.programme.id)
         },
-        adddTasks : (state, action) => {
+        addTasks : (state, action) => {
             state.tasks = [...state.tasks, action.payload.task]
         },
         removeTask : (state, action) => {
