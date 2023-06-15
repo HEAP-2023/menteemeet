@@ -1,4 +1,4 @@
-import { Box, Typography } from "@mui/material"
+import { Typography } from "@mui/material"
 
 const SectionHeader = ({text, margin="25px 30px"}) => {
     return (            

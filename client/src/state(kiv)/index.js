@@ -1,5 +1,41 @@
 import {createSlice} from '@reduxjs/toolkit'
 
+const fetchUserType = () => {
+    // go fetch 
+    return "mentee";
+}
+const fetchAllProfiles = () => {
+    // go fetch
+    return {
+        mentor : true,
+        mentee : true,
+    }
+}
+const fetchProgrammesEnrolled = () => {
+        // go fetch
+    return ([
+
+    ]);
+}
+const fetchProgrammesCreated = () => {
+     // go fetch
+     return ([
+
+     ]);
+}
+
+const fetchTasks = () => {
+    // go fetch
+    return ([
+
+    ]);
+}
+
+const fetchDetails = () => {
+     return ({
+        lastName : "Neo"
+     })
+}
 
 
 const initialState = {
@@ -9,6 +45,7 @@ const initialState = {
     programmesEnrolled : fetchProgrammesEnrolled(),
     programmesCreated : fetchProgrammesCreated(),
     tasks : fetchTasks(),
+    userDetails : fetchDetails(),
 }
 
 
@@ -49,38 +86,8 @@ export const userSlice = createSlice({
 })
 
 
-export const { logIn, logOut, swap,addCreated, removeCreated, addTasks, removeTask} = userSlice.actions;
+export const { overlayToggle, logIn, logOut, swap,addCreated, removeCreated, addTasks, removeTask} = userSlice.actions;
 export default userSlice.reducer
 
 
 
-const fetchUserType = () => {
-    // go fetch 
-    return "mentee";
-}
-const fetchAllProfiles = () => {
-    // go fetch
-    return {
-        mentor : true,
-        mentee : true,
-    }
-}
-const fetchProgrammesEnrolled = () => {
-        // go fetch
-    return ([
-
-    ]);
-}
-const fetchProgrammesCreated = () => {
-     // go fetch
-     return ([
-
-     ]);
-}
-
-const fetchTasks = () => {
-    // go fetch
-    return ([
-
-    ]);
-}

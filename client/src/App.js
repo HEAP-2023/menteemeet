@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom"
-import { CssBaseline, Box, ThemeProvider } from "@mui/material";
+import { CssBaseline, ThemeProvider } from "@mui/material";
 import { theme } from "./theme"
 
 
@@ -8,6 +8,7 @@ import Topbar from "./global/Topbar";
 import Home from "./scenes/home/Home"
 import Explore from "./scenes/explore/Explore";
 import Profile from "./scenes/profile/Profile";
+import Programme from "./scenes/programme/Programme";
 
 
 function App() {
@@ -24,6 +25,7 @@ function App() {
                     <Route path="/" element={<Home/>}></Route>
                     <Route path="/explore" element={<Explore programmes={Programmes_available}/>}></Route>
                     <Route path="/profile" element={<Profile peerReviews={peerReviews} history={history} acctInfo={acctInfo}/>}></Route>
+                    <Route path="/programmes/:id" element={<Programme />}></Route>
                 </Routes>
             </main>
         </div>
@@ -45,19 +47,16 @@ const programmes_enrolled = {
         id : 1,
         name : "program_1",
         img : "../../images/home/mentorship_1.jpg",
-        link : "/mentorshipPrograms/enrolled/1",
     },
     programID2 : {
         id : 2,
         name : "program_2",
         img : "../../images/home/mentorship_2.png",
-        link : "/mentorshipPrograms/enrolled/2",
     },
     programID3 : {
         id : 3,
         name : "program_3",
         img : "../../images/home/mentorship_3.jpg",
-        link : "/mentorshipPrograms/enrolled/3",
     },
 }
 

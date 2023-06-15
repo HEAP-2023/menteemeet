@@ -1,20 +1,23 @@
-import { Box, Typography } from "@mui/material"
+import { Box } from "@mui/material"
 import { generateColors } from "../../theme"
 import PageHeader from "../../components/PageHeader"
 import SectionHeader from "../../components/SectionHeader"
 import Section from "../../components/home/Section"
 import HomeCarousel from "../../components/home/HomeCarousel"
 
+// redux
+import { useSelector, useDispatch } from "react-redux"
 
 
 
 const Home = () => {
     const colors = generateColors();
-    
+    const userType = useSelector((state) => state.user.userType)
+    const lastName = useSelector((state) => state.user.userDetails.lastName)
 
     return (
     <Box width="100%" height="100%" display="flex" flexDirection="column">
-        <PageHeader text={`Welcome, ${username}`}/>
+        <PageHeader text={`Welcome, ${lastName}`}/>
         
         {/* carousel */}
         <SectionHeader text={"Featured Events"}/>
@@ -51,7 +54,7 @@ export default Home
 
 
 // hardcoded content to be fetched maybe tanstack query aka react query
-const username = "Neo"
+
 const announcements = {
     announcement_1 : {
         title : "announcement header1",

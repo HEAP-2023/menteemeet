@@ -64,7 +64,7 @@ const themeSetting = () => {
                 contrastText : colors.text[500],
             },
             secondary : {
-                main : colors.bg[500],
+                main : "#AEAEFF",
                 contrastText : colors.text[500],
             },
             background : {

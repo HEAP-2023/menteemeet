@@ -2,20 +2,20 @@ import React, { useReducer } from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
-// import { Provider } from "react-redux"
-// import { configureStore } from '@reduxjs/toolkit';
-// import cartReducer from "./state(kiv)"
+import { Provider } from "react-redux"
+import { configureStore } from '@reduxjs/toolkit';
+import userReducer from "./state(kiv)"
 
 
-// const store = configureStore({
-//     reducer : { user : useReducer}
-// })
+const store = configureStore({
+    reducer : { user : userReducer}
+})
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    {/* <Provider store={store}> */}
+    <Provider store={store}>
         <App />
-    {/* </Provider> */}
+    </Provider>
   </React.StrictMode>
 );

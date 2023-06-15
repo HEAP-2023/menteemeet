@@ -5,10 +5,12 @@ import { Sidebar, Menu, MenuItem, SubMenu } from "react-pro-sidebar";
 import { Box, IconButton, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
 import { generateColors } from "../theme";
-
+import { useSelector } from "react-redux";
 
 const SideNavbar = ({enrolled}) => {
     const colors = generateColors();
+    const userType = useSelector((state) => state.user.userType);
+
 
     return (
         <Box width="20%" bgcolor="primary.main">
@@ -42,17 +44,23 @@ const SideNavbar = ({enrolled}) => {
                     },
                   }}>
                     <MenuItem component={<Link to="/" />}> Home </MenuItem>
-                    <MenuItem component={<Link to="/explore" />}> Explore </MenuItem>
+
+                    {
+                        userType === "organiser" ? 
+                        <MenuItem component={<Link to="/newProgramme/create" />}> Create Programme </MenuItem>
+                        :
+                        <MenuItem component={<Link to="/explore" />}> Explore </MenuItem>
+                    }
+                    
                     <MenuItem component={<Link to="/calendar" />}> Calendar </MenuItem>
-                    <SubMenu label="My Programmes" 
+                    <SubMenu label={userType==="organiser" ? "Programmes" : "My Programmes"} 
                     rootStyles={{
                         [`& .ps-submenu-content`]: {
                             width : "80%"
                         },
                     }}>
-                        {Object.entries(enrolled).map(([key, {id, name, img, link}]) => {
-                            console.log(id)
-                            return (<MenuItem component={<Link to={link} />} key={id} >
+                        {Object.entries(enrolled).map(([key, {id, name, img}]) => {
+                            return (<MenuItem component={<Link to={`programmes/${id}`} />} key={id} >
                                 {name}
                             </MenuItem>);
                         })}

@@ -1,11 +1,9 @@
 // https://www.npmjs.com/package/react-material-ui-carousel
 
-import { Box, IconButton, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
-import { generateColors } from "../../theme";
 import Carousel from 'react-material-ui-carousel'
 import { Card, Button, CardMedia, Grid } from '@mui/material'
-import { useState } from "react";
 import { splitObjIntoArrSize } from "../../functions";
 
 

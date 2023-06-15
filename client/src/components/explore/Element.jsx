@@ -7,23 +7,23 @@ const Element = ({details}) => {
 
 
     const {
-        PID, 
+        // PID, 
         name,  
         description,
-        category,
-        capacity, 
-        startDate,
-        endDate, 
-        applicationDeadline,
+        // category,
+        // capacity, 
+        // startDate,
+        // endDate, 
+        // applicationDeadline,
         media, 
-        criteria,
-        link, 
+        // criteria,
+        // link, 
     } = details
 
     return (<Box display="flex" p="20px" >
         {/* image */}
         <Box width="30%" height="300px">
-            <img src={media} style={{width:"100%", height:"100%", objectFit:"contain"}}/>
+            <img src={media} alt="no img" style={{width:"100%", height:"100%", objectFit:"contain"}}/>
         </Box>
 
 

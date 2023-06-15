@@ -1,15 +1,29 @@
 import { Box, IconButton, Typography, Button } from "@mui/material";
 import { generateColors } from "../../theme";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+
+
+// icons
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 import ManageAccountsOutlinedIcon from '@mui/icons-material/ManageAccountsOutlined';
 import ChangeCircleOutlinedIcon from '@mui/icons-material/ChangeCircleOutlined';
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
 import SectionHeader from "../SectionHeader";
 
+
+
+// redux imports
+import { useDispatch, useSelector } from "react-redux";
+import { swap, overlayToggle } from "../../state(kiv)";
+
+
+
 // need rmb state using redux mentee / mentor
 
 const ProfileOverlayTab = ({acctInfo}) => {
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+
     const {id, name, email} = acctInfo;
     return (<Box width="10%" height="300px" 
     borderRadius="20px" position="absolute" 
@@ -33,9 +47,16 @@ const ProfileOverlayTab = ({acctInfo}) => {
             </Box>
 
 
-            <Box display="flex">
+            <Box display="flex" onClick={() => {
+                // basically close the overlay and go home
+                dispatch(overlayToggle())
+                dispatch(swap());
+                navigate("/");
+                }}>
+
+                    
                 <ChangeCircleOutlinedIcon/>
-                <Typography>
+                <Typography sx={{textDecoration:"underline"}}>
                     Switch view
                 </Typography>
             </Box>
