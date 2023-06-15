@@ -27,7 +27,7 @@ const ProfileOverlayTab = ({acctInfo}) => {
     const {id, name, email} = acctInfo;
     return (<Box width="10%" height="300px" 
     borderRadius="20px" position="absolute" 
-    top="5%" left="89%" bgcolor="primary.main"
+    top="105%" left="89.5%" bgcolor="primary.main"
     display="flex" flexDirection="column" alignItems="center"
     p="10px" zIndex="2" justifyContent="space-evenly">
 

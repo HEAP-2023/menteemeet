@@ -18,9 +18,11 @@ const Topbar = ({acctInfo}) => {
 
     return (
     <Box bgcolor="primary.main" 
-        width="100%" height="5%" 
+        width="82.5%" height="5%" 
         display="flex" justifyContent="flex-end" 
         alignItems="center"
+        position="fixed"
+        zIndex={99}
         >
 
         {/* to be deleted in production */}
