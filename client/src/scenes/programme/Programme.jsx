@@ -6,6 +6,7 @@ import { useState } from "react";
 import PageHeader  from "../../components/PageHeader"
 import { useParams } from 'react-router-dom';
 import Section from "../../components/programme/Section"
+import Sessions from "../../components/programme/Sessions";
 
 
 // redux
@@ -72,7 +73,7 @@ const Programme = ({programme_details}) => {
                     </Box>
                 </TabPanel>
                 <TabPanel value="sessions" index={1}>
-                    Item Two
+                    <Sessions/>
                 </TabPanel>
                 <TabPanel value="groupings" index={2}>
                     Item Three

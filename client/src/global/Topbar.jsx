@@ -18,12 +18,15 @@ const Topbar = ({acctInfo}) => {
 
     return (
     <Box bgcolor="primary.main" 
-        width="82.5%" height="5%" 
+        width="100%" height="5%" 
         display="flex" justifyContent="flex-end" 
         alignItems="center"
-        position="fixed"
+        position="sticky"
+        top="0px"
         zIndex={99}
         >
+
+            {/* original 82.5% position fixed */}
 
         {/* to be deleted in production */}
         <Typography color="#ff0000" >mode : {userType} (a helper, not part of design)     </Typography>

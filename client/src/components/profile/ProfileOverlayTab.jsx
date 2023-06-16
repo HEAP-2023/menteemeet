@@ -25,6 +25,9 @@ const ProfileOverlayTab = ({acctInfo}) => {
     const navigate = useNavigate();
 
     const {id, name, email} = acctInfo;
+
+
+    // try use fixed width and / or media query
     return (<Box width="10%" height="300px" 
     borderRadius="20px" position="absolute" 
     top="105%" left="89.5%" bgcolor="primary.main"
@@ -49,6 +52,7 @@ const ProfileOverlayTab = ({acctInfo}) => {
 
             <Box display="flex" onClick={() => {
                 // basically close the overlay and go home
+                
                 dispatch(overlayToggle())
                 dispatch(swap());
                 navigate("/");

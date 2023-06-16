@@ -1,8 +1,7 @@
 // https://www.npmjs.com/package/react-pro-sidebar
 
-import { useState } from "react";
 import { Sidebar, Menu, MenuItem, SubMenu } from "react-pro-sidebar";
-import { Box, IconButton, Typography } from "@mui/material";
+import { Box } from "@mui/material";
 import { Link } from "react-router-dom";
 import { generateColors } from "../theme";
 import { useSelector } from "react-redux";
