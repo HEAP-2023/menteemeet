@@ -28,9 +28,11 @@ const ProfileOverlayTab = ({acctInfo}) => {
 
 
     // try use fixed width and / or media query
-    return (<Box width="10%" height="300px" 
-    borderRadius="20px" position="absolute" 
-    top="105%" left="89.5%" bgcolor="primary.main"
+    return (<Box width="200px" height="300px" 
+    borderRadius="20px" position="absolute"
+    top="50px" right="0px" 
+    // top="105%" left="89.5%" 
+    bgcolor="primary.main"
     display="flex" flexDirection="column" alignItems="center"
     p="10px" zIndex="2" justifyContent="space-evenly">
 
