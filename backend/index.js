@@ -8,8 +8,27 @@ const app = express();
 const PORT = process.env.PORT;
 const API_VER = process.env.API_VER;
 
+//Import sequelize
+const sequelize = require('./config/database');
+
 app.use(express.json());
 
-app.listen(PORT, () => {
-  console.log(`Server is listening on port ${PORT}`)
-})
+sequelize
+  .authenticate()
+  .then(() => {
+      app.listen(PORT, () => {
+          console.log(`Connected to DB, server is listening on port ${PORT}`);
+      })
+  })
+  .catch((err) => {
+      console.error("Error: unable to connect to DB");
+  })
+
+sequelize
+  .sync({ alter: true })
+  .then(() => {
+    console.log("[SYSTEM] All models synchronized successfully!");
+  })
+  .catch((err) => {
+    console.error("[ERROR ] Error synchronizing models:", err);
+  });
