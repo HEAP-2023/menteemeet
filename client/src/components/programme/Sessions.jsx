@@ -3,11 +3,13 @@ import Table from "./Table";
 import { Box, Typography, IconButton } from "@mui/material";
 import SectionHeader from "../SectionHeader";
 import { generateColors } from "../../theme";
-import { useState } from "react"
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 import DoneOutlinedIcon from '@mui/icons-material/DoneOutlined';
 import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
+import NewSessionLog from "./NewSessionLog"
+
+
 
 const Sessions = () => {
     const userType = useSelector((state) => state.user.userType);
@@ -17,6 +19,7 @@ const Sessions = () => {
 
     return (
     <Box>
+        {userType !== "mentee" && <NewSessionLog/>}
         <Box width="100%" display="flex">
             <SectionHeader text="Upcoming Sessions" />
         </Box>
