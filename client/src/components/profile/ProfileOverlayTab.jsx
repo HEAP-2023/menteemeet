@@ -44,7 +44,7 @@ const ProfileOverlayTab = ({acctInfo}) => {
         <Box display="flex" flexDirection="column" >
             <Box display="flex">
                 <ManageAccountsOutlinedIcon/>
-                <Typography>
+                <Typography sx={{":hover":{cursor:"pointer"}}}>
                     Account Settings
                 </Typography>
             </Box>
@@ -60,7 +60,7 @@ const ProfileOverlayTab = ({acctInfo}) => {
 
                     
                 <ChangeCircleOutlinedIcon/>
-                <Typography sx={{textDecoration:"underline"}}>
+                <Typography sx={{textDecoration:"underline", ":hover":{cursor:"pointer"}}}>
                     Switch view
                 </Typography>
             </Box>
@@ -68,7 +68,7 @@ const ProfileOverlayTab = ({acctInfo}) => {
 
             <Box display="flex">
                 <LogoutOutlinedIcon/>
-                <Typography>
+                <Typography sx={{":hover":{cursor:"pointer"}}}>
                     Logout
                 </Typography>
             </Box>

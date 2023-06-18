@@ -14,8 +14,8 @@ const SideNavbar = ({enrolled}) => {
     return (
         <Box width="20%" bgcolor="primary.main">
             {/* logo */}
-            <Box width="100%" bgcolor="primary.main" display="flex" justifyContent="center" alignItems="center" p="30px">
-                Mentee meet logo
+            <Box width="100%" bgcolor="primary.main" display="flex" justifyContent="center" alignItems="center" p="0px">
+                <img src="../../images/global/menteemeet.png" style={{width: "200px", margin: "5px 0px 0p 0px", height: "100px", objectFit: "contain", padding:"0px"}} />
             </Box>
             
             {/* navbar */}

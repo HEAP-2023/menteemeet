@@ -14,7 +14,7 @@ const ResourcesRow = ({ resources }) => {
                         return (
                             <Grid item xs={12} sm={12} md={6} >
                                 <Button variant="contained" 
-                                    sx={{ borderRadius: 2, backgroundColor:"white"}} 
+                                    sx={{ borderRadius: 2, backgroundColor:"white", boxShadow:1}} 
                                     startIcon={<img src={item.icon} alt={item.name} 
                                     style={{width: "20px"}}/>} 
                                     component={Link} to={item.link}
@@ -33,7 +33,7 @@ const ResourcesRow = ({ resources }) => {
                         return (
                             <Grid item xs={12} sm={12} md={6} >
                                 <Button variant="contained" 
-                                    sx={{ borderRadius: 2, backgroundColor:"white"}}>
+                                    sx={{ borderRadius: 2, backgroundColor:"white", boxShadow:1}}>
                                     {item.name}
                                     <DownloadIcon sx={{ fontSize: 20, ml:1} }/>
                                 </Button>
