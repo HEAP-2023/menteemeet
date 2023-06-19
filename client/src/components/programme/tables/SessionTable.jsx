@@ -1,10 +1,11 @@
 import { Box } from "@mui/material"
 import { DataGrid  } from '@mui/x-data-grid';
 import { useCallback } from "react";
-import { generateColors } from "../../theme";
+import { generateColors } from "../../../theme";
 import { useSelector } from "react-redux";
 
-const Table = ({rows, columns, checkbox=false, color="#EBEBEB", editable=false, apiRef }) => {
+const SessionTable = ({rows, columns, checkbox=false, color="#EBEBEB", editable=false }) => {
+    // console.log(apiRef)
     const colors = generateColors()
     const hoverColor = (color === "#EBEBEB" ? colors.primary[500] : "#AEAEFF");
     const acctID = useSelector((state) => state.user.userDetails.acctID)
@@ -36,7 +37,6 @@ const Table = ({rows, columns, checkbox=false, color="#EBEBEB", editable=false, 
     <DataGrid
       rows={rows}
       columns={columns}
-      apiRef={apiRef}
       getRowSpacing={getRowSpacing}
       isCellEditable={() => editable}
       processRowUpdate={(newRow, oldRow) => handleDataChange(newRow, oldRow)}
@@ -66,7 +66,7 @@ const Table = ({rows, columns, checkbox=false, color="#EBEBEB", editable=false, 
     />
   </Box>);
 }
-export default Table;
+export default SessionTable;
 
 
 

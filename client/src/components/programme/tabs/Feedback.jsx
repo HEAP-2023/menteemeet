@@ -1,7 +1,7 @@
 import { Box, TextField, Select, MenuItem} from "@mui/material";
-import SectionHeader from "../SectionHeader";
+import SectionHeader from "../../SectionHeader";
 import { useSelector } from "react-redux";
-import CustomButton from "./CustomButton";
+import CustomButton from "../CustomButton";
 import { useState } from "react";
 
 const Feedback = () => {

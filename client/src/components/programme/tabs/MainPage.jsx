@@ -1,5 +1,5 @@
 import { Box } from "@mui/material";
-import Section from "../../components/programme/Section"
+import Section from "../Section"
 
 const MainPage = () => {
     return (

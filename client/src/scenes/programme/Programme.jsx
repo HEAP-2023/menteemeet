@@ -5,12 +5,13 @@ import { TabPanel, TabContext } from '@mui/lab';
 import { useState } from "react";
 import PageHeader  from "../../components/PageHeader"
 import { useParams } from 'react-router-dom';
-import Sessions from "../../components/programme/Sessions";
-import MainPage from "../../components/programme/MainPage";
-import Feedback from "../../components/programme/Feedback";
+import Sessions from "../../components/programme/tabs/Sessions";
+import MainPage from "../../components/programme/tabs/MainPage";
+import Feedback from "../../components/programme/tabs/Feedback";
 
 // redux
 import { useSelector } from "react-redux";
+import Groupings from "../../components/programme/tabs/Groupings";
 
 
 
@@ -58,7 +59,7 @@ const Programme = ({programme_details}) => {
                     <Sessions/>
                 </TabPanel>
                 <TabPanel value="groupings" index={2}>
-                    Item Three
+                    <Groupings/>
                 </TabPanel>
                 <TabPanel value="feedback" index={3}>
                     <Feedback />

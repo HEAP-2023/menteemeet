@@ -1,8 +1,8 @@
 import { useSelector } from "react-redux";
-import Table from "./Table";
+import SessionTable from "../tables/SessionTable";
 import { Box, Typography, IconButton } from "@mui/material";
-import SectionHeader from "../SectionHeader";
-import { generateColors } from "../../theme";
+import SectionHeader from "../../SectionHeader";
+import { generateColors } from "../../../theme";
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 import DoneOutlinedIcon from '@mui/icons-material/DoneOutlined';
@@ -23,12 +23,12 @@ const Sessions = () => {
         <Box width="100%" display="flex">
             <SectionHeader text="Upcoming Sessions" />
         </Box>
-            <Table rows={rows} columns={columns} 
+            <SessionTable rows={rows} columns={columns} 
             checkbox={userType === "mentee" ? false : true} 
             color={colors.primary[500]}
             editable={userType === "mentee" ? false : true}/>
         <SectionHeader text="Past Sessions" />
-        <Table rows={rows} columns={columns}/>
+        <SessionTable rows={rows} columns={columns}/>
 
     </Box>
     );

@@ -1,7 +1,7 @@
 import { Box, Typography } from "@mui/material";
-import PageHeader from "../PageHeader"
-import SectionHeader from "../SectionHeader";
-import SessionForms from "./forms/SessionForms";
+import PageHeader from "../../PageHeader"
+import SectionHeader from "../../SectionHeader";
+import SessionForms from "../forms/SessionForms";
 
 
 const NewSessionLog = () => {
