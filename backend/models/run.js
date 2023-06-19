@@ -14,7 +14,7 @@ const Run = sequelize.define(
         },
         ATTENDANCE: {
             type: DataTypes.INTEGER(),
-            allowNull: false;
+            allowNull: false,
         }
         
     },
