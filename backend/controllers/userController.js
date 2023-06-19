@@ -50,15 +50,7 @@ const loginUser = async (req, res) => {
         if (!(await bcrypt.compare(password, user.PASSWORD))) {
             return res.status(401).json( { message: "Your email/password is incorrect." });
         }
-
-        // // Issue web token
-        // const token = jwt.sign(user.toJSON(), ACCESS_TOKEN_SECRET, { expiry: EXPIRY });
-
-
-        // // User has successfully logged in
-        // return res.status(302).json( {jwt: token });
-        // // message: "You have been successfully logged in"}
-
+        
     } catch (err) {
         return res.status(500).json( { error: err });
     }
