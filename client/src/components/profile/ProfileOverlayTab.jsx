@@ -28,9 +28,11 @@ const ProfileOverlayTab = ({acctInfo}) => {
 
 
     // try use fixed width and / or media query
-    return (<Box width="10%" height="300px" 
-    borderRadius="20px" position="absolute" 
-    top="105%" left="89.5%" bgcolor="primary.main"
+    return (<Box width="200px" height="300px" 
+    borderRadius="20px" position="absolute"
+    top="50px" right="0px" 
+    // top="105%" left="89.5%" 
+    bgcolor="primary.main"
     display="flex" flexDirection="column" alignItems="center"
     p="10px" zIndex="2" justifyContent="space-evenly">
 
@@ -44,7 +46,7 @@ const ProfileOverlayTab = ({acctInfo}) => {
         <Box display="flex" flexDirection="column" >
             <Box display="flex">
                 <ManageAccountsOutlinedIcon/>
-                <Typography>
+                <Typography sx={{":hover":{cursor:"pointer"}}}>
                     Account Settings
                 </Typography>
             </Box>
@@ -60,7 +62,7 @@ const ProfileOverlayTab = ({acctInfo}) => {
 
                     
                 <ChangeCircleOutlinedIcon/>
-                <Typography sx={{textDecoration:"underline"}}>
+                <Typography sx={{textDecoration:"underline", ":hover":{cursor:"pointer"}}}>
                     Switch view
                 </Typography>
             </Box>
@@ -68,7 +70,7 @@ const ProfileOverlayTab = ({acctInfo}) => {
 
             <Box display="flex">
                 <LogoutOutlinedIcon/>
-                <Typography>
+                <Typography sx={{":hover":{cursor:"pointer"}}}>
                     Logout
                 </Typography>
             </Box>

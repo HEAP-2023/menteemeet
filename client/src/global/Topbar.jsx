@@ -31,7 +31,7 @@ const Topbar = ({acctInfo}) => {
         {/* to be deleted in production */}
         <Typography color="#ff0000" >mode : {userType} (a helper, not part of design)     </Typography>
 
-            <Box width="10%"  display="flex" flexDirection="column">
+            <Box width="10%" minWidth="200px" display="flex" flexDirection="column">
                 
                 <Box onClick={() => dispatch(overlayToggle())}> 
                     <ProfileNav />

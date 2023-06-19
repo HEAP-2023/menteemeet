@@ -2,7 +2,7 @@ import {createSlice} from '@reduxjs/toolkit'
 
 const fetchUserType = () => {
     // go fetch 
-    return "mentee";
+    return "mentor";
 }
 const fetchAllProfiles = () => {
     // go fetch
@@ -33,6 +33,7 @@ const fetchTasks = () => {
 
 const fetchDetails = () => {
      return ({
+        acctID : "mentor123",
         lastName : "Neo"
      })
 }
