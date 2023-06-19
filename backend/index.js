@@ -11,6 +11,7 @@ const API_VER = process.env.API_VER;
 //Import sequelize
 const sequelize = require('./config/database');
 
+//JSON
 app.use(express.json());
 
 sequelize
