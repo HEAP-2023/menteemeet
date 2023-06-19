@@ -38,14 +38,6 @@ const Programme = sequelize.define(
             type: DataTypes.BLOB(),
             allowNull: true,
         },
-        STARTDATE: {
-            type: DataTypes.DATE,
-            allowNull: false,
-        },
-        ENDDATE: {
-            type: DataTypes.DATE,
-            allowNull: false,
-        },
         APPLICATION_DATELINE: {
             type: DataTypes.DATE,
             allowNull: false,
