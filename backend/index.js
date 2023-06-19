@@ -8,6 +8,7 @@ const app = express();
 const PORT = process.env.PORT;
 const API_VER = process.env.API_VER;
 
+//JSON
 app.use(express.json());
 
 app.listen(PORT, () => {
