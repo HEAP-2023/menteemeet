@@ -40,27 +40,27 @@ export default Sessions;
 const fetchUpcomingSessions = (userType) => {
     if(userType === " mentee"){
         return ( [
-            { id: 1, groupNo: 5 , time: "13:50- 14:50", topicsCovered: "topic", remarks : "mentee's remarks " },
-            { id: 2, groupNo: 5 , time: "13:50- 14:50", topicsCovered: "topic", remarks : "mentee's remarks " },
-            { id: 3, groupNo: 5 , time: "13:50- 14:50", topicsCovered: "topic", remarks : "mentee's remarks " },
-            { id: 4, groupNo: 5 , time: "13:50- 14:50", topicsCovered: "topic", remarks : "mentee's remarks " },
-            { id: 5, groupNo: 5 , time: "13:50- 14:50", topicsCovered: "topic", remarks : "mentee's remarks " },
-            { id: 6, groupNo: 5 , time: "13:50- 14:50", topicsCovered: "topic", remarks : "mentee's remarks " },
-            { id: 7, groupNo: 5 , time: "13:50- 14:50", topicsCovered: "topic", remarks : "mentee's remarks " },
-            { id: 8, groupNo: 5 , time: "13:50- 14:50", topicsCovered: "topic", remarks : "mentee's remarks " },
-            { id: 9, groupNo: 5 , time: "13:50- 14:50", topicsCovered: "topic", remarks : "mentee's remarks " },
+            { id: 1, groupNo: 5 , date: "05/06/23", time: "13:50- 14:50", topicsCovered: "topic", remarks : "mentee's remarks " },
+            { id: 2, groupNo: 5 , date: "05/06/23", time: "13:50- 14:50", topicsCovered: "topic", remarks : "mentee's remarks " },
+            { id: 3, groupNo: 5 , date: "05/06/23", time: "13:50- 14:50", topicsCovered: "topic", remarks : "mentee's remarks " },
+            { id: 4, groupNo: 5 , date: "05/06/23", time: "13:50- 14:50", topicsCovered: "topic", remarks : "mentee's remarks " },
+            { id: 5, groupNo: 5 , date: "05/06/23", time: "13:50- 14:50", topicsCovered: "topic", remarks : "mentee's remarks " },
+            { id: 6, groupNo: 5 , date: "05/06/23", time: "13:50- 14:50", topicsCovered: "topic", remarks : "mentee's remarks " },
+            { id: 7, groupNo: 5 , date: "05/06/23", time: "13:50- 14:50", topicsCovered: "topic", remarks : "mentee's remarks " },
+            { id: 8, groupNo: 5 , date: "05/06/23", time: "13:50- 14:50", topicsCovered: "topic", remarks : "mentee's remarks " },
+            { id: 9, groupNo: 5 , date: "05/06/23", time: "13:50- 14:50", topicsCovered: "topic", remarks : "mentee's remarks " },
           ]);
     }
     return ([
-        { id: 1, groupNo: 5 , time: "13:50- 14:50", topicsCovered: "topic", remarks : "mentor's remarks " },
-        { id: 2, groupNo: 5 , time: "13:50- 14:50", topicsCovered: "topic", remarks : "mentor's remarks " },
-        { id: 3, groupNo: 5 , time: "13:50- 14:50", topicsCovered: "topic", remarks : "mentor's remarks " },
-        { id: 4, groupNo: 5 , time: "13:50- 14:50", topicsCovered: "topic", remarks : "mentor's remarks " },
-        { id: 5, groupNo: 5 , time: "13:50- 14:50", topicsCovered: "topic", remarks : "mentor's remarks " },
-        { id: 6, groupNo: 5 , time: "13:50- 14:50", topicsCovered: "topic", remarks : "mentor's remarks " },
-        { id: 7, groupNo: 5 , time: "13:50- 14:50", topicsCovered: "topic", remarks : "mentor's remarks " },
-        { id: 8, groupNo: 5 , time: "13:50- 14:50", topicsCovered: "topic", remarks : "mentor's remarks " },
-        { id: 9, groupNo: 5 , time: "13:50- 14:50", topicsCovered: "topic", remarks : "mentor's remarks " },
+        { id: 1, groupNo: 5 , date: "05/06/23", time: "13:50- 14:50", topicsCovered: "topic", remarks : "mentor's remarks " },
+        { id: 2, groupNo: 5 , date: "05/06/23", time: "13:50- 14:50", topicsCovered: "topic", remarks : "mentor's remarks " },
+        { id: 3, groupNo: 5 , date: "05/06/23", time: "13:50- 14:50", topicsCovered: "topic", remarks : "mentor's remarks " },
+        { id: 4, groupNo: 5 , date: "05/06/23", time: "13:50- 14:50", topicsCovered: "topic", remarks : "mentor's remarks " },
+        { id: 5, groupNo: 5 , date: "05/06/23", time: "13:50- 14:50", topicsCovered: "topic", remarks : "mentor's remarks " },
+        { id: 6, groupNo: 5 , date: "05/06/23", time: "13:50- 14:50", topicsCovered: "topic", remarks : "mentor's remarks " },
+        { id: 7, groupNo: 5 , date: "05/06/23", time: "13:50- 14:50", topicsCovered: "topic", remarks : "mentor's remarks " },
+        { id: 8, groupNo: 5 , date: "05/06/23", time: "13:50- 14:50", topicsCovered: "topic", remarks : "mentor's remarks " },
+        { id: 9, groupNo: 5 , date: "05/06/23", time: "13:50- 14:50", topicsCovered: "topic", remarks : "mentor's remarks " },
       ]);
 }
 
@@ -73,6 +73,12 @@ const structure = (userType) => {
               headerName: 'Group No.',
               width: 100,
               editable: true,
+            },
+            {
+                field: 'date',
+                headerName: 'Date',
+                width: 150,
+                editable: true,
             },
             {
               field: 'time',
