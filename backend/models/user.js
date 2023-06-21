@@ -10,19 +10,11 @@ const User = sequelize.define(
             allowNull: false,
             autoIncrement: true,
         },
-        SPECIALISATION: {
-            type: DataTypes.STRING(),
-            allowNull: true
-        },
-        INTEREST_AREAS: {
-            type: DataTypes.STRING(),
-            allowNull: true
-        },
     },
     {
       timestamps: false,
       tableName: "user"
     }
-)
+);
 
-module.exports = User
+module.exports = User;

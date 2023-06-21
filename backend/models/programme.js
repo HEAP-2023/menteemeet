@@ -48,6 +48,6 @@ const Programme = sequelize.define(
       timestamps: false,
       tableName: "programme"
     }
-)
+);
 
-module.exports = Programme
+module.exports = Programme;

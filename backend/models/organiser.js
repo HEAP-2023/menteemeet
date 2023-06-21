@@ -19,6 +19,6 @@ const Organiser = sequelize.define(
       timestamps: false,
       tableName: "organiser"
     }
-)
+);
 
-module.exports = Organiser
+module.exports = Organiser;

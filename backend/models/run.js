@@ -22,6 +22,6 @@ const Run = sequelize.define(
       timestamps: false,
       tableName: "run"
     }
-)
+);
 
-module.exports = Run
+module.exports = Run;
