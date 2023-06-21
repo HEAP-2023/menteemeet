@@ -3,18 +3,19 @@ import GroupingTable from "../tables/GroupingTable"
 import { useSelector } from "react-redux";
 import { generateColors } from "../../../theme";
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
-
+import {DndContext} from '@dnd-kit/core';
 
 
 const Groupings = () => {
     const userType = useSelector((state) => state.user.userType);
-    const colors = generateColors();
     const rows = fetchGroups()
     const columns = structure(userType)
 
 
     return (<Box>
-        <GroupingTable rows={rows} columns={columns}/>
+        <DndContext>
+            <GroupingTable rows={rows} columns={columns}/>
+        </DndContext>
     </Box>);
 }
 export default Groupings
@@ -81,7 +82,7 @@ const displayUsers = (props) => {
     return (<Box width="100%" display="flex" flexDirection="column"     >
         {value.map((user) => {
             return (
-            <Box key={user.id}>
+            <Box key={user.id} draggable>
                 <Button variant="contained" sx={{m:"10px 0", borderRadius:"20px", bgcolor:"#EBEBEB"}}>
                     <AccountCircleOutlinedIcon/>
                     <Typography>{user.name}</Typography>
