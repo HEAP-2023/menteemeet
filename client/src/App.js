@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom"
+import { BrowserRouter, Routes, Route} from "react-router-dom"
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import { theme } from "./theme"
 
@@ -9,23 +9,33 @@ import Home from "./scenes/home/Home"
 import Explore from "./scenes/explore/Explore";
 import Profile from "./scenes/profile/Profile";
 import Programme from "./scenes/programme/Programme";
-
+import LoginStart from "./scenes/login/LoginStart";
+import { useSelector } from "react-redux";
+import ProtectedRoute from "./ProtectedRoute"
 
 function App() {
-    
+    const userType = useSelector((state) => state.user.userType)
     return (
     <ThemeProvider theme={theme}>
         <CssBaseline/>
             <BrowserRouter>
         <div className="app">
-            <SideNavbar enrolled={programmes_enrolled}></SideNavbar>
-            <main className="content">
-                <Topbar acctInfo={acctInfo}></Topbar>
+            {userType && <SideNavbar enrolled={programmes_enrolled}/>}
+            
+           <main className="content">
+                {userType && <Topbar acctInfo={acctInfo}></Topbar>}
                 <Routes>
-                    <Route path="/" element={<Home/>}></Route>
-                    <Route path="/explore" element={<Explore programmes={Programmes_available}/>}></Route>
-                    <Route path="/profile" element={<Profile peerReviews={peerReviews} history={history} acctInfo={acctInfo}/>}></Route>
-                    <Route path="/programmes/:id" element={<Programme programme_details={programmes_enrolled}/>}></Route>
+                    {/* public routes */}
+                    <Route path="/login/start" element={<LoginStart/>}></Route>
+
+                    {/* private routes */}
+                    <Route element={<ProtectedRoute/>}>
+                        <Route path="/" element={<Home/>} role={userType}></Route>
+                        <Route path="/explore" element={<Explore programmes={Programmes_available}/>}></Route>
+                        <Route path="/profile" element={<Profile peerReviews={peerReviews} history={history} acctInfo={acctInfo}/>}></Route>
+                        <Route path="/programmes/:id" element={<Programme programme_details={programmes_enrolled}/>}></Route>
+
+                    </Route>
                 </Routes>
             </main>
         </div>

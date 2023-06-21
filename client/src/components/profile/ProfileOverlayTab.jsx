@@ -14,7 +14,7 @@ import SectionHeader from "../SectionHeader";
 
 // redux imports
 import { useDispatch, useSelector } from "react-redux";
-import { swap, overlayToggle } from "../../state(kiv)";
+import { swap, profileOverlayToggle } from "../../state(kiv)";
 
 
 
@@ -55,7 +55,7 @@ const ProfileOverlayTab = ({acctInfo}) => {
             <Box display="flex" onClick={() => {
                 // basically close the overlay and go home
                 
-                dispatch(overlayToggle())
+                dispatch(profileOverlayToggle())
                 dispatch(swap());
                 navigate("/");
                 }}>
