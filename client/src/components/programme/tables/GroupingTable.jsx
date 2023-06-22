@@ -48,7 +48,7 @@ const GroupingTable = ({rows, columns, editable=false }) => {
         },
         columns: {
             columnVisibilityModel: {
-                // id column invinsible
+                // id column invisible
                 id : false,
             },
           },

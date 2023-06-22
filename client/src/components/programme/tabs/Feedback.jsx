@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 import CustomButton from "../CustomButton";
 import { useState } from "react";
 import { useForm, Controller } from "react-hook-form";
+import FeedbackTable from "../tables/FeedbackTable"
 
 const Feedback = () => {
     const [person, setPerson] = useState('');
@@ -21,7 +22,7 @@ const Feedback = () => {
             to: ""
         }
     });
-    
+
     const handleSave = (data) => {
         const feedbackEntry = {
             feedback: data.feedback,
@@ -31,36 +32,36 @@ const Feedback = () => {
         // Save or process the feedback entry as needed
         console.log("Feedback Entry:", feedbackEntry);
     }
-    
+
     // let feedbackFor;
     let content;
-     
+
     if (userType === "mentee" || userType === "mentor") {
 
         content =
             <Box>
 
                 <form onSubmit={handleSubmit(handleSave)}>
-                    <SectionHeader text="Provide feedback to" sx={{ margin: "15px 30px", width: "50px" }} />                            
+                    <SectionHeader text="Provide feedback to" sx={{ margin: "15px 30px", width: "50px" }} />
                     <Select
-                                value={person}
-                                onChange={handleChange}
-                            
-                                displayEmpty
-                                sx={{ height: "30px", bgcolor: "#EBEBEB", border: "none" }}
-                            >
-                                <MenuItem value="">
-                                    <em>Select</em>
-                                </MenuItem>
-                                <MenuItem value="organiser">
-                                    Organiser
-                                </MenuItem>
-                                {rows.map((item, index) => (
-                                    <MenuItem value={item.name} key={index}>
-                                        {item.name}
-                                    </MenuItem>
-                                ))}
-                            </Select>
+                        value={person}
+                        onChange={handleChange}
+
+                        displayEmpty
+                        sx={{ height: "30px", bgcolor: "#EBEBEB", border: "none" }}
+                    >
+                        <MenuItem value="">
+                            <em>Select</em>
+                        </MenuItem>
+                        <MenuItem value="organiser">
+                            Organiser
+                        </MenuItem>
+                        {rows.map((item, index) => (
+                            <MenuItem value={item.name} key={index}>
+                                {item.name}
+                            </MenuItem>
+                        ))}
+                    </Select>
 
                     <Box display="block">
                         <Controller
@@ -79,9 +80,12 @@ const Feedback = () => {
 
                     </Box>
                     <CustomButton buttonName={"Edit"} />
-                    <CustomButton buttonName={"Submit"}/>
+                    <CustomButton buttonName={"Submit"} />
                 </form>
             </Box>
+    } else {
+        
+        content = <FeedbackTable />
     }
 
     return (
@@ -108,3 +112,5 @@ const fetchPeople = (userType) => {
         }]
     }
 }
+
+
