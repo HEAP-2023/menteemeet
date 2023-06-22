@@ -1,7 +1,7 @@
 import { Box, Typography, Button } from "@mui/material"
 import {DndContext} from '@dnd-kit/core';
 import { useState } from "react";
-import Draggable from "../../components/Dragggable";
+import Draggable from "../../components/Draggable";
 import Droppable from "../../components/Droppable";
 
 const Test = () => {
@@ -13,6 +13,7 @@ const Test = () => {
         // If the item is dropped over a container, set it as the parent
         // otherwise reset the parent to `null`
         console.log(event)
+        console.log(`draggable id = ${event.active.id} is dropped into container with id = ${event.over.id}`)
         setParent(over ? over.id : null);
     }
     
