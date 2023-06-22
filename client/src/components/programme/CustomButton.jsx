@@ -29,6 +29,7 @@ const CustomButton = ({ buttonName }) => {
                     opacity: 0.6
                 }
             }}
+            type="submit"
         >Submit</Button>
     }
     return (
