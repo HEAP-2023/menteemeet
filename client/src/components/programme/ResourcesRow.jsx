@@ -10,9 +10,9 @@ const ResourcesRow = ({ resources }) => {
             <Typography marginTop="10px" marginBottom="10px">Links</Typography>
             <Grid container spacing={2} justifyContent="left" >
                 {
-                    links.map((item) => {
+                    links.map((item, index) => {
                         return (
-                            <Grid item xs={12} sm={12} md={6} >
+                            <Grid item xs={12} sm={12} md={6} key={index}>
                                 <Button variant="contained" 
                                     sx={{ borderRadius: 2, backgroundColor:"white", boxShadow:1}} 
                                     startIcon={<img src={item.icon} alt={item.name} 
@@ -29,9 +29,9 @@ const ResourcesRow = ({ resources }) => {
             <Typography marginTop="10px" marginBottom="10px">Downloads</Typography>
             <Grid container spacing={2} justifyContent="left" >
                 {
-                    downloads.map((item) => {
+                    downloads.map((item, index) => {
                         return (
-                            <Grid item xs={12} sm={12} md={6} >
+                            <Grid item xs={12} sm={12} md={6} key={index}>
                                 <Button variant="contained" 
                                     sx={{ borderRadius: 2, backgroundColor:"white", boxShadow:1}}>
                                     {item.name}

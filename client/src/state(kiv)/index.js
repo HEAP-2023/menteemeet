@@ -1,8 +1,8 @@
 import {createSlice} from '@reduxjs/toolkit'
 
 const fetchUserType = () => {
-    // go fetch -->mentor/ mentee/ organiser / undefined --> logged out
-    return "mentor";
+    // go fetch 
+    return "mentee";
 }
 const fetchAllProfiles = () => {
     // go fetch
