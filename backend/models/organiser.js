@@ -1,8 +1,8 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("../config/database");
 
-const Organisation = sequelize.define(
-    "Organisation",
+const Organiser = sequelize.define(
+    "Organiser",
     {
         ORG_ID: {
             type: DataTypes.INTEGER,
@@ -10,15 +10,15 @@ const Organisation = sequelize.define(
             allowNull: false,
             autoIncrement: true,
         },
-        DECSRIPTION: {
+        DESCRIPTION: {
             type: DataTypes.String(),
             allowNull: true
         }
     },
     {
       timestamps: false,
-      tableName: "organisation"
+      tableName: "organiser"
     }
-)
+);
 
-module.exports = Organisation
+module.exports = Organiser;

@@ -1,20 +1,24 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("../config/database");
 
-const User = sequelize.define(
-    "User",
+const Forum = sequelize.define(
+    "Forum",
     {
-        USER_ID: {
+        FORUM_ID: {
             type: DataTypes.INTEGER,
             primaryKey: true,
             allowNull: false,
             autoIncrement: true,
         },
+        NUM_OF_COMMENTS: {
+          type: DataTypes.INTEGER,
+          allowNull: false,
+        }
     },
     {
       timestamps: false,
-      tableName: "user"
+      tableName: 'forum'
     }
 );
 
-module.exports = User;
+module.exports = Forum;

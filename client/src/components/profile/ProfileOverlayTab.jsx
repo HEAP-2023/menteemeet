@@ -13,8 +13,8 @@ import SectionHeader from "../SectionHeader";
 
 
 // redux imports
-import { useDispatch, useSelector } from "react-redux";
-import { swap, overlayToggle } from "../../state(kiv)";
+import { useDispatch } from "react-redux";
+import { swap, profileOverlayToggle, logOut } from "../../state(kiv)";
 
 
 
@@ -55,7 +55,7 @@ const ProfileOverlayTab = ({acctInfo}) => {
             <Box display="flex" onClick={() => {
                 // basically close the overlay and go home
                 
-                dispatch(overlayToggle())
+                dispatch(profileOverlayToggle())
                 dispatch(swap());
                 navigate("/");
                 }}>
@@ -68,9 +68,14 @@ const ProfileOverlayTab = ({acctInfo}) => {
             </Box>
 
 
-            <Box display="flex">
+            <Box display="flex" onClick={() => {
+                dispatch(profileOverlayToggle());
+                dispatch(logOut());
+                
+                // navigate("/login/start") --> should be auto since home is protected
+            }}>
                 <LogoutOutlinedIcon/>
-                <Typography sx={{":hover":{cursor:"pointer"}}}>
+                <Typography sx={{textDecoration:"underline", ":hover":{cursor:"pointer"}}}>
                     Logout
                 </Typography>
             </Box>

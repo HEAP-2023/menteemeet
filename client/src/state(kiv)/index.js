@@ -40,6 +40,7 @@ const fetchDetails = () => {
 
 
 const initialState = {
+    loginOverlay : false,
     profileOverlay : false,
     userType : fetchUserType(), // organiser, mentee, mentor
     userTypes : fetchAllProfiles(), //{mentor : true, mentee : true}
@@ -54,7 +55,10 @@ export const userSlice = createSlice({
     name : "user",
     initialState,
     reducers : {
-        overlayToggle : (state) => {
+        loginOverlayToggle : (state) => {
+            state.loginOverlay = !state.loginOverlay; 
+        },
+        profileOverlayToggle : (state) => {
             state.profileOverlay = !state.profileOverlay; 
         },
         logIn : (state, action) => {
@@ -87,7 +91,7 @@ export const userSlice = createSlice({
 })
 
 
-export const { overlayToggle, logIn, logOut, swap,addCreated, removeCreated, addTasks, removeTask} = userSlice.actions;
+export const {loginOverlayToggle ,profileOverlayToggle, logIn, logOut, swap,addCreated, removeCreated, addTasks, removeTask} = userSlice.actions;
 export default userSlice.reducer
 
 

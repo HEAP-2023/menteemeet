@@ -1,4 +1,4 @@
-require('dotenv').config({ path: './.env' });
+require('dotenv').config({path: "./.env" });
 
 //Server settings
 const express = require('express');
@@ -8,11 +8,11 @@ const app = express();
 const PORT = process.env.PORT;
 const API_VER = process.env.API_VER;
 
-//Import sequelize
-const sequelize = require('./config/database');
-
 //JSON
 app.use(express.json());
+
+//Import sequelize
+const sequelize = require('./config/database');
 
 sequelize
   .authenticate()

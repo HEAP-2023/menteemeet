@@ -31,8 +31,10 @@ const handleSave = (data) => {
 
             
             <Box display="flex" flexDirection="column" width="45%" justifyContent="space-evenly">
-                <Box display="flex" alignItems="center" justifyContent="space-between">
-                    <label>Group No: </label>
+                <Box display="flex" alignItems="center">
+                    <Box width="150px">
+                        <label>Group No: </label>
+                    </Box>
                     <Controller
                     name="firstName"
                     control={control}
@@ -40,28 +42,31 @@ const handleSave = (data) => {
                     />
                 </Box>
 
-                <Box display="flex" alignItems="center" justifyContent="space-between">
-                    <label>Date </label>
+                <Box display="flex" alignItems="center" >
+                    <Box width="150px">
+                        <label>Date </label>
+                    </Box>
                     <Controller
                     name="date"
                     control={control}
                     render={({ field }) => 
                         <LocalizationProvider dateAdapter={AdapterDayjs} >
-                            <DatePicker {...field} sx={{width:"70%"}}/>
+                            <DatePicker {...field} sx={{width:"65%"}}/>
                     </LocalizationProvider>
                   }
                     />
                 </Box>
 
-                <Box display="flex" alignItems="center" justifyContent="space-between">
-                    <label>Time </label>
-                    <Box display="flex" alignItems="center" justifyContent="flex-end">
+                <Box display="flex" alignItems="center">
+                    <Box width="150px">
+                        <label>Time </label>
+                    </Box>
                         <Controller
                         name="startTime"
                         control={control}
                         render={({ field }) => 
                         <LocalizationProvider dateAdapter={AdapterDayjs} >
-                            <TimePicker {...field} sx={{width:"35%",  m:"20px"}}/>
+                            <TimePicker {...field} sx={{width:"30%",  mr:"10px"}}/>
                         </LocalizationProvider>}
                         />
                         <label> to </label>
@@ -70,10 +75,9 @@ const handleSave = (data) => {
                         control={control}
                         render={({ field }) => 
                         <LocalizationProvider dateAdapter={AdapterDayjs} >
-                            <TimePicker {...field} sx={{width:"35%" ,  ml:"20px"}}/>
+                            <TimePicker {...field} sx={{width:"30%" ,  ml:"10px"}}/>
                         </LocalizationProvider>}
                         />
-                    </Box>
                 </Box>
 
             </Box>

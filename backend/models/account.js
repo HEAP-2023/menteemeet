@@ -40,6 +40,6 @@ const User = sequelize.define(
       timestamps: false,
       tableName: "account"
     }
-)
+);
 
-module.exports = Account
+module.exports = Account;
