@@ -10,7 +10,7 @@ const bcrypt = require("bcrypt");
 
 const registerAcc = async (req, res) => {
 
-    const {firstname, lastname, email, password } = req.body;
+    const { firstname, lastname, email, password } = req.body;
     try {
         // WHERE Email : has "email"
         if (await User.findOne({where: { EMAIL: email } })) {
@@ -52,7 +52,7 @@ const loginAcc = async (req, res) => {
             return res.status(401).json( { message: "Your email/password is incorrect." });
         }
 
-        return res.status(302).json( {message: "You have been successfully logged in"});
+        return res.status(200).json({ message: "Successfully logged in!" });
         //  return res.status(302).json( {jwt: token });
         
     } catch (err) {

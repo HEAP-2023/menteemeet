@@ -11,19 +11,19 @@ const Programme = sequelize.define(
             autoIncrement: true,
         },
         NAME: {
-            type: DataTypes.String(50),
+            type: DataTypes.STRING(50),
             allowNull: false,
         },
         DESCRIPTION: {
-            type: DataTypes.String(),
+            type: DataTypes.STRING(),
             allowNull: true,
         },
         CATEGORY: {
-            type: DataTypes.String(30),
+            type: DataTypes.STRING(30),
             allowNull: true,
         },
         CAPACITY: {
-            type: DataTypes.INTEGER(),
+            type: DataTypes.INTEGER,
             allowNull: false,
         },
         MATCHING_CRITERIA: {
@@ -31,7 +31,7 @@ const Programme = sequelize.define(
             allowNull: false,
         },
         EXTERNAL_LINK: {
-            type: DataTypes.String(),
+            type: DataTypes.STRING(),
             allowNull: true,
         },
         MEDIA: {

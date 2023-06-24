@@ -1,28 +1,32 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("../config/database");
 
-const Resource = sequelize.define(
-    "Resource",
+const Application = sequelize.define(
+    "Application",
     {
-        RESOURCE_ID: {
+        APPLICATION_ID: {
             type: DataTypes.INTEGER,
             primaryKey: true,
             allowNull: false,
             autoIncrement: true,
         },
-        MEDIA: {
-          type: DataTypes.BLOB(),
-          allowNull: true,
+        DATE: {
+            type: DataTypes.DATE,
+            allowNull: false,
         },
-        MESSAGE: {
+        FORM_DETAILS: {
             type: DataTypes.STRING(),
             allowNull: false,
-        }
+        },
+        ISACCEPTED: {
+          type: DataTypes.BOOLEAN,
+          allowNull: false,
+        },
     },
     {
       timestamps: false,
-      tableName: 'resource'
+      tableName: 'application'
     }
 );
 
-module.exports = Resource;
+module.exports = Application;

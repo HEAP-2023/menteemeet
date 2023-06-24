@@ -1,29 +1,29 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("../config/database");
 
-const Comment = sequelize.define(
-    "Comment",
+const SESSION = sequelize.define(
+    "SESSION",
     {
-        COMMENT_ID: {
+        SESSION_ID: {
             type: DataTypes.INTEGER,
             primaryKey: true,
             allowNull: false,
             autoIncrement: true,
         },
-        DESCRIPTION: {
-          type: DataTypes.STRING(),
-          allowNull: false,
-        },
-        UPVOTE_COUNT: {
-            type: DataTypes.INTEGER,
+        DATE: {
+            type: DataTypes.DATE,
             allowNull: false,
         },
-        DOWNVOTE_COUNT: {
-            type: DataTypes.INTEGER,
+        START_TIME: {
+            type: DataTypes.TIME,
             allowNull: false,
         },
-        ISREPLY: {
-            type: DataTypes.BOOLEAN,
+        END_TIME: {
+            type: DataTypes.TIME,
+            allowNull: false,
+        },
+        TOPIC: {
+            type: DataTypes.STRING(),
             allowNull: false,
         }
     },
