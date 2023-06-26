@@ -14,6 +14,9 @@ app.use(express.json());
 //Import sequelize
 const sequelize = require('./config/database');
 
+//for post
+app.use(API_VER + '/accounts', require('./routes/userRoutes'));
+
 sequelize
   .authenticate()
   .then(() => {

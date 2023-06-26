@@ -1,7 +1,7 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("../config/database");
 
-const User = sequelize.define(
+const Account = sequelize.define(
     "Account",
     {
         ACCOUNT_ID: {
@@ -38,7 +38,7 @@ const User = sequelize.define(
     },
     {
       timestamps: false,
-      tableName: "account"
+      tableName: "Account"
     }
 );
 

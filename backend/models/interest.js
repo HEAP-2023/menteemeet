@@ -17,7 +17,7 @@ const Interest = sequelize.define(
     },
     {
       timestamps: false,
-      tableName: 'interests'
+      tableName: 'interest'
     }
 );
 

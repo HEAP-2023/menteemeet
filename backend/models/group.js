@@ -1,24 +1,24 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("../config/database");
 
-const Organiser = sequelize.define(
-    "Organiser",
+const Group = sequelize.define(
+    "Group",
     {
-        ORG_ID: {
+        GROUP_ID: {
             type: DataTypes.INTEGER,
             primaryKey: true,
             allowNull: false,
             autoIncrement: true,
         },
-        DESCRIPTION: {
-            type: DataTypes.STRING(),
-            allowNull: true
+        GROUP_NO: {
+          type: DataTypes.INTEGER,
+          allowNull: false
         }
     },
     {
       timestamps: false,
-      tableName: "organiser"
+      tableName: 'group'
     }
 );
 
-module.exports = Organiser;
+module.exports = Group;
