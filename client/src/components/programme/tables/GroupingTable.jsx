@@ -4,7 +4,7 @@ import { useCallback } from "react";
 import { generateColors } from "../../../theme";
 import { useSelector } from "react-redux";
 
-const GroupingTable = ({rows, columns, editable=false }) => {
+const GroupingTable = ({api, rows, columns, editable=false }) => {
     const colors = generateColors();
     const acctID = useSelector((state) => state.user.userDetails.acctID)
     const getRowSpacing = useCallback((params) => {
@@ -22,24 +22,21 @@ const GroupingTable = ({rows, columns, editable=false }) => {
         console.log(acctID)
     }
     const handleDataChange = (newRow, oldRow) => {
-        if(newRow.action === "save"){
-            // might need some validation somewhere before sending  --> yup
-            putInDB(newRow)
-            return newRow
-        }
-        return oldRow;
+        return newRow;
     } 
     // https://mui.com/x/react-data-grid/editing/
 
-    return ( <Box sx={{ width: '100%' }}>
+   
+    return ( <Box sx={{ width: '70%' }}>
     <DataGrid
+      apiRef={api}
       rows={rows}
       columns={columns}
       getRowSpacing={getRowSpacing}
       getRowHeight={() => 'auto'}
-      isCellEditable={() => editable}
-      processRowUpdate={(newRow, oldRow) => handleDataChange(newRow, oldRow)}
+      isCellEditable={() => true}
       editMode="row"
+      processRowUpdate={(newRow, oldRow) => handleDataChange(newRow, oldRow)}
       initialState={{
         pagination: {
           paginationModel: {

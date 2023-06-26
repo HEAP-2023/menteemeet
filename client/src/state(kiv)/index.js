@@ -2,7 +2,7 @@ import {createSlice} from '@reduxjs/toolkit'
 
 const fetchUserType = () => {
     // go fetch 
-    return "mentee";
+    return "mentor";
 }
 const fetchAllProfiles = () => {
     // go fetch
@@ -48,6 +48,8 @@ const initialState = {
     programmesCreated : fetchProgrammesCreated(),
     tasks : fetchTasks(),
     userDetails : fetchDetails(),
+    disableDrag : true,
+    dragParking : [],
 }
 
 
@@ -86,12 +88,29 @@ export const userSlice = createSlice({
         },
         removeTask : (state, action) => {
             state.tasks = state.tasks.filter(task => task.id !== action.payload.id)
+        },
+        dragToggle : (state) => {
+            state.disableDrag = !state.disableDrag; 
+        },
+        addToParking : (state, action) => {
+            state.dragParking = [...state.dragParking, action.payload.user]
+        },
+        removeFromParking : (state, action) => {
+            state.dragParking = state.dragParking.filter((x) => {
+                return (x.id !== action.payload.id)})
         }
     }
 })
 
 
-export const {loginOverlayToggle ,profileOverlayToggle, logIn, logOut, swap,addCreated, removeCreated, addTasks, removeTask} = userSlice.actions;
+export const {loginOverlayToggle ,
+    profileOverlayToggle,
+    logIn, logOut,
+    swap,addCreated,
+    removeCreated, 
+    addTasks, removeTask,
+    dragToggle,
+    addToParking, removeFromParking} = userSlice.actions;
 export default userSlice.reducer
 
 

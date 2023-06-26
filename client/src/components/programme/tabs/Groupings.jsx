@@ -1,75 +1,76 @@
 import { Box, Typography, Button } from "@mui/material"
 import GroupingTable from "../tables/GroupingTable"
-import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
+import {  useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { GridApi, useGridApiRef } from "@mui/x-data-grid";
 
-import { useRef, useState } from "react";
-import { useSelector } from "react-redux";
-
+import DisplayUsers from "../DisplayUsers";
 import {DndContext} from '@dnd-kit/core';
-import Draggable from "../../Draggable";
-import Droppable from "../../Droppable";
+import { dragToggle, removeFromParking } from "../../../state(kiv)";
+import DraggableParking from "../DraggableParking";
 
 const Groupings = () => {
+    const api = useGridApiRef();
     const userType = useSelector((state) => state.user.userType);
-    const rows = fetchGroups()
-    const [disableDrag, toggleDrag] = useState(true)
-
+    const dispatch = useDispatch(); 
     const [parent, setParent] = useState(null)
     const [child, setChild] = useState(null)
-
-
+    
+    const [rows, setRows] = useState(fetchGroups());
+    
     const handleDragEnd = (event) => {
         const {over} = event;
-    
-        // If the item is dropped over a container, set it as the parent
-        // otherwise reset the parent to `null`
-        console.log(child.id)
         console.log(`draggable id = ${event.active.id} is dropped into container with id = ${event.over.id}`)
         setParent(over ? over.id : null);
+        const data = event.active.data.current
+        modifyRows(api, event.over.id, data);
+
+        dispatch(removeFromParking({id : event.active.id}))
     }
-
-
     const handleDragStart = (event) => {
-        console.log(event.active.data.current)
+        // console.log(event.active.data.current)
         setChild(event.active.data.current);
     }
-    const displayUsers = (props) => {
-        const { api, value, row } = props;
-        return (
-        <Droppable id={row.id}>
-            <Box width="100%" display="flex" flexDirection="column">
-                {value.map((user) => {
-                    const button = displayButton(user.name)
-                    return (
-                        <Draggable key={user.id} id={user.id} disableDrag={disableDrag} name={user.name} children={button} />
-                    )}
-                )}
-                
-                {parent === row.id ? <Draggable key={child.id} id={child.id} disableDrag={disableDrag} children={displayButton(child.name)}/>
-                           : null}
-            </Box>
-        </Droppable>
-        )
-    }
     
-    const columns = structure(userType, displayUsers)
-
+    const disableDrag = useSelector((state) => state.user.disableDrag)
+    const columns = structure(parent, child) 
+    
     return (<Box>
         <DndContext onDragEnd={handleDragEnd} onDragStart={handleDragStart}>
-            <GroupingTable rows={rows} columns={columns} editable={true}/>
+            <Box width="100%" display="flex">
+                <GroupingTable api={api} rows={rows} columns={columns} mode={disableDrag ? "view" : "edit"}/>
+                <DraggableParking/>
+            </Box>
         </DndContext>
-        <Button variant="contained" onClick={()=>toggleDrag(!disableDrag)}>{disableDrag ?  "edit" : "cancel" }</Button>
+        <Button variant="contained" onClick={()=> dispatch(dragToggle())}>{disableDrag ?  "edit" : "cancel" }</Button>
     </Box>);
 }
 export default Groupings
 
-const displayButton = (name) => {
-    return ( <Box>
-        <Button variant="contained" sx={{m:"10px 0", borderRadius:"20px", bgcolor:"#EBEBEB"}}>
-            <AccountCircleOutlinedIcon/>
-            <Typography>{name}</Typography>
-        </Button>
-    </Box>)
+const modifyRows = (api, to, data) => {
+    const [containerID, role] = to.split("-");
+    console.log(api.current)
+    const rows = api.current.getSortedRows()
+    
+    if(to !== null){
+        // rows.map((row) => {
+        //     if(row.id == containerID){
+        //         console.log("success")
+        //         row[role].push(data);
+        //     }
+        // })
+
+        const row = rows.find(row => row.id == containerID)
+        console.log(row)
+        if(!(row[role].includes(user => user.id === data.id))){
+            row[role].push(data)
+        }
+        console.log(row)
+        api.current.updateRows([{...row}])
+    }
+
+
+
 }
 
 const fetchGroups = () => {
@@ -91,7 +92,7 @@ const fetchGroups = () => {
     ]
 }
 
-const structure = (userType, displayUsers) => {
+const structure = (parent, child) => {
     return (
         [
             { field: 'id', headerName: 'ID', width: 90 },
@@ -106,14 +107,14 @@ const structure = (userType, displayUsers) => {
               headerName: 'Mentor(s)',
               width: 300,
               editable: true,
-              renderCell : displayUsers,
+              renderCell : (props) => <DisplayUsers props={props} role={"mentor"} parent={parent} child={child}/>
             },
             {
               field: 'mentee',
               headerName: 'Mentees',
               width: 300,
               editable: true,
-              renderCell : displayUsers,
+              renderCell : (props) => <DisplayUsers props={props} role={"mentee"} parent={parent} child={child}/>
             },
             {
               field: 'commonDT',
@@ -132,7 +133,7 @@ const structure = (userType, displayUsers) => {
 
 const displayDate = (props) => {
     const { api, value } = props;
-    return (<Box width="100%" display="flex" flexDirection="column">
+    return (<Box width="100%" display="flex" flexDirection="column" >
         {value.map((user) => {
             return (
             <Box m="10px 0" key={user}>
