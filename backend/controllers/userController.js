@@ -56,35 +56,27 @@ const loginAcc = async (req, res) => {
         const accessToken = jwt.sign(user.toJSON(), ACCESS_TOKEN_SECRET)
 
         // return res.status(200).json({ message: "Successfully logged in!" });
-        // return res.status(200).json({ accessToken: accessToken });
-
-        
+        return res.status(200).json({message: "Successfully logged in!", accessToken: accessToken });
         
     } catch (err) {
         return res.status(500).json( { error: err });
     }
 }
 
-function authenticateToken(req, res, next) {
-    const authHeader = req.headers['authorization']
 
-    //if got authHeader then return (v) this. while splitting space
-    //token var will either be undefined (first part)
-        // or the actual token after &&
-    const token = authHeader && authHeader.split(' ')[1]
+const updateAcc = async (req, res) => {
 
-    if (token == null) return res.sendStatus(401)
+    //Authenticate user
+    // const { email, password } = req.body;
 
-    jwt.verify(token, ACCESS_TOKEN_SECRET, (err, user) => {
-
-        if (err) return res.sendStatus(403)
-
-        req.user = user
-        next()
-    })
-    // Bearer TOKEN 
+    try {
+        return res.status(200).json( {message: "Yes sir. You have been successfully authenticated."});
+        
+    } catch (err) {
+        return res.status(500).json( { error: err });
+    }
 }
 
-module.exports = {registerAcc, loginAcc}
+module.exports = {registerAcc, loginAcc, updateAcc}
 
 
