@@ -2,35 +2,35 @@ import { Button } from "@mui/material";
 
 const CustomButton = ({ buttonName }) => {
     let content;
-    if (buttonName === "Edit") {
+    if (buttonName === "Edit" || buttonName === "Change") {
         content =
             <Button
                 sx={{
                     color: "black",
-                    ml: 61,
-                    mt: 1,
                     backgroundColor: "#EBEBEB",
+                    ml:1,
+                    mt:1,
                     ":hover": {
                         backgroundColor: "#EBEBEB",
                         opacity: 0.6
                     }
                 }}
-            >Edit</Button>
+            >{buttonName}</Button>
 
-    } else if (buttonName === "Submit") {
+    } else if (buttonName === "Submit" || buttonName === 'Save') {
         content = <Button
             sx={{
                 color: "white",
-                ml: 1,
-                mt: 1,
                 backgroundColor: "#333D55",
+                ml:1,
+                mt:1,
                 ":hover": {
                     backgroundColor: "#333D55",
                     opacity: 0.6
                 }
             }}
             type="submit"
-        >Submit</Button>
+        >{buttonName}</Button>
     }
     return (
         <>{content}</>

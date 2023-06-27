@@ -13,6 +13,7 @@ import LoginStart from "./scenes/login/LoginStart";
 import { useSelector } from "react-redux";
 import ProtectedRoute from "./ProtectedRoute"
 import Test from "./scenes/testingGrounds/Test";
+import AccountSettings from "./scenes/accountSettings/AccountSettings";
 
 function App() {
     const userType = useSelector((state) => state.user.userType)
@@ -36,6 +37,7 @@ function App() {
                         <Route path="/profile" element={<Profile peerReviews={peerReviews} history={history} acctInfo={acctInfo}/>}></Route>
                         <Route path="/programmes/:id" element={<Programme programme_details={programmes_enrolled}/>}></Route>
                         <Route path="/test" element={<Test/>} />
+                        <Route path="/accountSettings" element={<AccountSettings acctInfo={acctInfo}/>} />
                     </Route>
                 </Routes>
             </main>
@@ -50,7 +52,11 @@ export default App;
 const acctInfo = {
     acctId : 1,
     name : "NEO SHYH RUEY",
-    email : "srneo.2022@scis.smu.edu.sg"
+    email : "srneo.2022@scis.smu.edu.sg",
+    username: "shyhruey",
+    password: "hello123",
+    telegramUsername: "@shyhruey",
+    contactNumber: "81234567"
 }
 
 const programmes_enrolled = [
