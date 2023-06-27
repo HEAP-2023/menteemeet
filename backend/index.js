@@ -1,21 +1,21 @@
-require('dotenv').config({path: "./.env" });
+const config = require('./utils/config');
 
 //Server settings
 const express = require('express');
 const app = express();
 
 //Server params
-const PORT = process.env.PORT;
-const API_VER = process.env.API_VER;
+const PORT = config.PORT;
+const API_VER = config.API_VER;
 
-//JSON
+//Parse JSON data
 app.use(express.json());
 
 //Import sequelize
 const sequelize = require('./config/database');
 
-//for post
-app.use(API_VER + '/accounts', require('./routes/userRoutes'));
+//User routes
+app.use(API_VER + '/user', require('./routes/userRoutes'));
 
 sequelize
   .authenticate()
@@ -34,5 +34,5 @@ sequelize
     console.log("[SYSTEM] All models synchronized successfully!");
   })
   .catch((err) => {
-    console.error("[ERROR ] Error synchronizing models:", err);
+    console.error("[ERROR] Error synchronizing models:", err);
   });
