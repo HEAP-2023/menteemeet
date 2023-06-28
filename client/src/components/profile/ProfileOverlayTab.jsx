@@ -44,7 +44,9 @@ const ProfileOverlayTab = ({acctInfo}) => {
         <Typography sx={{width:"130px", overflowWrap:"break-word"}}>{email}</Typography>
 
         <Box display="flex" flexDirection="column" >
-            <Box display="flex">
+            <Box display="flex" onClick={() => {
+                navigate("/accountSettings");
+            }}>
                 <ManageAccountsOutlinedIcon/>
                 <Typography sx={{":hover":{cursor:"pointer"}}}>
                     Account Settings
@@ -62,7 +64,7 @@ const ProfileOverlayTab = ({acctInfo}) => {
 
                     
                 <ChangeCircleOutlinedIcon/>
-                <Typography sx={{textDecoration:"underline", ":hover":{cursor:"pointer"}}}>
+                <Typography sx={{":hover":{cursor:"pointer"}}}>
                     Switch view
                 </Typography>
             </Box>
@@ -75,7 +77,7 @@ const ProfileOverlayTab = ({acctInfo}) => {
                 // navigate("/login/start") --> should be auto since home is protected
             }}>
                 <LogoutOutlinedIcon/>
-                <Typography sx={{textDecoration:"underline", ":hover":{cursor:"pointer"}}}>
+                <Typography sx={{":hover":{cursor:"pointer"}}}>
                     Logout
                 </Typography>
             </Box>
