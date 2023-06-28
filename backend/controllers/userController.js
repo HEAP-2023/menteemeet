@@ -1,6 +1,3 @@
-
-///// -------------------  W I P -----------------   ////////
-
 const User = require("../models/account");
 const bcrypt = require("bcrypt");
 const config = require('../utils/config');
