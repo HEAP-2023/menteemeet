@@ -1,8 +1,8 @@
 import { Box, Typography, Button } from "@mui/material"
 import GroupingTable from "../tables/GroupingTable"
-import {  useState, useEffect } from "react";
+import {  useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { GridApi, useGridApiRef } from "@mui/x-data-grid";
+import { useGridApiRef } from "@mui/x-data-grid";
 
 import DisplayUsers from "../DisplayUsers";
 import {DndContext} from '@dnd-kit/core';
@@ -15,9 +15,8 @@ const Groupings = () => {
     const dispatch = useDispatch(); 
     const [parent, setParent] = useState(null)
     const [child, setChild] = useState(null)
-    
     const [rows, setRows] = useState(fetchGroups());
-    
+
     const handleDragEnd = (event) => {
         const {over} = event;
         console.log(`draggable id = ${event.active.id} is dropped into container with id = ${event.over.id}`)
@@ -28,21 +27,40 @@ const Groupings = () => {
         dispatch(removeFromParking({id : event.active.id}))
     }
     const handleDragStart = (event) => {
-        // console.log(event.active.data.current)
         setChild(event.active.data.current);
     }
     
     const disableDrag = useSelector((state) => state.user.disableDrag)
     const columns = structure(parent, child) 
-    
+
+
     return (<Box>
         <DndContext onDragEnd={handleDragEnd} onDragStart={handleDragStart}>
             <Box width="100%" display="flex">
                 <GroupingTable api={api} rows={rows} columns={columns} mode={disableDrag ? "view" : "edit"}/>
-                <DraggableParking/>
+                {userType === "organiser" && <DraggableParking/>}
             </Box>
         </DndContext>
-        <Button variant="contained" onClick={()=> dispatch(dragToggle())}>{disableDrag ?  "edit" : "cancel" }</Button>
+        {
+        userType === "organiser" &&
+        <Button variant="contained" onClick={()=> {
+            dispatch(dragToggle())
+            if(!disableDrag){
+                // cancel
+                window.location.reload()
+            }
+        }}>{disableDrag ?  "edit" : "cancel" }</Button>
+        }
+        {
+            !disableDrag && <Button variant="contained" onClick={() => {
+                const updatedData = api.current.getSortedRows();
+                console.log("this will be sent to db")
+                console.log(updatedData);
+                dispatch(dragToggle());
+            }}>
+                save
+            </Button>
+        }
     </Box>);
 }
 export default Groupings
@@ -53,24 +71,12 @@ const modifyRows = (api, to, data) => {
     const rows = api.current.getSortedRows()
     
     if(to !== null){
-        // rows.map((row) => {
-        //     if(row.id == containerID){
-        //         console.log("success")
-        //         row[role].push(data);
-        //     }
-        // })
-
         const row = rows.find(row => row.id == containerID)
-        console.log(row)
         if(!(row[role].includes(user => user.id === data.id))){
             row[role].push(data)
         }
-        console.log(row)
         api.current.updateRows([{...row}])
     }
-
-
-
 }
 
 const fetchGroups = () => {

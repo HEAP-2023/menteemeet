@@ -40,6 +40,7 @@ const Programme = ({programme_details}) => {
             <TabContext value={tab}>
             <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                 <Tabs value={tab} onChange={tabChange} 
+                selectionFollowsFocus
                 textColor="inherit"
                 indicatorColor="secondary"
                 aria-label="basic tabs example">

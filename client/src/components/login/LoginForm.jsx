@@ -7,21 +7,23 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { logIn } from "../../state(kiv)";
 
+import { yupResolver } from "@hookform/resolvers/yup"
+import { loginSchema } from "./validationSchema";
 
 const LoginForm = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    const {control, handleSubmit, reset} = useForm({
+    
+
+    const {control,formState: {errors} , handleSubmit, reset} = useForm({
         defaultValues : {
             email : "",
             password : "",
-        }
+        },
+        resolver : yupResolver(loginSchema)
     })
-    // console.log(useForm({defaultValues : {
-    //     email : "",
-    //     password : "",
-    // }}))
+    
     const handleSave = (data) => {
         console.log("to be submitted")
         console.log(data)
@@ -52,6 +54,7 @@ const LoginForm = () => {
                     control={control}
                     render={({field}) => <TextField {...field} variant="outlined" sx={{width:"100%"}} /> }
                     />
+                    <ErrorMessage errors={errors} name="email"/>
                 </Box>
                 <Box display="flex" flexDirection="column" width="100%">
                     <label>Password</label>
@@ -60,6 +63,7 @@ const LoginForm = () => {
                     control={control}
                     render={({field}) => <TextField {...field} variant="outlined" sx={{width:"100%"}} /> }
                     />
+                    <ErrorMessage errors={errors} name="password"/>
                 </Box>
     
                 <Button type="submit" variant="contained" color="secondary" sx={{width:"100%"}}>Log In</Button>

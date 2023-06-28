@@ -9,6 +9,7 @@ import { addToParking } from "../../state(kiv)";
 const DisplayUsers = ({props, role}) => {
     let {id, api, value, row} = props
     const dispatch = useDispatch()
+    const disableDrag = useSelector(state => state.user.disableDrag)
     const droppableKey = `${row.id}-${role}`;
 
     const removeThis = (userID) => {
@@ -31,9 +32,12 @@ const DisplayUsers = ({props, role}) => {
     <Box key={user.id} display="flex" sx={{m:"10px 0", borderRadius:"20px", bgcolor:"#EBEBEB"}}>
             <AccountCircleOutlinedIcon/>
             <Typography>{user.name}</Typography>
+            {
+            !disableDrag && 
             <IconButton onClick={() => removeThis(user.id)}>
                 <HighlightOffOutlinedIcon/>
             </IconButton>
+            }
     </Box>)
     )}
         </Box>
