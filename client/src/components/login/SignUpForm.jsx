@@ -9,6 +9,7 @@ import { logIn } from "../../state(kiv)";
 
 import { yupResolver } from "@hookform/resolvers/yup"
 import { signUpSchema } from "./validationSchema";
+import { DevTool } from "@hookform/devtools";
 
 
 const SignUpForm = () => {
@@ -55,7 +56,11 @@ const SignUpForm = () => {
                     control={control}
                     render={({field}) => <TextField {...field} variant="outlined" sx={{width:"100%"}} /> }
                     />
-                    <ErrorMessage errors={errors} name="email"/>
+                    <ErrorMessage 
+                    errors={errors} 
+                    name="email"
+                    render={({ message }) => <p style={{color : "#ff0000"}}>{message}</p>}
+                    />
                 </Box>
                 <Box display="flex" flexDirection="column" width="100%">
                     <label>Password</label>
@@ -64,7 +69,11 @@ const SignUpForm = () => {
                     control={control}
                     render={({field}) => <TextField {...field} variant="outlined" sx={{width:"100%"}} /> }
                     />
-                <ErrorMessage errors={errors} name="password"/>
+                <ErrorMessage 
+                errors={errors} 
+                name="password"
+                render={({ message }) => <p style={{color : "#ff0000"}}>{message}</p>}
+                />
                 </Box>
                 <Box display="flex" flexDirection="column" width="100%">
                     <label>Confirm Password</label>
@@ -73,12 +82,16 @@ const SignUpForm = () => {
                     control={control}
                     render={({field}) => <TextField {...field} variant="outlined" sx={{width:"100%"}} /> }
                     />
-                    <ErrorMessage errors={errors} name="confirmPassword"/>
+                    <ErrorMessage errors={errors} 
+                    name="confirmPassword"
+                    render={({ message }) => <p style={{color : "#ff0000"}}>{message}</p>}
+                    />
                 </Box>
     
                 <Button type="submit" variant="contained" color="secondary" sx={{width:"100%"}}>Sign Up</Button>
             </Box>
         </form>
+        <DevTool control={control} /> 
     </Box>
 }
 
