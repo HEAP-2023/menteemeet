@@ -1,6 +1,3 @@
-
-///// -------------------  W I P -----------------   ////////
-
 const express = require('express');
 
 const router = express.Router();

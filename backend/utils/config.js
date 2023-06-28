@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 require('dotenv').config( { path: './.env' } );
+=======
+require('dotenv').config({ path: './.env' });
+>>>>>>> 19276d07a1e2b3db0ec1d5c206eae14f0408a710
 
 const PORT = process.env.PORT;
 const API_VER = process.env.API_VER;
