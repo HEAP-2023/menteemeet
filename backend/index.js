@@ -1,4 +1,5 @@
 const config = require('./utils/config');
+const cors = require('cors');
 
 //Server settings
 const express = require('express');
@@ -16,6 +17,10 @@ const sequelize = require('./config/database');
 
 //User routes
 app.use(API_VER + '/user', require('./routes/userRoutes'));
+let corsOptions = {
+  origin: ['http://localhost:3000'],
+}
+app.use(cors(corsOptions));
 
 sequelize
   .authenticate()

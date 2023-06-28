@@ -10,6 +10,7 @@ import { logIn } from "../../state(kiv)";
 import { yupResolver } from "@hookform/resolvers/yup"
 import { loginSchema } from "./validationSchema";
 import { DevTool } from "@hookform/devtools";
+import { login } from "../../services/auth/authServices";
 
 const LoginForm = () => {
     const dispatch = useDispatch();
@@ -24,18 +25,25 @@ const LoginForm = () => {
         resolver : yupResolver(loginSchema)
     })
     
-    const handleSave = (data) => {
+    const handleSave = async (data) => {
         console.log("to be submitted")
         console.log(data)
+
+        try {
+          const isLoggedIn = await login(data);
+          if (isLoggedIn) {
+            const role = 'mentee';
+            dispatch(logIn({ type : role }))
+            navigate("/");
+          }
+        } catch (err) {
+          alert(err);
+        }
 
         // if valid
             // get role  
             // change userType to role
             // navigate to home 
-
-            const role = "mentee"
-            dispatch(logIn({type : role }))
-            navigate("/")
 
         // else 
             // resetForm 
