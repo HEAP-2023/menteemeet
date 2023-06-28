@@ -67,7 +67,7 @@ const SignUpForm = () => {
                     <Controller
                     name="password"
                     control={control}
-                    render={({field}) => <TextField {...field} variant="outlined" sx={{width:"100%"}} /> }
+                    render={({field}) => <TextField {...field} variant="outlined" sx={{width:"100%"}} type="password"/> }
                     />
                 <ErrorMessage 
                 errors={errors} 
@@ -80,7 +80,7 @@ const SignUpForm = () => {
                     <Controller
                     name="confirmPassword"
                     control={control}
-                    render={({field}) => <TextField {...field} variant="outlined" sx={{width:"100%"}} /> }
+                    render={({field}) => <TextField {...field} variant="outlined" sx={{width:"100%"}} type="password"/> }
                     />
                     <ErrorMessage errors={errors} 
                     name="confirmPassword"

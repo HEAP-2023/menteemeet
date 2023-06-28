@@ -65,7 +65,7 @@ const LoginForm = () => {
                     <Controller
                     name="password"
                     control={control}
-                    render={({field}) => <TextField {...field} variant="outlined" sx={{width:"100%"}} /> }
+                    render={({field}) => <TextField {...field} variant="outlined" sx={{width:"100%"}} type="password"/> }
                     />
                     <ErrorMessage 
                     errors={errors} 
