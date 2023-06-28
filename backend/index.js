@@ -10,6 +10,7 @@ const PORT = config.PORT;
 const API_VER = config.API_VER;
 
 //Parse JSON data
+app.use(cors());
 app.use(express.json());
 
 //Import sequelize
@@ -17,10 +18,8 @@ const sequelize = require('./config/database');
 
 //User routes
 app.use(API_VER + '/user', require('./routes/userRoutes'));
-let corsOptions = {
-  origin: ['http://localhost:3000'],
-}
-app.use(cors(corsOptions));
+
+
 
 sequelize
   .authenticate()
