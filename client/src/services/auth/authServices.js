@@ -1,6 +1,5 @@
 import axiosInstance from "../../utils/axiosInstance";
 
-
 async function login(user) {
   const res = await axiosInstance({
     method: "post",
@@ -14,6 +13,17 @@ async function login(user) {
   return true;
 }
 
+async function register(user) {
+  const res = await axiosInstance({
+    method: "post",
+    url: "/user/register",
+    data: user
+  })
+
+  if (res.status !== 200) return false;
+  return true;
+}
+
 export {
-  login 
+  login, register
 };
