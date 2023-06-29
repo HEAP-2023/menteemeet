@@ -8,7 +8,7 @@ async function login(user) {
   })
 
   if (res.status !== 200) return false;
-
+  console.log(res)
   localStorage.setItem("jwt", res.data.accessToken);
   return true;
 }
@@ -19,8 +19,8 @@ async function register(user) {
     url: "/user/register",
     data: user
   })
-
-  if (res.status !== 200) return false;
+  console.log(res)
+  if (res.status !== 201) return false;
   return true;
 }
 

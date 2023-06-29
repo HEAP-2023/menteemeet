@@ -2,7 +2,7 @@ import {createSlice} from '@reduxjs/toolkit'
 
 const fetchUserType = () => {
     // go fetch 
-    return "organiser";
+    return undefined;
 }
 const fetchAllProfiles = () => {
     // go fetch

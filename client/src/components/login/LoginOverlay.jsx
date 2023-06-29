@@ -24,7 +24,7 @@ const LoginOverlay = () => {
         >
             <Box width="600px" height="800px" 
             bgcolor="#ffffff" display="flex"
-            flexDirection="column" p="20px"
+            flexDirection="column" p="0 20px"
             gap="20px"
             >
                 <IconButton sx={{width:"40px" ,ml:"auto"}} onClick={() => dispatch(loginOverlayToggle())}>

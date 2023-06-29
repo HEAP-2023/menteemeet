@@ -20,6 +20,8 @@ const SignUpForm = () => {
 
     const {control, formState: {errors}, handleSubmit, reset} = useForm({
         defaultValues : {
+            firstname : "",
+            lastname : "",
             email : "",
             password : "",
             confirmPassword : "",
@@ -32,15 +34,8 @@ const SignUpForm = () => {
         console.log(data)
 
         try {
-          const toSend = {
-            firstname: "Test",
-            lastname: "Test",
-            email : data.email,
-            password : data.password,
-            confirmPassword : data.confirmPassword,
-          }
-
-          const isRegistered = await register(toSend);
+          const isRegistered = await register(data);
+          console.log(isRegistered)
           if (isRegistered) {
             const role = 'mentee';
             dispatch(logIn({ type : role }))
@@ -65,6 +60,32 @@ const SignUpForm = () => {
     return <Box width="100%">
         <form onSubmit={handleSubmit(handleSave)} width="100%">
             <Box display="flex" flexDirection="column" width="100%" gap="20px">
+            <Box display="flex" flexDirection="column" width="100%">
+                    <label>First Name</label>
+                    <Controller
+                    name="firstname"
+                    control={control}
+                    render={({field}) => <TextField {...field} variant="outlined" sx={{width:"100%"}} /> }
+                    />
+                    <ErrorMessage 
+                    errors={errors} 
+                    name="firstname"
+                    render={({ message }) => <p style={{color : "#ff0000"}}>{message}</p>}
+                    />
+                </Box>
+                <Box display="flex" flexDirection="column" width="100%">
+                    <label>Last Name</label>
+                    <Controller
+                    name="lastname"
+                    control={control}
+                    render={({field}) => <TextField {...field} variant="outlined" sx={{width:"100%"}} /> }
+                    />
+                    <ErrorMessage 
+                    errors={errors} 
+                    name="lastname"
+                    render={({ message }) => <p style={{color : "#ff0000"}}>{message}</p>}
+                    />
+                </Box>
                 <Box display="flex" flexDirection="column" width="100%">
                     <label>Email</label>
                     <Controller

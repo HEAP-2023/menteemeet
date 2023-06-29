@@ -20,6 +20,10 @@ export const loginSchema = yup.object()
 export const signUpSchema = yup.object()
                     .shape(
                         {
+                            firstname : yup.string()
+                                            .required("this field is required"),
+                            lastname : yup.string().
+                                            required("this field is required"),
                             email : yup.string()
                                     .email("invalid email format")
                                     .required("this field is required"),
