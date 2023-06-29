@@ -10,6 +10,7 @@ import { logIn } from "../../state(kiv)";
 import { yupResolver } from "@hookform/resolvers/yup"
 import { signUpSchema } from "./validationSchema";
 import { DevTool } from "@hookform/devtools";
+import { register } from "../../services/auth/authServices";
 
 
 const SignUpForm = () => {
@@ -26,18 +27,33 @@ const SignUpForm = () => {
         resolver : yupResolver(signUpSchema)
     })
 
-    const handleSave = (data) => {
+    const handleSave = async (data) => {
         console.log("to be submitted")
         console.log(data)
+
+        try {
+          const toSend = {
+            firstname: "Test",
+            lastname: "Test",
+            email : data.email,
+            password : data.password,
+            confirmPassword : data.confirmPassword,
+          }
+
+          const isRegistered = await register(toSend);
+          if (isRegistered) {
+            const role = 'mentee';
+            dispatch(logIn({ type : role }))
+            navigate("/");
+          }
+        } catch (err) {
+          alert(err);
+        }
 
         // if valid
             // get role  
             // change userType to role
             // navigate to home 
-
-            const role = "mentee"
-            dispatch(logIn({type : role }))
-            navigate("/")
 
         // else 
             // resetForm 
