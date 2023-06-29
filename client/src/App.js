@@ -59,8 +59,8 @@ const acctInfo = {
     email : "srneo.2022@scis.smu.edu.sg",
     username: "shyhruey",
     password: "hello123",
+    contactNumber: "81234567",
     telegramUsername: "@shyhruey",
-    contactNumber: "81234567"
 }
 
 const programmes_enrolled = [

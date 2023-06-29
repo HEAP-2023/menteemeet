@@ -6,6 +6,10 @@ import { useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import FeedbackTable from "../tables/FeedbackTable";
 import { generateColors } from "../../../theme";
+import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { ErrorMessage } from '@hookform/error-message';
+import { DevTool } from "@hookform/devtools";
 
 const Feedback = () => {
     const bgColor = generateColors().primary[500];
@@ -17,12 +21,22 @@ const Feedback = () => {
     const rows = fetchPeople(userType);
 
     const acctID = useSelector((state) => state.user.userDetails.acctID)
-    const { control, handleSubmit, reset } = useForm({
+    const people = ["Organiser"].concat(rows.map((item, index) => item.name));
+    
+    const feedbackSchema = yup.object()
+        .shape({
+            feedback: yup.string()
+                .required("This field is required"),  
+            person: yup.string()
+                .oneOf(people, "Select a person for feedback")
+                .required("Select a person for feedback")
+        }).required()
+    const { control, handleSubmit, reset, formState: { errors }, register } = useForm({
         defaultValues: {
             feedback: "",
             from: acctID,
             to: ""
-        }
+        }, resolver: yupResolver(feedbackSchema)
     });
     const [store, setStore] = useState([]);
     const handleSave = (data) => {
@@ -39,9 +53,9 @@ const Feedback = () => {
     }
 
     let content;
-    console.log(store)
+    // console.log(store)
     let hasContent = store.length > 0 ? true : false;
-    console.log(hasContent);
+    // console.log(hasContent);
     if (userType === "mentee" || userType === "mentor") {
 
         content =
@@ -50,10 +64,11 @@ const Feedback = () => {
                 <form onSubmit={handleSubmit(handleSave)}>
                     <SectionHeader text="Provide feedback to" sx={{ margin: "15px 30px", width: "50px" }} />
                     <Select
+                        {...register("person")}
                         value={person}
                         onChange={handleChange}
-
                         displayEmpty
+                        name="person"
                         sx={{ height: "30px", bgcolor: "#EBEBEB", border: "none" }}
                     >
                         <MenuItem value="">
@@ -68,6 +83,11 @@ const Feedback = () => {
                             </MenuItem>
                         ))}
                     </Select>
+                    <ErrorMessage
+                        errors={errors}
+                        name="person"
+                        render={({ message }) => <p style={{ color: "#ff0000", margin: "0px", marginLeft: "35px"}}>{message}</p>}
+                    />
 
                     <Box display="flex" flexDirection={"column"}>
                         <Controller
@@ -83,12 +103,18 @@ const Feedback = () => {
                                 }}
                             />}
                         />
-                        <Box display="flex" justifyContent="flex-end" width={"95%"}>
-                        <CustomButton buttonName={"Edit"} />
-                        <CustomButton buttonName={"Submit"} />
-                    </Box>
-                    </Box>
+                        <ErrorMessage
+                            errors={errors}
+                            name="feedback"
+                            render={({ message }) => <p style={{ color: "#ff0000", marginLeft: "35px"}}>{message}</p>}
+                        />
                     
+                        <Box display="flex" justifyContent="flex-end" width={"95%"}>
+                            <CustomButton buttonName={"Edit"} />
+                            <CustomButton buttonName={"Submit"} />
+                        </Box>
+                    </Box>
+
 
                 </form>
                 <Box>
@@ -108,6 +134,7 @@ const Feedback = () => {
                     </Box>
 
                 </Box>
+                <DevTool control={control}/>
             </Box>
 
     } else {
