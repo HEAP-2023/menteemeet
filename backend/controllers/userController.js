@@ -55,6 +55,7 @@ const loginAcc = async (req, res) => {
         return res.status(200).json({message: "Successfully logged in!", accessToken: accessToken });
         
     } catch (err) {
+        console.log(err);
         return res.status(500).json( { error: err });
     }
 }

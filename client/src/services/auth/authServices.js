@@ -4,7 +4,7 @@ import axiosInstance from "../../utils/axiosInstance";
 async function login(user) {
   const res = await axiosInstance({
     method: "post",
-    url: "/user/register",
+    url: "/user/login",
     data: user
   })
 
