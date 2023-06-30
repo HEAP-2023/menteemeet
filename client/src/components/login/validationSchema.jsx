@@ -29,7 +29,7 @@ export const signUpSchema = yup.object()
                 .required("This field is required"),
             password: yup.string()
                 .required("This field is required")
-                .test('len', "Password must have at least 8 characters", val => val.length === 8)
+                .min(8, "Password must have at least 8 characters")
                 .matches(/[0-9]/, getCharacterValidationError("digit"))
                 .matches(/[a-z]/, getCharacterValidationError("lowercase"))
                 .matches(/[A-Z]/, getCharacterValidationError("uppercase")),

@@ -3,20 +3,12 @@ import { Box, Typography, Input, TextField, Button } from "@mui/material";
 import { useForm, Controller } from "react-hook-form";
 import { ErrorMessage } from '@hookform/error-message';
 
-import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import { logIn } from "../../state(kiv)";
-
 import { yupResolver } from "@hookform/resolvers/yup"
 import { loginSchema } from "./validationSchema";
 import { DevTool } from "@hookform/devtools";
-import { login } from "../../services/auth/authServices";
+import useLogin from "../../hooks/login/useLogin";
 
 const LoginForm = () => {
-    const dispatch = useDispatch();
-    const navigate = useNavigate();
-
-
     const {control,formState: {errors} , handleSubmit, reset} = useForm({
         defaultValues : {
             email : "",
@@ -24,30 +16,12 @@ const LoginForm = () => {
         },
         resolver : yupResolver(loginSchema)
     })
-    
-    const handleSave = async (data) => {
+
+    const {mutate : login} = useLogin(reset)
+    const handleSave = async (data, reset) => {
         console.log("to be submitted")
         console.log(data)
-
-        try {
-          const isLoggedIn = await login(data);
-          if (isLoggedIn) {
-            navigate("/");
-          }
-        } catch (err) {
-          alert(err);
-        }
-
-        // if valid
-            // get role  
-            // change userType to role
-            // navigate to home 
-
-        // else 
-            // resetForm 
-            // stay here
-
-            // reset();
+        login(data);
     }
 
     return <Box width="100%">

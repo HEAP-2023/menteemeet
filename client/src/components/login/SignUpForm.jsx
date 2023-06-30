@@ -3,8 +3,8 @@ import { Box, Typography, Input, TextField, Button } from "@mui/material";
 import { ErrorMessage } from '@hookform/error-message';
 
 
-import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import { logIn } from "../../state(kiv)";
 
 import { yupResolver } from "@hookform/resolvers/yup"
@@ -34,13 +34,14 @@ const SignUpForm = () => {
         console.log(data)
 
         try {
-          const isRegistered = await register(data);
-          console.log(isRegistered)
-          if (isRegistered) {
+          const {authorised, role} = await register(data);
+          if (authorised) {
+            dispatch(logIn({ type : role }))
             navigate("/");
           }
         } catch (err) {
           alert(err);
+          reset();
         }
 
         // if valid
@@ -52,7 +53,6 @@ const SignUpForm = () => {
             // resetForm 
             // stay here
 
-            // reset();
     }
 
     return <Box width="100%">
