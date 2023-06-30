@@ -32,8 +32,6 @@ const LoginForm = () => {
         try {
           const isLoggedIn = await login(data);
           if (isLoggedIn) {
-            const role = 'mentee';
-            dispatch(logIn({ type : role }))
             navigate("/");
           }
         } catch (err) {

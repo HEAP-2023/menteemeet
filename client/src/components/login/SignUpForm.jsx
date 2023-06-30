@@ -37,8 +37,6 @@ const SignUpForm = () => {
           const isRegistered = await register(data);
           console.log(isRegistered)
           if (isRegistered) {
-            const role = 'mentee';
-            dispatch(logIn({ type : role }))
             navigate("/");
           }
         } catch (err) {

@@ -9,6 +9,8 @@ async function login(user) {
 
   if (res.status !== 200) return false;
   console.log(res)
+  const role = 'mentee';
+  dispatch(logIn({ type : role }))
   localStorage.setItem("jwt", res.data.accessToken);
   return true;
 }
@@ -21,6 +23,9 @@ async function register(user) {
   })
   console.log(res)
   if (res.status !== 201) return false;
+
+  const role = 'mentee';
+  dispatch(logIn({ type : role }))
   return true;
 }
 
