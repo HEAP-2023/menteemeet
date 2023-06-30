@@ -18,7 +18,7 @@ const LoginForm = () => {
     })
 
     const {mutate : login} = useLogin(reset)
-    const handleSave = async (data, reset) => {
+    const handleSave = async (data) => {
         console.log("to be submitted")
         console.log(data)
         login(data);

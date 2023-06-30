@@ -11,12 +11,10 @@ import { yupResolver } from "@hookform/resolvers/yup"
 import { signUpSchema } from "./validationSchema";
 import { DevTool } from "@hookform/devtools";
 import { register } from "../../services/auth/authServices";
+import useSignup from "../../hooks/login/useSignup";
 
 
 const SignUpForm = () => {
-    const dispatch = useDispatch();
-    const navigate = useNavigate();
-
 
     const {control, formState: {errors}, handleSubmit, reset} = useForm({
         defaultValues : {
@@ -29,30 +27,24 @@ const SignUpForm = () => {
         resolver : yupResolver(signUpSchema)
     })
 
+    const {mutate : signup} = useSignup(reset)
+
     const handleSave = async (data) => {
         console.log("to be submitted")
         console.log(data)
-
-        try {
-          const {authorised, role} = await register(data);
-          if (authorised) {
-            dispatch(logIn({ type : role }))
-            navigate("/");
-          }
-        } catch (err) {
-          alert(err);
-          reset();
-        }
-
-        // if valid
-            // get role  
-            // change userType to role
-            // navigate to home 
-
-        // else 
-            // resetForm 
-            // stay here
-
+        signup(data)
+        
+        // original 
+        // try {
+        //   const {authorised, role} = await register(data);
+        //   if (authorised) {
+        //     dispatch(logIn({ type : role }))
+        //     navigate("/");
+        //   }
+        // } catch (err) {
+        //   alert(err);
+        //   reset();
+        // }
     }
 
     return <Box width="100%">
