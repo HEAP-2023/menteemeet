@@ -16,10 +16,14 @@ app.use(express.json());
 //Import sequelize
 const sequelize = require('./config/database');
 
+//Seed data
+const seedData = require('./utils/dbInit');
+
+//Initialise associations
+const initAssociations = require('./models/associations');
+
 //User routes
 app.use(API_VER + '/user', require('./routes/userRoutes'));
-
-
 
 sequelize
   .authenticate()
@@ -40,3 +44,6 @@ sequelize
   .catch((err) => {
     console.error("[ERROR] Error synchronizing models:", err);
   });
+
+initAssociations();
+seedData();
