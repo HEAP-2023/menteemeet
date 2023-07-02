@@ -1,4 +1,5 @@
-const User = require("../models/account");
+const Account = require("../models/account");
+const User = require('../models/user');
 const bcrypt = require("bcrypt");
 const config = require('../utils/config');
 const jwt = require("jsonwebtoken");
@@ -11,7 +12,7 @@ const registerAcc = async (req, res) => {
     const { firstname, lastname, email, password } = req.body;
     try {
         // WHERE Email : has "email"
-        if (await User.findOne({where: { EMAIL: email } })) {
+        if (await Account.findOne({ where: { EMAIL: email } })) {
             return res.status(400).json({ message: "Email address has already been taken!"});
         }
 
@@ -20,13 +21,18 @@ const registerAcc = async (req, res) => {
         const hashedPassword = await bcrypt.hash(password, salt);
 
         //Create entry 
-        const newUser = await User.create({
-            FIRST_NAME: firstname,
-            LAST_NAME: lastname,
-            EMAIL: email,
-            PASSWORD: hashedPassword,
+        const newAccount = await Account.create({
+            first_name: firstname,
+            last_name: lastname,
+            email: email,
+            password: hashedPassword,
         })
-        res.status(201).json(newUser);
+
+        const newUser = await User.create({
+            account_id: newAccount.dataValues.account_id,
+        })
+
+        res.status(201).json({ ...newAccount.dataValues, user_id: newUser.user_id });
     } catch (err) {
         console.log(err);
         return res.status(500).json({ error: err });
@@ -40,13 +46,13 @@ const loginAcc = async (req, res) => {
 
     try {
         // if incorrect, X
-        const user = await User.findOne( {where: { EMAIL: email } });
+        const user = await Account.findOne( {where: { EMAIL: email } });
 
         if (!user) {
             return res.status(401).json( { message: "Your email/password is incorrect." });
         }
         // email valid -> Compare password with bcrypt
-        if (!(await bcrypt.compare(password, user.PASSWORD))) {
+        if (!(await bcrypt.compare(password, user.password))) {
             return res.status(401).json( { message: "Your email/password is incorrect." });
         }
 
@@ -74,6 +80,4 @@ const updateAcc = async (req, res) => {
     }
 }
 
-module.exports = {registerAcc, loginAcc, updateAcc}
-
-
+module.exports = { registerAcc, loginAcc, updateAcc };

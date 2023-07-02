@@ -27,7 +27,7 @@ const Programme = sequelize.define(
             allowNull: false,
         },
         MATCHING_CRITERIA: {
-            type: DataTypes.String(),
+            type: DataTypes.STRING(),
             allowNull: false,
         },
         EXTERNAL_LINK: {

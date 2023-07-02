@@ -4,18 +4,18 @@ const sequelize = require("../config/database");
 const Announcement = sequelize.define(
     "Announcement",
     {
-        ANNOUNCEMENT_ID: {
+        announcement_id: {
             type: DataTypes.INTEGER,
             primaryKey: true,
             allowNull: false,
             autoIncrement: true,
         },
-        MESSAGE: {
-          type: DataTypes.String(),
+        message: {
+          type: DataTypes.STRING(),
           allowNull: true,
         },
-        TYPE: {
-            type: DataTypes.String(),
+        type: {
+            type: DataTypes.STRING(),
             allowNull: false,
         }
     },

@@ -4,25 +4,25 @@ const sequelize = require("../config/database");
 const Comment = sequelize.define(
     "Comment",
     {
-        COMMENT_ID: {
+        comment_id: {
             type: DataTypes.INTEGER,
             primaryKey: true,
             allowNull: false,
             autoIncrement: true,
         },
-        DESCRIPTION: {
+        description: {
           type: DataTypes.STRING(),
           allowNull: false,
         },
-        UPVOTE_COUNT: {
+        upvote_count: {
             type: DataTypes.INTEGER,
             allowNull: false,
         },
-        DOWNVOTE_COUNT: {
+        downvote_count: {
             type: DataTypes.INTEGER,
             allowNull: false,
         },
-        ISREPLY: {
+        is_reply: {
             type: DataTypes.BOOLEAN,
             allowNull: false,
         }

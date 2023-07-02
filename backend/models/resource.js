@@ -4,17 +4,17 @@ const sequelize = require("../config/database");
 const Resource = sequelize.define(
     "Resource",
     {
-        RESOURCE_ID: {
+        resource_id: {
             type: DataTypes.INTEGER,
             primaryKey: true,
             allowNull: false,
             autoIncrement: true,
         },
-        MEDIA: {
+        media: {
           type: DataTypes.BLOB(),
           allowNull: true,
         },
-        MESSAGE: {
+        message: {
             type: DataTypes.STRING(),
             allowNull: false,
         }

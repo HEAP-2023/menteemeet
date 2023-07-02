@@ -4,41 +4,41 @@ const sequelize = require("../config/database");
 const Account = sequelize.define(
     "Account",
     {
-        ACCOUNT_ID: {
+        account_id: {
             type: DataTypes.INTEGER,
             primaryKey: true,
             allowNull: false,
             autoIncrement: true,
         },
-        FIRST_NAME: {
+        first_name: {
             type: DataTypes.STRING(30),
             allowNull: false,
         },
-        LAST_NAME: {
+        last_name: {
             type: DataTypes.STRING(30),
             allowNull: false
         },
-        EMAIL: {
+        email: {
             type: DataTypes.STRING(50),
             allowNull: false,
             unique: true
         },
-        PASSWORD: {
+        password: {
             type: DataTypes.STRING(),
             allowNull: false
         },
-        CONTACT_NO: {
+        contact_no: {
             type: DataTypes.INTEGER,
             allowNull: true
         },
-        ADDRESS: {
+        address: {
             type: DataTypes.STRING(),
             allowNull: true
         },
     },
     {
       timestamps: false,
-      tableName: "Account"
+      tableName: "account"
     }
 );
 

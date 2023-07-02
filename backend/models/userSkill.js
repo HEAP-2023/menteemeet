@@ -6,7 +6,7 @@ const UserSkill = sequelize.define(
     {},
     {
       timestamps: false,
-      tableName: "user_skill"
+      tableName: "userSkill"
     }
 );
 

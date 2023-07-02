@@ -4,21 +4,21 @@ const sequelize = require("../config/database");
 const Application = sequelize.define(
     "Application",
     {
-        APPLICATION_ID: {
+        application_id: {
             type: DataTypes.INTEGER,
             primaryKey: true,
             allowNull: false,
             autoIncrement: true,
         },
-        DATE: {
+        date: {
             type: DataTypes.DATE,
             allowNull: false,
         },
-        FORM_DETAILS: {
+        form_details: {
             type: DataTypes.STRING(),
             allowNull: false,
         },
-        ISACCEPTED: {
+        is_accepted: {
           type: DataTypes.BOOLEAN,
           allowNull: false,
         },

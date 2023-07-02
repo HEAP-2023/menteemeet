@@ -4,21 +4,21 @@ const sequelize = require("../config/database");
 const Review = sequelize.define(
     "Review",
     {
-        REVIEW_ID: {
+        review_id: {
             type: DataTypes.INTEGER,
             primaryKey: true,
             allowNull: false,
             autoIncrement: true,
         },
-        DATE: {
+        date: {
             type: DataTypes.DATE,
             allowNull: false,
         },
-        RATING: {
+        rating: {
             type: DataTypes.INTEGER,
             allowNull: false,
         },
-        COMMENT: {
+        comment: {
             type: DataTypes.STRING(),
             allowNull: true
         }
