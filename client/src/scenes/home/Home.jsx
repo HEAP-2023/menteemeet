@@ -5,7 +5,7 @@ import SectionHeader from "../../components/SectionHeader"
 import Section from "../../components/home/Section"
 import HomeCarousel from "../../components/home/HomeCarousel"
 // redux
-import { useSelector, useDispatch } from "react-redux"
+import { useSelector } from "react-redux"
 
 
 

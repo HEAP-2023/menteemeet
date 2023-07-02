@@ -39,6 +39,7 @@ const registerAcc = async (req, res) => {
     }
 }
 
+var a;
 const loginAcc = async (req, res) => {
 
     //Authenticate user
@@ -57,6 +58,7 @@ const loginAcc = async (req, res) => {
         }
 
         const accessToken = jwt.sign(user.toJSON(), ACCESS_TOKEN_SECRET, { expiresIn: EXPIRY });
+        a = user.toJSON();
 
         return res.status(200).json({message: "Successfully logged in!", accessToken: accessToken });
         
@@ -66,14 +68,19 @@ const loginAcc = async (req, res) => {
     }
 }
 
-
+// WIP//
 const updateAcc = async (req, res) => {
 
     //Authenticate user
     // const { email, password } = req.body;
 
     try {
-        return res.status(200).json({ message: "Successfully authenticated!" });
+        //Filtering out each Object so that they == to the email.
+        //the hardcoded email i want to change it to "Retrieve from JWT"
+        const filteredObject = Object.fromEntries(Object.entries(a).filter(([key, value]) => value === 'test123@gmail.com'));
+        const filteredJsonString = JSON.stringify(filteredObject); // Stringify the filtered object
+
+        return res.status(200).json({message: "Successfully authenticated!" });
         
     } catch (err) {
         return res.status(500).json({ error: err });

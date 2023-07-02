@@ -11,7 +11,7 @@ import Profile from "./scenes/profile/Profile";
 import Programme from "./scenes/programme/Programme";
 import LoginStart from "./scenes/login/LoginStart";
 import Test from "./scenes/testingGrounds/Test";
-
+import CreateProgramme from "./scenes/createProgramme/CreateProgramme";
 
 import { useSelector } from "react-redux";
 import ProtectedRoute from "./ProtectedRoute"
@@ -39,6 +39,8 @@ function App() {
                         <Route path="/" element={<Home/>} role={userType}></Route>
                         <Route path="/explore" element={<Explore programmes={Programmes_available}/>}></Route>
                         <Route path="/profile" element={<Profile peerReviews={peerReviews} history={history} acctInfo={acctInfo}/>}></Route>
+                        {userType === "organiser" 
+                            && <Route path="/programme/create" element={<CreateProgramme/>}/>}
                         <Route path="/programmes/:id" element={<Programme programme_details={programmes_enrolled}/>}></Route>
                         <Route path="/test" element={<Test/>} />
                         <Route path="/accountSettings" element={<AccountSettings acctInfo={acctInfo}/>} />

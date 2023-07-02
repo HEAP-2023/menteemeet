@@ -46,7 +46,7 @@ const SideNavbar = ({enrolled}) => {
 
                     {
                         userType === "organiser" ? 
-                        <MenuItem component={<Link to="/newProgramme/create" />}> Create Programme </MenuItem>
+                        <MenuItem component={<Link to="/programme/create" />}> Create Programme </MenuItem>
                         :
                         <MenuItem component={<Link to="/explore" />}> Explore </MenuItem>
                     }
