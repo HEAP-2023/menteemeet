@@ -67,10 +67,10 @@ const updateAcc = async (req, res) => {
     // const { email, password } = req.body;
 
     try {
-        return res.status(200).json( {message: "Yes sir. You have been successfully authenticated."});
+        return res.status(200).json({ message: "Successfully authenticated!" });
         
     } catch (err) {
-        return res.status(500).json( { error: err });
+        return res.status(500).json({ error: err });
     }
 }
 

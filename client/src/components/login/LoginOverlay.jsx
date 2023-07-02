@@ -22,7 +22,7 @@ const LoginOverlay = () => {
         open={overlayActive}
         sx = {{display:"flex", justifyContent:"center", alignItems:"center"}}
         >
-            <Box width="600px" height="800px" 
+            <Box width="60%" height="80%" 
             bgcolor="#ffffff" display="flex"
             flexDirection="column" p="0 20px"
             gap="20px"
