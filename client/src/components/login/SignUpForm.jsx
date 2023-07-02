@@ -2,15 +2,9 @@ import { useForm, Controller } from "react-hook-form";
 import { Box, Typography, Input, TextField, Button } from "@mui/material";
 import { ErrorMessage } from '@hookform/error-message';
 
-
-import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { logIn } from "../../state(kiv)";
-
 import { yupResolver } from "@hookform/resolvers/yup"
 import { signUpSchema } from "./validationSchema";
 import { DevTool } from "@hookform/devtools";
-import { register } from "../../services/auth/authServices";
 import useSignup from "../../hooks/login/useSignup";
 
 
