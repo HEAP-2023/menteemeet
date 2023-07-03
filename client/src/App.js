@@ -12,7 +12,7 @@ import Programme from "./scenes/programme/Programme";
 import LoginStart from "./scenes/login/LoginStart";
 import Test from "./scenes/testingGrounds/Test";
 import CreateProgramme from "./scenes/createProgramme/CreateProgramme";
-
+import Calendar from "./scenes/calendar/Calendar";
 import { useSelector } from "react-redux";
 import ProtectedRoute from "./ProtectedRoute"
 import AccountSettings from "./scenes/accountSettings/AccountSettings";
@@ -44,6 +44,7 @@ function App() {
                         <Route path="/programmes/:id" element={<Programme programme_details={programmes_enrolled}/>}></Route>
                         <Route path="/test" element={<Test/>} />
                         <Route path="/accountSettings" element={<AccountSettings acctInfo={acctInfo}/>} />
+                        <Route path="/calendar" element={<Calendar />} />
                     </Route>
                 </Routes>
             </main>

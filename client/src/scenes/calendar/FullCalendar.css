@@ -1,0 +1,18 @@
+.fc .fc-toolbar-title {
+    font-size: 16px;
+    font-weight: 400;
+    color: #333d55;
+}
+
+.fc-direction-ltr .fc-button-group > .fc-button:not(:last-child)
+{
+    background-color: #f0f0ff;
+    color: #333d55;
+    border-color:#c0c0cc;
+}
+
+.fc-direction-ltr .fc-button-group > .fc-button:not(:first-child){
+    background-color: #f0f0ff;
+    color: #333d55;
+    border-color:#c0c0cc;
+}
