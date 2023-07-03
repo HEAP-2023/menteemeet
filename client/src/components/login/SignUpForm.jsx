@@ -1,11 +1,12 @@
 import { useForm, Controller } from "react-hook-form";
-import { Box, Typography, Input, TextField, Button } from "@mui/material";
+import { Box, FormControlLabel,Radio, RadioGroup, TextField, Button } from "@mui/material";
 import { ErrorMessage } from '@hookform/error-message';
 
 import { yupResolver } from "@hookform/resolvers/yup"
 import { signUpSchema } from "./validationSchema";
 import { DevTool } from "@hookform/devtools";
 import useSignup from "../../hooks/login/useSignup";
+import { useState } from "react";
 
 
 const SignUpForm = () => {
@@ -17,6 +18,7 @@ const SignUpForm = () => {
             email : "",
             password : "",
             confirmPassword : "",
+            role : "mentee",
         },
         resolver : yupResolver(signUpSchema)
     })
@@ -108,7 +110,27 @@ const SignUpForm = () => {
                     render={({ message }) => <p style={{color : "#ff0000"}}>{message}</p>}
                     />
                 </Box>
-    
+                <Box display="flex" flexDirection="column" width="100%">
+                    <label>Role</label>
+                    <Controller
+                    name="role"
+                    control={control}
+                    render={({field}) => 
+                    <RadioGroup
+                        row
+                        {...field}>
+                        <FormControlLabel value="organiser" control={
+                            <Radio sx={{'&.Mui-checked': {color: "#AEAEFF"}
+                        }}/>} 
+                        label="Organiser" />
+                        <FormControlLabel value="mentee" control={
+                        <Radio disableRipple sx={{'&.Mui-checked': {color: "#AEAEFF"}
+                        }}/>} 
+                        label="Mentee / Mentor" />
+                      </RadioGroup>
+                    }
+                    />
+                </Box>
                 <Button type="submit" variant="contained" color="secondary" sx={{width:"100%"}}>Sign Up</Button>
             </Box>
         </form>

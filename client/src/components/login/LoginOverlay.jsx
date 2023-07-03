@@ -22,10 +22,10 @@ const LoginOverlay = () => {
         open={overlayActive}
         sx = {{display:"flex", justifyContent:"center", alignItems:"center"}}
         >
-            <Box width="60%" height="80%" 
+            <Box width="40%" height="90%" 
             bgcolor="#ffffff" display="flex"
             flexDirection="column" p="0 20px"
-            gap="20px"
+            gap="10px"
             >
                 <IconButton sx={{width:"40px" ,ml:"auto"}} onClick={() => dispatch(loginOverlayToggle())}>
                     <CancelOutlinedIcon/>
