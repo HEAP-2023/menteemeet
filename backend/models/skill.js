@@ -4,24 +4,24 @@ const sequelize = require("../config/database");
 const Skill = sequelize.define(
     "Skill",
     {
-        SKILL_ID: {
+        skill_id: {
             type: DataTypes.INTEGER,
             primaryKey: true,
             allowNull: false,
             autoIncrement: true,
         },
-        SKILL: {
+        skill: {
           type: DataTypes.STRING(),
           allowNull: false,
         },
-        CATEGORY: {
+        category: {
           type: DataTypes.STRING(),
           allowNull: true
         }
     },
     {
       timestamps: false,
-      tableName: 'skills'
+      tableName: 'skill'
     }
 );
 

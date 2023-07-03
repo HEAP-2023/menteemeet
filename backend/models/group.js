@@ -4,15 +4,15 @@ const sequelize = require("../config/database");
 const Group = sequelize.define(
     "Group",
     {
-        GROUP_ID: {
+        group_id: {
             type: DataTypes.INTEGER,
             primaryKey: true,
             allowNull: false,
             autoIncrement: true,
         },
-        GROUP_NO: {
-          type: DataTypes.INTEGER,
-          allowNull: false
+        group_no: {
+            type: DataTypes.INTEGER,
+            allowNull: true
         }
     },
     {

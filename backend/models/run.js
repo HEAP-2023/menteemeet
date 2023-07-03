@@ -4,15 +4,15 @@ const sequelize = require("../config/database");
 const Run = sequelize.define(
     "Run",
     {
-        STARTDATE: {
+        start_date: {
             type: DataTypes.DATE,
             allowNull: false,
         },
-        ENDDATE: {
+        end_date: {
             type: DataTypes.DATE,
             allowNull: false,
         },
-        ATTENDANCE: {
+        attendance: {
             type: DataTypes.INTEGER(),
             allowNull: false,
         }

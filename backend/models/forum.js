@@ -4,13 +4,13 @@ const sequelize = require("../config/database");
 const Forum = sequelize.define(
     "Forum",
     {
-        FORUM_ID: {
+        forum_id: {
             type: DataTypes.INTEGER,
             primaryKey: true,
             allowNull: false,
             autoIncrement: true,
         },
-        NUM_OF_COMMENTS: {
+        num_of_comments: {
           type: DataTypes.INTEGER,
           allowNull: false,
         }

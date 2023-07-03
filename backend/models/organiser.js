@@ -4,13 +4,13 @@ const sequelize = require("../config/database");
 const Organiser = sequelize.define(
     "Organiser",
     {
-        ORG_ID: {
+        organiser_id: {
             type: DataTypes.INTEGER,
             primaryKey: true,
             allowNull: false,
             autoIncrement: true,
         },
-        DESCRIPTION: {
+        description: {
             type: DataTypes.STRING(),
             allowNull: true
         }

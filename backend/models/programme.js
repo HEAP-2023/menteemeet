@@ -4,41 +4,41 @@ const sequelize = require("../config/database");
 const Programme = sequelize.define(
     "Programme",
     {
-        PROGRAMME_ID: {
+        programme_id: {
             type: DataTypes.INTEGER,
             primaryKey: true,
             allowNull: false,
             autoIncrement: true,
         },
-        NAME: {
+        name: {
             type: DataTypes.STRING(50),
             allowNull: false,
         },
-        DESCRIPTION: {
+        description: {
             type: DataTypes.STRING(),
             allowNull: true,
         },
-        CATEGORY: {
+        category: {
             type: DataTypes.STRING(30),
             allowNull: true,
         },
-        CAPACITY: {
+        capacity: {
             type: DataTypes.INTEGER,
             allowNull: false,
         },
-        MATCHING_CRITERIA: {
-            type: DataTypes.String(),
+        matching_criteria: {
+            type: DataTypes.STRING(),
             allowNull: false,
         },
-        EXTERNAL_LINK: {
+        external_link: {
             type: DataTypes.STRING(),
             allowNull: true,
         },
-        MEDIA: {
+        media: {
             type: DataTypes.BLOB(),
             allowNull: true,
         },
-        APPLICATION_DATELINE: {
+        application_deadline: {
             type: DataTypes.DATE,
             allowNull: false,
         }

@@ -4,25 +4,25 @@ const sequelize = require("../config/database");
 const MentorSession = sequelize.define(
     "MentorSession",
     {
-        SESSION_ID: {
+        session_id: {
             type: DataTypes.INTEGER,
             primaryKey: true,
             allowNull: false,
             autoIncrement: true,
         },
-        DATE: {
+        date: {
             type: DataTypes.DATE,
             allowNull: false,
         },
-        START_TIME: {
+        start_time: {
             type: DataTypes.TIME,
             allowNull: false,
         },
-        END_TIME: {
+        end_time: {
             type: DataTypes.TIME,
             allowNull: false,
         },
-        TOPIC: {
+        topic: {
             type: DataTypes.STRING(),
             allowNull: false,
         }

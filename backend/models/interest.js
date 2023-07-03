@@ -4,13 +4,13 @@ const sequelize = require("../config/database");
 const Interest = sequelize.define(
     "Interest",
     {
-        INTEREST_ID: {
+        interest_id: {
             type: DataTypes.INTEGER,
             primaryKey: true,
             allowNull: false,
             autoIncrement: true,
         },
-        INTEREST: {
+        interest: {
           type: DataTypes.STRING(),
           allowNull: false,
         }

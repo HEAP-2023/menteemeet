@@ -4,14 +4,14 @@ const sequelize = require("../config/database");
 const UserProgramme = sequelize.define(
     "UserProgramme",
     {
-      ROLE: {
+      role: {
           type: DataTypes.STRING,
           allowNull: false,
       },
     },
     {
       timestamps: false,
-      tableName: "user_programme"
+      tableName: "userProgramme"
     }
 );
 

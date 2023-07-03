@@ -11,70 +11,83 @@ const Forum = require('./forum');
 const Resource = require('./resource');
 const Announcement = require('./announcement');
 const Organiser = require('./organiser');
+const Comment = require('./comment');
+const UserSkill = require('./userSkill');
+const UserInterest = require('./userInterest');
+const UserProgramme = require('./userProgramme');
+const Account = require('./account');
 
 //Define the relationships between the entities
 function initAssociations() {
   //User and skill
-  User.belongsToMany(Skill, { through: 'UserSkill' });
-  Skill.belongsToMany(User, { through: 'UserSkill' });
+  User.belongsToMany(Skill, { foreignKey: 'user_id', through: UserSkill });
+  Skill.belongsToMany(User, { foreignKey: 'skill_id', through: UserSkill });
 
   //User and interest
-  User.belongsToMany(Interest, { through: 'UserInterest' });
-  Interest.belongsToMany(User, { through: 'UserInterest' });
+  User.belongsToMany(Interest, { foreignKey: 'user_id', through: UserInterest });
+  Interest.belongsToMany(User, { foreignKey: 'interest_id', through: UserInterest });
 
   //User and group
-  Group.hasMany(User, { foreignKey: 'groupId' });
-  User.belongsTo(Group, { foreignKey: 'groupId' });
+  Group.hasMany(User, { foreignKey: 'group_id' });
+  User.belongsTo(Group, { foreignKey: 'group_id' });
 
   //User and programme
-  User.belongsToMany(Programme,{ through: 'UserProgramme' });
-  Programme.belongsToMany(User, { through: 'UserProgramme' });
+  User.belongsToMany(Programme,{ foreignKey: 'user_id', through: UserProgramme });
+  Programme.belongsToMany(User, { foreignKey: 'programme_id', through: UserProgramme });
 
   //Group and mentorsession
-  Group.hasMany(MentorSession, { foreignKey: "groupId" });
-  MentorSession.belongsTo(Group, { foreignKey: "groupId" });
+  Group.hasMany(MentorSession, { foreignKey: "group_id" });
+  MentorSession.belongsTo(Group, { foreignKey: "group_id" });
 
   //User and review
-  User.hasMany(Review, { foreignKey: 'receiverId', as: 'receivedReviews' });
-  Review.belongsTo(User, { foreignKey: 'receiverId', as: 'receiver' });
-  User.hasMany(Review, { foreignKey: 'authorId', as: 'authoredReview' });
-  Review.belongsTo(User, { foreignKey: 'authorId', as: 'author' });
+  User.hasMany(Review, { foreignKey: 'receiver_id', as: 'receivedReviews' });
+  Review.belongsTo(User, { foreignKey: 'receiver_id', as: 'receiver' });
+  User.hasMany(Review, { foreignKey: 'author_id', as: 'authoredReview' });
+  Review.belongsTo(User, { foreignKey: 'author_id', as: 'author' });
 
   //User and application
-  User.hasMany(Application, { foreignKey: 'userId' });
-  Application.belongsTo(User, { foreignKey: 'userId' });
+  User.hasMany(Application, { foreignKey: 'user_id' });
+  Application.belongsTo(User, { foreignKey: 'user_id' });
 
   //Programme and run
-  Programme.hasMany(Run, { foreignKey: 'programmeId' });
-  Run.belongsTo(Programme, { foreignKey: 'programmeId' });
+  Programme.hasMany(Run, { foreignKey: 'programme_id' });
+  Run.belongsTo(Programme, { foreignKey: 'programme_id' });
 
   //Programme and forum
-  Programme.hasOne(Forum, { foreignKey: "programmeId" });
-  Forum.belongsTo(Programme, { foreignKey: "programmeId" });
+  Programme.hasOne(Forum, { foreignKey: "programme_id" });
+  Forum.belongsTo(Programme, { foreignKey: "programme_id" });
 
   //Forum and comments
-  Forum.hasMany(Comment, { foreignKey: "forumId" });
-  Comment.belongsTo(Forum, { foreignKey: "forumId" });
+  Forum.hasMany(Comment, { foreignKey: "forum_id" });
+  Comment.belongsTo(Forum, { foreignKey: "forum_id" });
 
   //User and comments
-  User.hasMany(Comment, { foreignKey: "userId" });
-  Comment.belongsTo(User, { foreignKey: "userId" });
+  User.hasMany(Comment, { foreignKey: "user_id" });
+  Comment.belongsTo(User, { foreignKey: "user_id" });
 
   //Programme and resource
-  Programme.hasMany(Resource, { foreignKey: "programmeId" });
-  Resource.belongsTo(Programme, { foreignKey: "programmeId" });
+  Programme.hasMany(Resource, { foreignKey: "programme_id" });
+  Resource.belongsTo(Programme, { foreignKey: "programme_id" });
 
   //Programme and announcement
-  Programme.hasMany(Announcement, { foreignKey: "programmeId" });
-  Announcement.belongsTo(Programme, { foreignKey: "programmeId" });
+  Programme.hasMany(Announcement, { foreignKey: "programme_id" });
+  Announcement.belongsTo(Programme, { foreignKey: "programme_id" });
 
   //Organiser and announcement
-  Organiser.hasMany(Announcement, { foreignKey: "organiserId" });
-  Announcement.belongsTo(Organiser, { foregnKey: "organiserId" });
+  Organiser.hasMany(Announcement, { foreignKey: "organiser_id" });
+  Announcement.belongsTo(Organiser, { foregnKey: "organiser_id" });
 
   //Organiser and resource
-  Organiser.hasMany(Resource, { foreignKey: "organiserId" });
-  Resource.belongsTo(Organiser, { foreignKey: "organiserId" });
+  Organiser.hasMany(Resource, { foreignKey: "organiser_id" });
+  Resource.belongsTo(Organiser, { foreignKey: "organiser_id" });
+
+  //Account and user
+  Account.hasOne(User, { foreignKey: "account_id" });
+  User.belongsTo(Account, { foreignKey: "account_id" });
+
+  //Account and organiser
+  Account.hasOne(Organiser, { foreignKey: "account_id" });
+  Organiser.belongsTo(Account, { foreignKey: "account_id" });
 }
 
 module.exports = initAssociations;
