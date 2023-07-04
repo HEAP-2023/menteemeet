@@ -10,7 +10,7 @@ import Step2 from "../../components/createProgramme/Step2";
 const CreateProgramme = () => {
     const [progress, setProgress] = useState(10);
 
-    const {control,formState: {errors} , handleSubmit, reset} = useForm({
+    const {control,formState: {errors} , handleSubmit, reset, watch} = useForm({
         defaultValues : {
             programmeName : "",
             programmeStart : "",
@@ -24,6 +24,10 @@ const CreateProgramme = () => {
             matchingCriteria : "",
         },
     })
+    const watchAll = watch()
+    console.log(watchAll)
+    const watchMatchingCriteria = watch("matchingCriteria")
+    console.log(watchMatchingCriteria)
 
 
     const handleSave = (data) => {

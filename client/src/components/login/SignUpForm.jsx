@@ -6,7 +6,6 @@ import { yupResolver } from "@hookform/resolvers/yup"
 import { signUpSchema } from "./validationSchema";
 import { DevTool } from "@hookform/devtools";
 import useSignup from "../../hooks/login/useSignup";
-import { useState } from "react";
 
 
 const SignUpForm = () => {
