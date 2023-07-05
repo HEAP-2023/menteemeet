@@ -18,6 +18,7 @@ const { authenticateToken } = require('../middlewares/authMiddlewares');
 // you can do this instead. So every route in this router will
 // use the auth function as a middleware.
 router.use(authenticateToken);
-router.get('/update', authenticateToken, updateAcc);
+// router.get('/update', authenticateToken, updateAcc);
+router.put('/update', authenticateToken, updateAcc);
 
 module.exports = router

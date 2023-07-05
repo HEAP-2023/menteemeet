@@ -56,9 +56,10 @@ const loginAcc = async (req, res) => {
         if (!(await bcrypt.compare(password, user.password))) {
             return res.status(401).json( { message: "Your email/password is incorrect." });
         }
-
-        const accessToken = jwt.sign(user.toJSON(), ACCESS_TOKEN_SECRET, { expiresIn: EXPIRY });
+        //this is for update func
         storeUserObj = user.toJSON();
+
+        const accessToken = generateAccessToken(user);
 
         return res.status(200).json({message: "Successfully logged in!", accessToken: accessToken });
         
@@ -68,17 +69,31 @@ const loginAcc = async (req, res) => {
     }
 }
 
+function generateAccessToken(user) {
+    return jwt.sign(user.toJSON(), ACCESS_TOKEN_SECRET, { expiresIn: EXPIRY });
+}
+
 const updateAcc = async (req, res) => {
 
     try {
         //Filtering out each Object so that they == to the email.
         //req.user.email == JWT's Email
-        const filteredObject = Object.fromEntries(Object.entries(storeUserObj).filter(([key, value]) => value === req.user.email));
+        // const filteredObject = Object.fromEntries(Object.entries(storeUserObj).filter(([key, value]) => value === req.user.email));
         // const filteredJsonString = JSON.stringify(filteredObject); // Stringify the filtered object
 
-        const getCurrEmail = filteredObject.email;
+        //to get AccountID from the login data
+        const filteredObject = Object.fromEntries(Object.entries(storeUserObj).filter(([key, value]) => key === "account_id"));
+        const getCurrID = filteredObject.account_id;
 
-        return res.status(200).json({message: "Login as : " + getCurrEmail + ". Successfully authenticated!" });
+        const email = req.body.email;
+
+        //Update function
+        if (await Account.update(
+            {   email: email }, 
+            {   where: { account_id: getCurrID }} )) {
+        };
+        
+        return res.status(200).json({message: "Login as : " + email + ". Successfully Authenticated & Updated!" });
         
     } catch (err) {
         return res.status(500).json({ error: err });
