@@ -18,7 +18,7 @@ const SignUpForm = () => {
             email : "",
             password : "",
             confirmPassword : "",
-            role : "mentee",
+            account_type : "user",
         },
         resolver : yupResolver(signUpSchema)
     })
@@ -111,9 +111,9 @@ const SignUpForm = () => {
                     />
                 </Box>
                 <Box display="flex" flexDirection="column" width="100%">
-                    <label>Role</label>
+                    <label>Account Type:</label>
                     <Controller
-                    name="role"
+                    name="account_type"
                     control={control}
                     render={({field}) => 
                     <RadioGroup
@@ -123,10 +123,10 @@ const SignUpForm = () => {
                             <Radio sx={{'&.Mui-checked': {color: "#AEAEFF"}
                         }}/>} 
                         label="Organiser" />
-                        <FormControlLabel value="mentee" control={
+                        <FormControlLabel value="user" control={
                         <Radio disableRipple sx={{'&.Mui-checked': {color: "#AEAEFF"}
                         }}/>} 
-                        label="Mentee / Mentor" />
+                        label="Mentee/Mentor" />
                       </RadioGroup>
                     }
                     />

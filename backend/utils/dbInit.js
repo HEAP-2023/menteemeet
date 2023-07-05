@@ -8,10 +8,11 @@ const generateHashedPassword = async (password) => {
 }
 
 const data = [
-   { first_name: "Jack", last_name: "Tan", email: "jack@live.com", hashedPassword: generateHashedPassword("Tester123") },
+   { first_name: "Jack", last_name: "Tan", email: "jack@live.com", account_type: "user" },
 ]
 
-const seedData = () => { 
+const seedData = async () => {
+  data[0].password = await generateHashedPassword('Tester123');
   Account.bulkCreate(data)
     .then(() => {
         console.log("Seeded Account Data Successfully.");

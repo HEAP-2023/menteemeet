@@ -2,10 +2,10 @@ const express = require('express');
 
 const router = express.Router();
 
-const { registerAcc, loginAcc, updateAcc } = require('../controllers/userController');
+const { registerUser, loginUser, updateUser } = require('../controllers/userController');
 
-router.post('/register', registerAcc);
-router.post('/login', loginAcc);
+router.post('/register', registerUser);
+router.post('/login', loginUser);
 
 //FOR UPDATING. 
 // const {
@@ -18,6 +18,6 @@ const { authenticateToken } = require('../middlewares/authMiddlewares');
 // you can do this instead. So every route in this router will
 // use the auth function as a middleware.
 router.use(authenticateToken);
-router.get('/update', authenticateToken, updateAcc);
+router.put('/:id/update', authenticateToken, updateUser);
 
 module.exports = router

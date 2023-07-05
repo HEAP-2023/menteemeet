@@ -75,7 +75,7 @@ function initAssociations() {
 
   //Organiser and announcement
   Organiser.hasMany(Announcement, { foreignKey: "organiser_id" });
-  Announcement.belongsTo(Organiser, { foregnKey: "organiser_id" });
+  Announcement.belongsTo(Organiser, { foreignKey: "organiser_id" });
 
   //Organiser and resource
   Organiser.hasMany(Resource, { foreignKey: "organiser_id" });

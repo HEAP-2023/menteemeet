@@ -7,9 +7,9 @@ const jwt = require("jsonwebtoken");
 const ACCESS_TOKEN_SECRET = config.ACCESS_TOKEN_SECRET;
 const EXPIRY = config.EXPIRY;
 
-const registerAcc = async (req, res) => {
+const registerUser = async (req, res) => {
 
-    const { firstname, lastname, email, password } = req.body;
+    const { firstname, lastname, email, password, account_type } = req.body;
     try {
         // WHERE Email : has "email"
         if (await Account.findOne({ where: { EMAIL: email } })) {
@@ -26,6 +26,7 @@ const registerAcc = async (req, res) => {
             last_name: lastname,
             email: email,
             password: hashedPassword,
+            account_type: account_type
         })
 
         const newUser = await User.create({
@@ -39,8 +40,7 @@ const registerAcc = async (req, res) => {
     }
 }
 
-var a;
-const loginAcc = async (req, res) => {
+const loginUser = async (req, res) => {
 
     //Authenticate user
     const { email, password } = req.body;
@@ -58,7 +58,6 @@ const loginAcc = async (req, res) => {
         }
 
         const accessToken = jwt.sign(user.toJSON(), ACCESS_TOKEN_SECRET, { expiresIn: EXPIRY });
-        a = user.toJSON();
 
         return res.status(200).json({message: "Successfully logged in!", accessToken: accessToken });
         
@@ -69,7 +68,7 @@ const loginAcc = async (req, res) => {
 }
 
 // WIP//
-const updateAcc = async (req, res) => {
+const updateUser = async (req, res) => {
 
     //Authenticate user
     // const { email, password } = req.body;
@@ -87,4 +86,11 @@ const updateAcc = async (req, res) => {
     }
 }
 
-module.exports = { registerAcc, loginAcc, updateAcc };
+//WIP
+const getUser = async (req, res) => {
+    const { id } = req.params.id;
+
+    const User = await Account.findOne({ where: { EMAIL: email } });
+}
+
+module.exports = { registerUser, loginUser, updateUser };

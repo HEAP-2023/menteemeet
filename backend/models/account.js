@@ -35,6 +35,10 @@ const Account = sequelize.define(
             type: DataTypes.STRING(),
             allowNull: true
         },
+        account_type: {
+            type: DataTypes.STRING(),
+            allowNULL: false
+        }
     },
     {
       timestamps: false,

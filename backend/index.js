@@ -7,7 +7,6 @@ const app = express();
 
 //Server params
 const PORT = config.PORT;
-const API_VER = config.API_VER;
 
 //Parse JSON data
 app.use(cors());
@@ -23,7 +22,7 @@ const seedData = require('./utils/dbInit');
 const initAssociations = require('./models/associations');
 
 //User routes
-app.use(API_VER + '/user', require('./routes/userRoutes'));
+app.use('/api/user', require('./routes/userRoutes'));
 
 sequelize
   .authenticate()
