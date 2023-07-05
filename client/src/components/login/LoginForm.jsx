@@ -1,7 +1,7 @@
 import { Box, Typography, Input, TextField, Button } from "@mui/material";
+import StandardTextField from "./StandardTextField";
 
 import { useForm, Controller } from "react-hook-form";
-import { ErrorMessage } from '@hookform/error-message';
 
 import { yupResolver } from "@hookform/resolvers/yup"
 import { loginSchema } from "./validationSchema";
@@ -28,29 +28,29 @@ const LoginForm = () => {
         <form onSubmit={handleSubmit(handleSave)} width="100%">
             <Box display="flex" flexDirection="column" width="100%" gap="20px">
                 <Box display="flex" flexDirection="column" width="100%">
-                    <label>Email</label>
                     <Controller
                     name="email"
                     control={control}
-                    render={({field}) => <TextField {...field} variant="outlined" sx={{width:"100%"}} /> }
-                    />
-                    <ErrorMessage 
-                    errors={errors} 
-                    name="email"
-                    render={({ message }) => <p style={{color : "#ff0000"}}>{message}</p>}
+                    render={({field}) => 
+                        <StandardTextField 
+                            errors={errors} 
+                            field={field} 
+                            name="email" 
+                            label="Email"/>
+                }
                     />
                 </Box>
                 <Box display="flex" flexDirection="column" width="100%">
-                    <label>Password</label>
                     <Controller
                     name="password"
                     control={control}
-                    render={({field}) => <TextField {...field} variant="outlined" sx={{width:"100%"}} type="password"/> }
-                    />
-                    <ErrorMessage 
-                    errors={errors} 
-                    name="password"
-                    render={({ message }) => <p style={{color : "#ff0000"}}>{message}</p>}
+                    render={({field}) => 
+                        <StandardTextField 
+                            errors={errors} 
+                            field={field} 
+                            name="password" 
+                            label="Password"/>
+                }
                     />
                 </Box>
     
