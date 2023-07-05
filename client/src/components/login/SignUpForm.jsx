@@ -1,6 +1,6 @@
 import { useForm, Controller } from "react-hook-form";
 import { Box, FormControlLabel,Radio, RadioGroup, TextField, Button } from "@mui/material";
-import { ErrorMessage } from '@hookform/error-message';
+import StandardTextField from "./StandardTextField";
 
 import { yupResolver } from "@hookform/resolvers/yup"
 import { signUpSchema } from "./validationSchema";
@@ -23,7 +23,7 @@ const SignUpForm = () => {
     })
 
     const {mutate : signup} = useSignup(reset)
-
+    console.log(errors)
     const handleSave = async (data) => {
         console.log("to be submitted")
         console.log(data)
@@ -42,71 +42,80 @@ const SignUpForm = () => {
         // }
     }
 
-    return <Box width="100%">
-        <form onSubmit={handleSubmit(handleSave)} width="100%">
-            <Box display="flex" flexDirection="column" width="100%" gap="20px">
-            <Box display="flex" flexDirection="column" width="100%">
-                    <label>First Name</label>
+    return <Box width="100%" height="100%" >
+        <form onSubmit={handleSubmit(handleSave)} width="100%" display="flex">
+            <Box display="flex" flexDirection="column" width="100%" gap="10px" >
+            <Box display="flex" flexDirection="column" width="100%" >
+                    {/* <label>First Name</label> */}
                     <Controller
                     name="firstname"
                     control={control}
-                    render={({field}) => <TextField {...field} variant="outlined" sx={{width:"100%"}} /> }
+                    render={({field}) => 
+
+                    <StandardTextField 
+                            errors={errors} 
+                            field={field} 
+                            name="firstname" 
+                            label="First Name"/>
+                        
+                }
                     />
-                    <ErrorMessage 
-                    errors={errors} 
-                    name="firstname"
-                    render={({ message }) => <p style={{color : "#ff0000"}}>{message}</p>}
-                    />
+
                 </Box>
-                <Box display="flex" flexDirection="column" width="100%">
-                    <label>Last Name</label>
+                <Box display="flex" flexDirection="column" width="100%" >
                     <Controller
-                    name="lastname"
-                    control={control}
-                    render={({field}) => <TextField {...field} variant="outlined" sx={{width:"100%"}} /> }
+                        name="lastname"
+                        control={control}
+                        render={({field}) => 
+                        <StandardTextField 
+                            errors={errors} 
+                            field={field} 
+                            name="lastname" 
+                            label="Last Name"/>
+                        }
                     />
-                    <ErrorMessage 
-                    errors={errors} 
-                    name="lastname"
-                    render={({ message }) => <p style={{color : "#ff0000"}}>{message}</p>}
-                    />
+                    
+
                 </Box>
-                <Box display="flex" flexDirection="column" width="100%">
-                    <label>Email</label>
+                <Box display="flex" flexDirection="column" width="100%" >
                     <Controller
                     name="email"
                     control={control}
-                    render={({field}) => <TextField {...field} variant="outlined" sx={{width:"100%"}} /> }
+                    render={({field}) => 
+                        <StandardTextField 
+                            errors={errors} 
+                            field={field} 
+                            name="email" 
+                            label="Email"/>
+                        }
                     />
-                    <ErrorMessage 
-                    errors={errors} 
-                    name="email"
-                    render={({ message }) => <p style={{color : "#ff0000"}}>{message}</p>}
-                    />
+
                 </Box>
                 <Box display="flex" flexDirection="column" width="100%">
-                    <label>Password</label>
                     <Controller
                     name="password"
                     control={control}
-                    render={({field}) => <TextField {...field} variant="outlined" sx={{width:"100%"}} type="password"/> }
+                    render={({field}) => 
+                        <StandardTextField 
+                            errors={errors} 
+                            field={field} 
+                            name="password" 
+                            label="Password"/>
+                }
                     />
-                <ErrorMessage 
-                errors={errors} 
-                name="password"
-                render={({ message }) => <p style={{color : "#ff0000"}}>{message}</p>}
-                />
+                
                 </Box>
                 <Box display="flex" flexDirection="column" width="100%">
-                    <label>Confirm Password</label>
                     <Controller
                     name="confirmPassword"
                     control={control}
-                    render={({field}) => <TextField {...field} variant="outlined" sx={{width:"100%"}} type="password"/> }
-                    />
-                    <ErrorMessage errors={errors} 
-                    name="confirmPassword"
-                    render={({ message }) => <p style={{color : "#ff0000"}}>{message}</p>}
+                    render={({field}) => 
+                        <StandardTextField 
+                            errors={errors} 
+                            field={field} 
+                            name="confirmPassword" 
+                            label="Confirm Password"/>
+                }
                     />
                 </Box>
                 <Box display="flex" flexDirection="column" width="100%">

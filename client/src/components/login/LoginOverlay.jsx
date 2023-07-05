@@ -20,22 +20,27 @@ const LoginOverlay = () => {
     return (
         <Modal
         open={overlayActive}
-        sx = {{display:"flex", justifyContent:"center", alignItems:"center"}}
+        sx = {{display:"flex", justifyContent:"center", alignItems:"center", width : "100%", height : "100%"}}
         >
             <Box width="40%" height="90%" 
             bgcolor="#ffffff" display="flex"
-            flexDirection="column" p="0 20px"
-            gap="10px"
+            flexDirection="column" 
+            gap="10px" overflow="auto"
             >
-                <IconButton sx={{width:"40px" ,ml:"auto"}} onClick={() => dispatch(loginOverlayToggle())}>
-                    <CancelOutlinedIcon/>
-                </IconButton>
-                <Box  display="flex" flexDirection="column" justifyContent="center" alignItems="center">
-                    <img src="../../../images/global/menteemeet.png" style={{width: "200px", margin: "5px 0px 0p 0px", height: "100px", objectFit: "contain", padding:"0px"}} />
-                    <Typography fontWeight="700">Log in to continue</Typography>
+                <Box display="grid" gridTemplateColumns="1fr 10fr 1fr">
+                    <Box></Box>
+                    <Box  display="flex" flexDirection="column" justifyContent="center" alignItems="center">
+                        <img src="../../../images/global/menteemeet.png" style={{width: "200px", margin: "5px 0px 0p 0px", height: "100px", objectFit: "contain", padding:"0px"}} />
+                        <Typography fontWeight="700">Log in to continue</Typography>
+                    </Box>
+                    <IconButton sx={{width:"40px", height:"40px", ml:"auto"}} onClick={() => dispatch(loginOverlayToggle())}>
+                        <CancelOutlinedIcon/>
+                    </IconButton>
                 </Box>
+
+                
                 {!newUser &&
-                <Box display="flex" flexDirection="column" gap="20px">
+                <Box display="flex" flexDirection="column" gap="10px" p="0 20px">
                     <LoginForm/>
                     <Typography>Forgot Password</Typography>
                     <Box display="flex" alignItems="center">
@@ -49,11 +54,11 @@ const LoginOverlay = () => {
                 </Box>}
 
                 {newUser && 
-                <Box display="flex" flexDirection="column" gap="20px">
+                <Box display="flex" flexDirection="column" gap="10px" p="0 20px">
                     <SignUpForm/>
                     <Box display="flex" alignItems="center">
                         <Typography>Already a member ?</Typography>
-                        <Button onClick={() => setNewUser(false)} sx={{color: colors.text[500], textDecoration:"underline"}}>
+                        <Button onClick={() => setNewUser(false)} sx={{color: colors.text[500]}}>
                             <Typography sx={{textDecoration:"underline"}}>
                                 Log In
                             </Typography>
