@@ -40,14 +40,15 @@ const registerUser = async (req, res) => {
     }
 }
 
+var storeUserObj;
 const loginUser = async (req, res) => {
 
     //Authenticate user
     const { email, password } = req.body;
 
     try {
-        // if incorrect, X
-        const user = await Account.findOne( {where: { EMAIL: email } });
+        // if incorrect, DB col : form col
+        const user = await Account.findOne( {where: { email: email } });
 
         if (!user) {
             return res.status(401).json( { message: "Your email/password is incorrect." });
@@ -56,8 +57,10 @@ const loginUser = async (req, res) => {
         if (!(await bcrypt.compare(password, user.password))) {
             return res.status(401).json( { message: "Your email/password is incorrect." });
         }
+        //this is for update func
+        storeUserObj = user.toJSON();
 
-        const accessToken = jwt.sign(user.toJSON(), ACCESS_TOKEN_SECRET, { expiresIn: EXPIRY });
+        const accessToken = generateAccessToken(user);
 
         return res.status(200).json({message: "Successfully logged in!", accessToken: accessToken });
         
@@ -67,19 +70,31 @@ const loginUser = async (req, res) => {
     }
 }
 
-// WIP//
-const updateUser = async (req, res) => {
+function generateAccessToken(user) {
+    return jwt.sign(user.toJSON(), ACCESS_TOKEN_SECRET, { expiresIn: EXPIRY });
+}
 
-    //Authenticate user
-    // const { email, password } = req.body;
+const updateUser = async (req, res) => {
 
     try {
         //Filtering out each Object so that they == to the email.
-        //the hardcoded email i want to change it to "Retrieve from JWT"
-        const filteredObject = Object.fromEntries(Object.entries(a).filter(([key, value]) => value === 'test123@gmail.com'));
-        const filteredJsonString = JSON.stringify(filteredObject); // Stringify the filtered object
+        //req.user.email == JWT's Email
+        // const filteredObject = Object.fromEntries(Object.entries(storeUserObj).filter(([key, value]) => value === req.user.email));
+        // const filteredJsonString = JSON.stringify(filteredObject); // Stringify the filtered object
 
-        return res.status(200).json({message: "Successfully authenticated!" });
+        //to get AccountID from the login data
+        const filteredObject = Object.fromEntries(Object.entries(storeUserObj).filter(([key, value]) => key === "account_id"));
+        const getCurrID = filteredObject.account_id;
+
+        const email = req.body.email;
+
+        //Update function
+        if (await Account.update(
+            {   email: email }, 
+            {   where: { account_id: getCurrID }} )) {
+        };
+        
+        return res.status(200).json({message: "Login as : " + email + ". Successfully Authenticated & Updated!" });
         
     } catch (err) {
         return res.status(500).json({ error: err });
