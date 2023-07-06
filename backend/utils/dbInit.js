@@ -8,7 +8,7 @@ const generateHashedPassword = async (password) => {
 }
 
 const data = [
-   { first_name: "Jack", last_name: "Tan", email: "jack@live.com", account_type: "user" },
+   { name: "Jack Tan", email: "jack@live.com", account_type: "user" },
 ]
 
 const seedData = async () => {
@@ -20,6 +20,7 @@ const seedData = async () => {
     .catch(err => {
         console.log("Error seeding Account Data:", err);
     })
+    
 }
 
 module.exports = seedData;

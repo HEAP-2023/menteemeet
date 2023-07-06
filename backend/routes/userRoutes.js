@@ -1,18 +1,15 @@
 const express = require('express');
 const router = express.Router();
 
-const { registerUser, loginUser, updateUser, refreshTokFunc } = require('../controllers/userController');
-
-router.post('/register', registerUser);
-router.post('/login', loginUser);
+const { getUser, updateUser } = require('../controllers/userController');
 
 //for refreshTokens
-router.post('/token', refreshTokFunc)
+// router.post('/token', refreshTokFunc)
 
-//for refreshTokens
-router.post('/token', refreshTokFunc)
-
-//FOR UPDATING. 
+//FOR UPDATING.
+// const {
+//     ,
+// } = require('../controllers/userController');
 //call authToken func
 const { authenticateToken } = require('../middlewares/authMiddlewares');
 
@@ -22,5 +19,6 @@ const { authenticateToken } = require('../middlewares/authMiddlewares');
 router.use(authenticateToken);
 // router.get('/update', authenticateToken, updateAcc);
 router.put('/update', authenticateToken, updateUser);
+router.get('/:id', authenticateToken, getUser);
 
 module.exports = router

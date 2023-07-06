@@ -10,13 +10,9 @@ const Account = sequelize.define(
             allowNull: false,
             autoIncrement: true,
         },
-        first_name: {
+        name: {
             type: DataTypes.STRING(30),
             allowNull: false,
-        },
-        last_name: {
-            type: DataTypes.STRING(30),
-            allowNull: false
         },
         email: {
             type: DataTypes.STRING(50),
