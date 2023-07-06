@@ -24,6 +24,8 @@ const initAssociations = require('./models/associations');
 
 //User routes
 app.use(API_VER + '/user', require('./routes/userRoutes'));
+//Programme routes
+app.use(API_VER + '/program', require('./routes/programmeRoutes'));
 
 sequelize
   .authenticate()
