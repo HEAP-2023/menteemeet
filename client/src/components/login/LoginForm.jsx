@@ -1,5 +1,5 @@
 import { Box, Typography, Input, TextField, Button } from "@mui/material";
-import StandardTextField from "./StandardTextField";
+import StandardTextField from "../StandardTextField";
 
 import { useForm, Controller } from "react-hook-form";
 

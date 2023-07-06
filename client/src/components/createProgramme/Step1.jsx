@@ -1,52 +1,65 @@
-import { Box, TextField } from "@mui/material"
+import { Box, TextField, Typography } from "@mui/material"
 import SectionHeader from "../../components/SectionHeader";
 import { Controller } from "react-hook-form";
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
+import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import StandardTextField from "../StandardTextField";
 
-const Step1 = ({control, handleSubmit}) => {
+
+const Step1 = ({control, errors}) => {
    
     return (
-    <Box width="100%" p="40px" m="20px 0" display="flex" flexDirection="column" bgcolor="#CFCFCF" >
+    <Box width="100%" p="40px" m="20px 0" display="flex" flexDirection="column" bgcolor="#F1F1F1" >
         <SectionHeader margin="0" text="Step 1 - The Basics"/>
         <SectionHeader margin="0" text="Tell us about the basic information of the program"/>
 
-        <Box p="20px">
-        <form onSubmit={handleSubmit} width="100%">
-            <Box display="flex" flexDirection="column" width="100%" gap="20px">
+            <Box display="flex" flexDirection="column" width="100%" gap="20px" p="20px">
                 <Box display="flex" width="100%">
-                    <label>Programme Name</label>
-                    <Box width="70%" ml="auto">
+                    <Box width="100%" >
                         <Controller
                         name="programmeName"
                         control={control}
-                        render={({field}) => <TextField {...field} variant="outlined" sx={{width:"100%"}} /> }
+                        render={({field}) => 
+                    <StandardTextField errors={errors} field={field} 
+                    name="programmeName" label="Programme Name" />
+                    }
                         />
                     </Box>
                 </Box>
 
-                <Box display="flex" width="100%">
-                    <label>Duration of Programme</label>
-                    <Box width="70%" ml="auto">
+                <Box display="flex" width="100%" flexDirection="column">
+                <Typography fontWeight="bold" mb="10px">Duration of Programme</Typography>
+                    <Box width="100%" >
                         <label>Start</label>
                         <Controller
                         name="programmeStart"
                         control={control}
-                        render={({field}) => <TextField {...field} variant="outlined" sx={{width:"20%" , p:"0 20px"}}/> }
+                        render={({field}) => 
+                    <LocalizationProvider dateAdapter={AdapterDayjs} >
+                            <DatePicker {...field} 
+                            sx={{width:"30%", p:"0 20px"}}/>
+                    </LocalizationProvider>
+                    }
                         />
                         <label>End</label>
                         <Controller
                         name="programmeEnd"
                         control={control}
-                        render={({field}) => <TextField {...field} variant="outlined" sx={{width:"20%" , p:"0 20px"}}/> }
+                        render={({field}) => 
+                        <LocalizationProvider dateAdapter={AdapterDayjs} >
+                            <DatePicker {...field} sx={{width:"30%", p:"0 20px"}}/>
+                        </LocalizationProvider>
+                    }
                         />
                     </Box>
                 </Box>
 
-                <Box display="flex" width="100%">
-                    <label>Session on fixed dates?</label>
-                    <Box width="70%" ml="auto">
+                <Box display="flex" width="100%" flexDirection="column">
+                    <Typography fontWeight="bold" mb="10px">Session on fixed dates?</Typography>
+                    <Box width="100%">
                         <Controller
                         name="fixedDates"
                         control={control}
@@ -54,17 +67,17 @@ const Step1 = ({control, handleSubmit}) => {
                         <RadioGroup
                         row
                         {...field}>
-                        <FormControlLabel value="female" control={<Radio />} label="Female" />
-                        <FormControlLabel value="male" control={<Radio />} label="Male" />
+                        <FormControlLabel value="Yes" control={<Radio />} label="Yes" />
+                        <FormControlLabel value="No" control={<Radio />} label="No" />
                       </RadioGroup>
                     }
                         />
                     </Box>
                 </Box>
 
-                <Box display="flex" width="100%">
-                    <label>Frequency of sessions</label>
-                    <Box width="70%" ml="auto">
+                <Box display="flex" width="100%" flexDirection="column">
+                <Typography fontWeight="bold" mb="10px">Frequency of sessions</Typography>
+                    <Box width="100%" >
                         <Controller
                         name="frequency"
                         control={control}
@@ -83,43 +96,44 @@ const Step1 = ({control, handleSubmit}) => {
                     </Box>
                 </Box>
 
-                <Box display="flex" width="100%">
-                    <label>Duration</label>
-                    <Box width="70%" ml="auto">
+                <Box display="flex" width="100%" gap="20px">
+                    <Box width="100%" >
                         <Controller
                         name="duration"
                         control={control}
-                        render={({field}) => <TextField {...field} variant="outlined" sx={{width:"100%"}} /> }
+                        render={({field}) => 
+                        <StandardTextField errors={errors} field={field} adornment="hour"
+                        name="duration" label="Duration per session" />
+                    }
                         />
                     </Box>
-                </Box>
 
-                <Box display="flex" width="100%">
-                    <label>Expected Number of Mentors</label>
-                    <Box width="70%" ml="auto">
+                    <Box width="100%" >
                         <Controller
                         name="expectedMentors"
                         control={control}
-                        render={({field}) => <TextField {...field} variant="outlined" sx={{width:"100%"}} /> }
+                        render={({field}) => 
+                        <StandardTextField errors={errors} field={field} type="number"
+                        name="expectedMentors" label="Expected Number of Mentors" />
+                    }
                         />
                     </Box>
-                </Box>
 
-                <Box display="flex" width="100%">
-                    <label>Expected Number of Mentees</label>
-                    <Box width="70%" ml="auto">
+                    <Box width="100%" >
                         <Controller
                         name="expectedMentees"
                         control={control}
-                        render={({field}) => <TextField {...field} variant="outlined" sx={{width:"100%"}} /> }
+                        render={({field}) => 
+                        <StandardTextField errors={errors} field={field} type="number"
+                        name="expectedMentees" label="Expected Number of Mentees" />
+                    }
                         />
                     </Box>
                 </Box>
     
             </Box>
-        </form>
-        </Box>
-    </Box>);
+
+        </Box>);
 }
 
 export default Step1;

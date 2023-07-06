@@ -1,6 +1,6 @@
 import { useForm, Controller } from "react-hook-form";
 import { Box, FormControlLabel,Radio, RadioGroup, TextField, Button } from "@mui/material";
-import StandardTextField from "./StandardTextField";
+import StandardTextField from "../StandardTextField";
 
 import { yupResolver } from "@hookform/resolvers/yup"
 import { signUpSchema } from "./validationSchema";

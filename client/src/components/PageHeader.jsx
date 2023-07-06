@@ -1,8 +1,8 @@
 import { Typography } from "@mui/material"
 
-const PageHeader = ({text}) => {
+const PageHeader = ({text, margin="40px 30px"}) => {
     return (            
-        <Typography variant="h2" margin="40px 30px">{text}</Typography>
+        <Typography variant="h2" margin={margin}>{text}</Typography>
     );
 }
 
