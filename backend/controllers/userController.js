@@ -5,6 +5,8 @@ const config = require('../utils/config');
 const jwt = require("jsonwebtoken");
 
 const ACCESS_TOKEN_SECRET = config.ACCESS_TOKEN_SECRET;
+const REFRESH_TOKEN_SECRET = config.REFRESH_TOKEN_SECRET;
+
 const EXPIRY = config.EXPIRY;
 
 const registerUser = async (req, res) => {
@@ -40,6 +42,25 @@ const registerUser = async (req, res) => {
     }
 }
 
+//Still fixing this
+let refreshTokens = []
+//for refresh token
+const refreshTokFunc = async (req, res) => {
+    const refreshToken = req.body.token
+    if (refreshToken == null) return res.status(401).json({ message: "Token is empty"});
+    if (!refreshTokens.includes(refreshToken)) return res.status(403).json({ message: "Token is invalid" });
+
+    jwt.verify(refreshToken, REFRESH_TOKEN_SECRET, (err, user) => {
+        if (err) return res.status(403).json( {message: "Error. JWT issue" }, { error: err });
+
+        console.log(typeof user);
+        console.log("Test : " +  user);
+        const accessToken = generateAccessToken(user)
+
+        res.json({ accessToken : accessToken })
+    })
+}
+
 var storeUserObj;
 const loginUser = async (req, res) => {
 
@@ -61,17 +82,26 @@ const loginUser = async (req, res) => {
         storeUserObj = user.toJSON();
 
         const accessToken = generateAccessToken(user);
+        // no expiry
+        const refreshToken = jwt.sign(user.toJSON(), REFRESH_TOKEN_SECRET);
+        refreshTokens.push(refreshToken);
 
-        return res.status(200).json({message: "Successfully logged in!", accessToken: accessToken });
+        return res.status(200).json({message: "Successfully logged in!", accessToken: accessToken, 
+        refreshToken: refreshToken });
         
     } catch (err) {
-        console.log(err);
+        console.log(err);   
         return res.status(500).json( { error: err });
     }
 }
 
 function generateAccessToken(user) {
-    return jwt.sign(user.toJSON(), ACCESS_TOKEN_SECRET, { expiresIn: EXPIRY });
+
+    if (typeof user === 'object') {
+        return jwt.sign(user.toJSON(), ACCESS_TOKEN_SECRET, { expiresIn: EXPIRY });
+    } else {
+        return jwt.sign(user, ACCESS_TOKEN_SECRET, { expiresIn: EXPIRY });
+    }
 }
 
 const updateUser = async (req, res) => {
@@ -108,4 +138,4 @@ const getUser = async (req, res) => {
     const User = await Account.findOne({ where: { EMAIL: email } });
 }
 
-module.exports = { registerUser, loginUser, updateUser };
+module.exports = { registerUser, loginUser, updateUser, refreshTokFunc };

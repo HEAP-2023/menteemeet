@@ -1,16 +1,18 @@
 const express = require('express');
-
 const router = express.Router();
 
-const { registerUser, loginUser, updateUser } = require('../controllers/userController');
+const { registerUser, loginUser, updateUser, refreshTokFunc } = require('../controllers/userController');
 
 router.post('/register', registerUser);
 router.post('/login', loginUser);
 
+//for refreshTokens
+router.post('/token', refreshTokFunc)
+
+//for refreshTokens
+router.post('/token', refreshTokFunc)
+
 //FOR UPDATING. 
-// const {
-//     ,
-// } = require('../controllers/userController');
 //call authToken func
 const { authenticateToken } = require('../middlewares/authMiddlewares');
 

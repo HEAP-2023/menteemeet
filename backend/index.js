@@ -22,7 +22,9 @@ const seedData = require('./utils/dbInit');
 const initAssociations = require('./models/associations');
 
 //User routes
-app.use('/api/user', require('./routes/userRoutes'));
+app.use(API_VER + '/user', require('./routes/userRoutes'));
+//Programme routes
+app.use(API_VER + '/programme', require('./routes/programmeRoutes'));
 
 sequelize
   .authenticate()
