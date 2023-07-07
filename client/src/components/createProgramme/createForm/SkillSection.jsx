@@ -1,19 +1,44 @@
-import { Box, Typography, Button, Modal, Input, TextField } from "@mui/material"
+import { Box, Typography ,Button, Modal, TextField, List, ListItem } from "@mui/material"
 import PageHeader from "../../PageHeader"
 import { useRef, useState } from "react"
+import { Controller, useFieldArray } from "react-hook-form"
 import Skill from "./Skill"
 
-const SkillSection = () => {
-    const [skills, setSkills] = useState([])
+
+const SkillSection = ({control}) => {
     const [skillModal, toggleModal] = useState(false)
     const skillInput = useRef(null)
     const popupAddskillButton = useRef(null)
+
+    const {fields, append, remove } = useFieldArray({
+        name : "skills",
+        control
+    })
 
     return (
     <Box>
         <PageHeader text="Skills" margin="20px 0"/>
         <Box display="flex" flexDirection="column" gap="20px">
-            {skills.map(skill => <Skill skillName={skill} key={skill} skills={skills} setSkills={setSkills}/>)}
+            <List>
+            {
+            fields.map((item, index) => {
+                return (
+                <ListItem key={item.id}>
+                    <Controller
+                    render={({ field }) => {
+                    return (
+                        <Skill remove={remove} index={index}>
+                            <TextField {...field} disabled variant="standard"></TextField>
+                        </Skill>
+                    )}
+                }
+                    name={`skills.${index}.skillName`}
+                    control={control}
+                    />
+                </ListItem>)
+            })
+            }
+            </List>
 
             {/* popup */}
             <Modal
@@ -30,13 +55,15 @@ const SkillSection = () => {
                     <Typography>Skill: </Typography>
                     <TextField inputRef={skillInput} variant="outlined"
                     autoFocus
-                    onKeyDown={(e) => {
-                        if (e.key === 'Enter') {
-                          console.log('Enter key pressed');
-                          popupAddskillButton.current.click()
-                          toggleModal(false)
-                        }}
-                    }
+// autofocus and enter key not working well
+
+                    // onKeyDown={(e) => {
+                    //     if (e.key === 'Enter') {
+                    //       console.log('Enter key pressed');
+                    //       popupAddskillButton.current.click()
+                    //       toggleModal(false)
+                    //     }}
+                    // }
                     sx={{width:"100%", 
                     "& label.Mui-focused": {
                         color: "secondary.main"
@@ -47,10 +74,15 @@ const SkillSection = () => {
                             borderColor: "secondary.main"
                         }
                         }}}/>
+                    <Controller
+                    name="skills"
+                    control={control}
+                    render={({field}) => 
                     <Button ref={popupAddskillButton} variant="contained" color="secondary" onClick={() => {
-                        setSkills([...skills, skillInput.current.value])
+                        append({ skillName :  skillInput.current.value})
                         toggleModal(false)
                         }}>Add Skill</Button>
+                    }/>
                 </Box>
             </Modal>
 

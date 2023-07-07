@@ -5,7 +5,9 @@ import StandardTextField from "../StandardTextField";
 import AvailabilitySection from "./createForm/AvailabilitySection";
 import SkillSection from "./createForm/SkillSection";
 import moment from "moment";
-
+import InterestSection from "./createForm/InterestSection";
+import MentorGroupingSection from "./createForm/MentorGroupingSection";
+import MenteeGroupingSection from "./createForm/MenteeGroupingSection";
 
 const Step3 = ({control,errors, watch}) => {
     const criteriaSelected = watch("matchingCriteria")
@@ -25,15 +27,35 @@ const Step3 = ({control,errors, watch}) => {
 
         <Box p="20px">
             <Box display="flex" flexDirection="column" width="100%" gap="20px">
-                
                 <Box width="100%">
                     <Controller
                     name="introPara"
                     control={control}
                     render={({field}) => 
-                <StandardTextField errors={errors} field={field} multiline rows={4}
-                    name="introPara" label="Introduction Paragraph" />
+                <TextField error={errors["introPara"] !== undefined} 
+                {...field} multiline rows={4}
+                    name="introPara" label="Introduction Paragraph" 
+                    helperText={errors["introPara"]?.message}
+                    sx={{
+                        width : "100%",
+                        "& .MuiInputLabel-root": {
+                          color: "secondary.main"
+                        },
+                        "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline": {
+                          borderColor: "secondary.main"
+                        },
+                        "& label.Mui-focused": {
+                            color: "secondary.main"
+                            },
+        
+                        "& .MuiOutlinedInput-root": {
+                            "&.Mui-focused fieldset": {
+                                borderColor: "secondary.main"
+                            }
+                        }
+                    }}/>
                 }
+                    
                     />
                 </Box>
 
@@ -47,25 +69,25 @@ const Step3 = ({control,errors, watch}) => {
 
                 <Box width="100%">
                     {criteriaSelected.includes("skill") &&
-                        <SkillSection/>
+                        <SkillSection control={control}/>
                     }
                 </Box>
 
                 <Box width="100%">
                     {criteriaSelected.includes("interest") &&
-                        <Typography>interest section</Typography>
+                        <InterestSection control={control}/>
                     }
                 </Box>
 
                 <Box width="100%">
                     {criteriaSelected.includes("mentorGrouping") &&
-                        <Typography>mentor grouping section</Typography>
+                        <MentorGroupingSection/>
                     }
                 </Box>
 
                 <Box width="100%">
                     {criteriaSelected.includes("menteeGrouping") &&
-                        <Typography>mentee grouping section section</Typography>
+                        <MenteeGroupingSection/>
                     }
                 </Box>
 

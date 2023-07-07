@@ -6,15 +6,18 @@ import StarIcon from '@mui/icons-material/Star';
 import { useState } from "react";
 
 
-const Skill = ({skillName, skills, setSkills}) => {
+const Skill = ({children, remove, index}) => {
 
     return (
-    <Box border="1px solid black" p="20px">
-        <Box display="flex" justifyContent="space-between">
-            <Typography>Skill: {skillName}</Typography>
-            <IconButton onClick={() => {
-                setSkills(skills.filter(skill => skill !== skillName))
-            }}>
+    <Box border="1px solid black" p="20px" width="60%">
+        <Box display="flex" alignItems="center">
+            <Typography>Skill: </Typography>
+            {children}
+            <IconButton 
+            sx={{ml : "auto"}}
+            onClick={() => {
+                remove(index)
+                }}>
                 <CancelOutlinedIcon/>
             </IconButton>
         </Box>
@@ -22,6 +25,7 @@ const Skill = ({skillName, skills, setSkills}) => {
         <HoverRating/>
         <Typography>Elaborate on this skill</Typography>
         <TextField 
+            disabled
             variant="outlined" 
             multiline={true}
             rows={4}

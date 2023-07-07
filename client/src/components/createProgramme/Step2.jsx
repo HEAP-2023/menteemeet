@@ -4,7 +4,6 @@ import { Controller } from "react-hook-form";
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormGroup from '@mui/material/FormGroup';
 import Checkbox from '@mui/material/Checkbox';
-import { useState } from "react";
 
 const Step2 = ({control, matchingCriterias}) => {
 
@@ -32,6 +31,7 @@ const Step2 = ({control, matchingCriterias}) => {
                         label={matchingCriteria.label}
                         control={
                             <Checkbox
+                            color="secondary"
                             value={matchingCriteria.value}
                             checked={field.value.includes(matchingCriteria.value)}
                             onChange={(event, checked) => {

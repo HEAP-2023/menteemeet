@@ -4,7 +4,7 @@ import InputAdornment from '@mui/material/InputAdornment';
 const StandardTextField = ({errors, field, name, label, type="text", adornment="", multiline=false, rows=1}) => {
     return (
         <TextField {...field} 
-                label = {label}
+                label={label}
                 type={type}
                 variant="outlined" 
                 multiline={multiline}
@@ -22,7 +22,7 @@ const StandardTextField = ({errors, field, name, label, type="text", adornment="
                         borderColor: "secondary.main"
                     }
                     }}}
-                error={errors[name]}
+                error={errors[name] !== undefined}
                 helperText={errors[name]?.message}/> 
     )
 }

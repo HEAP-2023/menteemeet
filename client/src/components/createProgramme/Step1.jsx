@@ -67,8 +67,8 @@ const Step1 = ({control, errors}) => {
                         <RadioGroup
                         row
                         {...field}>
-                        <FormControlLabel value="Yes" control={<Radio />} label="Yes" />
-                        <FormControlLabel value="No" control={<Radio />} label="No" />
+                        <FormControlLabel value="Yes" control={<Radio color="secondary"/>} label="Yes" />
+                        <FormControlLabel value="No" control={<Radio color="secondary"/>} label="No" />
                       </RadioGroup>
                     }
                         />
@@ -85,10 +85,10 @@ const Step1 = ({control, errors}) => {
                         <RadioGroup
                         row
                         {...field}>
-                            <FormControlLabel value="weekly" control={<Radio />} label="Weekly" />
-                            <FormControlLabel value="monthly" control={<Radio />} label="Monthly" />
-                            <FormControlLabel value="yearly" control={<Radio />} label="Yearly" />
-                            <FormControlLabel value="na" control={<Radio />} label="Not Applicable" />
+                            <FormControlLabel value="weekly" control={<Radio color="secondary"/>} label="Weekly" />
+                            <FormControlLabel value="monthly" control={<Radio color="secondary"/>} label="Monthly" />
+                            <FormControlLabel value="yearly" control={<Radio color="secondary"/>} label="Yearly" />
+                            <FormControlLabel value="na" control={<Radio color="secondary"/>} label="Not Applicable" />
 
                       </RadioGroup>
                     }

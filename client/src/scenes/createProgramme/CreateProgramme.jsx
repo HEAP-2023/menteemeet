@@ -3,14 +3,21 @@ import { useState } from 'react';
 import ProgressBar from "../../components/createProgramme/ProgressBar";
 import SectionHeader from "../../components/SectionHeader";
 import { useForm, Controller } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup"
+import { createProgrammeSchema } from "../../components/createProgramme/createProgrammeVSchema";
+import { DevTool } from "@hookform/devtools";
+
+
 import Step1 from "../../components/createProgramme/Step1";
 import Step2 from "../../components/createProgramme/Step2";
 import Step3 from "../../components/createProgramme/Step3";
 
+
+
 const CreateProgramme = () => {
     const [progress, setProgress] = useState(10);
 
-    const {control,formState: {errors} , handleSubmit, reset, watch} = useForm({
+    const {control,formState: {errors} , handleSubmit, reset, register, watch} = useForm({
         defaultValues : {
             programmeName : "",
             programmeStart : "",
@@ -23,7 +30,11 @@ const CreateProgramme = () => {
 
             matchingCriteria : [],
             introPara : "",
+            
+            skills : [],
+            interestField : ""
         },
+        resolver : yupResolver(createProgrammeSchema)
     })
 
 
@@ -52,10 +63,15 @@ const CreateProgramme = () => {
         {/* step 3 form creation */}
         <Step3 control={control} 
                 errors={errors} 
-                watch={watch}/>
+                watch={watch}
+            />
 
-        <Button type="submit"  variant="contained" color="secondary">Submit</Button>
+        <Box display="flex" gap="20px">
+            <Button type="submit" variant="contained" color="secondary" onClick={() => {console.log("submit??");console.log(errors)}}>Submit</Button>
+            <Button variant="contained" color="secondary">Preview Form </Button>
+        </Box>
         </form>
+        <DevTool control={control}/>
     </Box>);
 }
 
