@@ -1,5 +1,5 @@
 import { Box, Button, Typography } from "@mui/material"
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import ProgressBar from "../../components/createProgramme/ProgressBar";
 import SectionHeader from "../../components/SectionHeader";
 import { useForm, Controller } from "react-hook-form";
@@ -15,21 +15,26 @@ import Step3 from "../../components/createProgramme/Step3";
 
 
 const CreateProgramme = () => {
-    const [progress, setProgress] = useState(10);
 
-    const {control,formState: {errors} , handleSubmit, reset, register, watch} = useForm({
+    const [progress, setProgress] = useState(0)
+    const {control,formState: {errors, defaultValues, dirtyFields} , handleSubmit, reset, getValues, watch} = useForm({
         defaultValues : {
+// new
+            deadline : "",
+            externalLink : "",
+            media : "",
+// new
             programmeName : "",
             programmeStart : "",
             programmeEnd : "",
             fixedDates : "",
             frequency : "",
             duration : "",
-            expectedMentors : "",
-            expectedMentees : "",
+            mentorCapacity : "",
+            menteeCapacity : "",
 
             matchingCriteria : [],
-            introPara : "",
+            description : "",
             
             skills : [],
             interestField : ""
@@ -37,6 +42,14 @@ const CreateProgramme = () => {
         resolver : yupResolver(createProgrammeSchema)
     })
 
+    let done = Object.keys(dirtyFields).length
+    useEffect(() => {
+        const total = Object.keys(defaultValues).length
+        if(done > 0){
+            let result = Math.round(done * 100 / total)
+            setProgress(result);
+        }
+    }, [done])
 
 
 
@@ -44,7 +57,8 @@ const CreateProgramme = () => {
         console.log("to be submitted")
         console.log(data)
     }
-
+    const testImage = getValues("media")
+    console.log(testImage)
     return (
     <Box width="100%" p="40px" display="flex" flexDirection="column">
         {/* progress bar */}
@@ -71,6 +85,7 @@ const CreateProgramme = () => {
             <Button variant="contained" color="secondary">Preview Form </Button>
         </Box>
         </form>
+        {/* <img src={}/> */}
         <DevTool control={control}/>
     </Box>);
 }

@@ -29,13 +29,13 @@ const Step3 = ({control,errors, watch}) => {
             <Box display="flex" flexDirection="column" width="100%" gap="20px">
                 <Box width="100%">
                     <Controller
-                    name="introPara"
+                    name="description"
                     control={control}
                     render={({field}) => 
-                <TextField error={errors["introPara"] !== undefined} 
+                <TextField error={errors["description"] !== undefined} 
                 {...field} multiline rows={4}
-                    name="introPara" label="Introduction Paragraph" 
-                    helperText={errors["introPara"]?.message}
+                    name="description" label="Introduction Paragraph / description of programme" 
+                    helperText={errors["description"]?.message}
                     sx={{
                         width : "100%",
                         "& .MuiInputLabel-root": {

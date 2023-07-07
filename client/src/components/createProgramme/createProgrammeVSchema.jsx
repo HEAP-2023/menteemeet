@@ -15,14 +15,14 @@ export const createProgrammeSchema = yup.object()
                             .required("this field is required"),
             duration : yup.string()
                             .required("this field is required"),
-            expectedMentors : yup.string()
+            mentorCapacity : yup.string()
                             .required("this field is required"),
-            expectedMentees : yup.string()
+            menteeCapacity : yup.string()
                             .required("this field is required"),
             matchingCriteria : yup.array()
                                     .of(yup.string())
                                     .min(1, "this field is required"),
-            introPara : yup.string()
+            description : yup.string()
                             .required("this field is required"),
             interestField : yup.string()
                             .when('matchingCriteria',{
@@ -38,7 +38,8 @@ export const createProgrammeSchema = yup.object()
                                     return matchingCriteria.includes("skill");
                                 },
                                 then : () => yup.array()
-                                        .required("this field is required")
+                                                .of(yup.string())
+                                                .min(1, "this field is required"),
                             }),
         }
     ).required("form not filled in yet") 

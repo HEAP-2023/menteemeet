@@ -1,4 +1,4 @@
-import { Box, TextField, Typography } from "@mui/material"
+import { Box, Button, Typography } from "@mui/material"
 import SectionHeader from "../../components/SectionHeader";
 import { Controller } from "react-hook-form";
 import Radio from '@mui/material/Radio';
@@ -7,6 +7,7 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import StandardTextField from "../StandardTextField";
+import UploadFileIcon from "@mui/icons-material/UploadFile";
 
 
 const Step1 = ({control, errors}) => {
@@ -18,7 +19,6 @@ const Step1 = ({control, errors}) => {
 
             <Box display="flex" flexDirection="column" width="100%" gap="20px" p="20px">
                 <Box display="flex" width="100%">
-                    <Box width="100%" >
                         <Controller
                         name="programmeName"
                         control={control}
@@ -27,7 +27,6 @@ const Step1 = ({control, errors}) => {
                     name="programmeName" label="Programme Name" />
                     }
                         />
-                    </Box>
                 </Box>
 
                 <Box display="flex" width="100%" flexDirection="column">
@@ -110,26 +109,73 @@ const Step1 = ({control, errors}) => {
 
                     <Box width="100%" >
                         <Controller
-                        name="expectedMentors"
+                        name="mentorCapacity"
                         control={control}
                         render={({field}) => 
                         <StandardTextField errors={errors} field={field} type="number"
-                        name="expectedMentors" label="Expected Number of Mentors" />
+                        name="mentorCapacity" label="Mentor Capacity" />
                     }
                         />
                     </Box>
 
                     <Box width="100%" >
                         <Controller
-                        name="expectedMentees"
+                        name="menteeCapacity"
                         control={control}
                         render={({field}) => 
                         <StandardTextField errors={errors} field={field} type="number"
-                        name="expectedMentees" label="Expected Number of Mentees" />
+                        name="menteeCapacity" label="Mentee Capacity" />
+                    }
+                        />
+                    </Box>
+
+                </Box>
+                
+                <Box display="flex" width="100%" flexDirection="column">
+                <Typography fontWeight="bold" mb="10px">Application Deadline</Typography>
+                    <Box width="100%" >
+                        <Controller
+                        name="deadline"
+                        control={control}
+                        render={({field}) => 
+                    <LocalizationProvider dateAdapter={AdapterDayjs} >
+                            <DatePicker {...field} 
+                            sx={{width:"30%"}}/>
+                    </LocalizationProvider>
                     }
                         />
                     </Box>
                 </Box>
+
+                <Box display="flex" width="100%" alignItems="center">
+                        <Controller
+                        name="externalLink"
+                        control={control}
+                        render={({field}) => 
+                    <StandardTextField errors={errors} field={field} 
+                    name="externalLink" label="Link to external site (N.A. if not applicable)" />
+                    }
+                />
+
+                        {/* <Controller
+                        name="media"
+                        control={control}
+                        render={({field}) => 
+                        <Button
+                        component="label"
+                        variant="contained"
+                        color="secondary"
+                        startIcon={<UploadFileIcon />}
+                        sx={{ ml : "20px" }}
+                      >
+                        Upload Image
+                        <input {...field} type="file" accept="image/*" hidden />
+                      </Button>
+                    }
+                        /> */}
+
+                </Box>
+
     
             </Box>
 
@@ -137,3 +183,4 @@ const Step1 = ({control, errors}) => {
 }
 
 export default Step1;
+
