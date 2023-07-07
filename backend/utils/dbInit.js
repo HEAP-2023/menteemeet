@@ -1,4 +1,5 @@
 const Account = require("../models/account");
+const User = require("../models/user");
 const bcrypt = require("bcrypt");
 
 const generateHashedPassword = async (password) => {
@@ -7,20 +8,20 @@ const generateHashedPassword = async (password) => {
   return hashedPassword;
 }
 
-const data = [
-   { name: "Jack Tan", email: "jack@live.com", account_type: "user" },
-]
+const data =
+   { name: "Jack Tan", email: "jack@live.com", account_type: "user" }
 
 const seedData = async () => {
-  data[0].password = await generateHashedPassword('Tester123');
-  Account.bulkCreate(data)
-    .then(() => {
-        console.log("Seeded Account Data Successfully.");
-    })
-    .catch(err => {
-        console.log("Error seeding Account Data:", err);
-    })
-    
+  try {
+    data.password = await generateHashedPassword('Tester123');
+    const newAccount = await Account.create(data, { raw: true });
+    const user = { account_id: newAccount.account_id };
+    const newUser = await User.create(user);
+
+    console.log("Successfully seeded user " + data.name);
+  } catch(err) {
+    console.error("Failed to seed user. Error: ", err);
+  }
 }
 
 module.exports = seedData;

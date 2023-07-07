@@ -134,15 +134,13 @@ const getUser = async (req, res) => {
     const id = req.params.id;
 
     try {
-      const user = await User.findOne({ where: { user_id: id }, raw: true });
+      const user = await User.findOne({ where: { user_id: id }, include: { model: Account }, raw: true });
 
       if (!user) {
         return res.status(404).json({ message: 'User not found!'})
       }
 
-      const account = await Account.findOne({ where: { account_id: user.account_id }, raw: true});
-
-      return res.status(200).json({ ...account, user });
+      return res.status(200).json({ user });
     } catch (err) {
       console.log(err);
       return res.status(500).json({ error: err });

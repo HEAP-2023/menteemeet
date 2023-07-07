@@ -9,8 +9,8 @@ const app = express();
 const PORT = config.PORT;
 const API_VER = config.API_VER;
 
-//Parse JSON data
 app.use(cors());
+//Parse JSON data
 app.use(express.json());
 
 //Import sequelize

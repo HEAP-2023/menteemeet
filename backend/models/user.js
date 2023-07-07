@@ -10,6 +10,10 @@ const User = sequelize.define(
             allowNull: false,
             autoIncrement: true,
         },
+        telegram_username: {
+            type: DataTypes.STRING(),
+            allowNull: true
+        },
     },
     {
       timestamps: false,
