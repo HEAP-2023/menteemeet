@@ -1,4 +1,4 @@
-import { Box, Typography, Input, TextField, Button } from "@mui/material";
+import { Box, Button } from "@mui/material";
 import StandardTextField from "../StandardTextField";
 
 import { useForm, Controller } from "react-hook-form";
@@ -46,6 +46,7 @@ const LoginForm = () => {
                     control={control}
                     render={({field}) => 
                         <StandardTextField 
+                            type="password"
                             errors={errors} 
                             field={field} 
                             name="password" 

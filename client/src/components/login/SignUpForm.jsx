@@ -12,8 +12,7 @@ const SignUpForm = () => {
 
     const {control, formState: {errors}, handleSubmit, reset} = useForm({
         defaultValues : {
-            firstname : "",
-            lastname : "",
+            name : "",
             email : "",
             password : "",
             confirmPassword : "",
@@ -48,35 +47,21 @@ const SignUpForm = () => {
             <Box display="flex" flexDirection="column" width="100%" >
                     {/* <label>First Name</label> */}
                     <Controller
-                    name="firstname"
+                    name="name"
                     control={control}
                     render={({field}) => 
 
                     <StandardTextField 
                             errors={errors} 
                             field={field} 
-                            name="firstname" 
-                            label="First Name"/>
+                            name="name" 
+                            label="Name"/>
                         
                 }
                     />
 
                 </Box>
-                <Box display="flex" flexDirection="column" width="100%" >
-                    <Controller
-                        name="lastname"
-                        control={control}
-                        render={({field}) => 
-                        <StandardTextField 
-                            errors={errors} 
-                            field={field} 
-                            name="lastname" 
-                            label="Last Name"/>
-                        }
-                    />
-                    
-
-                </Box>
+                
                 <Box display="flex" flexDirection="column" width="100%" >
                     <Controller
                     name="email"
@@ -97,6 +82,7 @@ const SignUpForm = () => {
                     control={control}
                     render={({field}) => 
                         <StandardTextField 
+                            type="password"
                             errors={errors} 
                             field={field} 
                             name="password" 
@@ -111,6 +97,7 @@ const SignUpForm = () => {
                     control={control}
                     render={({field}) => 
                         <StandardTextField 
+                            type="password"
                             errors={errors} 
                             field={field} 
                             name="confirmPassword" 
