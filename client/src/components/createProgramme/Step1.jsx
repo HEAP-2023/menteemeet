@@ -8,10 +8,12 @@ import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import StandardTextField from "../StandardTextField";
 import UploadFileIcon from "@mui/icons-material/UploadFile";
-
+import dayjs from "dayjs";
+import { useState } from "react";
 
 const Step1 = ({control, errors}) => {
-   
+
+
     return (
     <Box width="100%" p="40px" m="20px 0" display="flex" flexDirection="column" bgcolor="#F1F1F1" >
         <SectionHeader margin="0" text="Step 1 - The Basics"/>
@@ -39,6 +41,12 @@ const Step1 = ({control, errors}) => {
                         render={({field}) => 
                     <LocalizationProvider dateAdapter={AdapterDayjs} >
                             <DatePicker {...field} 
+                              format="DD-MM-YYYY"
+                              value=""
+                              onChange={(e) => {
+                                const formattedDate = dayjs(e.$d).format("DD/MM/YYYY")
+                                field.onChange(formattedDate)
+                            }}
                             sx={{width:"30%", p:"0 20px"}}/>
                     </LocalizationProvider>
                     }
@@ -49,7 +57,14 @@ const Step1 = ({control, errors}) => {
                         control={control}
                         render={({field}) => 
                         <LocalizationProvider dateAdapter={AdapterDayjs} >
-                            <DatePicker {...field} sx={{width:"30%", p:"0 20px"}}/>
+                            <DatePicker {...field} 
+                            value=""
+                            format="DD-MM-YYYY"
+                           onChange={(e) => {
+                                const formattedDate = dayjs(e.$d).format("DD/MM/YYYY")
+                                field.onChange(formattedDate)
+                            }}
+                            sx={{width:"30%", p:"0 20px"}} />
                         </LocalizationProvider>
                     }
                         />
@@ -140,6 +155,12 @@ const Step1 = ({control, errors}) => {
                         render={({field}) => 
                     <LocalizationProvider dateAdapter={AdapterDayjs} >
                             <DatePicker {...field} 
+                            value=""
+                            format="DD-MM-YYYY"
+                            onChange={(e) => {
+                                const formattedDate = dayjs(e.$d).format("DD/MM/YYYY")
+                                field.onChange(formattedDate)
+                            }}
                             sx={{width:"30%"}}/>
                     </LocalizationProvider>
                     }

@@ -4,7 +4,7 @@ import LinearProgress, { linearProgressClasses } from '@mui/material/LinearProgr
 
 const ProgressBar = ({progress}) => {
     return (
-    <Box display="flex" m="20px">
+    <Box display="flex" m="20px" position="sticky" top="50px">
         <LinearProgress variant="determinate" value={progress} 
         sx={{height : "20px", width:"80%",
         borderRadius: 5,

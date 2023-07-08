@@ -2,7 +2,7 @@ import { Box, Typography ,Button, Modal, TextField, List, ListItem } from "@mui/
 import PageHeader from "../../PageHeader"
 import { useRef, useState } from "react"
 import { Controller, useFieldArray } from "react-hook-form"
-import Skill from "./Skill"
+import SkillAdmin from "./SkillAdmin"
 
 
 const SkillSection = ({control}) => {
@@ -27,9 +27,9 @@ const SkillSection = ({control}) => {
                     <Controller
                     render={({ field }) => {
                     return (
-                        <Skill remove={remove} index={index}>
+                        <SkillAdmin remove={remove} index={index}>
                             <TextField {...field} disabled variant="standard"></TextField>
-                        </Skill>
+                        </SkillAdmin>
                     )}
                 }
                     name={`skills.${index}.skillName`}

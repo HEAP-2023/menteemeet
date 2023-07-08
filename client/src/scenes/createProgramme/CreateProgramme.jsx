@@ -11,13 +11,15 @@ import { DevTool } from "@hookform/devtools";
 import Step1 from "../../components/createProgramme/Step1";
 import Step2 from "../../components/createProgramme/Step2";
 import Step3 from "../../components/createProgramme/Step3";
+import PreviewForm from "../../components/createProgramme/PreviewForm";
 
 
 
 const CreateProgramme = () => {
 
     const [progress, setProgress] = useState(0)
-    const {control,formState: {errors, defaultValues, dirtyFields} , handleSubmit, reset, getValues, watch} = useForm({
+    const [preview, setPreview] = useState(false)
+    const {control,formState: {errors, defaultValues, dirtyFields, isDirty} , handleSubmit, reset, getValues, watch} = useForm({
         defaultValues : {
 // new
             deadline : "",
@@ -42,11 +44,14 @@ const CreateProgramme = () => {
         resolver : yupResolver(createProgrammeSchema)
     })
 
-    let done = Object.keys(dirtyFields).length
+    let done = Object.keys(dirtyFields);
     useEffect(() => {
         const total = Object.keys(defaultValues).length
-        if(done > 0){
-            let result = Math.round(done * 100 / total)
+        const dirty = done.filter(key => dirtyFields[key] === true || dirtyFields[key].length > 0)
+        console.log(dirty)
+        console.log(total)
+        if(isDirty){
+            let result = Math.round(dirty.length * 100 / total)
             setProgress(result);
         }
     }, [done])
@@ -82,10 +87,11 @@ const CreateProgramme = () => {
 
         <Box display="flex" gap="20px">
             <Button type="submit" variant="contained" color="secondary" onClick={() => {console.log("submit??");console.log(errors)}}>Submit</Button>
-            <Button variant="contained" color="secondary">Preview Form </Button>
+            <Button /* disabled={progress < 100} */ variant="contained" color="secondary" onClick={() => {setPreview(!preview)}}>Preview Form </Button>
         </Box>
+
+        <PreviewForm open={preview} setPreview={setPreview} getValues={getValues}/>
         </form>
-        {/* <img src={}/> */}
         <DevTool control={control}/>
     </Box>);
 }

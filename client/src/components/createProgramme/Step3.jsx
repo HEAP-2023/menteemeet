@@ -11,13 +11,12 @@ import MenteeGroupingSection from "./createForm/MenteeGroupingSection";
 
 const Step3 = ({control,errors, watch}) => {
     const criteriaSelected = watch("matchingCriteria")
-    const watchStartDate = watch("programmeStart");
-    const watchEndDate = watch("programmeEnd");
+    const startDate = watch("programmeStart");
+    const endDate = watch("programmeEnd");
     const frequency = watch("frequency");
     const programmeName = watch("programmeName");
 
-    const startDate = moment(watchStartDate["$d"]).format('DD/MM/YYYY');
-    const endDate = moment(watchEndDate["$d"]).format('DD/MM/YYYY');
+    
 
 
     return (
@@ -59,7 +58,7 @@ const Step3 = ({control,errors, watch}) => {
                     />
                 </Box>
 
-                <Typography>{programmeName} will be conducted from {startDate} to {endDate} {frequency !== "na" && `it will be conducted on a ${frequency} basis`}</Typography>
+                <Typography>{programmeName} will be conducted from {startDate} to {endDate} {frequency !== "na" && `and it will be conducted on a ${frequency} basis`}</Typography>
                 
                 <Box width="100%">
                     {criteriaSelected.includes("availability") &&

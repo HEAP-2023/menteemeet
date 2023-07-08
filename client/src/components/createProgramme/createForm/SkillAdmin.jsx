@@ -6,7 +6,7 @@ import StarIcon from '@mui/icons-material/Star';
 import { useState } from "react";
 
 
-const Skill = ({children, remove, index}) => {
+const SkillAdmin = ({children, remove, index}) => {
 
     return (
     <Box border="1px solid black" p="20px" width="60%">
@@ -43,7 +43,7 @@ const Skill = ({children, remove, index}) => {
     </Box>)
 }
 
-export default Skill;
+export default SkillAdmin;
 
 
 const labels = {
