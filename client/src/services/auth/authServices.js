@@ -25,7 +25,7 @@ const verifyJWT = async() => {
 async function login(user) {
     const res = await axiosInstance({
         method: "post",
-        url: "/user/login",
+        url: "/login",
         data: user
     })
     console.log(res)
@@ -47,7 +47,7 @@ async function login(user) {
 async function register(user) {
   const res = await axiosInstance({
     method: "post",
-    url: "/user/register",
+    url: "/register",
     data: user
   })
   console.log(res)

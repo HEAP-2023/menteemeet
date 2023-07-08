@@ -8,7 +8,7 @@ const jwt = require("jsonwebtoken");
 const ACCESS_TOKEN_SECRET = config.ACCESS_TOKEN_SECRET;
 const EXPIRY = config.EXPIRY;
 
-function generateAccessToken(user) {
+const generateAccessToken = (user) => {
   return jwt.sign(user, ACCESS_TOKEN_SECRET, { expiresIn: EXPIRY });
 }
 
@@ -16,7 +16,7 @@ const register = async (req, res) => {
     const { name, email, password, account_type } = req.body;
     try {
         // WHERE Email : has "email"
-        if (await Account.findOne({ where: { EMAIL: email } })) {
+        if (await Account.findOne({ where: { email: email } })) {
             return res.status(400).json({ message: "Email address has already been taken!"});
         }
 
@@ -30,18 +30,18 @@ const register = async (req, res) => {
             email: email,
             password: hashedPassword,
             account_type: account_type
-        })
+        }, { raw: true })
 
         if (account_type === 'user') {
           const newUser = await User.create({
-            account_id: newAccount.dataValues.account_id,
-          })
-          return res.status(201).json({ ...newAccount.dataValues, user_id: newUser.user_id });
+            account_id: newAccount.account_id,
+          }, { raw: true })
+          return res.status(201).json({ ...newAccount, user_id: newUser.user_id });
         } else if (account_type === 'organiser') {
           const newOrganiser = await Organiser.create({
             account_id: newAccount.dataValues.account_id,
-          })
-          return res.status(201).json({ ...newAccount.dataValues, organiser_id: newOrganiser.organiser_id });
+          }, { raw: true })
+          return res.status(201).json({ ...newAccount, organiser_id: newOrganiser.organiser_id });
         }
     } catch (err) {
         console.log(err);

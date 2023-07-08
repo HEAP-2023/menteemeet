@@ -65,7 +65,7 @@ const SideNavbar = ({enrolled}) => {
                         })}
                     </SubMenu>
                 </Menu>
-            </Sidebar>;
+            </Sidebar>
         </Box>
     );
 }
