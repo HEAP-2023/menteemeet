@@ -13,15 +13,24 @@ const updateUser = async (req, res) => {
         // const filteredJsonString = JSON.stringify(filteredObject); // Stringify the filtered object
 
         //to get AccountID from the login data
-        const filteredObject = Object.fromEntries(Object.entries(storeUserObj).filter(([key, value]) => key === "account_id"));
-        const getCurrID = filteredObject.account_id;
+
+        // const filteredObject = Object.fromEntries(Object.entries(storeUserObj).filter(([key, value]) => key === "account_id"));
+        // const getCurrID = filteredObject.account_id;
 
         const email = req.body.email;
+        const name = req.body.name;
+        const contact = req.body.contact;
+        const address = req.body.address;
+
+        const getID = req.params.id;
+
+        console.log(email + " " + getID);
 
         //Update function
         if (await Account.update(
-            {   email: email }, 
-            {   where: { account_id: getCurrID }} )) {
+          //Add-on when confirm
+            {   email: email, contact_no : contact }, 
+            {   where: { account_id: getID }} )) {
         };
         
         return res.status(200).json({message: "Login as : " + email + ". Successfully Authenticated & Updated!" });
