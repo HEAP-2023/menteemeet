@@ -1,10 +1,22 @@
 import { Box, IconButton, TextField, Typography, Button } from "@mui/material"
 import PageHeader from "../../PageHeader"
 import { useState, useRef } from "react"
-import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
+import DisplayUser from "./DisplayUser"
 
 
-const MentorGroupingSection = () => {
+const MentorGroupingSection = ({admin=false}) => {
+    const inputref = useRef();
+    const [mentors, setMentors] = useState([])
+    const addMentor = () => {
+        const newMentor = inputref.current.value;
+        setMentors([...mentors, newMentor]);
+        inputref.current.value = "";
+    }
+
+    const removeMentor = (name) => {
+        setMentors(mentors.filter(mentor => mentor !== name))
+    } 
+
     return (
     <Box width="100%">
          <PageHeader text="Mentor Preferences" margin="20px 0"/>
@@ -14,9 +26,10 @@ const MentorGroupingSection = () => {
 
             <Box width="100%" display="flex" flexDirection="column" alignItems="flex-start" gap="10px">
                 <Typography>Preferred Mentor (please input full name)</Typography>
-                <TextField disabled/>
+                {mentors.map(mentor => <DisplayUser key={mentor} name={mentor} removeUser={removeMentor}/>)}
 
-                <Button variant="contained" color="secondary" disabled>Add Mentor</Button>
+                <TextField disabled={admin} inputRef={inputref}/>
+                <Button variant="contained" color="secondary" disabled={admin} onClick={addMentor}>Add Mentor</Button>
             </Box>
          </Box>
     </Box>)

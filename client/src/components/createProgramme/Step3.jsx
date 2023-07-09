@@ -80,13 +80,13 @@ const Step3 = ({control,errors, watch}) => {
 
                 <Box width="100%">
                     {criteriaSelected.includes("mentorGrouping") &&
-                        <MentorGroupingSection/>
+                        <MentorGroupingSection admin={true}/>
                     }
                 </Box>
 
                 <Box width="100%">
                     {criteriaSelected.includes("menteeGrouping") &&
-                        <MenteeGroupingSection/>
+                        <MenteeGroupingSection admin={true}/>
                     }
                 </Box>
 

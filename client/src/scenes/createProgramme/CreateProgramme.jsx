@@ -48,8 +48,6 @@ const CreateProgramme = () => {
     useEffect(() => {
         const total = Object.keys(defaultValues).length
         const dirty = done.filter(key => dirtyFields[key] === true || dirtyFields[key].length > 0)
-        console.log(dirty)
-        console.log(total)
         if(isDirty){
             let result = Math.round(dirty.length * 100 / total)
             setProgress(result);
@@ -63,7 +61,6 @@ const CreateProgramme = () => {
         console.log(data)
     }
     const testImage = getValues("media")
-    console.log(testImage)
     return (
     <Box width="100%" p="40px" display="flex" flexDirection="column">
         {/* progress bar */}

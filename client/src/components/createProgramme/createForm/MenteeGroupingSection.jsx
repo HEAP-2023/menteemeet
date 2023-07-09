@@ -1,9 +1,20 @@
 import { Box, IconButton, TextField, Typography, Button } from "@mui/material"
 import PageHeader from "../../PageHeader"
 import { useState, useRef } from "react"
+import DisplayUser from "./DisplayUser"
 
+const MenteeGroupingSection = ({admin=false}) => {
+    const inputref = useRef();
+    const [mentees, setMentees] = useState([])
+    const addMentee = () => {
+        const newMentee = inputref.current.value;
+        setMentees([...mentees, newMentee]);
+        inputref.current.value = "";
+    }
 
-const MenteeGroupingSection = () => {
+    const removeMentee = (name) => {
+        setMentees(mentees.filter(mentee => mentee !== name))
+    } 
 
     return (
     <Box width="100%">
@@ -13,9 +24,10 @@ const MenteeGroupingSection = () => {
             
             <Box width="100%" display="flex" flexDirection="column" alignItems="flex-start" gap="10px">
                 <Typography>Preferred Mentee (please input full name)</Typography>
-                <TextField disabled/>
+                {mentees.map(mentee => <DisplayUser key={mentee} name={mentee} removeUser={removeMentee}/>)}
 
-                <Button variant="contained" color="secondary" disabled>Add Mentee</Button>
+                <TextField disabled={admin} inputRef={inputref}/>
+                <Button variant="contained" color="secondary" disabled={admin}  onClick={addMentee}>Add Mentee</Button>
             </Box>
          </Box>
     </Box>)

@@ -3,6 +3,8 @@ import PageHeader from "../PageHeader"
 import SectionHeader from "../SectionHeader"
 import NonFormTextField from "../NonFormTextField"
 import SkillUsers from "./SkillUsers"
+import MenteeGroupingSection from "./createForm/MenteeGroupingSection"
+import MentorGroupingSection from "./createForm/MentorGroupingSection"
 
 const PreviewForm = ({open, setPreview, getValues}) => {
     const programmeName = getValues("programmeName")
@@ -17,7 +19,6 @@ const PreviewForm = ({open, setPreview, getValues}) => {
     const skills = getValues("skills")
     const interestField = getValues("interestField")
 
-    console.log(interestField)
     return (
     <Modal 
     sx={{
@@ -72,9 +73,8 @@ const PreviewForm = ({open, setPreview, getValues}) => {
                     <Stack>
                         {
                             skills.map(skill => {
-                                console.log(skill.skillName)
                                 return (
-                                <SkillUsers>
+                                <SkillUsers key={skill.skillName}>
                                     <Typography fontWeight="700">{skill.skillName}</Typography>
                                 </SkillUsers>)
                             })
@@ -85,8 +85,40 @@ const PreviewForm = ({open, setPreview, getValues}) => {
                 {matchingCriteria.includes("interest") && 
                 <Stack>
                     <Typography fontWeight="700">Interest</Typography>
-                    <Typography>Select the top 3 areas you are interested in with relevance to {interestField}</Typography>
+                    <Typography>Select the top 3 areas you are interested in relevant to {interestField}</Typography>
+
+                    <Box display="flex" gap="20px">
+                    <TextField fullWidth
+                        select
+                        value=""
+                        label="Interest 1"
+                        variant="outlined"
+                        children={[]}
+                    />
+                    <TextField fullWidth
+                        select
+                        value=""
+                        label="Interest 2"
+                        variant="outlined"
+                        children={[]}
+                    />
+                    <TextField fullWidth
+                        select
+                        value=""
+                        label="Interest 3"
+                        variant="outlined"
+                        children={[]}
+                    />
+                </Box>
                 </Stack>
+                }
+
+                {matchingCriteria.includes("mentorGrouping") && 
+                    <MentorGroupingSection/>
+                }
+
+                {matchingCriteria.includes("menteeGrouping") && 
+                    <MenteeGroupingSection/>
                 }
             </Box>
         </Box>
