@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const { deleteProg } = require('../controllers/programmeController');
+const programmeController = require('../controllers/programmeController');
 
 //call authToken func
 const { authenticateToken } = require('../middlewares/authMiddlewares');
@@ -11,7 +11,8 @@ const { authenticateToken } = require('../middlewares/authMiddlewares');
 // use the auth function as a middleware.
 router.use(authenticateToken);
 
+
 //for deletion - for programme.
-router.delete('/delete/:id', authenticateToken, deleteProg);
+router.delete('/:id', authenticateToken, programmeController.deleteProg);
 
 module.exports = router
