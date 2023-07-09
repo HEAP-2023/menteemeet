@@ -30,19 +30,14 @@ const Programme = sequelize.define(
             type: DataTypes.STRING(),
             allowNull: false,
         },
-        external_link: {
+        application_deadline: {
+          type: DataTypes.DATE,
+          allowNull: false,
+        },
+        display_image: {
             type: DataTypes.STRING(),
             allowNull: true,
-        },
-        media: {
-            type: DataTypes.BLOB(),
-            allowNull: true,
-        },
-        application_deadline: {
-            type: DataTypes.DATE,
-            allowNull: false,
         }
-
     },
     {
       timestamps: false,
