@@ -1,4 +1,4 @@
-import { Box, Button, Typography } from "@mui/material"
+import { Box, Stack, Typography, Input, TextField } from "@mui/material"
 import SectionHeader from "../../components/SectionHeader";
 import { Controller } from "react-hook-form";
 import Radio from '@mui/material/Radio';
@@ -9,11 +9,12 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import StandardTextField from "../StandardTextField";
 import UploadFileIcon from "@mui/icons-material/UploadFile";
 import dayjs from "dayjs";
-import { useState } from "react";
+import { useRef, useState } from "react";
 
-const Step1 = ({control, errors}) => {
+const Step1 = ({control, errors, watch={watch}}) => {
 
-
+    const imagePreview = useRef();
+    const imgUploaded = watch("media", false)
     return (
     <Box width="100%" p="40px" m="20px 0" display="flex" flexDirection="column" bgcolor="#F1F1F1" >
         <SectionHeader margin="0" text="Step 1 - The Basics"/>
@@ -39,16 +40,19 @@ const Step1 = ({control, errors}) => {
                         name="programmeStart"
                         control={control}
                         render={({field}) => 
-                    <LocalizationProvider dateAdapter={AdapterDayjs} >
-                            <DatePicker {...field} 
-                              format="DD-MM-YYYY"
-                              value=""
-                              onChange={(e) => {
+                    {
+                    const {value, ...others} = field; 
+                    return (<LocalizationProvider dateAdapter={AdapterDayjs} >
+                            <DatePicker 
+                            {...others}
+                            format="DD-MM-YYYY"
+                            onChange={(e) => {
                                 const formattedDate = dayjs(e.$d).format("DD/MM/YYYY")
                                 field.onChange(formattedDate)
                             }}
-                            sx={{width:"30%", p:"0 20px"}}/>
-                    </LocalizationProvider>
+                            sx={{width:"30%", p:"20px"}}/>
+                    </LocalizationProvider>)
+                        }
                     }
                         />
                         <label>End</label>
@@ -56,16 +60,19 @@ const Step1 = ({control, errors}) => {
                         name="programmeEnd"
                         control={control}
                         render={({field}) => 
-                        <LocalizationProvider dateAdapter={AdapterDayjs} >
-                            <DatePicker {...field} 
-                            value=""
-                            format="DD-MM-YYYY"
-                           onChange={(e) => {
-                                const formattedDate = dayjs(e.$d).format("DD/MM/YYYY")
-                                field.onChange(formattedDate)
-                            }}
-                            sx={{width:"30%", p:"0 20px"}} />
-                        </LocalizationProvider>
+                        {
+                            const {value, ...others} = field; 
+                            return (<LocalizationProvider dateAdapter={AdapterDayjs} >
+                                    <DatePicker 
+                                    {...others}
+                                    format="DD-MM-YYYY"
+                                    onChange={(e) => {
+                                        const formattedDate = dayjs(e.$d).format("DD/MM/YYYY")
+                                        field.onChange(formattedDate)
+                                    }}
+                                    sx={{width:"30%", p:"20px"}}/>
+                            </LocalizationProvider>)
+                        }
                     }
                         />
                     </Box>
@@ -153,22 +160,25 @@ const Step1 = ({control, errors}) => {
                         name="deadline"
                         control={control}
                         render={({field}) => 
-                    <LocalizationProvider dateAdapter={AdapterDayjs} >
-                            <DatePicker {...field} 
-                            value=""
+                        {
+                    const {value, ...others} = field; 
+                    return (<LocalizationProvider dateAdapter={AdapterDayjs} >
+                            <DatePicker 
+                            {...others}
                             format="DD-MM-YYYY"
                             onChange={(e) => {
                                 const formattedDate = dayjs(e.$d).format("DD/MM/YYYY")
                                 field.onChange(formattedDate)
                             }}
                             sx={{width:"30%"}}/>
-                    </LocalizationProvider>
+                    </LocalizationProvider>)
+                        }
                     }
                         />
                     </Box>
                 </Box>
 
-                <Box display="flex" width="100%" alignItems="center">
+                <Stack display="flex" width="100%" >
                         <Controller
                         name="externalLink"
                         control={control}
@@ -178,24 +188,37 @@ const Step1 = ({control, errors}) => {
                     }
                 />
 
-                        {/* <Controller
+                        <Controller
                         name="media"
                         control={control}
-                        render={({field}) => 
-                        <Button
-                        component="label"
-                        variant="contained"
-                        color="secondary"
-                        startIcon={<UploadFileIcon />}
-                        sx={{ ml : "20px" }}
-                      >
-                        Upload Image
-                        <input {...field} type="file" accept="image/*" hidden />
-                      </Button>
+                        render={({field}) => {
+                        const {value, ...others} = field; 
+                        return (
+                        <Stack width="50%">
+                            <Typography fontWeight="bold" m="10px 0">Add a cover image for your programme</Typography>
+                            <TextField {...others} type="file" 
+                            inputProps={{accept : "image/*"}} 
+                            error={errors["media"] !== undefined} 
+                            InputProps={{endAdornment:<UploadFileIcon/>}} 
+                            helperText={errors["media"]?.message} 
+                            variant="outlined"
+                            onChange={(e) => {
+                                const [file] = e.target.files
+                                if (file) {
+                                    const blob = URL.createObjectURL(file)
+                                    imagePreview.current.src = blob
+                                    field.onChange(blob)
+                                  }
+                            }}
+                            />
+                            <img ref={imagePreview} alt="Image format is not supported" 
+                            src="#" hidden={!imgUploaded}
+                            style={{height: "300px", objectFit : "scale-down" ,width: "auto"}}/>
+                        </Stack>)}
                     }
-                        /> */}
+                        />
 
-                </Box>
+                </Stack>
 
     
             </Box>

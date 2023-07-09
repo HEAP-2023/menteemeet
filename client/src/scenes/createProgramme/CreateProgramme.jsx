@@ -74,7 +74,7 @@ const CreateProgramme = () => {
         <form onSubmit={handleSubmit(handleSave)} width="100%" >
 
         {/* step 1 */}
-        <Step1 control={control} errors={errors}/>
+        <Step1 control={control} errors={errors} watch={watch}/>
 
         {/* step 2 */}
         <Step2 control={control}  matchingCriterias={matchingCriterias}/>
