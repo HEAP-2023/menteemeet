@@ -12,7 +12,7 @@ const Calendar = () => {
                     <DateCalendar />
                 </LocalizationProvider>
             </Box>
-            <Box sx={{ flex: '80%', marginRight: "100px", marginTop: "2%" }}>
+            <Box sx={{ flex: '80%', marginRight: "100px", marginY: '2%' }}>
                 <MainCalendar />
             </Box>
 
