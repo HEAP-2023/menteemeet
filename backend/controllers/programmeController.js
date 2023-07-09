@@ -1,5 +1,9 @@
 const Programme = require("../models/programme");
 
+const addProg = async (req, res) => {
+  
+}
+
 const deleteProg = async (req, res) => {
     try {
         const deleteProgID = req.params.id;
