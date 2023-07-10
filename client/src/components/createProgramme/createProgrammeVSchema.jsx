@@ -38,7 +38,7 @@ export const createProgrammeSchema = yup.object()
                                     return matchingCriteria.includes("skill");
                                 },
                                 then : () => yup.array()
-                                                .of(yup.string())
+                                                .of(yup.object())
                                                 .min(1, "this field is required"),
                             }),
             deadline : yup.string()

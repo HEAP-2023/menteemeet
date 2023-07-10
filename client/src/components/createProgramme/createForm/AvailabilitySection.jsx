@@ -1,5 +1,7 @@
 import { Box, Typography } from "@mui/material"
 import PageHeader from "../../PageHeader"
+import WeekSelectionCalendar from "./WeekSelectionCalendar"
+
 const AvailabilitySection = () => {
 
     return (<Box>
@@ -8,6 +10,7 @@ const AvailabilitySection = () => {
 
         {/* response section */}
         <Typography>Please select the timeslots you will be available for a mentorship section</Typography>
+        <WeekSelectionCalendar admin={true}/>
     </Box>)
 }
 

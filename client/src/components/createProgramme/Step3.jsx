@@ -1,10 +1,8 @@
-import { Box, TextField, Typography } from "@mui/material"
+import { Box, TextField } from "@mui/material"
 import SectionHeader from "../../components/SectionHeader";
 import { Controller } from "react-hook-form";
-import StandardTextField from "../StandardTextField";
 import AvailabilitySection from "./createForm/AvailabilitySection";
 import SkillSection from "./createForm/SkillSection";
-import moment from "moment";
 import InterestSection from "./createForm/InterestSection";
 import MentorGroupingSection from "./createForm/MentorGroupingSection";
 import MenteeGroupingSection from "./createForm/MenteeGroupingSection";
@@ -14,7 +12,6 @@ const Step3 = ({control,errors, watch}) => {
     const startDate = watch("programmeStart");
     const endDate = watch("programmeEnd");
     const frequency = watch("frequency");
-    const programmeName = watch("programmeName");
 
     
 
@@ -58,7 +55,6 @@ const Step3 = ({control,errors, watch}) => {
                     />
                 </Box>
 
-                <Typography>{programmeName} will be conducted from {startDate} to {endDate} {frequency !== "na" && `and it will be conducted on a ${frequency} basis`}</Typography>
                 
                 <Box width="100%">
                     {criteriaSelected.includes("availability") &&

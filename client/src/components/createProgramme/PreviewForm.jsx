@@ -5,6 +5,7 @@ import NonFormTextField from "../NonFormTextField"
 import SkillUsers from "./SkillUsers"
 import MenteeGroupingSection from "./createForm/MenteeGroupingSection"
 import MentorGroupingSection from "./createForm/MentorGroupingSection"
+import WeekSelectionCalendar from "./createForm/WeekSelectionCalendar"
 
 const PreviewForm = ({open, setPreview, getValues}) => {
     const programmeName = getValues("programmeName")
@@ -65,7 +66,7 @@ const PreviewForm = ({open, setPreview, getValues}) => {
                 {matchingCriteria.includes("availability") &&
                     <Stack>
                         <Typography>calendar select kiv</Typography>
-                         {/* insert calendar */}
+                        <WeekSelectionCalendar/>
                     </Stack>
                 }
 

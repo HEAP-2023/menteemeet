@@ -2,7 +2,7 @@ import { Box, Button, Typography } from "@mui/material"
 import { useEffect, useState } from 'react';
 import ProgressBar from "../../components/createProgramme/ProgressBar";
 import SectionHeader from "../../components/SectionHeader";
-import { useForm, Controller } from "react-hook-form";
+import { useForm, Controller, FormProvider } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup"
 import { createProgrammeSchema } from "../../components/createProgramme/createProgrammeVSchema";
 import { DevTool } from "@hookform/devtools";
@@ -19,7 +19,7 @@ const CreateProgramme = () => {
 
     const [progress, setProgress] = useState(0)
     const [preview, setPreview] = useState(false)
-    const {control,formState: {errors, defaultValues, dirtyFields, isDirty} , handleSubmit, reset, getValues, watch} = useForm({
+    const methods = useForm({
         defaultValues : {
 // new
             deadline : "",
@@ -43,6 +43,7 @@ const CreateProgramme = () => {
         },
         resolver : yupResolver(createProgrammeSchema)
     })
+    const {control,formState: {errors, defaultValues, dirtyFields, isDirty} , handleSubmit, reset, getValues, watch} = methods
 
     let done = Object.keys(dirtyFields);
     useEffect(() => {
@@ -68,6 +69,7 @@ const CreateProgramme = () => {
 
         <SectionHeader margin="20px" text="Welcome organiser, let’s start to create your mentoring programme." />
 
+    <FormProvider {...methods}>
         <form onSubmit={handleSubmit(handleSave)} width="100%" >
 
         {/* step 1 */}
@@ -89,6 +91,7 @@ const CreateProgramme = () => {
 
         <PreviewForm open={preview} setPreview={setPreview} getValues={getValues}/>
         </form>
+    </FormProvider>
         <DevTool control={control}/>
     </Box>);
 }
