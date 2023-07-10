@@ -20,8 +20,8 @@ const AddEventPopover = ({ isOpen, onRequestClose, selectedDateInfo, addEvent })
             startTime: yup.string()
                 .required("This field is required"),
             endTime: yup.string()
-                .required("This field is required"),
-                //need to add one more validation to check that endTime is after startTime
+                .required("This field is required")
+                .min(yup.ref('startTime'), 'End time must be after start time'),
             programme: yup.string()
                 .oneOf(mentorshipProgrammes, "Required")
         }).required()
@@ -94,7 +94,6 @@ const AddEventPopover = ({ isOpen, onRequestClose, selectedDateInfo, addEvent })
                         <Typography>Time</Typography>
                         <ErrorMessage
                             errors={errors}
-                            name="startTime"
                             name="endTime"
                             render={({ message }) => <p style={{ color: "#ff0000", margin: "0px" }}>{message}</p>}
                         />

@@ -1,7 +1,3 @@
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { DateCalendar } from '@mui/x-date-pickers/DateCalendar';
-import { Box } from '@mui/material';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid'
@@ -74,7 +70,7 @@ const MainCalendar = () => {
         initialView: "dayGridMonth",
         firstDay: 1, // first day is a Monday
         headerToolbar: {
-            start: 'dayGridMonth,timeGridWeek,timeGridDay,listMonth', // will normally be on the left. if RTL, will be on the right
+            start: 'dayGridMonth,timeGridWeek,listMonth', // will normally be on the left. if RTL, will be on the right
             center: 'title',
             end: 'today prev,next' // will normally be on the right. if RTL, will be on the left
         },
