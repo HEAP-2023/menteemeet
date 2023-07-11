@@ -1,4 +1,4 @@
-import { Box, Typography ,Button, Modal, TextField, List, ListItem } from "@mui/material"
+import { Box, Typography ,Button, Modal, TextField, List, ListItem, FormControl, FormHelperText } from "@mui/material"
 import PageHeader from "../../PageHeader"
 import { useRef, useState } from "react"
 import { Controller, useFieldArray } from "react-hook-form"
@@ -7,7 +7,7 @@ import { useFormContext } from "react-hook-form";
 
 
 const SkillSection = () => {
-    const {control} = useFormContext();
+    const {control, formState : {errors}} = useFormContext();
 
     const [skillModal, toggleModal] = useState(false)
     const skillInput = useRef(null)
@@ -22,6 +22,10 @@ const SkillSection = () => {
     <Box>
         <PageHeader text="Skills" margin="20px 0"/>
         <Box display="flex" flexDirection="column" gap="20px">
+        <FormControl
+            error={errors["skills"] !== undefined}
+        >
+            <FormHelperText>{errors["skills"]?.message}</FormHelperText>
             <List>
             {
             fields.map((item, index) => {
@@ -42,6 +46,7 @@ const SkillSection = () => {
             })
             }
             </List>
+        </FormControl>
 
             {/* popup */}
             <Modal

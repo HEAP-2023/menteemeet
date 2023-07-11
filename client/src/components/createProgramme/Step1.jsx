@@ -1,4 +1,4 @@
-import { Box, Stack, Typography, Input, TextField } from "@mui/material"
+import { Box, Stack, Typography, Input, TextField, FormControl, FormHelperText } from "@mui/material"
 import SectionHeader from "../../components/SectionHeader";
 import { Controller } from "react-hook-form";
 import Radio from '@mui/material/Radio';
@@ -46,13 +46,20 @@ const Step1 = () => {
                     return (<LocalizationProvider dateAdapter={AdapterDayjs} >
                             <DatePicker 
                             {...others}
+                            disablePast
                             format="DD-MM-YYYY"
                             onChange={(e) => {
                                 const formattedDate = dayjs(e.$d).format("DD/MM/YYYY")
                                 field.onChange(formattedDate)
                             }}
-                            // slots={{textField : StandardTextField}} //kiv                          
-                            sx={{width:"30%", p:"20px"}}/>
+                            slotProps={{
+                                textField: {
+                                    error : errors["programmeStart"] !== undefined,
+                                    helperText: errors["programmeStart"]?.["message"],
+                                },
+                              }}
+                            sx={{width:"30%", p:"20px"}}
+                            />
                     </LocalizationProvider>)
                         }
                     }
@@ -67,12 +74,18 @@ const Step1 = () => {
                             return (<LocalizationProvider dateAdapter={AdapterDayjs} >
                                     <DatePicker 
                                     {...others}
+                                    disablePast
                                     format="DD-MM-YYYY"
                                     onChange={(e) => {
                                         const formattedDate = dayjs(e.$d).format("DD/MM/YYYY")
                                         field.onChange(formattedDate)
                                     }}
-                                    
+                                    slotProps={{
+                                        textField: {
+                                            error : errors["programmeEnd"] !== undefined,
+                                            helperText: errors["programmeEnd"]?.["message"],
+                                        },
+                                      }}
                                     sx={{width:"30%", p:"20px"}}/>
                             </LocalizationProvider>)
                         }
@@ -82,42 +95,56 @@ const Step1 = () => {
                 </Box>
 
                 <Box display="flex" width="100%" flexDirection="column">
-                    <Typography fontWeight="bold" mb="10px">Session on fixed dates?</Typography>
-                    <Box width="100%">
-                        <Controller
-                        name="fixedDates"
-                        control={control}
-                        render={({field}) => 
-                        <RadioGroup
-                        row
-                        {...field}>
-                        <FormControlLabel value="Yes" control={<Radio color="secondary"/>} label="Yes" />
-                        <FormControlLabel value="No" control={<Radio color="secondary"/>} label="No" />
-                      </RadioGroup>
-                    }
-                        />
-                    </Box>
+                    <FormControl
+                    error={errors["fixedDates"] !== undefined}
+                    >
+                        <Box display="flex">
+                            <Typography fontWeight="bold" mb="10px">Session on fixed dates?</Typography>
+                            <FormHelperText>{errors["fixedDates"]?.message}</FormHelperText>
+                        </Box>
+                        <Box width="100%">
+                                <Controller
+                                name="fixedDates"
+                                control={control}
+                                render={({field}) => 
+                                <RadioGroup
+                                row
+                                {...field}>
+                                <FormControlLabel value="Yes" control={<Radio color="secondary"/>} label="Yes" />
+                                <FormControlLabel value="No" control={<Radio color="secondary"/>} label="No" />
+                            </RadioGroup>
+                            }
+                                />
+                        </Box>
+                    </FormControl>
                 </Box>
 
                 <Box display="flex" width="100%" flexDirection="column">
-                <Typography fontWeight="bold" mb="10px">Frequency of sessions</Typography>
-                    <Box width="100%" >
-                        <Controller
-                        name="frequency"
-                        control={control}
-                        render={({field}) => 
-                        <RadioGroup
-                        row
-                        {...field}>
-                            <FormControlLabel value="weekly" control={<Radio color="secondary"/>} label="Weekly" />
-                            <FormControlLabel value="monthly" control={<Radio color="secondary"/>} label="Monthly" />
-                            <FormControlLabel value="yearly" control={<Radio color="secondary"/>} label="Yearly" />
-                            <FormControlLabel value="na" control={<Radio color="secondary"/>} label="Not Applicable" />
-
-                      </RadioGroup>
-                    }
-                        />
+                <FormControl
+                    error={errors["frequency"] !== undefined}
+                >
+                    <Box display="flex">
+                        <Typography fontWeight="bold" mb="10px">Frequency of sessions</Typography>
+                        <FormHelperText>{errors["frequency"]?.message}</FormHelperText>
                     </Box>
+                        <Box width="100%" >
+                            <Controller
+                            name="frequency"
+                            control={control}
+                            render={({field}) => 
+                            <RadioGroup
+                            row
+                            {...field}>
+                                <FormControlLabel value="weekly" control={<Radio color="secondary"/>} label="Weekly" />
+                                <FormControlLabel value="monthly" control={<Radio color="secondary"/>} label="Monthly" />
+                                <FormControlLabel value="yearly" control={<Radio color="secondary"/>} label="Yearly" />
+                                <FormControlLabel value="na" control={<Radio color="secondary"/>} label="Not Applicable" />
+
+                        </RadioGroup>
+                        }
+                            />
+                        </Box>
+                </FormControl>
                 </Box>
 
                 <Box display="flex" width="100%" gap="20px">
@@ -168,11 +195,18 @@ const Step1 = () => {
                     return (<LocalizationProvider dateAdapter={AdapterDayjs} >
                             <DatePicker 
                             {...others}
+                            disablePast
                             format="DD-MM-YYYY"
                             onChange={(e) => {
                                 const formattedDate = dayjs(e.$d).format("DD/MM/YYYY")
                                 field.onChange(formattedDate)
                             }}
+                            slotProps={{
+                                textField: {
+                                    error : errors["deadline"] !== undefined,
+                                    helperText: errors["deadline"]?.["message"],
+                                },
+                              }}
                             sx={{width:"30%"}}/>
                     </LocalizationProvider>)
                         }
@@ -201,8 +235,8 @@ const Step1 = () => {
                             <Typography fontWeight="bold" m="10px 0">Add a cover image for your programme</Typography>
                             <TextField {...others} type="file" 
                             inputProps={{accept : "image/*"}} 
-                            error={errors["media"] !== undefined} 
                             InputProps={{endAdornment:<UploadFileIcon/>}} 
+                            error={errors["media"] !== undefined} 
                             helperText={errors["media"]?.message} 
                             variant="outlined"
                             onChange={(e) => {

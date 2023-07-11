@@ -44,16 +44,19 @@ const CreateProgramme = () => {
         resolver : yupResolver(createProgrammeSchema)
     })
     const {control,formState: {errors, defaultValues, dirtyFields, isDirty} , handleSubmit, reset, getValues, watch} = methods
-
+    const watchMatching = watch("matchingCriteria")
     let done = Object.keys(dirtyFields);
     useEffect(() => {
-        const total = Object.keys(defaultValues).length
+        const max = Object.keys(defaultValues).length
         const dirty = done.filter(key => dirtyFields[key] === true || dirtyFields[key].length > 0)
+        let total = max;
+        if(!watchMatching.includes("skill")){total = total - 1}
+        if(!watchMatching.includes("interest")){total = total - 1}
         if(isDirty){
             let result = Math.round(dirty.length * 100 / total)
             setProgress(result);
         }
-    }, [done])
+    }, [done, watchMatching])
 
 
 

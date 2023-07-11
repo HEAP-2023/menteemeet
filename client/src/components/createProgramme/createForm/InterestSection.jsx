@@ -5,7 +5,7 @@ import { useFormContext } from "react-hook-form";
 
 
 const InterestSection = () => {
-    const {control} = useFormContext();
+    const {control, formState : {errors}} = useFormContext();
     const sectors = fetchSectors();
 
     return (
@@ -19,6 +19,8 @@ const InterestSection = () => {
                         render={({field}) => 
                     <TextField
                         {...field}
+                        error={errors["interestField"] !== undefined} 
+                        helperText={errors["interestField"]?.message} 
                         select
                         label="Sector"
                         variant="outlined"
