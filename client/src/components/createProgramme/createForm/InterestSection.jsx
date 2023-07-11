@@ -1,8 +1,11 @@
 import { Box, Typography, Select, MenuItem, InputLabel, FormControl, TextField  } from "@mui/material";
 import PageHeader from "../../PageHeader";
 import { Controller } from "react-hook-form";
+import { useFormContext } from "react-hook-form";
 
-const InterestSection = ({control}) => {
+
+const InterestSection = () => {
+    const {control} = useFormContext();
     const sectors = fetchSectors();
 
     return (

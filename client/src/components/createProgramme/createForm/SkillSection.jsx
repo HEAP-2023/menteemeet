@@ -3,9 +3,12 @@ import PageHeader from "../../PageHeader"
 import { useRef, useState } from "react"
 import { Controller, useFieldArray } from "react-hook-form"
 import SkillAdmin from "./SkillAdmin"
+import { useFormContext } from "react-hook-form";
 
 
-const SkillSection = ({control}) => {
+const SkillSection = () => {
+    const {control} = useFormContext();
+
     const [skillModal, toggleModal] = useState(false)
     const skillInput = useRef(null)
     const popupAddskillButton = useRef(null)

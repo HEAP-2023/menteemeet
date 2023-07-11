@@ -4,8 +4,12 @@ import { Controller } from "react-hook-form";
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormGroup from '@mui/material/FormGroup';
 import Checkbox from '@mui/material/Checkbox';
+import { useFormContext } from "react-hook-form";
+import { ErrorMessage } from "@hookform/error-message"
 
-const Step2 = ({control, matchingCriterias}) => {
+
+const Step2 = ({matchingCriterias}) => {
+    const {control, formState : {errors}} = useFormContext();
 
 
     return (
@@ -14,7 +18,12 @@ const Step2 = ({control, matchingCriterias}) => {
         <SectionHeader margin="0" text="Inform us about your desired criteria for group matching, which will be incorporated into our advanced matching algorithm"/>
 
             <Box display="flex" flexDirection="column" width="100%" gap="20px" p="20px">
-                    <label>Matching Criteria</label>
+                <label>Matching Criteria</label>
+                <ErrorMessage errors={errors} name="matchingCriteria" 
+                render={({message}) => 
+                <Typography sx={{color: "#ff0000"}}>
+                    {message}
+                </Typography>}/>
         <Box width="70%" >
 
             <FormControl >

@@ -10,11 +10,12 @@ import Explore from "./scenes/explore/Explore";
 import Profile from "./scenes/profile/Profile";
 import Programme from "./scenes/programme/Programme";
 import LoginStart from "./scenes/login/LoginStart";
+import LoginExplore from "./scenes/login/LoginExplore"
 import Test from "./scenes/testingGrounds/Test";
 import CreateProgramme from "./scenes/createProgramme/CreateProgramme";
 import Calendar from "./scenes/calendar/Calendar";
 import { useSelector } from "react-redux";
-import ProtectedRoute from "./ProtectedRoute"
+import { ProtectedRoute, UnprotectedRoute } from "./ProtectedRoute"
 import AccountSettings from "./scenes/accountSettings/AccountSettings";
 
 
@@ -32,7 +33,10 @@ function App() {
                 {userType && <Topbar acctInfo={acctInfo}></Topbar>}
                 <Routes>
                     {/* public routes */}
-                    <Route path="/login/start" element={<LoginStart/>}></Route>
+                    <Route element={<UnprotectedRoute/>}>
+                        <Route path="/login/start" element={<LoginStart/>}></Route>
+                        <Route path="/login/explore" element={<LoginExplore/>}></Route>
+                    </Route>
 
                     {/* private routes */}
                     <Route element={<ProtectedRoute/>}>

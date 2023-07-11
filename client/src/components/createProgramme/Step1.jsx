@@ -9,10 +9,11 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import StandardTextField from "../StandardTextField";
 import UploadFileIcon from "@mui/icons-material/UploadFile";
 import dayjs from "dayjs";
-import { useRef, useState } from "react";
+import { useRef } from "react";
+import { useFormContext } from "react-hook-form";
 
-const Step1 = ({control, errors, watch={watch}}) => {
-
+const Step1 = () => {
+    const {control, watch, formState : {errors}} = useFormContext();
     const imagePreview = useRef();
     const imgUploaded = watch("media", false)
     return (
@@ -50,6 +51,7 @@ const Step1 = ({control, errors, watch={watch}}) => {
                                 const formattedDate = dayjs(e.$d).format("DD/MM/YYYY")
                                 field.onChange(formattedDate)
                             }}
+                            // slots={{textField : StandardTextField}} //kiv                          
                             sx={{width:"30%", p:"20px"}}/>
                     </LocalizationProvider>)
                         }
@@ -70,6 +72,7 @@ const Step1 = ({control, errors, watch={watch}}) => {
                                         const formattedDate = dayjs(e.$d).format("DD/MM/YYYY")
                                         field.onChange(formattedDate)
                                     }}
+                                    
                                     sx={{width:"30%", p:"20px"}}/>
                             </LocalizationProvider>)
                         }

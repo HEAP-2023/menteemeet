@@ -6,8 +6,12 @@ import SkillSection from "./createForm/SkillSection";
 import InterestSection from "./createForm/InterestSection";
 import MentorGroupingSection from "./createForm/MentorGroupingSection";
 import MenteeGroupingSection from "./createForm/MenteeGroupingSection";
+import { useFormContext } from "react-hook-form";
 
-const Step3 = ({control,errors, watch}) => {
+
+const Step3 = () => {
+    const {control, watch, formState : {errors}} = useFormContext();
+
     const criteriaSelected = watch("matchingCriteria")
     const startDate = watch("programmeStart");
     const endDate = watch("programmeEnd");
@@ -64,13 +68,13 @@ const Step3 = ({control,errors, watch}) => {
 
                 <Box width="100%">
                     {criteriaSelected.includes("skill") &&
-                        <SkillSection control={control}/>
+                        <SkillSection />
                     }
                 </Box>
 
                 <Box width="100%">
                     {criteriaSelected.includes("interest") &&
-                        <InterestSection control={control}/>
+                        <InterestSection />
                     }
                 </Box>
 

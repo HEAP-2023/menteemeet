@@ -2,7 +2,7 @@ import { Navigate, Outlet } from "react-router-dom"
 import { useSelector } from "react-redux"
 // import useVerifyJWT from "./hooks/useVerifyJwt"
 
-const ProtectedRoute = () => {
+export const ProtectedRoute = () => {
     // const {data, isSuccess} = useVerifyJWT()
     const userType = useSelector((state) => state.user.userType)
 
@@ -12,4 +12,14 @@ const ProtectedRoute = () => {
         <Navigate to="/login/start"></Navigate>
     )
 }
-export default ProtectedRoute
+
+export const UnprotectedRoute = () => {
+    // const {data, isSuccess} = useVerifyJWT()
+    const userType = useSelector((state) => state.user.userType)
+
+    return (
+        userType ? 
+        <Navigate to="/"></Navigate> :
+        <Outlet/>
+    )
+}

@@ -73,16 +73,13 @@ const CreateProgramme = () => {
         <form onSubmit={handleSubmit(handleSave)} width="100%" >
 
         {/* step 1 */}
-        <Step1 control={control} errors={errors} watch={watch}/>
+        <Step1 />
 
         {/* step 2 */}
-        <Step2 control={control}  matchingCriterias={matchingCriterias}/>
+        <Step2 matchingCriterias={matchingCriterias}/>
 
         {/* step 3 form creation */}
-        <Step3 control={control} 
-                errors={errors} 
-                watch={watch}
-            />
+        <Step3 />
 
         <Box display="flex" gap="20px">
             <Button type="submit" variant="contained" color="secondary" onClick={() => {console.log("submit??");console.log(errors)}}>Submit</Button>
