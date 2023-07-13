@@ -9,17 +9,33 @@ const bcrypt = require("bcrypt");
 // const config = require('../utils/config');
 // const jwt = require("jsonwebtoken");
 
+function resetJWT(getID) {
+  
+  //to set JTI empty.
+    User.update(
+    {   json_tokenID: "placeholder" }, 
+    {   where: { user_id: getID }} )
+}
+
+const logoutUser = async (req, res) => {
+  try {
+
+    const getID = req.params.id;
+    resetJWT(getID);
+
+    return res.status(200).json({ message: "You have been successfully logged out!" });
+
+  } catch (err) {
+    return res.status(500).json({ error: err });
+  }
+}
+
 const updateUser = async (req, res) => {
     try {
         //Filtering out each Object so that they == to the email.
-        //req.user.email == JWT's Email
+
         // const filteredObject = Object.fromEntries(Object.entries(storeUserObj).filter(([key, value]) => value === req.user.email));
         // const filteredJsonString = JSON.stringify(filteredObject); // Stringify the filtered object
-
-        //to get AccountID from the login data
-
-        // const filteredObject = Object.fromEntries(Object.entries(storeUserObj).filter(([key, value]) => key === "account_id"));
-        // const getCurrID = filteredObject.account_id;
 
         const email = req.body.email;
         const name = req.body.name;
@@ -28,7 +44,6 @@ const updateUser = async (req, res) => {
 
         const getID = req.params.id;
 
-        // console.log(email + " " + getID);
         if (email != "") {
           //Update function
           await Account.update(
@@ -49,14 +64,13 @@ const updateUser = async (req, res) => {
             {   password: hashedPass }, 
             {   where: { account_id: getID }} )
 
-          //to set JTI empty.
-          await User.update(
-            {   json_tokenID: "placeholder" }, 
-            {   where: { user_id: getID }} )
+          //reset jwt
+          resetJWT(getID);
 
+          return res.status(200).json({message: "Successfully Updated! Please re-login." });
         } 
         
-        return res.status(200).json({message: "Successfully Authenticated & Updated! Please re-login." });
+        return res.status(200).json({message: "Successfully Updated!" });
         
     } catch (err) {
         return res.status(500).json({ error: err });
@@ -189,4 +203,4 @@ const getInterest = async (req, res) => {
   }
 }
 
-module.exports = { updateUser, getUser, getSkill, addSkill, addInterest, getInterest };
+module.exports = { logoutUser, updateUser, getUser, getSkill, addSkill, addInterest, getInterest };

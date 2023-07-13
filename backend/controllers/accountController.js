@@ -11,7 +11,6 @@ const { v4: uuidv4 } = require('uuid');
 // Generate JWT ID 
 function generateJwtId() {
   const jti = Buffer.from(uuidv4().replace(/-/g, ''), 'hex').toString('base64').replace(/=+$/, '');
-
   return jti;
 }
 
