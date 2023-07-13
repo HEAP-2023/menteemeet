@@ -5,6 +5,10 @@ const Skill = require('../models/skill');
 const Interest = require('../models/interest');
 const UserInterest = require('../models/userInterest');
 
+const bcrypt = require("bcrypt");
+// const config = require('../utils/config');
+// const jwt = require("jsonwebtoken");
+
 const updateUser = async (req, res) => {
     try {
         //Filtering out each Object so that they == to the email.
@@ -24,16 +28,35 @@ const updateUser = async (req, res) => {
 
         const getID = req.params.id;
 
-        console.log(email + " " + getID);
-
-        //Update function
-        if (await Account.update(
+        // console.log(email + " " + getID);
+        if (email != "") {
+          //Update function
+          await Account.update(
           //Add-on when confirm
             {   email: email, contact_no : contact }, 
-            {   where: { account_id: getID }} )) {
-        };
+            {   where: { account_id: getID }} )
+        }
         
-        return res.status(200).json({message: "Login as : " + email + ". Successfully Authenticated & Updated!" });
+        //Update password
+        const updatedPass = req.body.password;
+
+        if (updatedPass != "") {
+          //Hash
+          const salt = await bcrypt.genSalt();
+          const hashedPass = await bcrypt.hash(updatedPass, salt);
+
+          await Account.update(
+            {   password: hashedPass }, 
+            {   where: { account_id: getID }} )
+
+          //to set JTI empty.
+          await User.update(
+            {   json_tokenID: "placeholder" }, 
+            {   where: { user_id: getID }} )
+
+        } 
+        
+        return res.status(200).json({message: "Successfully Authenticated & Updated! Please re-login." });
         
     } catch (err) {
         return res.status(500).json({ error: err });
