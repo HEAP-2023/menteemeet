@@ -5,17 +5,37 @@ const Skill = require('../models/skill');
 const Interest = require('../models/interest');
 const UserInterest = require('../models/userInterest');
 
+const bcrypt = require("bcrypt");
+// const config = require('../utils/config');
+// const jwt = require("jsonwebtoken");
+
+function resetJWT(getID) {
+  
+  //to set JTI empty.
+    User.update(
+    {   json_tokenID: "placeholder" }, 
+    {   where: { user_id: getID }} )
+}
+
+const logoutUser = async (req, res) => {
+  try {
+
+    const getID = req.params.id;
+    resetJWT(getID);
+
+    return res.status(200).json({ message: "You have been successfully logged out!" });
+
+  } catch (err) {
+    return res.status(500).json({ error: err });
+  }
+}
+
 const updateUser = async (req, res) => {
     try {
         //Filtering out each Object so that they == to the email.
-        //req.user.email == JWT's Email
+
         // const filteredObject = Object.fromEntries(Object.entries(storeUserObj).filter(([key, value]) => value === req.user.email));
         // const filteredJsonString = JSON.stringify(filteredObject); // Stringify the filtered object
-
-        //to get AccountID from the login data
-
-        // const filteredObject = Object.fromEntries(Object.entries(storeUserObj).filter(([key, value]) => key === "account_id"));
-        // const getCurrID = filteredObject.account_id;
 
         const email = req.body.email;
         const name = req.body.name;
@@ -24,16 +44,33 @@ const updateUser = async (req, res) => {
 
         const getID = req.params.id;
 
-        console.log(email + " " + getID);
-
-        //Update function
-        if (await Account.update(
+        if (email != "") {
+          //Update function
+          await Account.update(
           //Add-on when confirm
             {   email: email, contact_no : contact }, 
-            {   where: { account_id: getID }} )) {
-        };
+            {   where: { account_id: getID }} )
+        }
         
-        return res.status(200).json({message: "Login as : " + email + ". Successfully Authenticated & Updated!" });
+        //Update password
+        const updatedPass = req.body.password;
+
+        if (updatedPass != "") {
+          //Hash
+          const salt = await bcrypt.genSalt();
+          const hashedPass = await bcrypt.hash(updatedPass, salt);
+
+          await Account.update(
+            {   password: hashedPass }, 
+            {   where: { account_id: getID }} )
+
+          //reset jwt
+          resetJWT(getID);
+
+          return res.status(200).json({message: "Successfully Updated! Please re-login." });
+        } 
+        
+        return res.status(200).json({message: "Successfully Updated!" });
         
     } catch (err) {
         return res.status(500).json({ error: err });
@@ -166,4 +203,4 @@ const getInterest = async (req, res) => {
   }
 }
 
-module.exports = { updateUser, getUser, getSkill, addSkill, addInterest, getInterest };
+module.exports = { logoutUser, updateUser, getUser, getSkill, addSkill, addInterest, getInterest };
