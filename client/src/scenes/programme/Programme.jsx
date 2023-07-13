@@ -12,6 +12,7 @@ import Feedback from "../../components/programme/tabs/Feedback";
 // redux
 import { useSelector } from "react-redux";
 import Groupings from "../../components/programme/tabs/Groupings";
+import Statistics from "../../components/programme/tabs/Statistics";
 
 
 
@@ -66,9 +67,9 @@ const Programme = ({programme_details}) => {
                     <Feedback />
                 </TabPanel>
                 {userType === "organiser" &&
-                        <TabPanel value="statistics" index={4}>
-                            stats
-                        </TabPanel>
+                    <TabPanel value="statistics" index={4}>
+                        <Statistics/>
+                    </TabPanel>
                 }
                 </TabContext>
         </Box>
