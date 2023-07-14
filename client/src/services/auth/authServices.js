@@ -1,5 +1,5 @@
 import axiosInstance from "../../utils/axiosInstance";
-
+import axios from "axios";
 
 const verifyJWT = async() => {
     // const res = await axiosInstance({
@@ -28,6 +28,8 @@ async function login(user) {
         url: "/login",
         data: user
     })
+    console.log(res)
+    // const res = await axios.post(`http://localhost:5001/api/v1/login/`, user)
     localStorage.setItem("jwt", res.data.accessToken);
     return ( res.data.user )
 }
