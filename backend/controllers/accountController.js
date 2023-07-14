@@ -18,11 +18,15 @@ const ACCESS_TOKEN_SECRET = config.ACCESS_TOKEN_SECRET;
 const EXPIRY = config.EXPIRY;
 
 const register = async (req, res) => {
-  const { name, email, password, account_type } = req.body;
+  const { name, email, password, confirmPassword, account_type } = req.body;
   try {
     // WHERE Email : has "email"
     if (await Account.findOne({ where: { email: email } })) {
       return res.status(400).json({ message: "Email address has already been taken!" });
+    }
+
+    if (password !== confirmPassword) {
+      return res.status(400).json({ message: "Passwords dont match!"});
     }
 
     //create salt
@@ -37,17 +41,19 @@ const register = async (req, res) => {
       account_type: account_type
     }, { raw: true })
 
+    const accessToken = generateAccessToken(newAccount);
+
     if (account_type === 'user') {
       const newUser = await User.create({
         account_id: newAccount.account_id,
       }, { raw: true })
-      return res.status(201).json({ ...newAccount, user_id: newUser.user_id });
+      return res.status(201).json({ ...newAccount, user_id: newUser.user_id, accessToken });
 
     } else if (account_type === 'organiser') {
       const newOrganiser = await Organiser.create({
         account_id: newAccount.dataValues.account_id,
       }, { raw: true })
-      return res.status(201).json({ ...newAccount, organiser_id: newOrganiser.organiser_id });
+      return res.status(201).json({ ...newAccount, organiser_id: newOrganiser.organiser_id , accessToken });
     }
 
   } catch (err) {
@@ -56,18 +62,24 @@ const register = async (req, res) => {
   }
 }
 
-const generateAccessToken = (user) => {
+const generateAccessToken = (account) => {
 
   const jwtID = generateJwtId();
 
   // Remove the encoded password property
-  delete user.password;
-  const tokenSigned = jwt.sign(user, ACCESS_TOKEN_SECRET, { jwtid: jwtID, expiresIn: EXPIRY });
+  delete account.password;
+  const tokenSigned = jwt.sign(account, ACCESS_TOKEN_SECRET, { jwtid: jwtID, expiresIn: EXPIRY });
 
   //store into DB
-  User.update(
-    {   json_tokenID: jwtID }, 
-    {   where: { user_id: user.account_id }} )
+  if (account.account_type === 'user'){
+    User.update(
+      { json_tokenID: jwtID }, 
+      { where: { account_id: account.account_id }} )
+  } else {
+    Organiser.update(
+      { json_tokenID: jwtID }, 
+      { where: { account_id: account.account_id }})
+  }
 
   return tokenSigned;
 }
@@ -92,7 +104,7 @@ const login = async (req, res) => {
     const accessToken = generateAccessToken(user);
 
     return res.status(200).json({
-      message: "Successfully logged in!", accessToken: accessToken, user
+      message: "Successfully logged in!", accessToken, user
     }); 
 
   } catch (err) {

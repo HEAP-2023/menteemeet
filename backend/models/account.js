@@ -27,10 +27,6 @@ const Account = sequelize.define(
             type: DataTypes.INTEGER,
             allowNull: true
         },
-        address: {
-            type: DataTypes.STRING(),
-            allowNull: true
-        },
         account_type: {
             type: DataTypes.STRING(),
             allowNULL: false
