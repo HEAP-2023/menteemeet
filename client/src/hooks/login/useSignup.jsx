@@ -12,7 +12,7 @@ const useSignup = (reset) => {
     return useMutation(register, {
         onSuccess : (data) => {
             console.log(data)
-            dispatch(logIn({ type : data.role }))
+            dispatch(logIn({ type : data.account_type }))
             navigate("/");
         },
         onError : (err)=> {

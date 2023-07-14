@@ -11,11 +11,11 @@ import { useSelector } from "react-redux"
 
 const Home = () => {
     const userType = useSelector((state) => state.user.userType)    
-    const lastName = useSelector((state) => state.user.userDetails.lastName)
+    const name = useSelector((state) => state.user.userBasicDetails.name)
     
     return (
     <Box width="100%" height="100%" display="flex" flexDirection="column">
-        <PageHeader text={`Welcome, ${lastName}`}/>
+        <PageHeader text={`Welcome, ${name}`}/>
         
         {/* carousel */}
         <SectionHeader text={"Featured Events"}/>

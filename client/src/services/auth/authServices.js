@@ -28,20 +28,8 @@ async function login(user) {
         url: "/login",
         data: user
     })
-    console.log(res)
-    
-    // below can be omitted just return the request but role must be included ah 
-    if (res.status !== 200) return (
-        {authorised : false}
-    );
-    
     localStorage.setItem("jwt", res.data.accessToken);
-    return (
-    {
-        authorised : true,
-        role : "mentee", // here i should get a res.data.role
-    }
-    )
+    return ( res.data.user )
 }
 
 async function register(user) {
@@ -50,18 +38,8 @@ async function register(user) {
     url: "/register",
     data: user
   })
-  console.log(res)
-  if (res.status !== 201) return (
-    {authorised : false}
-);
 
-
-    return (
-    {
-        authorised : true,
-        role : "mentee", // here i should get a res.data.role
-    }
-    )
+    return (res.data.dataValues)
 }
 
 export {
