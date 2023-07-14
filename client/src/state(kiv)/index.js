@@ -40,7 +40,7 @@ const initialState = {
     programmesEnrolled : fetchProgrammesEnrolled(),
     programmesCreated : fetchProgrammesCreated(),
     tasks : fetchTasks(),
-    userBasicDetails : {name : "", email : ""},
+    userBasicDetails : {id : "" ,name : "default", email : "defaultEmail"},
     disableDrag : true,
     dragParking : [],
 }
@@ -75,8 +75,7 @@ export const userSlice = createSlice({
             }
         },
         updateDetails : (state, action) => {
-            const {name, email} = action.payload
-            state.userBasicDetails = {name : name, email : email}
+            state.userBasicDetails = {...action.payload}
         },
         
         addTasks : (state, action) => {

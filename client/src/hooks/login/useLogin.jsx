@@ -12,7 +12,7 @@ const useLogin = (reset) => {
         onSuccess : (data) => {
             console.log(data)
             dispatch(logIn({ type : data.account_type }))
-            dispatch(updateDetails({ name : data.name, email : data.email }))
+            dispatch(updateDetails({...data}))
             navigate("/");
         },
         onError : (err)=> {

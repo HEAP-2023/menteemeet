@@ -6,8 +6,18 @@ import { ErrorMessage } from '@hookform/error-message';
 import { yupResolver } from "@hookform/resolvers/yup"
 import * as yup from "yup"
 import { useSelector } from "react-redux";
+import { useUserDetails } from '../../hooks/user/useUserDetails';
 
 const MyDetails = ({ acctInfo }) => {
+    const {error, isError, isSuccess} = useUserDetails();
+    console.log(error)
+    if(isError){
+        alert(error.message)
+    }
+
+
+
+
     const userType = useSelector((state) => state.user.userType)
     const {
         name,
