@@ -14,7 +14,7 @@ function resetJWT(getID) {
   //to set JTI empty.
     User.update(
     {   json_tokenID: "placeholder" }, 
-    {   where: { user_id: getID }} )
+    {   where: { account_id: getID }} )
 }
 
 const logoutUser = async (req, res) => {
@@ -44,18 +44,18 @@ const updateUser = async (req, res) => {
 
         const getID = req.params.id;
 
-        if (email != "") {
+        if (email !=  "") {
           //Update function
           await Account.update(
           //Add-on when confirm
-            {   email: email, contact_no : contact }, 
+            {   email: email }, 
             {   where: { account_id: getID }} )
         }
         
         //Update password
         const updatedPass = req.body.password;
 
-        if (updatedPass != "") {
+        if (updatedPass != "" && updatedPass != null) {
           //Hash
           const salt = await bcrypt.genSalt();
           const hashedPass = await bcrypt.hash(updatedPass, salt);
@@ -73,6 +73,7 @@ const updateUser = async (req, res) => {
         return res.status(200).json({message: "Successfully Updated!" });
         
     } catch (err) {
+        console.log(err);
         return res.status(500).json({ error: err });
     }
 }
