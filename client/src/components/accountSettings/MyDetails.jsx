@@ -5,35 +5,35 @@ import { useForm, Controller } from "react-hook-form";
 import { ErrorMessage } from '@hookform/error-message';
 import { yupResolver } from "@hookform/resolvers/yup"
 import * as yup from "yup"
+import { useSelector } from "react-redux";
 
 const MyDetails = ({ acctInfo }) => {
+    const userType = useSelector((state) => state.user.userType)
     const {
         name,
-        email, username, telegramUsername, contactNumber } = acctInfo;
+        email, telegramUsername, contactNumber, description } = acctInfo;
 
     const myDetailsSchema = yup.object()
         .shape(
             {
-                fullName: yup.string()
+                name: yup.string()
                     .required("Full name is required"),
                 email: yup.string()
                     .email("Invalid email format")
                     .required("Email is required"),
-                username: yup.string()
-                    .required("Username is required"),
                 contactNumber: yup.string()
                     .required("Contact number is required")
-                    .matches(/^\d{8,}$/, "Invalid contact number format")                  
+                    .matches(/^\d{8,}$/, "Invalid contact number format")
             }
         ).required()
 
     const { control, handleSubmit, formState: { errors } } = useForm({
         defaultValues: {
-            fullName: name,
+            name: name,
             email: email,
-            username: username,
             contactNumber: contactNumber,
             telegramUsername: telegramUsername,
+            description: description
         },
         resolver: yupResolver(myDetailsSchema)
     });
@@ -41,11 +41,11 @@ const MyDetails = ({ acctInfo }) => {
 
     const handleSave = (data) => {
         const accountSettingsSave = {
-            fullName: data.fullName,
+            name: data.name,
             email: data.email,
-            username: data.username,
             contactNumber: data.contactNumber,
             telegramUsername: data.telegramUsername,
+            description: data.description
         }
 
         console.log("Updated account settings:", accountSettingsSave);
@@ -81,6 +81,22 @@ const MyDetails = ({ acctInfo }) => {
                                 )
                             })
                         }
+
+                        {(userType === "mentee" || userType === "mentor") && <Grid display="flex" flexDirection="column" margin="5px" xs={4} item={true}>
+                            <label>Telegram Username</label>
+                            <Controller name="telegramUsername" control={control} render={({ field }) =>
+                                <TextField {...field} variant="outlined" size="small" />
+                            } />
+                        </Grid>}
+                        
+                        {(userType === "organiser") && <Grid display="flex" flexDirection="column" margin="5px" xs={4} item={true}>
+                            <label>Description</label>
+                            <Controller name="description" control={control} render={({ field }) =>
+                                <TextField {...field} variant="outlined" size="small" />
+                            } />
+                        </Grid>}
+                        
+
                     </Grid>
                 </Box>
                 <Box p="13px" >
@@ -96,25 +112,16 @@ export default MyDetails;
 const inputs = [
     {
         id: 1,
-        name: "fullName",
+        name: "name",
         label: "Full Name",
     }, {
         id: 2,
         name: "email",
         label: "Email",
-    }, {
-        id: 3,
-        name: "username",
-        label: "Username",
     },
     {
-        id: 4,
+        id: 3,
         name: "contactNumber",
         label: "Contact Number",
-    },
-    {
-        id: 5,
-        name: "telegramUsername",
-        label: "Telegram Username",
     },
 ]

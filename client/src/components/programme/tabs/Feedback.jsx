@@ -137,7 +137,7 @@ const Feedback = () => {
                 <DevTool control={control}/>
             </Box>
 
-    } else {
+    } else if (userType === "organiser"){
 
         content = <FeedbackTable />
     }
@@ -164,6 +164,8 @@ const fetchPeople = (userType) => {
         }, {
             name: "Gabriel"
         }]
+    } else{
+        return []
     }
 }
 
