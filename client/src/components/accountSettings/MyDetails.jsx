@@ -9,7 +9,8 @@ import { useSelector } from "react-redux";
 import { useUserDetails } from '../../hooks/user/useUserDetails';
 
 const MyDetails = ({ acctInfo }) => {
-    const {error, isError, isSuccess} = useUserDetails();
+    const {error, isError, isSuccess, data} = useUserDetails();
+    if(isSuccess){console.log(data)}
     console.log(error)
     if(isError){
         alert(error.message)
