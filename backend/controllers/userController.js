@@ -13,7 +13,7 @@ function resetJWT(getID) {
   
   //to set JTI empty.
     User.update(
-    {   json_tokenID: "placeholder" }, 
+    {   json_tokenID: "placeholder" },
     {   where: { account_id: getID }} )
 }
 

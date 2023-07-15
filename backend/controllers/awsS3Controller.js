@@ -13,13 +13,14 @@ AWS.config.update({
 const s3 = new AWS.S3();
 
 // Upload a file to S3
-const uploadToS3 = (file) => {
-  const fileName = `${uuidv4()}_${file.originalname}`;
+const uploadToS3 = (file, programme_id) => {
+  // const fileName = `${uuidv4()}_${file.originalname}`;
+  const fileName = file.originalname;
   const fileBuffer = fs.readFileSync(file.path);
 
   const uploadParams = {
     Bucket: 'menteemeet',
-    Key: fileName,
+    Key: `programmes/${programme_id}/display_image/${fileName}`,
     Body: fileBuffer,
   };
   

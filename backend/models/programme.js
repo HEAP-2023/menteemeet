@@ -18,21 +18,29 @@ const Programme = sequelize.define(
             type: DataTypes.STRING(),
             allowNull: true,
         },
+        programmeStart: {
+            type: DataTypes.DATE,
+            allowNull: true
+        },
+        programmeEnd: {
+            type: DataTypes.DATE,
+            allowNull: true
+        },
         category: {
             type: DataTypes.STRING(30),
             allowNull: true,
         },
-        capacity: {
-            type: DataTypes.INTEGER,
-            allowNull: false,
+        deadline: {
+          type: DataTypes.DATE,
+          allowNull: false,
         },
         matching_criteria: {
             type: DataTypes.STRING(),
             allowNull: false,
         },
-        application_deadline: {
-          type: DataTypes.DATE,
-          allowNull: false,
+        skills: {
+          type: DataTypes.STRING(),
+          allowNull: true
         },
         display_image: {
             type: DataTypes.STRING(),
