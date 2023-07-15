@@ -7,22 +7,18 @@ import { yupResolver } from "@hookform/resolvers/yup"
 import * as yup from "yup"
 import { useSelector } from "react-redux";
 import { useUserDetails } from '../../hooks/user/useUserDetails';
+import { useEffect } from 'react';
 
-const MyDetails = ({ acctInfo }) => {
-    const {error, isError, isSuccess, data} = useUserDetails();
-    if(isSuccess){console.log(data)}
-    console.log(error)
-    if(isError){
-        alert(error.message)
-    }
-
-
-
-
+const MyDetails = () => {
+    const defaultValues = {
+            name: "",
+            email: "",
+            contactNumber: "",
+            telegramUsername:  "", 
+            description: "",
+        }
+    
     const userType = useSelector((state) => state.user.userType)
-    const {
-        name,
-        email, telegramUsername, contactNumber, description } = acctInfo;
 
     const myDetailsSchema = yup.object()
         .shape(
@@ -37,17 +33,28 @@ const MyDetails = ({ acctInfo }) => {
                     .matches(/^\d{8,}$/, "Invalid contact number format")
             }
         ).required()
-
-    const { control, handleSubmit, formState: { errors } } = useForm({
-        defaultValues: {
-            name: name,
-            email: email,
-            contactNumber: contactNumber,
-            telegramUsername: telegramUsername,
-            description: description
-        },
+    const { control, handleSubmit, formState: { errors }, reset } = useForm({
+        defaultValues: defaultValues,
         resolver: yupResolver(myDetailsSchema)
     });
+    const {error, isError, isSuccess, data} = useUserDetails();
+    if(isError){
+        alert(error.message)
+    }
+
+    useEffect(() => {
+        if(isSuccess){
+            const { "Account.name" : name, "Account.email" : email, telegram_username: telegramUsername, "Account.contact_no" : contactNumber, description} = data.user
+            reset({
+                name: name,
+                email: email,
+                contactNumber: !!contactNumber ? contactNumber : "",
+                telegramUsername: !!telegramUsername ? telegramUsername : "", 
+                description: !!description ? description : "",
+            })
+        }
+
+    }, [isSuccess, data, reset])
 
 
     const handleSave = (data) => {
@@ -61,7 +68,7 @@ const MyDetails = ({ acctInfo }) => {
 
         console.log("Updated account settings:", accountSettingsSave);
     }
-
+   
     return (
         <>
             <form onSubmit={handleSubmit(handleSave)} noValidate>

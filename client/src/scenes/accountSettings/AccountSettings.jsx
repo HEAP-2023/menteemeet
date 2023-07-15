@@ -33,7 +33,7 @@ const AccountSettings = ({ acctInfo }) => {
                         </Tabs>
                     </Box>
                     <TabPanel value="myDetails" index={0}>
-                        <MyDetails acctInfo={acctInfo}/>
+                        <MyDetails/>
                     </TabPanel>
                     <TabPanel value="changePassword" index={1}>
                         <ChangePassword acctInfo={acctInfo}/>
