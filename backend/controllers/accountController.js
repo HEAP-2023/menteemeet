@@ -71,15 +71,10 @@ const generateAccessToken = (account) => {
   const tokenSigned = jwt.sign(account, ACCESS_TOKEN_SECRET, { jwtid: jwtID, expiresIn: EXPIRY });
 
   //store into DB
-  // if (account.account_type === 'user'){
-    Account.update(
-      { json_tokenID: jwtID }, 
-      { where: { account_id: account.account_id }} )
-  // } else {
-    // Organiser.update(
-    //   { json_tokenID: jwtID }, 
-    //   { where: { account_id: account.account_id }})
-  // }
+  Account.update(
+    { json_tokenID: jwtID }, 
+    { where: { account_id: account.account_id }} )
+
 
   return tokenSigned;
 }
@@ -122,4 +117,11 @@ const login = async (req, res) => {
   }
 }
 
-module.exports = { register, login, generateAccessToken };
+function resetJWT(getAccID) {
+  //to set JTI empty.
+    Account.update(
+    {   json_tokenID: "placeholder" }, 
+    {   where: { account_id : getAccID }} )
+}
+
+module.exports = { register, login, generateAccessToken, resetJWT };
