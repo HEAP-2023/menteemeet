@@ -5,6 +5,8 @@ const Skill = require('../models/skill');
 const Interest = require('../models/interest');
 const UserInterest = require('../models/userInterest');
 
+const { generateAccessToken } = require('./accountController');
+
 const bcrypt = require("bcrypt");
 // const config = require('../utils/config');
 // const jwt = require("jsonwebtoken");
@@ -29,6 +31,16 @@ const logoutUser = async (req, res) => {
     return res.status(500).json({ error: err });
   }
 }
+function updateJWT(getUserObj) {
+  try {
+    const accessToken = generateAccessToken(getUserObj);
+
+    return accessToken;
+
+  } catch (err) {
+    return err;
+  }
+}
 
 const updateUser = async (req, res) => {
     try {
@@ -44,14 +56,14 @@ const updateUser = async (req, res) => {
         const teleUsername = req.body.telegram_username;
         const getUserID = req.params.id;
 
-        const getUserObj = await User.findOne({ where: { user_id : getUserID } });
+        const getUserObj = await User.findOne({ where: { user_id : getUserID }, raw: true });
 
         await User.update(
           { telegram_username: teleUsername },
-          { where: { user_id : getUserID }} ),
+          { where: { user_id : getUserID }} );
 
         //Update function
-        await Account.update(
+        const getAccObj = await Account.update(
           { email: email, name: name, contact_no: contact }, 
           { where: { account_id: getUserObj.account_id }} )
         
@@ -69,8 +81,12 @@ const updateUser = async (req, res) => {
 
           return res.status(200).json({message: "Successfully Updated! (PW)" });
         } 
+
+        const getAccessToken = updateJWT(getUserObj);
+
+        console.log(getAccessToken);
         
-        return res.status(200).json({message: "Successfully Updated Including JWT!"});
+        return res.status(200).json({message: "Successfully Updated Including JWT!", getAccessToken });
         
     } catch (err) {
         console.log(err);
