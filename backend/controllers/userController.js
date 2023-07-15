@@ -15,7 +15,6 @@ const logoutUser = async (req, res) => {
   try {
 
     const getUserID = req.params.id;
-
     const getUserObj = await User.findOne({ where: { user_id : getUserID }, raw: true });
 
     resetJWT(getUserObj.account_id);

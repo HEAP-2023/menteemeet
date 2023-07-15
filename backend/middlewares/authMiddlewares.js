@@ -3,7 +3,6 @@ const config = require('../utils/config');
 const jwtDecode = require("jwt-decode");
 
 //Request Access to DB
-const User = require("../models/user");
 const Account = require("../models/account");
 
 const ACCESS_TOKEN_SECRET = config.ACCESS_TOKEN_SECRET;
