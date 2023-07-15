@@ -5,28 +5,40 @@ const Skill = require('../models/skill');
 const Interest = require('../models/interest');
 const UserInterest = require('../models/userInterest');
 
+const { generateAccessToken } = require('./accountController');
+
 const bcrypt = require("bcrypt");
 // const config = require('../utils/config');
 // const jwt = require("jsonwebtoken");
 
-function resetJWT(getID) {
+function resetJWT(getUserID) {
   
   //to set JTI empty.
     User.update(
-    {   json_tokenID: "placeholder" },
-    {   where: { account_id: getID }} )
+    {   json_tokenID: "placeholder" }, 
+    {   where: { user_id: getUserID }} )
 }
 
 const logoutUser = async (req, res) => {
   try {
 
-    const getID = req.params.id;
-    resetJWT(getID);
+    const getUserID = req.params.id;
+    resetJWT(getUserID);
 
     return res.status(200).json({ message: "You have been successfully logged out!" });
 
   } catch (err) {
     return res.status(500).json({ error: err });
+  }
+}
+function updateJWT(getUserObj) {
+  try {
+    const accessToken = generateAccessToken(getUserObj);
+
+    return accessToken;
+
+  } catch (err) {
+    return err;
   }
 }
 
@@ -42,24 +54,18 @@ const updateUser = async (req, res) => {
         const contact = req.body.contact_no;
 
         const teleUsername = req.body.telegram_username;
-
         const getUserID = req.params.id;
 
-        if ((email != "" && email != null) || (name != "" && name != null) 
-        || (contact != "" && contact != null) || (teleUsername != "" && teleUsername != null)) {
+        const getUserObj = await User.findOne({ where: { user_id : getUserID }, raw: true });
 
-          const getUserObj = await User.findOne({ where: { user_id : getUserID } });
+        await User.update(
+          { telegram_username: teleUsername },
+          { where: { user_id : getUserID }} );
 
-          await User.update(
-            { telegram_username: teleUsername },
-            { where: { user_id : getUserID }} ),
-
-          //Update function
-          await Account.update(
-          //Add-on when confirm
-            { email: email, name: name, contact_no: contact }, 
-            { where: { account_id: getUserObj.account_id }} )
-        } 
+        //Update function
+        await Account.update(
+          { email: email, name: name, contact_no: contact }, 
+          { where: { account_id: getUserObj.account_id }} )
         
         //Update password
         const updatedPass = req.body.password;
@@ -71,12 +77,16 @@ const updateUser = async (req, res) => {
 
           await Account.update(
             {   password: hashedPass }, 
-            {   where: { account_id: getID }} )
+            {   where: { account_id: getUserObj.account_id }} )
 
           return res.status(200).json({message: "Successfully Updated! (PW)" });
         } 
+
+        const getAccessToken = updateJWT(getUserObj);
+
+        console.log(getAccessToken);
         
-        return res.status(200).json({message: "Successfully Updated!" });
+        return res.status(200).json({message: "Successfully Updated Including JWT!", getAccessToken });
         
     } catch (err) {
         console.log(err);

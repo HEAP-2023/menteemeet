@@ -39,21 +39,21 @@ const register = async (req, res) => {
       email: email,
       password: hashedPassword,
       account_type: account_type
-    }, { raw: true })
+    })
 
-    const accessToken = generateAccessToken(newAccount);
+    const accessToken = generateAccessToken(newAccount.dataValues);
 
     if (account_type === 'user') {
       const newUser = await User.create({
         account_id: newAccount.account_id,
-      }, { raw: true })
-      return res.status(201).json({ ...newAccount, user_id: newUser.user_id, accessToken });
+      })
+      return res.status(201).json({ ...newAccount.dataValues, user_id: newUser.user_id, accessToken });
 
     } else if (account_type === 'organiser') {
       const newOrganiser = await Organiser.create({
         account_id: newAccount.dataValues.account_id,
-      }, { raw: true })
-      return res.status(201).json({ ...newAccount, organiser_id: newOrganiser.organiser_id , accessToken });
+      })
+      return res.status(201).json({ ...newAccount.dataValues, organiser_id: newOrganiser.organiser_id , accessToken });
     }
 
   } catch (err) {
@@ -71,15 +71,15 @@ const generateAccessToken = (account) => {
   const tokenSigned = jwt.sign(account, ACCESS_TOKEN_SECRET, { jwtid: jwtID, expiresIn: EXPIRY });
 
   //store into DB
-  if (account.account_type === 'user'){
-    User.update(
+  // if (account.account_type === 'user'){
+    Account.update(
       { json_tokenID: jwtID }, 
       { where: { account_id: account.account_id }} )
-  } else {
-    Organiser.update(
-      { json_tokenID: jwtID }, 
-      { where: { account_id: account.account_id }})
-  }
+  // } else {
+    // Organiser.update(
+    //   { json_tokenID: jwtID }, 
+    //   { where: { account_id: account.account_id }})
+  // }
 
   return tokenSigned;
 }
@@ -122,4 +122,4 @@ const login = async (req, res) => {
   }
 }
 
-module.exports = { register, login };
+module.exports = { register, login, generateAccessToken };
