@@ -1,5 +1,7 @@
 const Account = require("../models/account");
 const Organiser = require('../models/organiser');
+const Programme = require('../models/programme');
+const awsS3Controller = require('./awsS3Controller');
 
 const { generateAccessToken, resetJWT } = require('./accountController');
 
@@ -115,4 +117,40 @@ const getOrg = async (req, res) => {
     return res.status(200).json({ message: "Not doing ANything. Wait for Axel's GET" });
 }
 
-module.exports = { logoutOrg, updateOrg, getOrg };
+const addProg = async (req, res) => {
+  const organiser_id = req.params.id;
+  const { name, description, category, programmeStart, programmeEnd, deadline, matching_criteria, skills } = req.body;
+
+  try {
+    const newProg = await Programme.create({
+      name, 
+      description, 
+      category,
+      programmeStart,
+      programmeEnd,
+      deadline,
+      matching_criteria,
+      skills,
+      organiser_id
+    })
+
+    const uploadFile = await awsS3Controller.uploadToS3(req.file, newProg.programme_id);
+
+    if (uploadFile) {
+      const prog = await Programme.update({ display_image: JSON.stringify(uploadFile) },{ where: { programme_id: newProg.programme_id } });
+      const progToReturn = {
+        ...newProg.dataValues,
+        display_image: JSON.stringify(uploadFile)
+      }
+      return res.status(200).json({ message: 'Successfully created programme!', programme: progToReturn });
+    } else {
+      await Programme.destroy({ where: { programme_id: newProg.programme_id }});
+      res.status(500).json({ message: 'Failed to upload display image!' });
+    }
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ message: "Failed to create programme!" });
+  }
+}
+
+module.exports = { logoutOrg, updateOrg, getOrg, addProg };
