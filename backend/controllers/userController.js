@@ -41,15 +41,19 @@ const updateUser = async (req, res) => {
         //Filtering out each Object so that they == to the email.
 
         // const filteredObject = Object.fromEntries(Object.entries(storeUserObj).filter(([key, value]) => value === req.user.email));
-        // const filteredJsonString = JSON.stringify(filteredObject); // Stringify the filtered object
+        // const filteredJsonString = JSON.stringify(filteredObject); // Stringify the filtered object        
+
+        if (req.body === undefined || Object.keys(req.body).length === 0) {
+          return res.status(400).json({ message: "Fields are empty."});
+        }
 
         const email = req.body.email;
         const name = req.body.name;
         const contact = req.body.contact_no;
 
         const teleUsername = req.body.telegram_username;
+        
         const getUserID = req.params.id;
-
         const getUserObj = await User.findOne({ where: { user_id : getUserID }, raw: true });
         console.log(`hey3, ${req.body.email}`)
         await User.update(
@@ -77,9 +81,6 @@ const updateUser = async (req, res) => {
         } 
 
         const getAccessToken = updateJWT(getUserObj);
-
-        console.log(getAccessToken);
-        
         return res.status(200).json({message: "Successfully Updated Including JWT!", getAccessToken });
         
     } catch (err) {
