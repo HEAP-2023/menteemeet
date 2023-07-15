@@ -6,20 +6,22 @@ import CloseIcon from '@mui/icons-material/Close';
 import { TimePicker } from '@mui/x-date-pickers/TimePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ErrorMessage } from "@hookform/error-message";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 
 const AddEventPopover = ({ isOpen, onRequestClose, selectedDateInfo, addEvent }) => {
+    useEffect(() => setCounter(counter + 1  )); // to generate id of event (can delete later if don't need)
+    const [counter, setCounter] = useState(6);
     const mentorshipProgrammes = fetchMentorshipProgrammes();
     const addEventSchema = yup.object()
         .shape({
             title: yup.string()
                 .required("This field is required"),
-            startTime: yup.string()
+            startTime: yup.date()
                 .required("This field is required"),
-            endTime: yup.string()
+            endTime: yup.date()
                 .required("This field is required")
                 .min(yup.ref('startTime'), 'End time must be after start time'),
             programme: yup.string()
@@ -27,10 +29,11 @@ const AddEventPopover = ({ isOpen, onRequestClose, selectedDateInfo, addEvent })
         }).required()
 
     // console.log(selectedDateInfo.dateStr);
-    const date = format(selectedDateInfo.date, 'EEE, MMM dd HH:mm');
+    const date = format(selectedDateInfo.date, 'EEE, MMM dd');
     const [mentorshipProgramme, setMentorshipProgramme] = useState('');
     const { control, handleSubmit, register, formState: { errors } } = useForm({
         defaultValues: {
+            id: 0,
             title: "",
             date: selectedDateInfo.dateStr,
             startTime: "",
@@ -46,10 +49,13 @@ const AddEventPopover = ({ isOpen, onRequestClose, selectedDateInfo, addEvent })
     };
     const handleSave = (data) => {
         const eventData = {
+            id: counter,
             title: data.title,
             start: `${selectedDateInfo.dateStr}T${format(new Date(data.startTime), "HH:mm:ss")}`, // formatted time into string
             end: `${selectedDateInfo.dateStr}T${format(new Date(data.endTime), "HH:mm:ss")}`,
-            mentorshipProgramme: data.programme
+            mentorshipProgramme: data.programme,
+            topic: data.topic,
+            location: data.location
         }
         console.log("to be submitted")
         console.log(eventData);
@@ -82,7 +88,16 @@ const AddEventPopover = ({ isOpen, onRequestClose, selectedDateInfo, addEvent })
                             <Controller
                                 name="title"
                                 control={control}
-                                render={({ field }) => <TextField {...field} variant="standard" label="Add title" sx={{ width: '100%' }} />}
+                                render={({ field }) => <TextField {...field} variant="standard" label="Add title" sx={{
+                                    width: '100%', "& label.Mui-focused": {
+                                        color: "secondary.main"
+                                    },
+                                    "& .MuiOutlinedInput-root": {
+                                        "&.Mui-focused fieldset": {
+                                            borderColor: "secondary.main"
+                                        }
+                                    }
+                                }} />}
                             />
                             <ErrorMessage
                                 errors={errors}
@@ -146,7 +161,17 @@ const AddEventPopover = ({ isOpen, onRequestClose, selectedDateInfo, addEvent })
                                 name="topic"
                                 control={control}
                                 render={({ field }) => <TextField {...field} variant="standard" label="Topic"
-                                    sx={{ width: "79%" }} />}
+                                    sx={{
+                                        width: "79%",
+                                        "& label.Mui-focused": {
+                                            color: "secondary.main"
+                                        },
+                                        "& .MuiOutlinedInput-root": {
+                                            "&.Mui-focused fieldset": {
+                                                borderColor: "secondary.main"
+                                            }
+                                        }
+                                    }} />}
                             />
                         </Box>
                         <Box sx={{ mb: '20px' }}>
@@ -154,7 +179,16 @@ const AddEventPopover = ({ isOpen, onRequestClose, selectedDateInfo, addEvent })
                                 name="location"
                                 control={control}
                                 render={({ field }) => <TextField {...field} variant="standard" label="Location"
-                                    sx={{ width: "80%" }} />}
+                                    sx={{
+                                        width: "80%", "& label.Mui-focused": {
+                                            color: "secondary.main"
+                                        },
+                                        "& .MuiOutlinedInput-root": {
+                                            "&.Mui-focused fieldset": {
+                                                borderColor: "secondary.main"
+                                            }
+                                        }
+                                    }} />}
                             />
                         </Box>
                         <Box display="flex"  >
