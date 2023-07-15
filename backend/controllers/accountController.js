@@ -86,21 +86,30 @@ const login = async (req, res) => {
 
   try {
     // if incorrect, DB col : form col
-    const user = await Account.findOne({ where: { email: email }, raw: true });
+    const account = await Account.findOne({ where: { email: email }, raw: true });
 
-    if (!user) {
+    if (!account) {
       return res.status(401).json({ message: "Your email/password is incorrect." });
     }
+
     // email valid -> Compare password with bcrypt
-    if (!(await bcrypt.compare(password, user.password))) {
+    if (!(await bcrypt.compare(password, account.password))) {
       return res.status(401).json({ message: "Your email/password is incorrect." });
     }
 
-    const accessToken = generateAccessToken(user);
+    const accessToken = generateAccessToken(account);
 
-    return res.status(200).json({
-      message: "Successfully logged in!", accessToken, user
-    }); 
+    if (account.account_type === 'user'){
+      const user = User.findOne({ where: { account_id: account.account_id }});
+      return res.status(200).json({
+        message: "Successfully logged in!", accessToken, account, user
+      });
+    } else {
+      const organiser = Organiser.findOne({ where: { account_id: account.account_id }});
+      return res.status(200).json({
+        message: "Successfully logged in!", accessToken, account, organiser
+      });
+    }
 
   } catch (err) {
     console.log(err);

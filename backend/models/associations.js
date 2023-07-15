@@ -6,7 +6,6 @@ const Programme = require('./programme');
 const Review = require('./review');
 const MentorSession = require('./mentorSession');
 const Application = require('./application');
-const Run = require('./run');
 const Forum = require('./forum');
 const Resource = require('./resource');
 const Announcement = require('./announcement');
@@ -48,10 +47,6 @@ function initAssociations() {
   //User and application
   User.hasMany(Application, { foreignKey: 'user_id' });
   Application.belongsTo(User, { foreignKey: 'user_id' });
-
-  //Programme and run
-  Programme.hasMany(Run, { foreignKey: 'programme_id' });
-  Run.belongsTo(Programme, { foreignKey: 'programme_id' });
 
   //Programme and forum
   Programme.hasOne(Forum, { foreignKey: "programme_id" });

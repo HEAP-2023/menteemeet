@@ -101,7 +101,16 @@ const getUser = async (req, res) => {
     const id = req.params.id;
 
     try {
-      const user = await User.findOne({ where: { user_id: id }, include: { model: Account }, raw: true });
+      const user = await User.findOne(
+        { where: { user_id: id }, 
+        include: [
+          {
+            model: Account,
+            attributes: {
+              exclude: ['password', 'account_id', 'json_tokenID'], // Exclude the 'password' and 'json_tokenID' field from the Account model
+            },
+          }
+        ], raw: true });
 
       if (!user) {
         return res.status(404).json({ message: 'User not found!' })
