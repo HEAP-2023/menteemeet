@@ -98,7 +98,7 @@ const getUser = async (req, res) => {
           {
             model: Account,
             attributes: {
-              exclude: ['password', 'account_id', 'json_tokenID'], // Exclude the 'password' and 'json_tokenID' field from the Account model
+              exclude: ['password', 'account_id', 'json_tokenID'], // Exclude the 'password','json_tokenID' and 'account_id' field from the Account model
             },
           }
         ], raw: true });
