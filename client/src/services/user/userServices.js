@@ -10,11 +10,13 @@ export const getUserDetails = async (id) => {
 }
 
 export const putUserDetails = async (id, data) => {
+    console.log(id, data)
     const res = await axiosInstance({
         method : "put",
         url : `/users/${id}`,
         headers: { Authorization: `Bearer ${localStorage.getItem("jwt")}` },
         data : data
     })
+    localStorage.setItem("jwt", res.data.getAccessToken);
     return res.data;
 }

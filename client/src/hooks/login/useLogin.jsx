@@ -12,6 +12,7 @@ const useLogin = (reset) => {
         onSuccess : (data) => {
             console.log(data)
             dispatch(logIn({ type : data.account_type }))
+            console.log(data)
             dispatch(updateDetails({...data}))
             navigate("/");
         },

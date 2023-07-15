@@ -3,7 +3,7 @@ import { useMutation } from "@tanstack/react-query"
 import { useSelector } from "react-redux";
 
 export const usePutUserDetails = () => {
-    const id = useSelector((state) => state.user.userBasicDetails["User.user_id"])
+    const id = useSelector((state) => state.user.userBasicDetails["user_id"])
     return useMutation((data) => putUserDetails(id, data), {
         onSuccess : (data) => {
             console.log(data)

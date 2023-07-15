@@ -59,9 +59,10 @@ const MyDetails = () => {
             })
         }
         if(saveFormSuccess){
+            console.log("hey")
             refetch()
         }
-    }, [getDetailsSuccess, data, reset, saveFormSuccess])
+    }, [getDetailsSuccess, data, reset, refetch, saveFormSuccess])
 
 
     const handleSave = (data) => {
