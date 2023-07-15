@@ -18,9 +18,11 @@ const authenticateToken = async (req, res, next) => {
     // decode jwt
     const getPayload = jwtDecode(token);
 
+    console.log(getPayload);
+
     //find a particular user for JWT Token.
     const getUser = await User.findOne(
-        {   where: { user_id: getPayload.account_id }} )
+        {   where: { account_id: getPayload.account_id }} )
 
     if (token == null) return res.status(400).json({ error: "No JWT provided!" });
 

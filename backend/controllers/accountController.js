@@ -41,11 +41,11 @@ const register = async (req, res) => {
       account_type: account_type
     }, { raw: true })
 
-    const accessToken = generateAccessToken(newAccount);
+    const accessToken = generateAccessToken(newAccount.dataValues);
 
     if (account_type === 'user') {
       const newUser = await User.create({
-        account_id: newAccount.account_id,
+        account_id: newAccount.dataValues.account_id,
       }, { raw: true })
       return res.status(201).json({ ...newAccount, user_id: newUser.user_id, accessToken });
 
@@ -91,7 +91,7 @@ const login = async (req, res) => {
 
   try {
     // if incorrect, DB col : form col
-    const user = await Account.findOne({ where: { email: email }, raw: true });
+    const user = await Account.findOne({ where: { email: email }, include: { model: User }, raw: true });
 
     if (!user) {
       return res.status(401).json({ message: "Your email/password is incorrect." });
