@@ -30,6 +30,10 @@ const Account = sequelize.define(
         account_type: {
             type: DataTypes.STRING(),
             allowNULL: false
+        },
+        json_tokenID: {
+            type:DataTypes.STRING(),
+            allowNULL: true
         }
     },
     {

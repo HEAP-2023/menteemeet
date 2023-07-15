@@ -63,7 +63,7 @@ const updateUser = async (req, res) => {
           { where: { user_id : getUserID }} );
 
         //Update function
-        const getAccObj = await Account.update(
+        await Account.update(
           { email: email, name: name, contact_no: contact }, 
           { where: { account_id: getUserObj.account_id }} )
         
