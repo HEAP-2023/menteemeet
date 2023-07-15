@@ -13,7 +13,7 @@ import SectionHeader from "../SectionHeader";
 
 
 // redux imports
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { swap, profileOverlayToggle, logOut } from "../../state(kiv)";
 
 
@@ -24,7 +24,7 @@ const ProfileOverlayTab = ({acctInfo}) => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    const {id, name, email} = acctInfo;
+    const {name, email} = useSelector((state) => state.user.userBasicDetails) 
 
 
     // try use fixed width and / or media query
