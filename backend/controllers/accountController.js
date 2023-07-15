@@ -105,12 +105,12 @@ const login = async (req, res) => {
     const accessToken = generateAccessToken(account);
 
     if (account.account_type === 'user'){
-      const user = User.findOne({ where: { account_id: account.account_id }});
+      const user = await User.findOne({ where: { account_id: account.account_id }, raw: true });
       return res.status(200).json({
         message: "Successfully logged in!", accessToken, account, user
       });
     } else {
-      const organiser = Organiser.findOne({ where: { account_id: account.account_id }});
+      const organiser = await Organiser.findOne({ where: { account_id: account.account_id }});
       return res.status(200).json({
         message: "Successfully logged in!", accessToken, account, organiser
       });
