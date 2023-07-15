@@ -19,11 +19,11 @@ const Programme = sequelize.define(
             allowNull: true,
         },
         programmeStart: {
-            type: DataTypes.DATE,
+            type: DataTypes.DATEONLY,
             allowNull: true
         },
         programmeEnd: {
-            type: DataTypes.DATE,
+            type: DataTypes.DATEONLY,
             allowNull: true
         },
         category: {
@@ -31,7 +31,7 @@ const Programme = sequelize.define(
             allowNull: true,
         },
         deadline: {
-          type: DataTypes.DATE,
+          type: DataTypes.DATEONLY,
           allowNull: false,
         },
         matching_criteria: {
