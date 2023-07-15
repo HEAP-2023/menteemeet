@@ -8,6 +8,7 @@ import * as yup from "yup"
 import { useSelector } from "react-redux";
 import { useUserDetails } from '../../hooks/user/useUserDetails';
 import { useEffect } from 'react';
+import { usePutUserDetails } from '../../hooks/user/usePutUserDetails';
 
 const MyDetails = () => {
     const defaultValues = {
@@ -37,13 +38,14 @@ const MyDetails = () => {
         defaultValues: defaultValues,
         resolver: yupResolver(myDetailsSchema)
     });
-    const {error, isError, isSuccess, data} = useUserDetails();
+    const {error, isError, isSuccess : getDetailsSuccess, data, refetch} = useUserDetails();
     if(isError){
         alert(error.message)
     }
+    const {mutate : saveDetails, isSuccess : saveFormSuccess} = usePutUserDetails()
 
     useEffect(() => {
-        if(isSuccess){
+        if(getDetailsSuccess){
             const { "Account.name" : name, "Account.email" : email, telegram_username: telegramUsername, "Account.contact_no" : contactNumber, description} = data.user
             reset({
                 name: name,
@@ -53,8 +55,10 @@ const MyDetails = () => {
                 description: !!description ? description : "",
             })
         }
-
-    }, [isSuccess, data, reset])
+        if(saveFormSuccess){
+            refetch()
+        }
+    }, [getDetailsSuccess, data, reset, saveFormSuccess])
 
 
     const handleSave = (data) => {
@@ -65,7 +69,7 @@ const MyDetails = () => {
             telegramUsername: data.telegramUsername,
             description: data.description
         }
-
+        saveDetails(accountSettingsSave)
         console.log("Updated account settings:", accountSettingsSave);
     }
    
