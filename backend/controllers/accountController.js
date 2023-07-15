@@ -117,4 +117,11 @@ const login = async (req, res) => {
   }
 }
 
-module.exports = { register, login, generateAccessToken };
+function resetJWT(getAccID) {
+  //to set JTI empty.
+    Account.update(
+    {   json_tokenID: "placeholder" }, 
+    {   where: { account_id : getAccID }} )
+}
+
+module.exports = { register, login, generateAccessToken, resetJWT };

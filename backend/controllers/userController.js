@@ -5,19 +5,11 @@ const Skill = require('../models/skill');
 const Interest = require('../models/interest');
 const UserInterest = require('../models/userInterest');
 
-const { generateAccessToken } = require('./accountController');
+const { generateAccessToken, resetJWT } = require('./accountController');
 
 const bcrypt = require("bcrypt");
 // const config = require('../utils/config');
 // const jwt = require("jsonwebtoken");
-
-function resetJWT(getAccID) {
-  
-  //to set JTI empty.
-    Account.update(
-    {   json_tokenID: "placeholder" }, 
-    {   where: { account_id : getAccID }} )
-}
 
 const logoutUser = async (req, res) => {
   try {
