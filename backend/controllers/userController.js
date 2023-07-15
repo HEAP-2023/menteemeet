@@ -57,7 +57,7 @@ const updateUser = async (req, res) => {
         const getUserID = req.params.id;
 
         const getUserObj = await User.findOne({ where: { user_id : getUserID }, raw: true });
-
+        console.log(`hey3, ${req.body.email}`)
         await User.update(
           { telegram_username: teleUsername },
           { where: { user_id : getUserID }} );

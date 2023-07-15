@@ -1,4 +1,5 @@
 import axiosInstance from "../../utils/axiosInstance";
+
 export const getUserDetails = async (id) => {
     const res = await axiosInstance({
         method : "get",
@@ -9,13 +10,11 @@ export const getUserDetails = async (id) => {
 }
 
 export const putUserDetails = async (id, data) => {
-
     const res = await axiosInstance({
         method : "put",
         url : `/users/${id}`,
         headers: { Authorization: `Bearer ${localStorage.getItem("jwt")}` },
         data : data
     })
-    console.log(res)
     return res.data;
 }

@@ -38,6 +38,9 @@ const MyDetails = () => {
         defaultValues: defaultValues,
         resolver: yupResolver(myDetailsSchema)
     });
+
+
+    // fetching / mutating
     const {error, isError, isSuccess : getDetailsSuccess, data, refetch} = useUserDetails();
     if(isError){
         alert(error.message)
@@ -65,14 +68,20 @@ const MyDetails = () => {
         const accountSettingsSave = {
             name: data.name,
             email: data.email,
-            contactNumber: data.contactNumber,
-            telegramUsername: data.telegramUsername,
+            contact_no: data.contactNumber,
+            telegram_username: data.telegramUsername,
             description: data.description
         }
         saveDetails(accountSettingsSave)
+        if(saveFormSuccess){
+            alert("successfully changed details")
+        }
         console.log("Updated account settings:", accountSettingsSave);
     }
    
+    // fetching / mutating
+
+
     return (
         <>
             <form onSubmit={handleSubmit(handleSave)} noValidate>
