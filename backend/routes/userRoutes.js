@@ -16,7 +16,7 @@ const { authenticateToken } = require('../middlewares/authMiddlewares');
 router.use(authenticateToken);
 
 router.put('/:id', authenticateToken, userController.updateUser);
-router.put('/logout/:id', authenticateToken, userController.logoutUser)
+router.put('/:id/logout', authenticateToken, userController.logoutUser)
 
 router.get('/:id', authenticateToken, userController.getUser);
 router.get('/:id/skills', authenticateToken, userController.getSkill);

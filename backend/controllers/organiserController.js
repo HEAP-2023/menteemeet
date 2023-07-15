@@ -47,7 +47,7 @@ const updateOrg = async (req, res) => {
         const contact = req.body.contact_no;
 
         const description = req.body.description;
-        
+
         const getOrgID = req.params.id;
         const getOrgObj = await Organiser.findOne({ where: { organiser_id : getOrgID }, raw: true });
 
