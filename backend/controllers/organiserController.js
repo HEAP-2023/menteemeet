@@ -40,23 +40,18 @@ const updateOrg = async (req, res) => {
         // const filteredObject = Object.fromEntries(Object.entries(storeUserObj).filter(([key, value]) => value === req.user.email));
         // const filteredJsonString = JSON.stringify(filteredObject); // Stringify the filtered object
 
+        if (req.body === undefined || Object.keys(req.body).length === 0) {
+          return res.status(400).json({ message: "Fields are empty."});
+        }
+
         const email = req.body.email;
         const name = req.body.name;
         const contact = req.body.contact_no;
 
         const description = req.body.description;
+
         const getOrgID = req.params.id;
-
-        console.log(req.body);
-
-        console.log("--------------");
-        console.log(req.body.email);
-
-        if (!req.body) {
-            return res.status(400).json({ message: "Fields are empty."});
-        }
-
-        const getOrgObj = await User.findOne({ where: { organiser_id : getOrgID }, raw: true });
+        const getOrgObj = await Organiser.findOne({ where: { organiser_id : getOrgID }, raw: true });
 
         await Organiser.update(
           { description: description },

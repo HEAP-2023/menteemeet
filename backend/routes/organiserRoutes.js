@@ -15,7 +15,10 @@ const { authenticateToken } = require('../middlewares/authMiddlewares');
 // use the auth function as a middleware.
 router.use(authenticateToken);
 
-// router.get('/:id/programmes', authenticateToken, organiserController.getProg);
+router.put('/:id', authenticateToken, organiserController.updateOrg);
+router.put('/:id/logout', authenticateToken, organiserController.logoutOrg)
 router.post('/:id/programmes', authenticateToken, upload.single('display_image'), organiserController.addProg);
+
+// router.get('/:id', authenticateToken, organiserController.getOrg);
 
 module.exports = router;
