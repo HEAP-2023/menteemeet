@@ -5,28 +5,34 @@ const Skill = require('../models/skill');
 const Interest = require('../models/interest');
 const UserInterest = require('../models/userInterest');
 
+const { generateAccessToken, resetJWT } = require('./accountController');
+
 const bcrypt = require("bcrypt");
 // const config = require('../utils/config');
 // const jwt = require("jsonwebtoken");
 
-function resetJWT(getID) {
-  
-  //to set JTI empty.
-    User.update(
-    {   json_tokenID: "placeholder" }, 
-    {   where: { user_id: getID }} )
-}
-
 const logoutUser = async (req, res) => {
   try {
 
-    const getID = req.params.id;
-    resetJWT(getID);
+    const getUserID = req.params.id;
+    const getUserObj = await User.findOne({ where: { user_id : getUserID }, raw: true });
+
+    resetJWT(getUserObj.account_id);
 
     return res.status(200).json({ message: "You have been successfully logged out!" });
 
   } catch (err) {
     return res.status(500).json({ error: err });
+  }
+}
+function updateJWT(getUserObj) {
+  try {
+    const accessToken = generateAccessToken(getUserObj);
+
+    return accessToken;
+
+  } catch (err) {
+    return err;
   }
 }
 
@@ -35,44 +41,50 @@ const updateUser = async (req, res) => {
         //Filtering out each Object so that they == to the email.
 
         // const filteredObject = Object.fromEntries(Object.entries(storeUserObj).filter(([key, value]) => value === req.user.email));
-        // const filteredJsonString = JSON.stringify(filteredObject); // Stringify the filtered object
+        // const filteredJsonString = JSON.stringify(filteredObject); // Stringify the filtered object        
+
+        if (req.body === undefined || Object.keys(req.body).length === 0) {
+          return res.status(400).json({ message: "Fields are empty."});
+        }
 
         const email = req.body.email;
         const name = req.body.name;
-        const contact = req.body.contact;
-        const address = req.body.address;
+        const contact = req.body.contact_no;
 
-        const getID = req.params.id;
+        const teleUsername = req.body.telegram_username;
+        
+        const getUserID = req.params.id;
+        const getUserObj = await User.findOne({ where: { user_id : getUserID }, raw: true });
 
-        if (email != "") {
-          //Update function
-          await Account.update(
-          //Add-on when confirm
-            {   email: email, contact_no : contact }, 
-            {   where: { account_id: getID }} )
-        }
+        await User.update(
+          { telegram_username: teleUsername },
+          { where: { user_id : getUserID }} );
+
+        //Update function
+        await Account.update(
+          { email: email, name: name, contact_no: contact }, 
+          { where: { account_id: getUserObj.account_id }} )
         
         //Update password
         const updatedPass = req.body.password;
 
-        if (updatedPass != "") {
+        if (updatedPass != "" && updatedPass != null) {
           //Hash
           const salt = await bcrypt.genSalt();
           const hashedPass = await bcrypt.hash(updatedPass, salt);
 
           await Account.update(
             {   password: hashedPass }, 
-            {   where: { account_id: getID }} )
+            {   where: { account_id: getUserObj.account_id }} )
 
-          //reset jwt
-          resetJWT(getID);
-
-          return res.status(200).json({message: "Successfully Updated! Please re-login." });
+          return res.status(200).json({message: "Successfully Updated! (PW)" });
         } 
-        
-        return res.status(200).json({message: "Successfully Updated!" });
+
+        const getAccessToken = updateJWT(getUserObj);
+        return res.status(200).json({message: "Successfully Updated Including JWT!", getAccessToken });
         
     } catch (err) {
+        console.log(err);
         return res.status(500).json({ error: err });
     }
 }
@@ -81,7 +93,16 @@ const getUser = async (req, res) => {
     const id = req.params.id;
 
     try {
-      const user = await User.findOne({ where: { user_id: id }, include: { model: Account }, raw: true });
+      const user = await User.findOne(
+        { where: { user_id: id }, 
+        include: [
+          {
+            model: Account,
+            attributes: {
+              exclude: ['password', 'account_id', 'json_tokenID'], // Exclude the 'password','json_tokenID' and 'account_id' field from the Account model
+            },
+          }
+        ], raw: true });
 
       if (!user) {
         return res.status(404).json({ message: 'User not found!' })

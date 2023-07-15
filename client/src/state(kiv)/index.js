@@ -2,7 +2,7 @@ import {createSlice} from '@reduxjs/toolkit'
 
 const fetchUserType = () => {
     // go fetch 
-    return "mentee";
+    return undefined;
 }
 const fetchAllProfiles = () => {
     // go fetch
@@ -31,14 +31,6 @@ const fetchTasks = () => {
     ]);
 }
 
-const fetchDetails = () => {
-     return ({
-        acctID : "mentor123",
-        lastName : "Neo",
-        password: "hello123"
-     })
-}
-
 
 const initialState = {
     loginOverlay : false,
@@ -48,7 +40,7 @@ const initialState = {
     programmesEnrolled : fetchProgrammesEnrolled(),
     programmesCreated : fetchProgrammesCreated(),
     tasks : fetchTasks(),
-    userDetails : fetchDetails(),
+    userBasicDetails : {id : "" ,name : "default", email : "defaultEmail"},
     disableDrag : true,
     dragParking : [],
 }
@@ -65,7 +57,11 @@ export const userSlice = createSlice({
             state.profileOverlay = !state.profileOverlay; 
         },
         logIn : (state, action) => {
-            state.userType = action.payload.type;
+            if(action.payload.type === "user"){
+                state.userType = "mentee";
+            }else if(action.payload.type === "organiser"){
+                state.userType = "organiser";
+            }
         },
         logOut : (state) => {
             state.userType = undefined;
@@ -78,12 +74,10 @@ export const userSlice = createSlice({
                 state.userType = "mentee"
             }
         },
-        addCreated : (state, action) => {
-            state.programmesCreated = [...state.programmesCreated, action.payload.programme]
+        updateDetails : (state, action) => {
+            state.userBasicDetails = {...action.payload}
         },
-        removeCreated : (state, action) => {
-            state.programmesCreated = state.programmesCreated.filter(p => p.id !== action.payload.programme.id)
-        },
+        
         addTasks : (state, action) => {
             state.tasks = [...state.tasks, action.payload.task]
         },
@@ -107,8 +101,7 @@ export const userSlice = createSlice({
 export const {loginOverlayToggle ,
     profileOverlayToggle,
     logIn, logOut,
-    swap,addCreated,
-    removeCreated, 
+    swap, updateDetails,
     addTasks, removeTask,
     dragToggle,
     addToParking, removeFromParking} = userSlice.actions;
