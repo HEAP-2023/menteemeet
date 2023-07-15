@@ -39,18 +39,27 @@ const updateUser = async (req, res) => {
 
         const email = req.body.email;
         const name = req.body.name;
-        const contact = req.body.contact;
-        const address = req.body.address;
+        const contact = req.body.contact_no;
 
-        const getID = req.params.id;
+        const teleUsername = req.body.telegram_username;
 
-        if (email !=  "") {
+        const getUserID = req.params.id;
+
+        if ((email != "" && email != null) || (name != "" && name != null) 
+        || (contact != "" && contact != null) || (teleUsername != "" && teleUsername != null)) {
+
+          const getUserObj = await User.findOne({ where: { user_id : getUserID } });
+
+          await User.update(
+            { telegram_username: teleUsername },
+            { where: { user_id : getUserID }} ),
+
           //Update function
           await Account.update(
           //Add-on when confirm
-            {   email: email }, 
-            {   where: { account_id: getID }} )
-        }
+            { email: email, name: name, contact_no: contact }, 
+            { where: { account_id: getUserObj.account_id }} )
+        } 
         
         //Update password
         const updatedPass = req.body.password;
@@ -64,10 +73,7 @@ const updateUser = async (req, res) => {
             {   password: hashedPass }, 
             {   where: { account_id: getID }} )
 
-          //reset jwt
-          resetJWT(getID);
-
-          return res.status(200).json({message: "Successfully Updated! Please re-login." });
+          return res.status(200).json({message: "Successfully Updated! (PW)" });
         } 
         
         return res.status(200).json({message: "Successfully Updated!" });
