@@ -3,29 +3,32 @@ const awsS3Controller = require('./awsS3Controller');
 
 // WIP
 const addProg = async (req, res) => {
-  const { name, description, category, capacity, matching_criteria, deadline } = req.body;
+  const { name, description, category, programmeStart, programmeEnd, deadline, matching_criteria, skills } = req.body;
 
   try {
-    console.log(req.body);
-    const uploadFile = await awsS3Controller.uploadToS3(req.file);
+    const newProg = await Programme.create({
+      name, 
+      description, 
+      category,
+      programmeStart,
+      programmeEnd,
+      deadline,
+      matching_criteria,
+      skills
+    }, { raw: true })
+
+    const uploadFile = await awsS3Controller.uploadToS3(req.file, newProg.programme_id);
 
     if (uploadFile) {
+      const prog = await Programme.update({});
       console.log(uploadFile);
-      // const newProg = await Programme.create({
-      //   name, 
-      //   description, 
-      //   category, 
-      //   capacity, 
-      //   matching_criteria, 
-      //   application_deadline: deadline, 
-      // }, { raw: true })
-  
-      // //create forum
-      // const newForum = await Forum.create({
-  
-      // })
       return res.status(200).json({ message: 'Successfully created programme!' });
     }
+
+    // //create forum
+      // const newForum = await Forum.create({
+  
+    // })
   } catch(err) {
     console.error(err);
     res.status(500).json({ error: err });

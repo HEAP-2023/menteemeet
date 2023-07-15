@@ -3,7 +3,7 @@ const config = require('../utils/config');
 const jwtDecode = require("jwt-decode");
 
 //Request Access to DB
-const User = require("../models/user");
+const Account = require("../models/account");
 
 const ACCESS_TOKEN_SECRET = config.ACCESS_TOKEN_SECRET;
 
@@ -21,14 +21,14 @@ const authenticateToken = async (req, res, next) => {
     console.log(getPayload);
 
     //find a particular user for JWT Token.
-    const getUser = await User.findOne(
-        {   where: { account_id: getPayload.account_id }} )
+    const getAcc = await Account.findOne(
+        {   where: { account_id: getPayload.account_id }, raw: true} )
 
     if (token == null) return res.status(400).json({ error: "No JWT provided!" });
 
     jwt.verify(token, ACCESS_TOKEN_SECRET, (err, user) => {
 
-        if (getPayload.jti !== getUser.json_tokenID || err) {
+        if (getPayload.jti !== getAcc.json_tokenID || err) {
             return res.status(403).json({ error: "Invalid JWT! Please RE-LOGIN if you recently changed your password" });
         }
     

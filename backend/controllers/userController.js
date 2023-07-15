@@ -5,25 +5,19 @@ const Skill = require('../models/skill');
 const Interest = require('../models/interest');
 const UserInterest = require('../models/userInterest');
 
-const { generateAccessToken } = require('./accountController');
+const { generateAccessToken, resetJWT } = require('./accountController');
 
 const bcrypt = require("bcrypt");
 // const config = require('../utils/config');
 // const jwt = require("jsonwebtoken");
 
-function resetJWT(getUserID) {
-  
-  //to set JTI empty.
-    User.update(
-    {   json_tokenID: "placeholder" }, 
-    {   where: { user_id: getUserID }} )
-}
-
 const logoutUser = async (req, res) => {
   try {
 
     const getUserID = req.params.id;
-    resetJWT(getUserID);
+    const getUserObj = await User.findOne({ where: { user_id : getUserID }, raw: true });
+
+    resetJWT(getUserObj.account_id);
 
     return res.status(200).json({ message: "You have been successfully logged out!" });
 
@@ -63,7 +57,7 @@ const updateUser = async (req, res) => {
           { where: { user_id : getUserID }} );
 
         //Update function
-        const getAccObj = await Account.update(
+        await Account.update(
           { email: email, name: name, contact_no: contact }, 
           { where: { account_id: getUserObj.account_id }} )
         
@@ -98,7 +92,16 @@ const getUser = async (req, res) => {
     const id = req.params.id;
 
     try {
-      const user = await User.findOne({ where: { user_id: id }, include: { model: Account }, raw: true });
+      const user = await User.findOne(
+        { where: { user_id: id }, 
+        include: [
+          {
+            model: Account,
+            attributes: {
+              exclude: ['password', 'account_id', 'json_tokenID'], // Exclude the 'password' and 'json_tokenID' field from the Account model
+            },
+          }
+        ], raw: true });
 
       console.log(user);
 

@@ -39,21 +39,21 @@ const register = async (req, res) => {
       email: email,
       password: hashedPassword,
       account_type: account_type
-    }, { raw: true })
+    })
 
     const accessToken = generateAccessToken(newAccount.dataValues);
 
     if (account_type === 'user') {
       const newUser = await User.create({
-        account_id: newAccount.dataValues.account_id,
-      }, { raw: true })
-      return res.status(201).json({ ...newAccount, user_id: newUser.user_id, accessToken });
+        account_id: newAccount.account_id,
+      })
+      return res.status(201).json({ ...newAccount.dataValues, user_id: newUser.user_id, accessToken });
 
     } else if (account_type === 'organiser') {
       const newOrganiser = await Organiser.create({
         account_id: newAccount.dataValues.account_id,
-      }, { raw: true })
-      return res.status(201).json({ ...newAccount, organiser_id: newOrganiser.organiser_id , accessToken });
+      })
+      return res.status(201).json({ ...newAccount.dataValues, organiser_id: newOrganiser.organiser_id , accessToken });
     }
 
   } catch (err) {
@@ -71,15 +71,10 @@ const generateAccessToken = (account) => {
   const tokenSigned = jwt.sign(account, ACCESS_TOKEN_SECRET, { jwtid: jwtID, expiresIn: EXPIRY });
 
   //store into DB
-  if (account.account_type === 'user'){
-    User.update(
-      { json_tokenID: jwtID }, 
-      { where: { account_id: account.account_id }} )
-  } else {
-    Organiser.update(
-      { json_tokenID: jwtID }, 
-      { where: { account_id: account.account_id }})
-  }
+  Account.update(
+    { json_tokenID: jwtID }, 
+    { where: { account_id: account.account_id }} )
+
 
   return tokenSigned;
 }
@@ -91,21 +86,30 @@ const login = async (req, res) => {
 
   try {
     // if incorrect, DB col : form col
-    const user = await Account.findOne({ where: { email: email }, include: { model: User }, raw: true });
+    const account = await Account.findOne({ where: { email: email }, raw: true });
 
-    if (!user) {
+    if (!account) {
       return res.status(401).json({ message: "Your email/password is incorrect." });
     }
+
     // email valid -> Compare password with bcrypt
-    if (!(await bcrypt.compare(password, user.password))) {
+    if (!(await bcrypt.compare(password, account.password))) {
       return res.status(401).json({ message: "Your email/password is incorrect." });
     }
 
-    const accessToken = generateAccessToken(user);
+    const accessToken = generateAccessToken(account);
 
-    return res.status(200).json({
-      message: "Successfully logged in!", accessToken, user
-    }); 
+    if (account.account_type === 'user'){
+      const user = User.findOne({ where: { account_id: account.account_id }});
+      return res.status(200).json({
+        message: "Successfully logged in!", accessToken, account, user
+      });
+    } else {
+      const organiser = Organiser.findOne({ where: { account_id: account.account_id }});
+      return res.status(200).json({
+        message: "Successfully logged in!", accessToken, account, organiser
+      });
+    }
 
   } catch (err) {
     console.log(err);
@@ -113,4 +117,11 @@ const login = async (req, res) => {
   }
 }
 
-module.exports = { register, login };
+function resetJWT(getAccID) {
+  //to set JTI empty.
+    Account.update(
+    {   json_tokenID: "placeholder" }, 
+    {   where: { account_id : getAccID }} )
+}
+
+module.exports = { register, login, generateAccessToken, resetJWT };
