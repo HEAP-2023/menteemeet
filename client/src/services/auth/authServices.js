@@ -27,7 +27,6 @@ async function login(user) {
         url: "/login",
         data: user
     })
-    console.log(res)
     localStorage.setItem("jwt", res.data.accessToken);
     console.log({...res.data.user, ...res.data.account})
     return ( {...res.data.user, ...res.data.account} )

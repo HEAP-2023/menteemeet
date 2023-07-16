@@ -10,7 +10,6 @@ const useLogin = (reset) => {
     const navigate = useNavigate();
     return useMutation(login, {
         onSuccess : (data) => {
-            console.log(data)
             dispatch(logIn({ type : data.account_type }))
             console.log(data)
             dispatch(updateDetails({...data}))

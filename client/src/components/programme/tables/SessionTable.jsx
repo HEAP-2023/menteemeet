@@ -8,7 +8,7 @@ const SessionTable = ({rows, columns, checkbox=false, color="#EBEBEB", editable=
     // console.log(apiRef)
     const colors = generateColors()
     const hoverColor = (color === "#EBEBEB" ? colors.primary[500] : "#AEAEFF");
-    const acctID = useSelector((state) => state.user.userDetails.acctID)
+    const acctID = useSelector((state) => state.user.userBasicDetails.account_id)
     const getRowSpacing = useCallback((params) => {
         return {
           top: (params.isFirstVisible && params.isLastVisible) ? 0 : 5,
