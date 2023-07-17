@@ -3,18 +3,18 @@ import * as yup from "yup"
 export const createProgrammeSchema = yup.object()
     .shape(
         {
-            programmeName : yup.string()
+            name : yup.string()
                             .required("this field is required"),
             programmeStart : yup.string()
                             .required("this field is required"),
             programmeEnd : yup.string()
                             .required("this field is required"),
-            fixedDates : yup.string()
-                            .required("this field is required"),
-            frequency : yup.string()
-                            .required("this field is required"),
-            duration : yup.string()
-                            .required("this field is required"),
+            // fixedDates : yup.string()
+            //                 .required("this field is required"),
+            // frequency : yup.string()
+            //                 .required("this field is required"),
+            // duration : yup.string()
+            //                 .required("this field is required"),
             mentorCapacity : yup.string()
                             .required("this field is required"),
             menteeCapacity : yup.string()
@@ -24,7 +24,7 @@ export const createProgrammeSchema = yup.object()
                                     .min(1, "this field is required"),
             description : yup.string()
                             .required("this field is required"),
-            interestField : yup.string()
+            category : yup.string()
                             .when('matchingCriteria',{
                                 is : (matchingCriteria) => {
                                     return matchingCriteria.includes("interest");
@@ -44,12 +44,12 @@ export const createProgrammeSchema = yup.object()
             deadline : yup.string()
                             .required("this field is required"),
 
-            externalLink : yup.string()
-                            .matches(
-                                /^((http|https):\/\/)?(www.)?(?!.*(http|https|www.))[a-zA-Z0-9_-]+(\.[a-zA-Z]+)+(\/)?.([\w\?[a-zA-Z-_%\/@?]+)*([^\/\w\?[a-zA-Z0-9_-]+=\w+(&[a-zA-Z0-9_]+=\w+)*)?$/,
-                                'Enter a valid url'
-                            ),
-            media : yup.string()
+            // externalLink : yup.string()
+            //                 .matches(
+            //                     /^((http|https):\/\/)?(www.)?(?!.*(http|https|www.))[a-zA-Z0-9_-]+(\.[a-zA-Z]+)+(\/)?.([\w\?[a-zA-Z-_%\/@?]+)*([^\/\w\?[a-zA-Z0-9_-]+=\w+(&[a-zA-Z0-9_]+=\w+)*)?$/,
+            //                     'Enter a valid url'
+            //                 ),
+            displayImage : yup.string()
                         .required("this field is required"),
         }
     ).required("form not filled in yet") 

@@ -21,25 +21,23 @@ const CreateProgramme = () => {
     const [preview, setPreview] = useState(false)
     const methods = useForm({
         defaultValues : {
-// new
-            deadline : "",
-            externalLink : "",
-            media : "",
-// new
-            programmeName : "",
+            name : "",
             programmeStart : "",
             programmeEnd : "",
-            fixedDates : "",
-            frequency : "",
-            duration : "",
+            deadline : "",
+            displayImage : "",
             mentorCapacity : "",
             menteeCapacity : "",
+            // externalLink : "",
+            // fixedDates : "",
+            // frequency : "",
+            // duration : "",
 
             matchingCriteria : [],
             description : "",
             
             skills : [],
-            interestField : ""
+            category : ""
         },
         resolver : yupResolver(createProgrammeSchema)
     })
@@ -62,9 +60,10 @@ const CreateProgramme = () => {
 
     const handleSave = (data) => {
         console.log("to be submitted")
-        console.log(data)
+        const formattedData = {...data, skills : [data.skills.map(skill => skill.skillName)]}
+        console.log(formattedData)
     }
-    const testImage = getValues("media")
+    const testImage = getValues("displayImage")
     return (
     <Box width="100%" p="40px" display="flex" flexDirection="column">
         {/* progress bar */}
@@ -85,7 +84,7 @@ const CreateProgramme = () => {
         <Step3 />
 
         <Box display="flex" gap="20px">
-            <Button type="submit" variant="contained" color="secondary" onClick={() => {console.log("submit??");console.log(errors)}}>Submit</Button>
+            <Button type="submit" variant="contained" color="secondary" onClick={() => {console.log("errors:",errors)}}>Submit</Button>
             <Button /* disabled={progress < 100} */ variant="contained" color="secondary" onClick={() => {setPreview(!preview)}}>Preview Form </Button>
         </Box>
 
