@@ -2,7 +2,7 @@ import {createSlice} from '@reduxjs/toolkit'
 
 const fetchUserType = () => {
     // here should be get jwt from localstorage if have then just login ah
-    return "organiser";
+    return undefined;
 }
 const fetchAllProfiles = () => {
     // go fetch

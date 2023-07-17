@@ -15,7 +15,7 @@ import { useFormContext } from "react-hook-form";
 const Step1 = () => {
     const {control, watch, formState : {errors}} = useFormContext();
     const imagePreview = useRef();
-    const imgUploaded = watch("displayImage", false)
+    const imgUploaded = watch("display_image", false)
     return (
     <Box width="100%" p="40px" m="20px 0" display="flex" flexDirection="column" bgcolor="#F1F1F1" >
         <SectionHeader margin="0" text="Step 1 - The Basics"/>
@@ -226,7 +226,7 @@ const Step1 = () => {
                 /> */}
 
                         <Controller
-                        name="displayImage"
+                        name="display_image"
                         control={control}
                         render={({field}) => {
                         const {value, ...others} = field; 
@@ -236,8 +236,8 @@ const Step1 = () => {
                             <TextField {...others} type="file" 
                             inputProps={{accept : "image/*"}} 
                             InputProps={{endAdornment:<UploadFileIcon/>}} 
-                            error={errors["displayImage"] !== undefined} 
-                            helperText={errors["displayImage"]?.message} 
+                            error={errors["display_image"] !== undefined} 
+                            helperText={errors["display_image"]?.message} 
                             variant="outlined"
                             onChange={(e) => {
                                 const [file] = e.target.files

@@ -6,7 +6,7 @@ import { useForm, Controller, FormProvider } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup"
 import { createProgrammeSchema } from "../../components/createProgramme/createProgrammeVSchema";
 import { DevTool } from "@hookform/devtools";
-
+import usePostProgramme from "../../hooks/programmes/usePostProgramme";
 
 import Step1 from "../../components/createProgramme/Step1";
 import Step2 from "../../components/createProgramme/Step2";
@@ -25,7 +25,7 @@ const CreateProgramme = () => {
             programmeStart : "",
             programmeEnd : "",
             deadline : "",
-            displayImage : "",
+            display_image : "",
             mentorCapacity : "",
             menteeCapacity : "",
             // externalLink : "",
@@ -33,7 +33,7 @@ const CreateProgramme = () => {
             // frequency : "",
             // duration : "",
 
-            matchingCriteria : [],
+            matching_criteria : [],
             description : "",
             
             skills : [],
@@ -42,7 +42,7 @@ const CreateProgramme = () => {
         resolver : yupResolver(createProgrammeSchema)
     })
     const {control,formState: {errors, defaultValues, dirtyFields, isDirty} , handleSubmit, reset, getValues, watch} = methods
-    const watchMatching = watch("matchingCriteria")
+    const watchMatching = watch("matching_criteria")
     let done = Object.keys(dirtyFields);
     useEffect(() => {
         const max = Object.keys(defaultValues).length
@@ -57,13 +57,14 @@ const CreateProgramme = () => {
     }, [done, watchMatching])
 
 
+    const { mutate : createProgramme } = usePostProgramme()
 
-    const handleSave = (data) => {
+    const handleSave = async (data) => {
         console.log("to be submitted")
-        const formattedData = {...data, skills : [data.skills.map(skill => skill.skillName)]}
+        const formattedData = {...data, skills : data.skills.map(skill => skill.skillName)}
         console.log(formattedData)
+        createProgramme(formattedData);
     }
-    const testImage = getValues("displayImage")
     return (
     <Box width="100%" p="40px" display="flex" flexDirection="column">
         {/* progress bar */}

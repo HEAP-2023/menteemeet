@@ -15,7 +15,7 @@ const PreviewForm = ({open, setPreview, getValues}) => {
     const programmeEnd = getValues("programmeEnd")
     const applicationDeadline = getValues("deadline")
 
-    const matchingCriteria = getValues("matchingCriteria")
+    const matchingCriteria = getValues("matching_criteria")
     const skills = getValues("skills")
     const category = getValues("category")
 
@@ -64,7 +64,6 @@ const PreviewForm = ({open, setPreview, getValues}) => {
                 <Divider/>
                 {matchingCriteria.includes("availability") &&
                     <Stack>
-                        <Typography>calendar select kiv</Typography>
                         <WeekSelectionCalendar/>
                     </Stack>
                 }

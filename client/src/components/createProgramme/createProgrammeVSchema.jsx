@@ -19,23 +19,23 @@ export const createProgrammeSchema = yup.object()
                             .required("this field is required"),
             menteeCapacity : yup.string()
                             .required("this field is required"),
-            matchingCriteria : yup.array()
+            matching_criteria : yup.array()
                                     .of(yup.string())
                                     .min(1, "this field is required"),
             description : yup.string()
                             .required("this field is required"),
             category : yup.string()
-                            .when('matchingCriteria',{
-                                is : (matchingCriteria) => {
-                                    return matchingCriteria.includes("interest");
+                            .when('matching_criteria',{
+                                is : (matching_criteria) => {
+                                    return matching_criteria.includes("interest");
                                 },
                                 then : () =>  yup.string()
                                         .required("this field is required")
                             }),
             skills : yup.array()
-                            .when('matchingCriteria',{
-                                is : (matchingCriteria) => {
-                                    return matchingCriteria.includes("skill");
+                            .when('matching_criteria',{
+                                is : (matching_criteria) => {
+                                    return matching_criteria.includes("skill");
                                 },
                                 then : () => yup.array()
                                                 .of(yup.object())
@@ -49,7 +49,7 @@ export const createProgrammeSchema = yup.object()
             //                     /^((http|https):\/\/)?(www.)?(?!.*(http|https|www.))[a-zA-Z0-9_-]+(\.[a-zA-Z]+)+(\/)?.([\w\?[a-zA-Z-_%\/@?]+)*([^\/\w\?[a-zA-Z0-9_-]+=\w+(&[a-zA-Z0-9_]+=\w+)*)?$/,
             //                     'Enter a valid url'
             //                 ),
-            displayImage : yup.string()
+            display_image : yup.string()
                         .required("this field is required"),
         }
     ).required("form not filled in yet") 
