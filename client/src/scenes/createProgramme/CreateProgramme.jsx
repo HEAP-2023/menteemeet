@@ -6,7 +6,7 @@ import { useForm, Controller, FormProvider } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup"
 import { createProgrammeSchema } from "../../components/createProgramme/createProgrammeVSchema";
 import { DevTool } from "@hookform/devtools";
-import usePostProgramme from "../../hooks/programmes/usePostProgramme";
+import usePostProgramme from "../../hooks/programmes/organiser_authorised/usePostProgramme";
 
 import Step1 from "../../components/createProgramme/Step1";
 import Step2 from "../../components/createProgramme/Step2";
@@ -61,7 +61,10 @@ const CreateProgramme = () => {
 
     const handleSave = async (data) => {
         console.log("to be submitted")
-        const formattedData = {...data, skills : data.skills.map(skill => skill.skillName)}
+        const formattedData = {...data, 
+            skills : JSON.stringify(data.skills.map(skill => skill.skillName)),
+            matching_criteria : JSON.stringify(data.matching_criteria)
+        }
         console.log(formattedData)
         createProgramme(formattedData);
     }

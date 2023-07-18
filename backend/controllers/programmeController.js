@@ -30,8 +30,7 @@ const getAllProg = async (req, res) => {
 // WIP
 const addProg = async (req, res) => {
   const { name, description, category, programmeStart, programmeEnd, deadline, matching_criteria, skills } = req.body;
-    console.log("sent to back")
-    console.log(req.body);
+    
   try {
     const newProg = await Programme.create({
       name, 

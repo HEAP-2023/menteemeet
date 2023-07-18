@@ -29,8 +29,9 @@ async function login(user) {
         data: user
     })
     localStorage.setItem("jwt", res.data.accessToken);
-    console.log({...res.data.user, ...res.data.account})
-    return ( {...res.data.user, ...res.data.account} )
+    const user_id = !!res.data.user ? res.data.user.user_id : res.data.organiser.organiser_id
+    console.log({...res.data.user, ...res.data.account, ...res.data.organiser, user_id : user_id})
+    return ( {...res.data.user, ...res.data.account, ...res.data.organiser, user_id : user_id} )
 }
 
 async function register(user) {
