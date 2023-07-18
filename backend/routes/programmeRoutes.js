@@ -1,8 +1,5 @@
 const express = require('express');
 const router = express.Router();
-//For file uploads
-// const multer = require('multer')
-// const upload = multer({ dest: 'temp/uploads' });
 
 const programmeController = require('../controllers/programmeController');
 
@@ -14,7 +11,6 @@ const { authenticateToken } = require('../middlewares/authMiddlewares');
 // use the auth function as a middleware.
 router.use(authenticateToken);
 
-//WIP for ALlProgammes. Bruce wants certain number of results per page. do SQL LIMIT.
 router.get('/', authenticateToken, programmeController.getAllProg);
 router.get('/:id', authenticateToken, programmeController.getEachProg);
 

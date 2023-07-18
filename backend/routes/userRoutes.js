@@ -15,6 +15,9 @@ const { authenticateToken } = require('../middlewares/authMiddlewares');
 // use the auth function as a middleware.
 router.use(authenticateToken);
 
+//get Prog by UserID & Role
+router.get('/getAllProg', authenticateToken, userController.getAllProgByUserID);
+
 router.put('/:id', authenticateToken, userController.updateUser);
 router.put('/:id/logout', authenticateToken, userController.logoutUser)
 

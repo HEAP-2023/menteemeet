@@ -29,6 +29,8 @@ const initAssociations = require('./models/associations');
 app.use(API_VER, require('./routes/accountRoutes'))
 //User routes
 app.use(API_VER + '/users', require('./routes/userRoutes'));
+//Organiser routes
+app.use(API_VER + '/organisers', require('./routes/organiserRoutes'));
 //Programme routes
 app.use(API_VER + '/programmes', require('./routes/programmeRoutes'));
 // Organiser routes
