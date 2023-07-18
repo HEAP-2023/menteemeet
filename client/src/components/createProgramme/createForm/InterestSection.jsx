@@ -14,15 +14,15 @@ const InterestSection = () => {
             <Box>
                 <FormControl fullWidth >
                 <Controller
-                        name="interestField"
+                        name="category"
                         control={control}
                         render={({field}) => 
                     <TextField
                         {...field}
-                        error={errors["interestField"] !== undefined} 
-                        helperText={errors["interestField"]?.message} 
+                        error={errors["category"] !== undefined} 
+                        helperText={errors["category"]?.message} 
                         select
-                        label="Sector"
+                        label="Category"
                         variant="outlined"
                         sx={{
                             "& .MuiInputLabel-root": {

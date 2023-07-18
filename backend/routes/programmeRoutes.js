@@ -11,6 +11,10 @@ const { authenticateToken } = require('../middlewares/authMiddlewares');
 // use the auth function as a middleware.
 router.use(authenticateToken);
 
+//WIP for ALlProgammes. Bruce wants certain number of results per page. do SQL LIMIT.
+router.get('/', authenticateToken, programmeController.getAllProg);
+router.get('/:id', authenticateToken, programmeController.getEachProg);
+
 // router.post('/', authenticateToken, upload.single('display_image'), programmeController.addProg);
 //for deletion - for programme.
 router.delete('/:id', authenticateToken, programmeController.deleteProg);

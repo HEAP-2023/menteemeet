@@ -58,10 +58,7 @@ const MyDetails = () => {
                 description: !!description ? description : "",
             })
         }
-        if(saveFormSuccess){
-            console.log("hey")
-            refetch()
-        }
+        
     }, [getDetailsSuccess, data, reset, refetch, saveFormSuccess])
 
 
@@ -74,9 +71,6 @@ const MyDetails = () => {
             description: data.description
         }
         saveDetails(accountSettingsSave)
-        if(saveFormSuccess){
-            alert("successfully changed details")
-        }
         console.log("Updated account settings:", accountSettingsSave);
     }
    

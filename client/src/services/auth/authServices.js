@@ -1,3 +1,4 @@
+import axios from "axios";
 import axiosInstance from "../../utils/axiosInstance";
 
 const verifyJWT = async() => {
@@ -27,7 +28,6 @@ async function login(user) {
         url: "/login",
         data: user
     })
-    console.log(res)
     localStorage.setItem("jwt", res.data.accessToken);
     console.log({...res.data.user, ...res.data.account})
     return ( {...res.data.user, ...res.data.account} )
@@ -43,7 +43,18 @@ async function register(user) {
     return (res.data.dataValues)
 }
 
+const logout = async(id) => {
+    console.log("logout")
+    const res = await axiosInstance({
+        method : "put",
+        url : `/users/${id}/logout`,
+        headers: { Authorization: `Bearer ${localStorage.getItem("jwt")}` },
+    })
+    console.log(res)
+    return res.data
+}
+
 export {
-  login, register,
+  login, register, logout,
   verifyJWT
 };

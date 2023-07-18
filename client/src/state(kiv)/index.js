@@ -1,7 +1,7 @@
 import {createSlice} from '@reduxjs/toolkit'
 
 const fetchUserType = () => {
-    // go fetch 
+    // here should be get jwt from localstorage if have then just login ah
     return undefined;
 }
 const fetchAllProfiles = () => {
@@ -41,6 +41,17 @@ const initialState = {
     programmesCreated : fetchProgrammesCreated(),
     tasks : fetchTasks(),
     userBasicDetails : {id : "" ,name : "default", email : "defaultEmail"},
+// structure after logging in should be
+// account_id
+// account_type
+// contact_no
+// email
+// group_id
+// json_tokenID
+// name
+// telegram_username
+// user_id
+
     disableDrag : true,
     dragParking : [],
 }
