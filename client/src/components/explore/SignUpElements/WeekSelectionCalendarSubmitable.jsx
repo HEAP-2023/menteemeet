@@ -5,8 +5,11 @@ import interactionPlugin from '@fullcalendar/interaction'
 import listPlugin from '@fullcalendar/list';
 import "./FullCalendar.css"
 import { useRef, useState } from 'react';
+import { Controller, useFormContext } from "react-hook-form";
 
-const WeekSelectionCalendarSubmitable = ({admin=false, programmeStart}) => {    
+
+const WeekSelectionCalendarSubmitable = ({admin=false, programmeStart}) => {
+    const {control} = useFormContext();
     const calendar = useRef()
     const [id, setId] = useState(1)
     const [events, setEvents] = useState([])
@@ -47,16 +50,31 @@ const WeekSelectionCalendarSubmitable = ({admin=false, programmeStart}) => {
 
 
 
-    return <FullCalendar 
-    ref={calendar}
-    {...calendarOptions} 
-    selectable={!admin}
-    editable={!admin}
-    initialDate={programmeStart}
-    eventsSet={(events) => setEvents(events)}
-    eventClick={handleEventClick}
-    initialEvents={events}
-    />
+    return (
+    <Controller
+    name="availabilities"
+    control={control}
+    render={({field}) => {
+
+        const {value, ...others} = field; 
+        return (<FullCalendar 
+        {...others}
+        ref={calendar}
+        {...calendarOptions} 
+        selectable={!admin}
+        editable={!admin}
+        initialDate={programmeStart}
+        eventsSet={(e) => {
+            const availableTimes = e.map(event => ({start : event.startStr, end :event.endStr}))
+            console.log(availableTimes)
+            field.onChange(availableTimes)
+        }}
+        eventClick={handleEventClick}
+        initialEvents={events}
+        />)
+    }
+}
+    />)
 }
 
 export default WeekSelectionCalendarSubmitable;

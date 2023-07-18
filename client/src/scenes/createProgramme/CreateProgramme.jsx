@@ -28,10 +28,6 @@ const CreateProgramme = () => {
             display_image : "",
             mentorCapacity : "",
             menteeCapacity : "",
-            // externalLink : "",
-            // fixedDates : "",
-            // frequency : "",
-            // duration : "",
 
             matching_criteria : [],
             description : "",

@@ -2,12 +2,14 @@ import { Box, Typography, Divider,Stack, TextField } from "@mui/material"
 import { useSelector } from 'react-redux'
 import PageHeader from "../../PageHeader"
 import SectionHeader from "../../SectionHeader"
-import NonFormTextField from "../../NonFormTextField"
+import StandardTextField from "../../StandardTextField"
 import MenteePreferenceSelector from "./MenteePreferenceSelector"
 import MentorPreferenceSelector from "./MentorPreferenceSelector"
 import SkillUsers from "../../createProgramme/SkillUsers"
 import WeekSelectionCalendarSubmitable from "./WeekSelectionCalendarSubmitable"
-import { useForm } from "react-hook-form"
+
+import { useForm, Controller, FormProvider } from "react-hook-form"
+import { DevTool } from "@hookform/devtools";
 
 const SignUpForm = (id={id}) => {
     const details = fetch_details(id)
@@ -21,18 +23,31 @@ const SignUpForm = (id={id}) => {
         programmeStart,
         skills,
     } = details
-
-    const account_type = useSelector((state) => state.user.userBasicDetails.account_type)
-    
     const skillSet = JSON.parse(skills);
     const matching_criteria_set = JSON.parse(matching_criteria)
 
+    const {account_type, name : userName, email, telegram_username} = useSelector((state) => state.user.userBasicDetails)
 
+    const methods = useForm({
+        defaultValues :{
+            name : userName, 
+            email : email, 
+            tele : telegram_username,
+            availabilities : [],
+            skill : [], //array of objects {skillName : "", rating : "", elaboration : ""}
+            interests : [], // interest 1,2,3,
+            preferredMentors : [],
+            preferredMentees : [],
+        }
+    })
 
+    const {control,formState: {errors, defaultValues, dirtyFields, isDirty} , handleSubmit, reset, getValues, watch} = methods
 
 
     return (
         <Box>
+            <FormProvider {...methods}>
+            <form>
              <Box>
                 <PageHeader text={name} margin="20px 0"/>
 
@@ -55,9 +70,24 @@ const SignUpForm = (id={id}) => {
                 <SectionHeader text="Personal Details" margin="20px 0 0 0"/>
                 <Divider/>
                 <Stack direction="row" gap="20px" mt="10px">
-                    <NonFormTextField label="Name"/>
-                    <NonFormTextField label="Email"/>
-                    <NonFormTextField label="Telegram handle"/>
+                <Controller
+                        name="name"
+                        control={control}
+                        render={({field}) => 
+                    <StandardTextField errors={errors} field={field} name="name" label="Name"/>
+                }/>
+                <Controller
+                        name="email"
+                        control={control}
+                        render={({field}) => 
+                    <StandardTextField errors={errors} field={field} name="email" label="Email"/>
+                }/>
+                <Controller
+                        name="tele"
+                        control={control}
+                        render={({field}) => 
+                    <StandardTextField errors={errors} field={field} name="tele" label="Telegram handle"/>
+                }/>
                 </Stack>
             </Box>
 
@@ -123,6 +153,9 @@ const SignUpForm = (id={id}) => {
                     <MenteePreferenceSelector/>
                 }
             </Box>
+            </form>
+            </FormProvider>
+            <DevTool control={control}/>
         </Box>
     )
 }
