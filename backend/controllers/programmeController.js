@@ -1,7 +1,6 @@
 const Programme = require("../models/programme");
 const awsS3Controller = require('./awsS3Controller');
 
-
 const getEachProg = async (req, res) => {
   try {
       const getProgID = req.params.id;
@@ -73,4 +72,4 @@ const deleteProg = async (req, res) => {
     }
 }
 
-module.exports = { getEachProg, getAllProg, deleteProg };
+module.exports = { getEachProg, getAllProg, deleteProg, getPagination, getPagingData };
