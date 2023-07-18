@@ -1,15 +1,16 @@
 import { logout } from "../../services/auth/authServices";
 import { useMutation } from "@tanstack/react-query"
-import { logOut, updateDetails } from "../../state(kiv)";
+import { logOut } from "../../state(kiv)";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 
 const useLogout = () => {
     const dispatch = useDispatch();
-    const navigate = useNavigate();
     const id = useSelector((state) => state.user.userBasicDetails.user_id)
-    return useMutation(() => logout(id), {
+    const account_type = useSelector((state) => state.user.userBasicDetails.account_type)
+    const backend_role = account_type === "organiser" ? "organiser" : "users" 
+    return useMutation(() => logout(id, backend_role), {
         onSuccess : (data) => {
             dispatch(logOut())
             console.log(data)
