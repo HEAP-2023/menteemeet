@@ -75,7 +75,6 @@ const generateAccessToken = (account) => {
     { json_tokenID: jwtID }, 
     { where: { account_id: account.account_id }} )
 
-
   return tokenSigned;
 }
 

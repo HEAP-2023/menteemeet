@@ -16,11 +16,12 @@ const s3 = new AWS.S3();
 const uploadToS3 = (file, programme_id) => {
   // const fileName = `${uuidv4()}_${file.originalname}`;
   const fileName = file.originalname;
+  const filePath = `programmes/${programme_id}/display_image/${fileName}`;
   const fileBuffer = fs.readFileSync(file.path);
 
   const uploadParams = {
     Bucket: 'menteemeet',
-    Key: `programmes/${programme_id}/display_image/${fileName}`,
+    Key: filePath,
     Body: fileBuffer,
   };
   
@@ -39,18 +40,18 @@ const uploadToS3 = (file, programme_id) => {
         }
         console.log('File deleted:', file.path);
       });
-      return resolve({ fileName, fileUrl });
+      return resolve({ filePath, fileUrl });
     });
   })
 };
 
 // Get a file from S3
 const getFileFromS3 = (req, res) => {
-  const fileName = req.params.fileName;
+  const fileName = req.params.filePath;
 
   const downloadParams = {
-    Bucket: 'your-bucket-name',
-    Key: fileName,
+    Bucket: 'menteemeet',
+    Key: filePath,
   };
 
   s3.getObject(downloadParams, (err, data) => {

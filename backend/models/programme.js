@@ -26,6 +26,14 @@ const Programme = sequelize.define(
             type: DataTypes.DATEONLY,
             allowNull: true
         },
+        mentorCapacity: {
+            type: DataTypes.INTEGER,
+            allowNull: true
+        },
+        menteeCapacity: {
+            type: DataTypes.INTEGER,
+            allowNull: true
+        },
         category: {
             type: DataTypes.STRING(30),
             allowNull: true,
