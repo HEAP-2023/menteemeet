@@ -64,10 +64,10 @@ const acctInfo = {
     acctId : 1,
     name : "NEO SHYH RUEY",
     email : "srneo.2022@scis.smu.edu.sg",
-    username: "shyhruey",
     password: "hello123",
     contactNumber: "81234567",
     telegramUsername: "@shyhruey",
+    description: 'description'
 }
 
 const programmes_enrolled = [

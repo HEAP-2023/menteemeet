@@ -19,7 +19,7 @@ const Step2 = ({matchingCriterias}) => {
 
             <Box display="flex" flexDirection="column" width="100%" gap="20px" p="20px">
                 <label>Matching Criteria</label>
-                <ErrorMessage errors={errors} name="matchingCriteria" 
+                <ErrorMessage errors={errors} name="matching_criteria" 
                 render={({message}) => 
                 <Typography sx={{color: "#ff0000"}}>
                     {message}
@@ -29,7 +29,7 @@ const Step2 = ({matchingCriterias}) => {
             <FormControl >
                 <FormGroup  >
                     <Controller
-                    name="matchingCriteria"
+                    name="matching_criteria"
                     control={control}
                     render={({field}) => {
 

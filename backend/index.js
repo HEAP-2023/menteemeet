@@ -10,8 +10,11 @@ const PORT = config.PORT;
 const API_VER = config.API_VER;
 
 app.use(cors());
-//Parse JSON data
+//For parsing application/json data
 app.use(express.json());
+
+//For parsing application/x-www-form-urlencoded data
+app.use(express.urlencoded({ extended: true }));
 
 //Import sequelize
 const sequelize = require('./config/database');

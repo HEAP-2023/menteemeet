@@ -8,17 +8,16 @@ import MentorGroupingSection from "./createForm/MentorGroupingSection"
 import WeekSelectionCalendar from "./createForm/WeekSelectionCalendar"
 
 const PreviewForm = ({open, setPreview, getValues}) => {
-    const programmeName = getValues("programmeName")
+    const name = getValues("name")
     const programmeDesc = getValues("description")
 
     const programmeStart = getValues("programmeStart")
     const programmeEnd = getValues("programmeEnd")
     const applicationDeadline = getValues("deadline")
-    const frequency = getValues("frequency")
 
-    const matchingCriteria = getValues("matchingCriteria")
+    const matchingCriteria = getValues("matching_criteria")
     const skills = getValues("skills")
-    const interestField = getValues("interestField")
+    const category = getValues("category")
 
     return (
     <Modal 
@@ -32,7 +31,7 @@ const PreviewForm = ({open, setPreview, getValues}) => {
         <Box bgcolor="#ffffff" width="45%" height="90%" overflow="scroll" p="20px">
             {/* about the programme */}
             <Box>
-                <PageHeader text={programmeName} margin="20px 0"/>
+                <PageHeader text={name} margin="20px 0"/>
 
                 <SectionHeader text="About the Programme: " margin="20px 0 0 0"/>
                 <Divider/>
@@ -43,7 +42,7 @@ const PreviewForm = ({open, setPreview, getValues}) => {
                 <SectionHeader text="Programme Details: " margin="20px 0 0 0"/>
                 <Divider/>
                 <Box>
-                    <Typography>{programmeName} is conducted from {programmeStart} to {programmeEnd} {frequency !== "na" && `and it will be conducted on a ${frequency} basis`}</Typography>
+                    <Typography>{name} is conducted from {programmeStart} to {programmeEnd} </Typography>
                     <Typography>Application deadline: {applicationDeadline}</Typography>
                 </Box>
             </Box>
@@ -65,7 +64,6 @@ const PreviewForm = ({open, setPreview, getValues}) => {
                 <Divider/>
                 {matchingCriteria.includes("availability") &&
                     <Stack>
-                        <Typography>calendar select kiv</Typography>
                         <WeekSelectionCalendar/>
                     </Stack>
                 }
@@ -86,7 +84,7 @@ const PreviewForm = ({open, setPreview, getValues}) => {
                 {matchingCriteria.includes("interest") && 
                 <Stack>
                     <Typography fontWeight="700">Interest</Typography>
-                    <Typography>Select the top 3 areas you are interested in relevant to {interestField}</Typography>
+                    <Typography>Select the top 3 areas you are interested in {category}</Typography>
 
                     <Box display="flex" gap="20px">
                     <TextField fullWidth

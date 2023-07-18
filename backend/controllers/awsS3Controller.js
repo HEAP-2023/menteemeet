@@ -1,7 +1,7 @@
 const AWS = require('aws-sdk');
-const multer = require('multer');
 const { v4: uuidv4 } = require('uuid');
 const config = require('../utils/config');
+const fs = require('fs');
 
 // Configure the AWS SDK
 AWS.config.update({
@@ -11,28 +11,37 @@ AWS.config.update({
 });
 
 const s3 = new AWS.S3();
-const upload = multer({ dest: 'temp/' });
 
 // Upload a file to S3
-const uploadToS3 = (req, res) => {
-  const file = req.file;
-  const fileName = `${uuidv4()}_${file.originalname}`;
+const uploadToS3 = (file, programme_id) => {
+  // const fileName = `${uuidv4()}_${file.originalname}`;
+  const fileName = file.originalname;
+  const fileBuffer = fs.readFileSync(file.path);
 
   const uploadParams = {
-    Bucket: 'your-bucket-name',
-    Key: fileName,
-    Body: file.buffer,
+    Bucket: 'menteemeet',
+    Key: `programmes/${programme_id}/display_image/${fileName}`,
+    Body: fileBuffer,
   };
-
-  s3.upload(uploadParams, (err, data) => {
-    if (err) {
-      console.error(err);
-      return res.status(500).json({ error: 'Failed to upload file to S3' });
-    }
-
-    const fileUrl = data.Location;
-    return res.status(200).json({ fileName, fileUrl });
-  });
+  
+  return new Promise((resolve, reject) => {
+    s3.upload(uploadParams, (err, data) => {
+      if (err) {
+        console.error(err);
+        return reject(false);
+      }
+  
+      const fileUrl = data.Location;
+      // Delete temp uploaded file
+      fs.unlink(file.path, (err) => {
+        if (err) {
+          console.error(err);
+        }
+        console.log('File deleted:', file.path);
+      });
+      return resolve({ fileName, fileUrl });
+    });
+  })
 };
 
 // Get a file from S3

@@ -14,10 +14,6 @@ const User = sequelize.define(
             type: DataTypes.STRING(),
             allowNull: true
         },
-        json_tokenID: {
-            type:DataTypes.STRING(),
-            allowNULL: true
-        }
     },
     {
       timestamps: false,

@@ -11,7 +11,6 @@ const { v4: uuidv4 } = require('uuid');
 // Generate JWT ID 
 function generateJwtId() {
   const jti = Buffer.from(uuidv4().replace(/-/g, ''), 'hex').toString('base64').replace(/=+$/, '');
-
   return jti;
 }
 
@@ -19,11 +18,15 @@ const ACCESS_TOKEN_SECRET = config.ACCESS_TOKEN_SECRET;
 const EXPIRY = config.EXPIRY;
 
 const register = async (req, res) => {
-  const { name, email, password, account_type } = req.body;
+  const { name, email, password, confirmPassword, account_type } = req.body;
   try {
     // WHERE Email : has "email"
     if (await Account.findOne({ where: { email: email } })) {
       return res.status(400).json({ message: "Email address has already been taken!" });
+    }
+
+    if (password !== confirmPassword) {
+      return res.status(400).json({ message: "Passwords dont match!"});
     }
 
     //create salt
@@ -36,19 +39,21 @@ const register = async (req, res) => {
       email: email,
       password: hashedPassword,
       account_type: account_type
-    }, { raw: true })
+    })
+
+    const accessToken = generateAccessToken(newAccount.dataValues);
 
     if (account_type === 'user') {
       const newUser = await User.create({
         account_id: newAccount.account_id,
-      }, { raw: true })
-      return res.status(201).json({ ...newAccount, user_id: newUser.user_id });
+      })
+      return res.status(201).json({ ...newAccount.dataValues, user_id: newUser.user_id, accessToken });
 
     } else if (account_type === 'organiser') {
       const newOrganiser = await Organiser.create({
         account_id: newAccount.dataValues.account_id,
-      }, { raw: true })
-      return res.status(201).json({ ...newAccount, organiser_id: newOrganiser.organiser_id });
+      })
+      return res.status(201).json({ ...newAccount.dataValues, organiser_id: newOrganiser.organiser_id , accessToken });
     }
 
   } catch (err) {
@@ -57,18 +62,19 @@ const register = async (req, res) => {
   }
 }
 
-const generateAccessToken = (user) => {
+const generateAccessToken = (account) => {
 
   const jwtID = generateJwtId();
 
   // Remove the encoded password property
-  delete user.password;
-  const tokenSigned = jwt.sign(user, ACCESS_TOKEN_SECRET, { jwtid: jwtID, expiresIn: EXPIRY });
+  delete account.password;
+  const tokenSigned = jwt.sign(account, ACCESS_TOKEN_SECRET, { jwtid: jwtID, expiresIn: EXPIRY });
 
   //store into DB
-  User.update(
-    {   json_tokenID: jwtID }, 
-    {   where: { user_id: user.account_id }} )
+  Account.update(
+    { json_tokenID: jwtID }, 
+    { where: { account_id: account.account_id }} )
+
 
   return tokenSigned;
 }
@@ -80,21 +86,30 @@ const login = async (req, res) => {
 
   try {
     // if incorrect, DB col : form col
-    const user = await Account.findOne({ where: { email: email }, raw: true });
+    const account = await Account.findOne({ where: { email: email }, raw: true });
 
-    if (!user) {
+    if (!account) {
       return res.status(401).json({ message: "Your email/password is incorrect." });
     }
+
     // email valid -> Compare password with bcrypt
-    if (!(await bcrypt.compare(password, user.password))) {
+    if (!(await bcrypt.compare(password, account.password))) {
       return res.status(401).json({ message: "Your email/password is incorrect." });
     }
 
-    const accessToken = generateAccessToken(user);
+    const accessToken = generateAccessToken(account);
 
-    return res.status(200).json({
-      message: "Successfully logged in!", accessToken: accessToken, user
-    }); 
+    if (account.account_type === 'user'){
+      const user = await User.findOne({ where: { account_id: account.account_id }, raw: true });
+      return res.status(200).json({
+        message: "Successfully logged in!", accessToken, account, user
+      });
+    } else {
+      const organiser = await Organiser.findOne({ where: { account_id: account.account_id }});
+      return res.status(200).json({
+        message: "Successfully logged in!", accessToken, account, organiser
+      });
+    }
 
   } catch (err) {
     console.log(err);
@@ -102,4 +117,11 @@ const login = async (req, res) => {
   }
 }
 
-module.exports = { register, login };
+function resetJWT(getAccID) {
+  //to set JTI empty.
+    Account.update(
+    {   json_tokenID: "placeholder" }, 
+    {   where: { account_id : getAccID }} )
+}
+
+module.exports = { register, login, generateAccessToken, resetJWT };
