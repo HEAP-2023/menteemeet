@@ -115,7 +115,7 @@ const getAllProgByUserID = async (req, res) => {
     const getUserID = req.body.user_id;
     const getUserRole = req.body.role;
 
-    //got alot Array
+    //Returns array.
     const getUserProgObj = await UserProgramme.findAll({ where: { user_id : getUserID, role: getUserRole },
       raw: true });
       
@@ -131,12 +131,10 @@ const getAllProgByUserID = async (req, res) => {
       .then(data => {
         const response = getPagingData(data, (Number(page) + 1), limit);
 
-        console.log(response);
-
         if (response.currentPage > response.totalPages) {
           return res.status(400).json({message: "Nothing to retrieve. Exceeded page request", response });
         }
-      return res.status(200).json({message: "All programmes have been retrieved for User: " + getUserID + ".", response }) 
+      return res.status(200).json({message: "All programmes have been retrieved for User No: " + getUserID + ".", response }) 
       });
       
   } catch (err) {
