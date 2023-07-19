@@ -24,13 +24,13 @@ const authenticateToken = async (req, res, next) => {
 
     if (token == null) return res.status(400).json({ error: "No JWT provided!" });
 
-    jwt.verify(token, ACCESS_TOKEN_SECRET, (err, user) => {
+    jwt.verify(token, ACCESS_TOKEN_SECRET, (err, account) => {
 
         if (getPayload.jti !== getAcc.json_tokenID || err) {
             return res.status(403).json({ error: "Invalid JWT!" });
         }
     
-        req.user = user;
+        req.account = account;
         next();
     })
     // Bearer TOKEN 

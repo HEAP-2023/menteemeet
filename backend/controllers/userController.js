@@ -18,7 +18,6 @@ const bcrypt = require("bcrypt");
 
 const logoutUser = async (req, res) => {
   try {
-
     const getUserID = req.params.id;
     const getUserObj = await User.findOne({ where: { user_id : getUserID }, raw: true });
 
@@ -56,7 +55,6 @@ const updateUser = async (req, res) => {
         const email = req.body.email;
         const name = req.body.name;
         const contact = req.body.contact_no;
-
         const teleUsername = req.body.telegram_username;
         
         const getUserID = req.params.id;
@@ -68,26 +66,11 @@ const updateUser = async (req, res) => {
 
         //Update function
         await Account.update(
-          { email: email, name: name, contact_no: contact }, 
+          { email: email, name: name, contact_no: contact },
           { where: { account_id: getUserObj.account_id }} )
-        
-        //Update password
-        const updatedPass = req.body.password;
-
-        if (updatedPass != "" && updatedPass != null) {
-          //Hash
-          const salt = await bcrypt.genSalt();
-          const hashedPass = await bcrypt.hash(updatedPass, salt);
-
-          await Account.update(
-            {   password: hashedPass }, 
-            {   where: { account_id: getUserObj.account_id }} )
-
-          return res.status(200).json({message: "Successfully Updated! (PW)" });
-        } 
 
         const getAccessToken = updateJWT(getUserObj);
-        return res.status(200).json({message: "Successfully Updated Including JWT!", getAccessToken });
+        return res.status(200).json({ message: "Successfully updated!", getAccessToken });
         
     } catch (err) {
         console.log(err);

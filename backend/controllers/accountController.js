@@ -1,6 +1,5 @@
 const Account = require("../models/account");
 const User = require('../models/user');
-
 const Organiser = require('../models/organiser');
 const bcrypt = require("bcrypt");
 const config = require('../utils/config');
@@ -8,14 +7,37 @@ const jwt = require("jsonwebtoken");
 
 const { v4: uuidv4 } = require('uuid');
 
+const ACCESS_TOKEN_SECRET = config.ACCESS_TOKEN_SECRET;
+const EXPIRY = config.EXPIRY;
+
 // Generate JWT ID 
 function generateJwtId() {
   const jti = Buffer.from(uuidv4().replace(/-/g, ''), 'hex').toString('base64').replace(/=+$/, '');
   return jti;
 }
 
-const ACCESS_TOKEN_SECRET = config.ACCESS_TOKEN_SECRET;
-const EXPIRY = config.EXPIRY;
+const generateAccessToken = (account) => {
+
+  const jwtID = generateJwtId();
+
+  // Remove the encoded password property
+  delete account.password;
+  const tokenSigned = jwt.sign(account, ACCESS_TOKEN_SECRET, { jwtid: jwtID, expiresIn: EXPIRY });
+
+  //store into DB
+  Account.update(
+    { json_tokenID: jwtID }, 
+    { where: { account_id: account.account_id }} )
+
+  return tokenSigned;
+}
+
+function resetJWT(getAccID) {
+  //to set JTI empty.
+    Account.update(
+    {   json_tokenID: "placeholder" }, 
+    {   where: { account_id : getAccID }} )
+}
 
 const register = async (req, res) => {
   const { name, email, password, confirmPassword, account_type } = req.body;
@@ -62,22 +84,6 @@ const register = async (req, res) => {
   }
 }
 
-const generateAccessToken = (account) => {
-
-  const jwtID = generateJwtId();
-
-  // Remove the encoded password property
-  delete account.password;
-  const tokenSigned = jwt.sign(account, ACCESS_TOKEN_SECRET, { jwtid: jwtID, expiresIn: EXPIRY });
-
-  //store into DB
-  Account.update(
-    { json_tokenID: jwtID }, 
-    { where: { account_id: account.account_id }} )
-
-  return tokenSigned;
-}
-
 const login = async (req, res) => {
 
   //Authenticate user
@@ -116,11 +122,49 @@ const login = async (req, res) => {
   }
 }
 
-function resetJWT(getAccID) {
-  //to set JTI empty.
-    Account.update(
-    {   json_tokenID: "placeholder" }, 
-    {   where: { account_id : getAccID }} )
+const changePassword = async (req, res) => {
+  const acct = req.account;
+  const { currentPW, newPW, confirmNewPW } = req.body;
+
+  if (!newPW || newPW == "") {
+    return res.status(400).json({ message: "New password cannot be empty!" })
+  }
+
+  const account = await Account.findOne({ where: { account_id: acct.account_id }, raw: true });
+
+  // Check current password
+  if (!(await bcrypt.compare(currentPW, account.password))) {
+    return res.status(401).json({ message: "Current password is incorrect." });
+  }
+
+  if (newPW !== confirmNewPW) {
+    return res.status(400).json({ message: "Passwords don't match!" });
+  }
+
+  try {
+    const salt = await bcrypt.genSalt();
+    const hashedPass = await bcrypt.hash(newPW, salt);
+
+    await Account.update(
+      { password: hashedPass }, 
+      { where: { account_id: account.account_id }})
+
+    return res.status(200).json({ message: "Password chaged successfully!" });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ message: "Failed to change password!" });
+  }
 }
 
-module.exports = { register, login, generateAccessToken, resetJWT };
+const logout = async (req, res) => {
+  const account = req.account
+  try {
+    resetJWT(account.account_id);
+    return res.status(200).json({ message: "Successfully logged out!" });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ error: err });
+  }
+}
+
+module.exports = { register, login, changePassword, logout, generateAccessToken, resetJWT };
