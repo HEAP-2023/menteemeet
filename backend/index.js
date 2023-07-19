@@ -57,4 +57,4 @@ sequelize
   });
 
 initAssociations();
-// seedData();
+seedData();
