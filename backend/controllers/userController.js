@@ -5,6 +5,10 @@ const Skill = require('../models/skill');
 const Interest = require('../models/interest');
 const UserInterest = require('../models/userInterest');
 
+const UserProgramme = require('../models/userProgramme');
+const Programme = require('../models/programme');
+const { getPagination, getPagingData } = require('./programmeController');
+
 const { generateAccessToken, resetJWT } = require('./accountController');
 
 const bcrypt = require("bcrypt");
@@ -24,6 +28,7 @@ const logoutUser = async (req, res) => {
     return res.status(500).json({ error: err });
   }
 }
+
 function updateJWT(getUserObj) {
   try {
     const accessToken = generateAccessToken(getUserObj);
@@ -53,7 +58,7 @@ const updateUser = async (req, res) => {
         
         const getUserID = req.params.id;
         const getUserObj = await User.findOne({ where: { user_id : getUserID }, raw: true });
-        console.log(`hey3, ${req.body.email}`)
+
         await User.update(
           { telegram_username: teleUsername },
           { where: { user_id : getUserID }} );
@@ -98,6 +103,41 @@ const getUser = async (req, res) => {
       console.log(err);
       return res.status(500).json({ error: err });
     }
+}
+
+const getAllProgByUserID = async (req, res) => {
+
+  const { page, size } = req.query;
+  const { limit, offset } = getPagination(page, size);
+
+  try {
+    const getUserID = req.body.user_id;
+    const getUserRole = req.body.role;
+
+    const getUserProgObj = await UserProgramme.findOne({ where: { user_id : getUserID, role: getUserRole },
+      raw: true });
+
+    const condition = { programme_id: getUserProgObj.programme_id };
+
+    console.log(limit, offset);
+    console.log(getUserProgObj.programme_id)
+
+    await Programme.findAndCountAll({ attributes: ['programme_id', 'name', 'description'
+      , 'category', 'display_image'], where: condition, limit, offset, raw: true })
+      .then(data => {
+        const response = getPagingData(data, (Number(page) + 1), limit);
+
+        console.log(response);
+
+        if (response.currentPage > response.totalPages) {
+          return res.status(400).json({message: "Nothing to retrieve. Exceeded page request", response });
+        }
+      return res.status(200).json({message: "All programmes have been retrieved for User: " + getUserID + ".", response }) 
+      });
+      
+  } catch (err) {
+    return res.status(500).json({ error: err });
+  }
 }
 
 const getSkill = async (req, res) => {
@@ -209,4 +249,4 @@ const getInterest = async (req, res) => {
   }
 }
 
-module.exports = { logoutUser, updateUser, getUser, getSkill, addSkill, addInterest, getInterest };
+module.exports = { logoutUser, updateUser, getUser, getAllProgByUserID, getSkill, addSkill, addInterest, getInterest };

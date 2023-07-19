@@ -113,6 +113,8 @@ const getOrg = async (req, res) => {
 }
 
 const addProg = async (req, res) => {
+    console.log("new sentback")
+    console.log(req.body);
   const organiser_id = req.params.id;
   const { name, description, category, programmeStart, programmeEnd, menteeCapacity, mentorCapacity, deadline, matching_criteria, skills } = req.body;
 

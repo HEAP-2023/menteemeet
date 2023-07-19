@@ -33,6 +33,8 @@ app.use(API_VER + '/users', require('./routes/userRoutes'));
 app.use(API_VER + '/organisers', require('./routes/organiserRoutes'));
 //Programme routes
 app.use(API_VER + '/programmes', require('./routes/programmeRoutes'));
+// Organiser routes
+app.use(API_VER + '/organiser', require('./routes/organiserRoutes'));
 
 sequelize
   .authenticate()

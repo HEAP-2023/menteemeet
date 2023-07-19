@@ -71,4 +71,4 @@ const deleteProg = async (req, res) => {
     }
 }
 
-module.exports = { getEachProg, getAllProg, deleteProg };
+module.exports = { getEachProg, getAllProg, deleteProg, getPagination, getPagingData };

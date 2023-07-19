@@ -1,4 +1,4 @@
-import { Box } from "@mui/material";
+import { Box, Button } from "@mui/material";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import { TabPanel, TabContext } from '@mui/lab';
@@ -13,6 +13,7 @@ import Feedback from "../../components/programme/tabs/Feedback";
 import { useSelector } from "react-redux";
 import Groupings from "../../components/programme/tabs/Groupings";
 import Statistics from "../../components/programme/tabs/Statistics";
+import DeleteProgrammeModal from "../../components/programme/DeleteProgrammeModal";
 
 
 
@@ -26,12 +27,14 @@ const Programme = ({programme_details}) => {
     const tabChange = (event, newValue) => {
         changeTab(newValue);
     } 
+    const [deleteModal, setDeleteModal] = useState(false)
 
     const userType = useSelector((state) => state.user.userType);
     const lastName = useSelector((state) => state.user.userBasicDetails.name)
 
     return (
         <Box>
+            <DeleteProgrammeModal id={id} open={deleteModal} setDeleteModal={setDeleteModal} programme_name={programme.name}/>
 
             {/* header */}
             <Box display="flex" justifyContent="space-between">
@@ -39,7 +42,7 @@ const Programme = ({programme_details}) => {
                 <PageHeader text={`${programme.name} Mentorship Programme`}/>
             </Box>
             <TabContext value={tab}>
-            <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+            <Box sx={{ borderBottom: 1, borderColor: 'divider'}} display="flex" justifyContent="space-between">
                 <Tabs value={tab} onChange={tabChange} 
                 selectionFollowsFocus
                 textColor="inherit"
@@ -53,6 +56,11 @@ const Programme = ({programme_details}) => {
                         <Tab label="Statistics" value="statistics"/>
                     }
                 </Tabs>
+                {userType === "organiser" &&
+                    <Button variant="contained" color="warning" sx={{mr :"20px"}}
+                    onClick={() => setDeleteModal(true)}
+                    >Delete Programme</Button>
+                }
             </Box>
                 <TabPanel value="main" index={0}>   
                     <MainPage />
