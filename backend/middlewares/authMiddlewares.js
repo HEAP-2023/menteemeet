@@ -22,6 +22,10 @@ const authenticateToken = async (req, res, next) => {
     const getAcc = await Account.findOne(
         {   where: { account_id: getPayload.account_id }, raw: true} )
 
+    if (!getAcc) {
+      return res.status(400).json({ message: "Invalid JWT!" });
+    }
+
     if (token == null) return res.status(400).json({ error: "No JWT provided!" });
 
     jwt.verify(token, ACCESS_TOKEN_SECRET, (err, account) => {

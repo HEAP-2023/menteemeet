@@ -26,7 +26,7 @@ const generateAccessToken = (account) => {
 
   //store into DB
   Account.update(
-    { json_tokenID: jwtID }, 
+    { json_tokenID: jwtID },
     { where: { account_id: account.account_id }} )
 
   return tokenSigned;
@@ -125,6 +125,10 @@ const login = async (req, res) => {
 const changePassword = async (req, res) => {
   const acct = req.account;
   const { currentPW, newPW, confirmNewPW } = req.body;
+
+  if (account.account_id !== acct.account_id) {
+    return res.status(403).json({ message: "Not authorised!" });
+  }
 
   if (!newPW || newPW == "") {
     return res.status(400).json({ message: "New password cannot be empty!" })
