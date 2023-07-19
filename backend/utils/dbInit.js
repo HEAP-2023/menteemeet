@@ -15,6 +15,7 @@ const seedData = async () => {
   try {
     data.password = await generateHashedPassword('Tester123');
     const newAccount = await Account.create(data, { raw: true });
+    
     const user = { account_id: newAccount.account_id };
     const newUser = await User.create(user);
 

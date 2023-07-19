@@ -1,8 +1,8 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("../config/database");
 
-const MentorSession = sequelize.define(
-    "MentorSession",
+const Session = sequelize.define(
+    "Session",
     {
         session_id: {
             type: DataTypes.INTEGER,
@@ -29,8 +29,8 @@ const MentorSession = sequelize.define(
     },
     {
       timestamps: false,
-      tableName: 'mentor_session'
+      tableName: 'session'
     }
 );
 
-module.exports = MentorSession;
+module.exports = Session;
