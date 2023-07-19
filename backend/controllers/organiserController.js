@@ -114,7 +114,7 @@ const getOrg = async (req, res) => {
 
 const addProg = async (req, res) => {
   const organiser_id = req.params.id;
-  const { name, description, category, programmeStart, programmeEnd, deadline, matching_criteria, skills } = req.body;
+  const { name, description, category, programmeStart, programmeEnd, menteeCapacity, mentorCapacity, deadline, matching_criteria, skills } = req.body;
 
   try {
     const newProg = await Programme.create({
@@ -123,6 +123,8 @@ const addProg = async (req, res) => {
       category,
       programmeStart,
       programmeEnd,
+      menteeCapacity,
+      mentorCapacity,
       deadline,
       matching_criteria,
       skills,

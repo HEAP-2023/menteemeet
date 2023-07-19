@@ -1,6 +1,4 @@
 const Programme = require("../models/programme");
-const awsS3Controller = require('./awsS3Controller');
-
 
 const getEachProg = async (req, res) => {
   try {
