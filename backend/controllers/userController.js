@@ -7,6 +7,7 @@ const UserInterest = require('../models/userInterest');
 
 const UserProgramme = require('../models/userProgramme');
 const Programme = require('../models/programme');
+const { Op } = require("sequelize");
 const { getPagination, getPagingData } = require('./programmeController');
 
 const { generateAccessToken, resetJWT } = require('./accountController');
@@ -131,16 +132,19 @@ const getAllProgByUserID = async (req, res) => {
     const getUserID = req.body.user_id;
     const getUserRole = req.body.role;
 
-    const getUserProgObj = await UserProgramme.findOne({ where: { user_id : getUserID, role: getUserRole },
+    //got alot Array
+    const getUserProgObj = await UserProgramme.findAll({ where: { user_id : getUserID, role: getUserRole },
       raw: true });
+      
+    const arrIDs = [];
+    getUserProgObj.forEach(obj => {
+      arrIDs.push(obj.programme_id);
+    })
 
-    const condition = { programme_id: getUserProgObj.programme_id };
-
-    console.log(limit, offset);
-    console.log(getUserProgObj.programme_id)
+    const conditions = { [Op.or]: [ { programme_id: arrIDs } ]};
 
     await Programme.findAndCountAll({ attributes: ['programme_id', 'name', 'description'
-      , 'category', 'display_image'], where: condition, limit, offset, raw: true })
+      , 'category', 'display_image'], where: conditions, limit, offset, raw: true })
       .then(data => {
         const response = getPagingData(data, (Number(page) + 1), limit);
 
