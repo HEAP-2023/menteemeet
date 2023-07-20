@@ -4,6 +4,7 @@ const Programme = require('../models/programme');
 const awsS3Controller = require('./awsS3Controller');
 const bcrypt = require("bcrypt");
 const { generateAccessToken } = require('./accountController');
+const { getPagination, getPagingData } = require('./programmeController');
 
 function updateJWT(getOrgObj) {
   try {
