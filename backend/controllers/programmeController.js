@@ -1,47 +1,68 @@
 const Programme = require("../models/programme");
-const awsS3Controller = require('./awsS3Controller');
 
-// WIP
-const addProg = async (req, res) => {
-  const { name, description, category, programmeStart, programmeEnd, deadline, matching_criteria, skills } = req.body;
+const getEachProg = async (req, res) => {
+  try {
+      const getProgID = req.params.id;
+      const getProgObj = await Programme.findOne({ where: { programme_id: getProgID }, raw: true });
+
+      return res.status(200).json({ message: "Programme has been retrieved.", getProgObj})
+
+  } catch (err) {
+      return res.status(500).json({ error: err, message : "reached back" });
+  }
+}
+
+// For all Programs - Pagination (Helper Method 1)
+const getPagination = (page, size) => {
+  const limit = size ? +size : 5;
+  const offset = page ? (Number(page) - 1) * limit : 0;
+
+  return { limit, offset };
+};
+//(Helper Method 2)
+const getPagingData = (data, page, limit) => {
+  const { count: totalItems, rows: programmes } = data;
+  const currentPage = page ? +page : 0;
+
+  var adjustedCurrentPage = 1;
+  if (currentPage > 0) {
+    adjustedCurrentPage = currentPage - 1; // Subtract 1 to match the specified URL page number
+  }
+  const totalPages = Math.ceil(totalItems / limit);
+
+  return { totalItems, programmes, totalPages, currentPage: adjustedCurrentPage };
+};
+
+const getAllProg = (req, res) => {
+  //how to use this, put in the link --> Ex. http://localhost:5000/api/v1/programmes/?page=1&size=6
+  const { page, size } = req.query;
+  const { limit, offset } = getPagination(page, size);
 
   try {
-    const newProg = await Programme.create({
-      name, 
-      description, 
-      category,
-      programmeStart,
-      programmeEnd,
-      deadline,
-      matching_criteria,
-      skills
-    }, { raw: true })
+    Programme.findAndCountAll({ attributes: ['programme_id', 'name', 'description'
+      , 'category', 'display_image'], limit, offset, raw: true })
 
-    const uploadFile = await awsS3Controller.uploadToS3(req.file, newProg.programme_id);
+      .then(data => {
+        const response = getPagingData(data, (Number(page) + 1), limit);
 
-    if (uploadFile) {
-      const prog = await Programme.update({});
-      console.log(uploadFile);
-      return res.status(200).json({ message: 'Successfully created programme!' });
+        if (response.currentPage > response.totalPages) {
+          return res.status(400).json({message: "Nothing to retrieve. Exceeded page request", response });
+        }
+
+        res.status(200).json({message: "All programmes have been retrieved.", response });
+      })
+
+    } catch (err) {
+      return res.status(500).json({ error: err, message : "reached back" });
     }
-
-    // //create forum
-      // const newForum = await Forum.create({
-  
-    // })
-  } catch(err) {
-    console.error(err);
-    res.status(500).json({ error: err });
-  }
 }
 
 const deleteProg = async (req, res) => {
     try {
-        const deleteProgID = req.params.id;
-        // console.log(deleteID);
-        if (await Programme.destroy(
-            { where: { programme_id: deleteProgID }} )) {
-        };
+        const getProgID = req.params.id;
+    
+        await Programme.destroy(
+            { where: { programme_id: getProgID }} );
 
         return res.status(200).json({ message: "Programme has been successfully deleted."})
 
@@ -50,4 +71,4 @@ const deleteProg = async (req, res) => {
     }
 }
 
-module.exports = { addProg, deleteProg };
+module.exports = { getEachProg, getAllProg, deleteProg, getPagination, getPagingData };

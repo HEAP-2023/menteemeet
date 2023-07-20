@@ -15,7 +15,7 @@ import { useFormContext } from "react-hook-form";
 const Step1 = () => {
     const {control, watch, formState : {errors}} = useFormContext();
     const imagePreview = useRef();
-    const imgUploaded = watch("media", false)
+    const imgUploaded = watch("display_image", false)
     return (
     <Box width="100%" p="40px" m="20px 0" display="flex" flexDirection="column" bgcolor="#F1F1F1" >
         <SectionHeader margin="0" text="Step 1 - The Basics"/>
@@ -24,18 +24,18 @@ const Step1 = () => {
             <Box display="flex" flexDirection="column" width="100%" gap="20px" p="20px">
                 <Box display="flex" width="100%">
                         <Controller
-                        name="programmeName"
+                        name="name"
                         control={control}
                         render={({field}) => 
                     <StandardTextField errors={errors} field={field} 
-                    name="programmeName" label="Programme Name" />
+                    name="name" label="Programme Name" />
                     }
                         />
                 </Box>
 
                 <Box display="flex" width="100%" flexDirection="column">
                 <Typography fontWeight="bold" mb="10px">Duration of Programme</Typography>
-                    <Box width="100%" >
+                    <Box width="100%" display="flex" alignItems="center" justifyContent="space-between">
                         <label>Start</label>
                         <Controller
                         name="programmeStart"
@@ -49,7 +49,7 @@ const Step1 = () => {
                             disablePast
                             format="DD-MM-YYYY"
                             onChange={(e) => {
-                                const formattedDate = dayjs(e.$d).format("DD/MM/YYYY")
+                                const formattedDate = dayjs(e.$d).format("YYYY-MM-DD")
                                 field.onChange(formattedDate)
                             }}
                             slotProps={{
@@ -58,7 +58,7 @@ const Step1 = () => {
                                     helperText: errors["programmeStart"]?.["message"],
                                 },
                               }}
-                            sx={{width:"30%", p:"20px"}}
+                            sx={{width:"45%"}}
                             />
                     </LocalizationProvider>)
                         }
@@ -77,7 +77,7 @@ const Step1 = () => {
                                     disablePast
                                     format="DD-MM-YYYY"
                                     onChange={(e) => {
-                                        const formattedDate = dayjs(e.$d).format("DD/MM/YYYY")
+                                        const formattedDate = dayjs(e.$d).format("YYYY-MM-DD")
                                         field.onChange(formattedDate)
                                     }}
                                     slotProps={{
@@ -86,7 +86,7 @@ const Step1 = () => {
                                             helperText: errors["programmeEnd"]?.["message"],
                                         },
                                       }}
-                                    sx={{width:"30%", p:"20px"}}/>
+                                    sx={{width:"45%"}}/>
                             </LocalizationProvider>)
                         }
                     }
@@ -94,7 +94,7 @@ const Step1 = () => {
                     </Box>
                 </Box>
 
-                <Box display="flex" width="100%" flexDirection="column">
+                {/* <Box display="flex" width="100%" flexDirection="column">
                     <FormControl
                     error={errors["fixedDates"] !== undefined}
                     >
@@ -117,9 +117,9 @@ const Step1 = () => {
                                 />
                         </Box>
                     </FormControl>
-                </Box>
+                </Box> */}
 
-                <Box display="flex" width="100%" flexDirection="column">
+                {/* <Box display="flex" width="100%" flexDirection="column">
                 <FormControl
                     error={errors["frequency"] !== undefined}
                 >
@@ -145,10 +145,10 @@ const Step1 = () => {
                             />
                         </Box>
                 </FormControl>
-                </Box>
+                </Box> */}
 
                 <Box display="flex" width="100%" gap="20px">
-                    <Box width="100%" >
+                    {/* <Box width="100%" >
                         <Controller
                         name="duration"
                         control={control}
@@ -157,7 +157,7 @@ const Step1 = () => {
                         name="duration" label="Duration per session" />
                     }
                         />
-                    </Box>
+                    </Box> */}
 
                     <Box width="100%" >
                         <Controller
@@ -198,7 +198,7 @@ const Step1 = () => {
                             disablePast
                             format="DD-MM-YYYY"
                             onChange={(e) => {
-                                const formattedDate = dayjs(e.$d).format("DD/MM/YYYY")
+                                const formattedDate = dayjs(e.$d).format("YYYY-MM-DD")
                                 field.onChange(formattedDate)
                             }}
                             slotProps={{
@@ -216,17 +216,17 @@ const Step1 = () => {
                 </Box>
 
                 <Stack display="flex" width="100%" >
-                        <Controller
+                        {/* <Controller
                         name="externalLink"
                         control={control}
                         render={({field}) => 
                     <StandardTextField errors={errors} field={field} 
                     name="externalLink" label="Link to external site (N.A. if not applicable)" />
                     }
-                />
+                /> */}
 
                         <Controller
-                        name="media"
+                        name="display_image"
                         control={control}
                         render={({field}) => {
                         const {value, ...others} = field; 
@@ -236,8 +236,8 @@ const Step1 = () => {
                             <TextField {...others} type="file" 
                             inputProps={{accept : "image/*"}} 
                             InputProps={{endAdornment:<UploadFileIcon/>}} 
-                            error={errors["media"] !== undefined} 
-                            helperText={errors["media"]?.message} 
+                            error={errors["display_image"] !== undefined} 
+                            helperText={errors["display_image"]?.message} 
                             variant="outlined"
                             onChange={(e) => {
                                 const [file] = e.target.files

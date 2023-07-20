@@ -18,23 +18,24 @@ const authenticateToken = async (req, res, next) => {
     // decode jwt
     const getPayload = jwtDecode(token);
 
-    console.log(getPayload);
-
     //find a particular user for JWT Token.
     const getAcc = await Account.findOne(
         {   where: { account_id: getPayload.account_id }, raw: true} )
 
+    if (!getAcc) {
+      return res.status(400).json({ message: "Invalid JWT!" });
+    }
+
     if (token == null) return res.status(400).json({ error: "No JWT provided!" });
 
-    jwt.verify(token, ACCESS_TOKEN_SECRET, (err, user) => {
+    jwt.verify(token, ACCESS_TOKEN_SECRET, (err, account) => {
 
         if (getPayload.jti !== getAcc.json_tokenID || err) {
-            return res.status(403).json({ error: "Invalid JWT! Please RE-LOGIN if you recently changed your password" });
+            return res.status(403).json({ error: "Invalid JWT!" });
         }
     
-        req.user = user;
+        req.account = account;
         next();
-
     })
     // Bearer TOKEN 
 }

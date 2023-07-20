@@ -12,7 +12,7 @@ import { useFormContext } from "react-hook-form";
 const Step3 = () => {
     const {control, watch, formState : {errors}} = useFormContext();
 
-    const criteriaSelected = watch("matchingCriteria")
+    const criteriaSelected = watch("matching_criteria")
     const startDate = watch("programmeStart");
     const endDate = watch("programmeEnd");
     const frequency = watch("frequency");

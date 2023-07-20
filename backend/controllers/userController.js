@@ -5,26 +5,13 @@ const Skill = require('../models/skill');
 const Interest = require('../models/interest');
 const UserInterest = require('../models/userInterest');
 
-const { generateAccessToken, resetJWT } = require('./accountController');
+const UserProgramme = require('../models/userProgramme');
+const Programme = require('../models/programme');
+const { Op } = require("sequelize");
+const { getPagination, getPagingData } = require('./programmeController');
 
-const bcrypt = require("bcrypt");
-// const config = require('../utils/config');
-// const jwt = require("jsonwebtoken");
+const { generateAccessToken } = require('./accountController');
 
-const logoutUser = async (req, res) => {
-  try {
-
-    const getUserID = req.params.id;
-    const getUserObj = await User.findOne({ where: { user_id : getUserID }, raw: true });
-
-    resetJWT(getUserObj.account_id);
-
-    return res.status(200).json({ message: "You have been successfully logged out!" });
-
-  } catch (err) {
-    return res.status(500).json({ error: err });
-  }
-}
 function updateJWT(getUserObj) {
   try {
     const accessToken = generateAccessToken(getUserObj);
@@ -37,11 +24,21 @@ function updateJWT(getUserObj) {
 }
 
 const updateUser = async (req, res) => {
+    const account = req.account;
+
     try {
         //Filtering out each Object so that they == to the email.
 
         // const filteredObject = Object.fromEntries(Object.entries(storeUserObj).filter(([key, value]) => value === req.user.email));
         // const filteredJsonString = JSON.stringify(filteredObject); // Stringify the filtered object        
+        
+        const getUserID = req.params.id;
+        const getUserObj = await User.findOne({ where: { user_id : getUserID }, raw: true });
+
+        //Ensure that the current user is authorised to update details
+        if (account.account_id !== getUserObj.account_id) {
+          return res.status(403).json({ message: "Not authorised!" });
+        }
 
         if (req.body === undefined || Object.keys(req.body).length === 0) {
           return res.status(400).json({ message: "Fields are empty."});
@@ -50,38 +47,19 @@ const updateUser = async (req, res) => {
         const email = req.body.email;
         const name = req.body.name;
         const contact = req.body.contact_no;
-
         const teleUsername = req.body.telegram_username;
-        
-        const getUserID = req.params.id;
-        const getUserObj = await User.findOne({ where: { user_id : getUserID }, raw: true });
-        console.log(`hey3, ${req.body.email}`)
+
         await User.update(
           { telegram_username: teleUsername },
           { where: { user_id : getUserID }} );
 
         //Update function
         await Account.update(
-          { email: email, name: name, contact_no: contact }, 
+          { email: email, name: name, contact_no: contact },
           { where: { account_id: getUserObj.account_id }} )
-        
-        //Update password
-        const updatedPass = req.body.password;
 
-        if (updatedPass != "" && updatedPass != null) {
-          //Hash
-          const salt = await bcrypt.genSalt();
-          const hashedPass = await bcrypt.hash(updatedPass, salt);
-
-          await Account.update(
-            {   password: hashedPass }, 
-            {   where: { account_id: getUserObj.account_id }} )
-
-          return res.status(200).json({message: "Successfully Updated! (PW)" });
-        } 
-
-        const getAccessToken = updateJWT(getUserObj);
-        return res.status(200).json({message: "Successfully Updated Including JWT!", getAccessToken });
+        const accessToken = updateJWT(getUserObj);
+        return res.status(200).json({ message: "Successfully updated!", accessToken });
         
     } catch (err) {
         console.log(err);
@@ -115,6 +93,56 @@ const getUser = async (req, res) => {
       console.log(err);
       return res.status(500).json({ error: err });
     }
+}
+
+const getAllProgByUserID = async (req, res) => {
+
+  const { page, size } = req.query;
+  const { limit, offset } = getPagination(page, size);
+
+  try {
+
+    const account = req.account;
+    const getUserID = req.params.id;
+
+    const getUserObj = await User.findOne({ where: { user_id : getUserID }, raw: true });
+
+    //Ensure that the current user is authorised to update details
+    if (account.account_id !== getUserObj.account_id) {
+      return res.status(403).json({ message: "Not authorised!" });
+    }
+
+    const getUserRole = req.params.role;
+
+    //Returns array.
+    const getUserProgObj = await UserProgramme.findAll({ where: { user_id : getUserID, role: getUserRole },
+      raw: true });
+      
+    if (!getUserProgObj) {
+      return res.status(400).json({ message: "User is not enrolled in any programme!" });
+    }
+
+    const arrIDs = [];
+    getUserProgObj.forEach(obj => {
+      arrIDs.push(obj.programme_id);
+    })
+
+    const conditions = { [Op.or]: [ { programme_id: arrIDs } ]};
+
+    await Programme.findAndCountAll({ attributes: ['programme_id', 'name', 'description'
+      , 'category', 'display_image'], where: conditions, limit, offset, raw: true })
+      .then(data => {
+        const response = getPagingData(data, (Number(page) + 1), limit);
+
+        if (response.currentPage > response.totalPages) {
+          return res.status(400).json({message: "Nothing to retrieve. Exceeded page request", response });
+        }
+      return res.status(200).json({message: "All programmes have been retrieved for User No: " + getUserID + ".", response }) 
+      });
+      
+  } catch (err) {
+    return res.status(500).json({ error: err });
+  }
 }
 
 const getSkill = async (req, res) => {
@@ -226,4 +254,4 @@ const getInterest = async (req, res) => {
   }
 }
 
-module.exports = { logoutUser, updateUser, getUser, getSkill, addSkill, addInterest, getInterest };
+module.exports = { updateUser, getUser, getAllProgByUserID, getSkill, addSkill, addInterest, getInterest };
