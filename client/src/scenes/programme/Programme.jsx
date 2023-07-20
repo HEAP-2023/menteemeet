@@ -28,14 +28,14 @@ const Programme = ({programme_details}) => {
     } 
 
     const userType = useSelector((state) => state.user.userType);
-    const lastName = useSelector((state) => state.user.userDetails.lastName)
+    const userName = useSelector((state) => state.user.userBasicDetails.name)
 
     return (
         <Box>
 
             {/* header */}
             <Box display="flex" justifyContent="space-between">
-                <PageHeader text={`Welcome, ${lastName}`}/>
+                <PageHeader text={`Welcome, ${userName}`}/>
                 <PageHeader text={`${programme.name} Mentorship Programme`}/>
             </Box>
             <TabContext value={tab}>
