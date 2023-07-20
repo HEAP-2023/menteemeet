@@ -6,7 +6,6 @@ const upload = multer({ dest: 'temp/uploads' });
 
 const organiserController = require('../controllers/organiserController');
 
-//FOR UPDATING.
 //call authToken func
 const { authenticateToken } = require('../middlewares/authMiddlewares');
 

@@ -7,6 +7,7 @@ const UserInterest = require('../models/userInterest');
 
 const UserProgramme = require('../models/userProgramme');
 const Programme = require('../models/programme');
+const { Op } = require("sequelize");
 const { getPagination, getPagingData } = require('./programmeController');
 
 const { generateAccessToken, resetJWT } = require('./accountController');
@@ -100,38 +101,37 @@ const getUser = async (req, res) => {
 
 const getAllProgByUserID = async (req, res) => {
 
-  const id = req.params.id;
+  const getUserID = req.params.id;
   const { page, size } = req.query;
   const { limit, offset } = getPagination(page, size);
 
   try {
     const getUserRole = req.body.role;
 
-    const getUserProgObj = await UserProgramme.findOne({ where: { user_id : id, role: getUserRole },
+    //Returns array.
+    const getUserProgObj = await UserProgramme.findAll({ where: { user_id : getUserID, role: getUserRole },
       raw: true });
-
+      
     if (!getUserProgObj) {
       return res.status(400).json({ message: "User is not enrolled in any programme!" });
     }
 
-    console.log(getUserProgObj);
+    const arrIDs = [];
+    getUserProgObj.forEach(obj => {
+      arrIDs.push(obj.programme_id);
+    })
 
-    const condition = { programme_id: getUserProgObj.programme_id };
-
-    console.log(limit, offset);
-    console.log(getUserProgObj.programme_id)
+    const conditions = { [Op.or]: [ { programme_id: arrIDs } ]};
 
     await Programme.findAndCountAll({ attributes: ['programme_id', 'name', 'description'
-      , 'category', 'display_image'], where: condition, limit, offset, raw: true })
+      , 'category', 'display_image'], where: conditions, limit, offset, raw: true })
       .then(data => {
         const response = getPagingData(data, (Number(page) + 1), limit);
-
-        console.log(response);
 
         if (response.currentPage > response.totalPages) {
           return res.status(400).json({message: "Nothing to retrieve. Exceeded page request", response });
         }
-        return res.status(200).json({message: "All programmes have been retrieved for User: " + id + ".", response }) 
+      return res.status(200).json({message: "All programmes have been retrieved for User No: " + getUserID + ".", response }) 
       });
       
   } catch (err) {
