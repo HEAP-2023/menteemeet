@@ -127,4 +127,45 @@ const addProg = async (req, res) => {
   }
 }
 
-module.exports = { getOrg, updateOrg, addProg };
+
+const getAllProgsByOrgID = async (req, res) => {
+
+  const getOrgID = req.params.id;
+  const { page, size } = req.query;
+  const { limit, offset } = getPagination(page, size);
+
+  try {
+    //Returns array.
+    const getOrgProgObj = await Programme.findAll({ where: { organiser_id : getOrgID},
+      raw: true });
+      
+    if (!getOrgProgObj) {
+      return res.status(400).json({ message: "Organiser has not created any programmes." });
+    }
+
+    const ProgIDarr = [];
+    getOrgProgObj.forEach(obj => {
+      arrIDs.push(obj.programme_id);
+    })
+
+    const conditions = { [Op.or]: [ { programme_id: ProgIDarr } ]};
+
+    await Programme.findAndCountAll({ attributes: ['programme_id', 'name', 'description'
+      , 'category', 'display_image'], where: conditions, limit, offset, raw: true })
+      .then(data => {
+        const response = getPagingData(data, (Number(page) + 1), limit);
+
+        if (response.currentPage > response.totalPages) {
+          return res.status(400).json({message: "Nothing to retrieve. Exceeded page request", response });
+        }
+      return res.status(200).json({message: "All programmes have been retrieved for User No: " + getUserID + ".", response }) 
+      });
+      
+  } catch (err) {
+    return res.status(500).json({ error: err });
+  }
+}
+
+
+
+module.exports = { getOrg, updateOrg, addProg, getAllProgsByOrgID };
