@@ -2,19 +2,26 @@ import { Box, IconButton, TextField, Typography, Button } from "@mui/material"
 import PageHeader from "../../PageHeader"
 import { useState, useRef } from "react"
 import DisplayUser from "./DisplayUser"
+import { useFormContext, Controller } from "react-hook-form"
 
 
 const MentorPreferenceSelector = () => {
+    const {control,  setValue} = useFormContext()
+    // const
     const inputref = useRef();
     const [mentors, setMentors] = useState([])
     const addMentor = () => {
         const newMentor = inputref.current.value;
-        setMentors([...mentors, newMentor]);
+        const updated = [...mentors, newMentor];
+        setMentors(updated)
+        setValue("preferredMentors", updated)
         inputref.current.value = "";
     }
 
     const removeMentor = (name) => {
-        setMentors(mentors.filter(mentor => mentor !== name))
+        const updated = mentors.filter(mentor => mentor !== name)
+        setMentors(updated)
+        setValue("preferredMentors" ,updated)
     } 
 
     return (
@@ -27,11 +34,16 @@ const MentorPreferenceSelector = () => {
             <Box width="100%" display="flex" flexDirection="column" alignItems="flex-start" gap="10px">
                 <Typography>Preferred Mentor (please input full name)</Typography>
                 {mentors.map(mentor => <DisplayUser key={mentor} name={mentor} removeUser={removeMentor}/>)}
-
-                <TextField  inputRef={inputref}/>
-                <Button variant="contained" color="secondary" disabled={inputref.current?.value.length === 0} onClick={addMentor}>Add Mentor</Button>
+                <Controller
+                name="preferredMentors"
+                control={control}
+                render = {({field}) => <TextField inputRef={inputref} />
+            }/>
+                <Button variant="contained" color="secondary"  onClick={addMentor}>Add Mentor</Button> 
             </Box>
          </Box>
     </Box>)
 }
 export default MentorPreferenceSelector
+
+//disabled={inputref.current?.value.length === 0}

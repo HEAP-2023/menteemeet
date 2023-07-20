@@ -1,14 +1,14 @@
-import { Box, Typography, Divider,Stack, TextField } from "@mui/material"
+import { Box, Typography, Button, Divider,Stack, TextField } from "@mui/material"
 import { useSelector } from 'react-redux'
 import PageHeader from "../../PageHeader"
 import SectionHeader from "../../SectionHeader"
 import StandardTextField from "../../StandardTextField"
 import MenteePreferenceSelector from "./MenteePreferenceSelector"
 import MentorPreferenceSelector from "./MentorPreferenceSelector"
-import SkillUsers from "../../createProgramme/SkillUsers"
+import SkillForm from "./SkillForm"
 import WeekSelectionCalendarSubmitable from "./WeekSelectionCalendarSubmitable"
 
-import { useForm, Controller, FormProvider } from "react-hook-form"
+import { useForm, Controller, FormProvider, useFieldArray } from "react-hook-form"
 import { DevTool } from "@hookform/devtools";
 
 const SignUpForm = (id={id}) => {
@@ -34,20 +34,29 @@ const SignUpForm = (id={id}) => {
             email : email, 
             tele : telegram_username,
             availabilities : [],
-            skill : [], //array of objects {skillName : "", rating : "", elaboration : ""}
-            interests : [], // interest 1,2,3,
+            skill : skillSet.map(skill => ({skillName : skill, rating : 0, elaboration : ""}) ), //array of objects {skillName : "", rating : "", elaboration : ""}
+            interest_1 : "",
+            interest_2 : "",
+            interest_3 : "",
             preferredMentors : [],
             preferredMentees : [],
         }
     })
 
     const {control,formState: {errors, defaultValues, dirtyFields, isDirty} , handleSubmit, reset, getValues, watch} = methods
+    const {fields : skillFields} = useFieldArray({
+        name : "skill",
+        control, 
+    })
 
-
+    const handleSave = (data) => {
+        console.log("to be submitted")
+        console.log(data)
+    }
     return (
         <Box>
             <FormProvider {...methods}>
-            <form>
+            <form onSubmit={handleSubmit(handleSave)}>
              <Box>
                 <PageHeader text={name} margin="20px 0"/>
 
@@ -104,11 +113,11 @@ const SignUpForm = (id={id}) => {
                 {matching_criteria_set.includes("skill") &&
                     <Stack>
                         {
-                            skillSet.map(skill => {
+                            skillFields.map((skill, index) => {
                                 return (
-                                <SkillUsers key={skill}>
+                                <SkillForm key={skill.skillName} index={index}>
                                     <Typography fontWeight="700">{skill.skillName}</Typography>
-                                </SkillUsers>)
+                                </SkillForm>)
                             })
                         }
                     </Stack>
@@ -120,27 +129,41 @@ const SignUpForm = (id={id}) => {
                     <Typography>Select the top 3 areas you are interested in {category}</Typography>
 
                     <Box display="flex" gap="20px">
-                    <TextField fullWidth
-                        select
-                        value=""
-                        label="Interest 1"
-                        variant="outlined"
-                        children={[]}
-                    />
-                    <TextField fullWidth
-                        select
-                        value=""
-                        label="Interest 2"
-                        variant="outlined"
-                        children={[]}
-                    />
-                    <TextField fullWidth
-                        select
-                        value=""
-                        label="Interest 3"
-                        variant="outlined"
-                        children={[]}
-                    />
+                        <Controller name="interest_1" control={control} 
+                        render={({field}) =>
+                        <TextField 
+                            name="interest_1"
+                            {...field}
+                            fullWidth
+                            select
+                            label="Interest 1"
+                            variant="outlined"
+                            children={[]}
+                        />}/>
+
+                        <Controller name="interest_2" control={control} 
+                        render={({field}) =>
+                        <TextField 
+                            name="interest_2"
+                            {...field}
+                            fullWidth
+                            select
+                            label="Interest 2"
+                            variant="outlined"
+                            children={[]}
+                        />}/>
+                        
+                        <Controller name="interest_3" control={control} 
+                        render={({field}) =>
+                        <TextField 
+                            name="interest_3"
+                            {...field}
+                            fullWidth
+                            select
+                            label="Interest 3"
+                            variant="outlined"
+                            children={[]}
+                        />}/>
                 </Box>
                 </Stack>
                 }
@@ -153,6 +176,8 @@ const SignUpForm = (id={id}) => {
                     <MenteePreferenceSelector/>
                 }
             </Box>
+            <Button type="submit" variant="contained" color="secondary" sx={{mt : "20px"}}>Submit</Button>
+   
             </form>
             </FormProvider>
             <DevTool control={control}/>
