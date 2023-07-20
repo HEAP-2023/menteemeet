@@ -5,7 +5,7 @@ import { useState } from "react"
 import FindOutMore from "./FindOutMore"
 import SignUpForm from "./SignUpElements/SignUpForm"
 
-const Element = ({details}) => {
+const Element = ({details, id}) => {
     const colors = generateColors();
     const {
         name,  
@@ -26,7 +26,7 @@ const Element = ({details}) => {
                     dialogOpen === "findOutMore" && <FindOutMore/>
                 }
                 {
-                    dialogOpen === "signUp" && <SignUpForm/>
+                    dialogOpen === "signUp" && <SignUpForm id={id}/>
                 }
             </DialogContent>
         </Dialog>

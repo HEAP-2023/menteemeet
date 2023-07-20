@@ -8,7 +8,7 @@ const getEachProg = async (req, res) => {
       return res.status(200).json({ message: "Programme has been retrieved.", getProgObj})
 
   } catch (err) {
-      return res.status(500).json({ error: err });
+      return res.status(500).json({ error: err, message : "reached back" });
   }
 }
 
@@ -53,7 +53,7 @@ const getAllProg = (req, res) => {
       })
 
     } catch (err) {
-      return res.status(500).json({ error: err });
+      return res.status(500).json({ error: err, message : "reached back" });
     }
 }
 

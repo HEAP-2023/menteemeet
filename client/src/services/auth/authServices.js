@@ -44,11 +44,11 @@ async function register(user) {
     return (res.data.dataValues)
 }
 
-const logout = async(id, backend_role) => {
+const logout = async() => {
     console.log("logout")
     const res = await axiosInstance({
-        method : "put",
-        url : `/${backend_role}/${id}/logout`,
+        method : "post",
+        url : `/logout`,
         headers: { Authorization: `Bearer ${localStorage.getItem("jwt")}` },
     })
     console.log(res)

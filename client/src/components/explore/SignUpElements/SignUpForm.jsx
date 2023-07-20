@@ -10,31 +10,18 @@ import WeekSelectionCalendarSubmitable from "./WeekSelectionCalendarSubmitable"
 
 import { useForm, Controller, FormProvider, useFieldArray } from "react-hook-form"
 import { DevTool } from "@hookform/devtools";
-
-const SignUpForm = (id={id}) => {
-    const details = fetch_details(id)
-    const {
-        category ,
-        deadline,
-        description,
-        matching_criteria,
-        name,
-        programmeEnd,
-        programmeStart,
-        skills,
-    } = details
-    const skillSet = JSON.parse(skills);
-    const matching_criteria_set = JSON.parse(matching_criteria)
-
+import useGetSignUpForm from "../../../hooks/programmes/users/useGetSignUpForm"
+const SignUpForm = ({id}) => {
+    console.log(id)
+    const {error, isError ,isLoading, isSuccess : getDetailsSuccess, data : details} = useGetSignUpForm({id})
     const {account_type, name : userName, email, telegram_username} = useSelector((state) => state.user.userBasicDetails)
-
     const methods = useForm({
         defaultValues :{
             name : userName, 
             email : email, 
             tele : telegram_username,
             availabilities : [],
-            skill : skillSet.map(skill => ({skillName : skill, rating : 0, elaboration : ""}) ), //array of objects {skillName : "", rating : "", elaboration : ""}
+            skill : [], //array of objects {skillName : "", rating : "", elaboration : ""}
             interest_1 : "",
             interest_2 : "",
             interest_3 : "",
@@ -42,151 +29,181 @@ const SignUpForm = (id={id}) => {
             preferredMentees : [],
         }
     })
-
     const {control,formState: {errors, defaultValues, dirtyFields, isDirty} , handleSubmit, reset, getValues, watch} = methods
+
     const {fields : skillFields} = useFieldArray({
         name : "skill",
         control, 
     })
 
-    const handleSave = (data) => {
-        console.log("to be submitted")
-        console.log(data)
+    if(isLoading){
+        return <h2>loading...</h2>
     }
-    return (
-        <Box>
-            <FormProvider {...methods}>
-            <form onSubmit={handleSubmit(handleSave)}>
-             <Box>
-                <PageHeader text={name} margin="20px 0"/>
+    if(isError){
+        alert(error)
+    }
 
-                <SectionHeader text="About the Programme: " margin="20px 0 0 0"/>
-                <Divider/>
-                <Box>
-                    <Typography>{description}</Typography>
-                </Box>
 
-                <SectionHeader text="Programme Details: " margin="20px 0 0 0"/>
-                <Divider/>
-                <Box>
-                    <Typography>{name} is conducted from {programmeStart} to {programmeEnd} </Typography>
-                    <Typography>Application deadline: {deadline}</Typography>
-                </Box>
-            </Box>
+    if(getDetailsSuccess){
+        const {
+            category ,
+            deadline,
+            description,
+            matching_criteria,
+            name,
+            programmeEnd,
+            programmeStart,
+            skills,
+        } = details
+        
+        const matching_criteria_set = JSON.parse(matching_criteria)    
+        const skillSet = JSON.parse(skills);
+        const skillArr = skillSet.map(skill => ({skillName : skill, rating : 0, elaboration : ""}) )
+        reset({skill : skillArr})
 
-            {/* personal details */}
+        const handleSave = (data) => {
+            console.log("to be submitted")
+            console.log(data)
+        }
+        return (
             <Box>
-                <SectionHeader text="Personal Details" margin="20px 0 0 0"/>
-                <Divider/>
-                <Stack direction="row" gap="20px" mt="10px">
-                <Controller
-                        name="name"
-                        control={control}
-                        render={({field}) => 
-                    <StandardTextField errors={errors} field={field} name="name" label="Name"/>
-                }/>
-                <Controller
-                        name="email"
-                        control={control}
-                        render={({field}) => 
-                    <StandardTextField errors={errors} field={field} name="email" label="Email"/>
-                }/>
-                <Controller
-                        name="tele"
-                        control={control}
-                        render={({field}) => 
-                    <StandardTextField errors={errors} field={field} name="tele" label="Telegram handle"/>
-                }/>
-                </Stack>
-            </Box>
-
-            {/* Selection Criteria */}
-            <Box>
-                <SectionHeader text="Selection Criteria" margin="20px 0 0 0"/>
-                <Divider/>
-                {matching_criteria_set.includes("availability") &&
-                    <Stack>
-                        <WeekSelectionCalendarSubmitable programmeStart={programmeStart}/>
-                    </Stack>
-                }
-
-                {matching_criteria_set.includes("skill") &&
-                    <Stack>
-                        {
-                            skillFields.map((skill, index) => {
-                                return (
-                                <SkillForm key={skill.skillName} index={index}>
-                                    <Typography fontWeight="700">{skill.skillName}</Typography>
-                                </SkillForm>)
-                            })
-                        }
-                    </Stack>
-                }
-
-                {matching_criteria_set.includes("interest") && 
-                <Stack>
-                    <Typography fontWeight="700">Interest</Typography>
-                    <Typography>Select the top 3 areas you are interested in {category}</Typography>
-
-                    <Box display="flex" gap="20px">
-                        <Controller name="interest_1" control={control} 
-                        render={({field}) =>
-                        <TextField 
-                            name="interest_1"
-                            {...field}
-                            fullWidth
-                            select
-                            label="Interest 1"
-                            variant="outlined"
-                            children={[]}
-                        />}/>
-
-                        <Controller name="interest_2" control={control} 
-                        render={({field}) =>
-                        <TextField 
-                            name="interest_2"
-                            {...field}
-                            fullWidth
-                            select
-                            label="Interest 2"
-                            variant="outlined"
-                            children={[]}
-                        />}/>
-                        
-                        <Controller name="interest_3" control={control} 
-                        render={({field}) =>
-                        <TextField 
-                            name="interest_3"
-                            {...field}
-                            fullWidth
-                            select
-                            label="Interest 3"
-                            variant="outlined"
-                            children={[]}
-                        />}/>
+                <FormProvider {...methods}>
+                <form onSubmit={handleSubmit(handleSave)}>
+                 <Box>
+                    <PageHeader text={name} margin="20px 0"/>
+    
+                    <SectionHeader text="About the Programme: " margin="20px 0 0 0"/>
+                    <Divider/>
+                    <Box>
+                        <Typography>{description}</Typography>
+                    </Box>
+    
+                    <SectionHeader text="Programme Details: " margin="20px 0 0 0"/>
+                    <Divider/>
+                    <Box>
+                        <Typography>{name} is conducted from {programmeStart} to {programmeEnd} </Typography>
+                        <Typography>Application deadline: {deadline}</Typography>
+                    </Box>
                 </Box>
-                </Stack>
-                }
-
-                {matching_criteria_set.includes("mentorGrouping") && 
-                    <MentorPreferenceSelector/>
-                }
-
-                {matching_criteria_set.includes("menteeGrouping") && 
-                    <MenteePreferenceSelector/>
-                }
+    
+                {/* personal details */}
+                <Box>
+                    <SectionHeader text="Personal Details" margin="20px 0 0 0"/>
+                    <Divider/>
+                    <Stack direction="row" gap="20px" mt="10px">
+                    <Controller
+                            name="name"
+                            control={control}
+                            render={({field}) => 
+                        <StandardTextField errors={errors} field={field} name="name" label="Name"/>
+                    }/>
+                    <Controller
+                            name="email"
+                            control={control}
+                            render={({field}) => 
+                        <StandardTextField errors={errors} field={field} name="email" label="Email"/>
+                    }/>
+                    <Controller
+                            name="tele"
+                            control={control}
+                            render={({field}) => 
+                        <StandardTextField errors={errors} field={field} name="tele" label="Telegram handle"/>
+                    }/>
+                    </Stack>
+                </Box>
+    
+                {/* Selection Criteria */}
+                <Box>
+                    <SectionHeader text="Selection Criteria" margin="20px 0 0 0"/>
+                    <Divider/>
+                    {matching_criteria_set.includes("availability") &&
+                        <Stack>
+                            <WeekSelectionCalendarSubmitable programmeStart={programmeStart}/>
+                        </Stack>
+                    }
+    
+                    {matching_criteria_set.includes("skill") &&
+                        <Stack>
+                            {
+                                skillFields.map((skill, index) => {
+                                    return (
+                                    <SkillForm key={skill.skillName} index={index}>
+                                        <Typography fontWeight="700">{skill.skillName}</Typography>
+                                    </SkillForm>)
+                                })
+                            }
+                        </Stack>
+                    }
+    
+                    {matching_criteria_set.includes("interest") && 
+                    <Stack>
+                        <Typography fontWeight="700">Interest</Typography>
+                        <Typography>Select the top 3 areas you are interested in {category}</Typography>
+    
+                        <Box display="flex" gap="20px">
+                            <Controller name="interest_1" control={control} 
+                            render={({field}) =>
+                            <TextField 
+                                name="interest_1"
+                                {...field}
+                                fullWidth
+                                select
+                                label="Interest 1"
+                                variant="outlined"
+                                children={[]}
+                            />}/>
+    
+                            <Controller name="interest_2" control={control} 
+                            render={({field}) =>
+                            <TextField 
+                                name="interest_2"
+                                {...field}
+                                fullWidth
+                                select
+                                label="Interest 2"
+                                variant="outlined"
+                                children={[]}
+                            />}/>
+                            
+                            <Controller name="interest_3" control={control} 
+                            render={({field}) =>
+                            <TextField 
+                                name="interest_3"
+                                {...field}
+                                fullWidth
+                                select
+                                label="Interest 3"
+                                variant="outlined"
+                                children={[]}
+                            />}/>
+                    </Box>
+                    </Stack>
+                    }
+    
+                    {matching_criteria_set.includes("mentorGrouping") && 
+                        <MentorPreferenceSelector/>
+                    }
+    
+                    {matching_criteria_set.includes("menteeGrouping") && 
+                        <MenteePreferenceSelector/>
+                    }
+                </Box>
+                <Button type="submit" variant="contained" color="secondary" sx={{mt : "20px"}}>Submit</Button>
+       
+                </form>
+                </FormProvider>
+                <DevTool control={control}/>
             </Box>
-            <Button type="submit" variant="contained" color="secondary" sx={{mt : "20px"}}>Submit</Button>
-   
-            </form>
-            </FormProvider>
-            <DevTool control={control}/>
-        </Box>
-    )
-}
+        )
+    
+    }
+
+
+   }
 export default SignUpForm 
 
 const fetch_details = (id) => {
+    
     return (
         {
             category : "Tech",
