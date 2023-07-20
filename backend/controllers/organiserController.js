@@ -2,25 +2,8 @@ const Account = require("../models/account");
 const Organiser = require('../models/organiser');
 const Programme = require('../models/programme');
 const awsS3Controller = require('./awsS3Controller');
-
-const { generateAccessToken, resetJWT } = require('./accountController');
-
 const bcrypt = require("bcrypt");
-
-const logoutOrg = async (req, res) => {
-  try {
-
-    const getOrgID = req.params.id;
-    const getOrgObj = await Organiser.findOne({ where: { organiser_id : getOrgID }, raw: true });
-
-    resetJWT(getOrgObj.account_id);
-
-    return res.status(200).json({ message: "You have been successfully logged out!" });
-
-  } catch (err) {
-    return res.status(500).json({ error: err });
-  }
-}
+const { generateAccessToken } = require('./accountController');
 
 function updateJWT(getOrgObj) {
   try {
@@ -33,7 +16,37 @@ function updateJWT(getOrgObj) {
   }
 }
 
+const getOrg = async (req, res) => {
+  const id = req.params.id;
+
+  try {
+    const organiser = await Organiser.findOne(
+      { where: { organiser_id: id }, 
+      include: [
+        {
+          model: Account,
+          attributes: {
+            exclude: ['password', 'account_id', 'json_tokenID'], // Exclude the 'password','json_tokenID' and 'account_id' field from the Account model
+          },
+        }
+      ], raw: true });
+
+    console.log(organiser);
+
+    if (!organiser) {
+      return res.status(404).json({ message: 'Organiser not found!' })
+    }
+
+    return res.status(200).json({ organiser });
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({ error: err });
+  }
+}
+
 const updateOrg = async (req, res) => {
+    const account = req.account
+
     try {
         //Filtering out each Object so that they == to the email.
 
@@ -53,6 +66,11 @@ const updateOrg = async (req, res) => {
         const getOrgID = req.params.id;
         const getOrgObj = await Organiser.findOne({ where: { organiser_id : getOrgID }, raw: true });
 
+        //Ensure that the current organiser is authorised to update details
+        if (account.account_id !== getOrgObj.account_id) {
+          return res.status(403).json({ message: "Not authorised!" })
+        }
+
         await Organiser.update(
           { description: description },
           { where: { organiser_id : getOrgID }} );
@@ -61,23 +79,9 @@ const updateOrg = async (req, res) => {
         await Account.update(
           { email: email, name: name, contact_no: contact }, 
           { where: { account_id: getOrgObj.account_id }} )
-        
-        //Update password
-        const updatedPass = req.body.password;
-        if (updatedPass != "" && updatedPass != null) {
-          //Hash
-          const salt = await bcrypt.genSalt();
-          const hashedPass = await bcrypt.hash(updatedPass, salt);
 
-          await Account.update(
-            {   password: hashedPass }, 
-            {   where: { account_id: getOrgObj.account_id }} )
-
-          return res.status(200).json({message: "Successfully Updated! (PW)" });
-        } 
-
-        const getAccessToken = updateJWT(getOrgObj);
-        return res.status(200).json({message: "Successfully Updated Including JWT!", getAccessToken });
+        const accessToken = updateJWT(getOrgObj);
+        return res.status(200).json({message: "Successfully updated!", accessToken });
         
     } catch (err) {
         console.log(err);
@@ -85,36 +89,7 @@ const updateOrg = async (req, res) => {
     }
 }
 
-const getOrg = async (req, res) => {
-    // const id = req.params.id;
-
-    // try {
-    //   const user = await User.findOne(
-    //     { where: { user_id: id }, 
-    //     include: [
-    //       {
-    //         model: Account,
-    //         attributes: {
-    //           exclude: ['password', 'account_id', 'json_tokenID'], // Exclude the 'password' and 'json_tokenID' field from the Account model
-    //         },
-    //       }
-    //     ], raw: true });
-
-    //   if (!user) {
-    //     return res.status(404).json({ message: 'User not found!' })
-    //   }
-
-    //   return res.status(200).json({ user });
-    // } catch (err) {
-    //   console.log(err);
-    //   return res.status(500).json({ error: err });
-    // }
-    return res.status(200).json({ message: "Not doing ANything. Wait for Axel's GET" });
-}
-
 const addProg = async (req, res) => {
-    console.log("new sentback")
-    console.log(req.body);
   const organiser_id = req.params.id;
   const { name, description, category, programmeStart, programmeEnd, menteeCapacity, mentorCapacity, deadline, matching_criteria, skills } = req.body;
 
@@ -152,4 +127,4 @@ const addProg = async (req, res) => {
   }
 }
 
-module.exports = { logoutOrg, updateOrg, getOrg, addProg };
+module.exports = { getOrg, updateOrg, addProg };

@@ -16,20 +16,6 @@ const bcrypt = require("bcrypt");
 // const config = require('../utils/config');
 // const jwt = require("jsonwebtoken");
 
-const logoutUser = async (req, res) => {
-  try {
-    const getUserID = req.params.id;
-    const getUserObj = await User.findOne({ where: { user_id : getUserID }, raw: true });
-
-    resetJWT(getUserObj.account_id);
-
-    return res.status(200).json({ message: "You have been successfully logged out!" });
-
-  } catch (err) {
-    return res.status(500).json({ error: err });
-  }
-}
-
 function updateJWT(getUserObj) {
   try {
     const accessToken = generateAccessToken(getUserObj);
@@ -42,11 +28,21 @@ function updateJWT(getUserObj) {
 }
 
 const updateUser = async (req, res) => {
+    const account = req.account;
+
     try {
         //Filtering out each Object so that they == to the email.
 
         // const filteredObject = Object.fromEntries(Object.entries(storeUserObj).filter(([key, value]) => value === req.user.email));
         // const filteredJsonString = JSON.stringify(filteredObject); // Stringify the filtered object        
+        
+        const getUserID = req.params.id;
+        const getUserObj = await User.findOne({ where: { user_id : getUserID }, raw: true });
+
+        //Ensure that the current user is authorised to update details
+        if (account.account_id !== getUserObj.account_id) {
+          return res.status(403).json({ message: "Not authorised!" });
+        }
 
         if (req.body === undefined || Object.keys(req.body).length === 0) {
           return res.status(400).json({ message: "Fields are empty."});
@@ -56,9 +52,6 @@ const updateUser = async (req, res) => {
         const name = req.body.name;
         const contact = req.body.contact_no;
         const teleUsername = req.body.telegram_username;
-        
-        const getUserID = req.params.id;
-        const getUserObj = await User.findOne({ where: { user_id : getUserID }, raw: true });
 
         await User.update(
           { telegram_username: teleUsername },
@@ -69,8 +62,8 @@ const updateUser = async (req, res) => {
           { email: email, name: name, contact_no: contact },
           { where: { account_id: getUserObj.account_id }} )
 
-        const getAccessToken = updateJWT(getUserObj);
-        return res.status(200).json({ message: "Successfully updated!", getAccessToken });
+        const accessToken = updateJWT(getUserObj);
+        return res.status(200).json({ message: "Successfully updated!", accessToken });
         
     } catch (err) {
         console.log(err);
@@ -108,17 +101,21 @@ const getUser = async (req, res) => {
 
 const getAllProgByUserID = async (req, res) => {
 
+  const getUserID = req.params.id;
   const { page, size } = req.query;
   const { limit, offset } = getPagination(page, size);
 
   try {
-    const getUserID = req.body.user_id;
     const getUserRole = req.body.role;
 
     //Returns array.
     const getUserProgObj = await UserProgramme.findAll({ where: { user_id : getUserID, role: getUserRole },
       raw: true });
       
+    if (!getUserProgObj) {
+      return res.status(400).json({ message: "User is not enrolled in any programme!" });
+    }
+
     const arrIDs = [];
     getUserProgObj.forEach(obj => {
       arrIDs.push(obj.programme_id);
@@ -251,4 +248,4 @@ const getInterest = async (req, res) => {
   }
 }
 
-module.exports = { logoutUser, updateUser, getUser, getAllProgByUserID, getSkill, addSkill, addInterest, getInterest };
+module.exports = { updateUser, getUser, getAllProgByUserID, getSkill, addSkill, addInterest, getInterest };

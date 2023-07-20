@@ -26,7 +26,7 @@ const generateAccessToken = (account) => {
 
   //store into DB
   Account.update(
-    { json_tokenID: jwtID }, 
+    { json_tokenID: jwtID },
     { where: { account_id: account.account_id }} )
 
   return tokenSigned;

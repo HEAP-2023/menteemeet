@@ -1,6 +1,7 @@
 const Account = require("../models/account");
 const User = require("../models/user");
 const bcrypt = require("bcrypt");
+const { generateAccessToken } = require('../controllers/accountController');
 
 const generateHashedPassword = async (password) => {
   const salt = await bcrypt.genSalt();
@@ -9,7 +10,7 @@ const generateHashedPassword = async (password) => {
 }
 
 const data =
-   { name: "Jack Tan", email: "jack@live.com", account_type: "user" }
+   { name: "Jack Tan", email: "jack@gmail.com", account_type: "user" }
 
 const seedData = async () => {
   try {
