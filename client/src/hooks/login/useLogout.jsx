@@ -7,10 +7,7 @@ import { useNavigate } from "react-router-dom";
 
 const useLogout = () => {
     const dispatch = useDispatch();
-    const id = useSelector((state) => state.user.userBasicDetails.user_id)
-    const account_type = useSelector((state) => state.user.userBasicDetails.account_type)
-    const backend_role = account_type === "organiser" ? "organiser" : "users" 
-    return useMutation(() => logout(id, backend_role), {
+    return useMutation(() => logout(), {
         onSuccess : (data) => {
             dispatch(logOut())
             console.log(data)

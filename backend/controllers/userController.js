@@ -10,11 +10,7 @@ const Programme = require('../models/programme');
 const { Op } = require("sequelize");
 const { getPagination, getPagingData } = require('./programmeController');
 
-const { generateAccessToken, resetJWT } = require('./accountController');
-
-const bcrypt = require("bcrypt");
-// const config = require('../utils/config');
-// const jwt = require("jsonwebtoken");
+const { generateAccessToken } = require('./accountController');
 
 function updateJWT(getUserObj) {
   try {
@@ -101,12 +97,22 @@ const getUser = async (req, res) => {
 
 const getAllProgByUserID = async (req, res) => {
 
-  const getUserID = req.params.id;
   const { page, size } = req.query;
   const { limit, offset } = getPagination(page, size);
 
   try {
-    const getUserRole = req.body.role;
+
+    const account = req.account;
+    const getUserID = req.params.id;
+
+    const getUserObj = await User.findOne({ where: { user_id : getUserID }, raw: true });
+
+    //Ensure that the current user is authorised to update details
+    if (account.account_id !== getUserObj.account_id) {
+      return res.status(403).json({ message: "Not authorised!" });
+    }
+
+    const getUserRole = req.params.role;
 
     //Returns array.
     const getUserProgObj = await UserProgramme.findAll({ where: { user_id : getUserID, role: getUserRole },

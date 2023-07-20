@@ -5,10 +5,12 @@ const LENGTH = 3 //IDK IF THIS IS SUPPOSED TO BE FETCHED SOMEWHERE OR WHAT BUT I
 
 
 const useGetExploreProgramme = () => {
-    return useInfiniteQuery(["explore"], getInfiniteProgramme, {
-        getNextPageParam : (lastPage, pages)=> {
-            if(pages < LENGTH){
-                return pages.length + 1;
+    return useInfiniteQuery(["explore"], ({pageParam=1}) => getInfiniteProgramme(pageParam), {
+        getNextPageParam : (res)=> {
+            console.log(res)
+            const {currentPage, totalPages} = res
+            if(currentPage < totalPages){
+                return currentPage + 1;
             }
             else {
                 return undefined

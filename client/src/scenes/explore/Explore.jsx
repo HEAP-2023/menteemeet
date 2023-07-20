@@ -9,7 +9,7 @@ import useGetExploreProgramme from "../../hooks/programmes/users/useGetExplorePr
 
 const Explore = ({programmes}) => {
     const {isLoading, data, hasNextPage, fetchNextPage, isFetching} = useGetExploreProgramme()
-    
+    console.log(data?.pages[0].programmes)
 
     return (<Box display="flex" flexDirection="column" >
         <PageHeader text="Explore Programmes" />
@@ -22,7 +22,7 @@ const Explore = ({programmes}) => {
 
         {/* programme should have overflowY */}
         {
-            Object.entries(programmes).map(([key,value])  => <Element key={value.PID} details={value}/>)
+            Object.entries(programmes).map(([key,value])  => <Element key={value.PID} details={value} id={2}/>)
         }
     </Box>);
 }

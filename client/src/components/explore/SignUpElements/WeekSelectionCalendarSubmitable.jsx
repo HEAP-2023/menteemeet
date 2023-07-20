@@ -56,9 +56,8 @@ const WeekSelectionCalendarSubmitable = ({admin=false, programmeStart}) => {
     control={control}
     render={({field}) => {
 
-        const {value, ...others} = field; 
+        const {value} = field; 
         return (<FullCalendar 
-        {...others}
         ref={calendar}
         {...calendarOptions} 
         selectable={!admin}
