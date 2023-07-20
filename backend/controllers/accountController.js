@@ -126,10 +126,6 @@ const changePassword = async (req, res) => {
   const acct = req.account;
   const { currentPW, newPW, confirmNewPW } = req.body;
 
-  if (account.account_id !== acct.account_id) {
-    return res.status(403).json({ message: "Not authorised!" });
-  }
-
   if (!newPW || newPW == "") {
     return res.status(400).json({ message: "New password cannot be empty!" })
   }
