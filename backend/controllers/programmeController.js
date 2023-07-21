@@ -2,13 +2,14 @@ const Programme = require("../models/programme");
 
 const getEachProg = async (req, res) => {
   try {
-      const getProgID = req.params.id;
-      const getProgObj = await Programme.findOne({ where: { programme_id: getProgID }, raw: true });
+      const id = req.params.id;
+      const programme = await Programme.findOne({ where: { programme_id: id }, raw: true });
 
-      return res.status(200).json({ message: "Programme has been retrieved.", getProgObj})
+      return res.status(200).json({ message: "Programme has been retrieved.", programme})
 
   } catch (err) {
-      return res.status(500).json({ error: err, message : "reached back" });
+      console.error(err);
+      return res.status(500).json({ error: err, message : "Failed to retrieve programme" });
   }
 }
 
@@ -53,22 +54,9 @@ const getAllProg = (req, res) => {
       })
 
     } catch (err) {
-      return res.status(500).json({ error: err, message : "reached back" });
+      console.error (err);
+      return res.status(500).json({ error: err, message : "Failed to retrieve programmes" });
     }
 }
 
-const deleteProg = async (req, res) => {
-    try {
-        const getProgID = req.params.id;
-    
-        await Programme.destroy(
-            { where: { programme_id: getProgID }} );
-
-        return res.status(200).json({ message: "Programme has been successfully deleted."})
-
-    } catch (err) {
-        return res.status(500).json({ error: err });
-    }
-}
-
-module.exports = { getEachProg, getAllProg, deleteProg, getPagination, getPagingData };
+module.exports = { getEachProg, getAllProg, getPagination, getPagingData };

@@ -2,6 +2,7 @@ const Account = require("../models/account");
 const Organiser = require('../models/organiser');
 const Programme = require('../models/programme');
 const awsS3Controller = require('./awsS3Controller');
+const { Op } = require("sequelize");
 const bcrypt = require("bcrypt");
 const { generateAccessToken } = require('./accountController');
 const { getPagination, getPagingData } = require('./programmeController');
@@ -91,7 +92,16 @@ const updateOrg = async (req, res) => {
 }
 
 const addProg = async (req, res) => {
-  const organiser_id = req.params.id;
+  const account = req.account;
+  const id = req.params.id;
+
+  const org = await Organiser.findOne({ where: { organiser_id: id } });
+
+  //Ensure that the current organiser is authorised to update details
+  if (account.account_id !== org.account_id) {
+    return res.status(403).json({ message: "Not authorised!" })
+  }
+
   const { name, description, category, programmeStart, programmeEnd, menteeCapacity, mentorCapacity, deadline, matching_criteria, skills } = req.body;
 
   try {
@@ -146,7 +156,7 @@ const getAllProgsByOrgID = async (req, res) => {
 
     const ProgIDarr = [];
     getOrgProgObj.forEach(obj => {
-      arrIDs.push(obj.programme_id);
+      ProgIDarr.push(obj.programme_id);
     })
 
     const conditions = { [Op.or]: [ { programme_id: ProgIDarr } ]};
@@ -159,14 +169,36 @@ const getAllProgsByOrgID = async (req, res) => {
         if (response.currentPage > response.totalPages) {
           return res.status(400).json({message: "Nothing to retrieve. Exceeded page request", response });
         }
-      return res.status(200).json({message: "All programmes have been retrieved for User No: " + getUserID + ".", response }) 
+      return res.status(200).json({ message: "All programmes have been retrieved for Organiser No: " + getOrgID + ".", response }) 
       });
       
   } catch (err) {
+    console.error(err);
     return res.status(500).json({ error: err });
   }
 }
 
+const deleteProg = async (req, res) => {
+  const account = req.account;
+  const id = req.params.id;
 
+  const org = await Organiser.findOne({ where: { organiser_id: id } });
 
-module.exports = { getOrg, updateOrg, addProg, getAllProgsByOrgID };
+  //Ensure that the current organiser is authorised to update details
+  if (account.account_id !== org.account_id) {
+    return res.status(403).json({ message: "Not authorised!" })
+  }
+
+  try {
+    await Programme.destroy(
+          { where: { programme_id: getProgID }} );
+
+    return res.status(200).json({ message: "Programme has been successfully deleted."})
+
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ error: err });
+  }
+}
+
+module.exports = { getOrg, updateOrg, addProg, getAllProgsByOrgID, deleteProg };

@@ -14,8 +14,4 @@ const { authenticateToken } = require('../middlewares/authMiddlewares');
 router.get('/', authenticateToken, programmeController.getAllProg);
 router.get('/:id', authenticateToken, programmeController.getEachProg);
 
-// router.post('/', authenticateToken, upload.single('display_image'), programmeController.addProg);
-//for deletion - for programme.
-router.delete('/:id', authenticateToken, programmeController.deleteProg);
-
 module.exports = router

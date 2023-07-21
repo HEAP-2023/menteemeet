@@ -8,6 +8,7 @@ const Account = require("../models/account");
 const ACCESS_TOKEN_SECRET = config.ACCESS_TOKEN_SECRET;
 
 const authenticateToken = async (req, res, next) => {
+  try {
     const authHeader = req.headers['authorization'];
 
     //if got authHeader then return (v) this. while splitting space
@@ -37,7 +38,11 @@ const authenticateToken = async (req, res, next) => {
         req.account = account;
         next();
     })
-    // Bearer TOKEN 
+    // Bearer TOKEN
+  } catch (err) {
+    console.error(err);
+    return res.status(400).json({ message: "Failed to verify JWT token!" });
+  } 
 }
 
 module.exports = { authenticateToken };
