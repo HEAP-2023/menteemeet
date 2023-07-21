@@ -127,6 +127,7 @@ const addProg = async (req, res) => {
         ...newProg.dataValues,
         display_image: JSON.stringify(uploadFile)
       }
+      console.log("created programme but image failed")
       return res.status(200).json({ message: 'Successfully created programme!', programme: progToReturn });
     } else {
       await Programme.destroy({ where: { programme_id: newProg.programme_id }});

@@ -8,6 +8,7 @@ import { Typography, Box, FormControl, InputAdornment, OutlinedInput, IconButton
 import { yupResolver } from "@hookform/resolvers/yup"
 import { ErrorMessage } from '@hookform/error-message';
 import * as yup from "yup"
+import useChangePW from '../../hooks/login/useChangePW';
 
 const ChangePassword = ({acctInfo}) => {
     const {password} = acctInfo;
@@ -20,8 +21,8 @@ const ChangePassword = ({acctInfo}) => {
     .shape(
         {
             currentPassword: yup.string()
-                .required("This field is required")
-                .matches(password, "Incorrect password"),
+                .required("This field is required"),
+                // .matches(password, "Incorrect password"),
             newPassword: yup.string()
                 .required("This field is required")
                 .min(8, "Password must have at least 8 characters")
@@ -35,7 +36,7 @@ const ChangePassword = ({acctInfo}) => {
         }
     ).required()
 
-    const { control, handleSubmit, formState: { errors } } = useForm({
+    const { control, handleSubmit, formState: { errors }, reset } = useForm({
         resolver: yupResolver(changePasswordSchema)
     });
 
@@ -57,15 +58,17 @@ const ChangePassword = ({acctInfo}) => {
         event.preventDefault();
     };
 
+    const { mutate : changePW } = useChangePW();
 
     const handleSave = (data) => {
         const passwordSave = {
-            currentPassword: data.currentPassword,
-            newPassword: data.newPassword,
-            confirmNewPassword: data.confirmNewPassword
+            currentPW: data.currentPassword,
+            newPW: data.newPassword,
+            confirmNewPW: data.confirmNewPassword
         }
-
         console.log("Updated password:", passwordSave);
+        changePW(passwordSave);
+        reset()
     }
     return (
         <>

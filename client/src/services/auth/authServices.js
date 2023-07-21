@@ -55,7 +55,20 @@ const logout = async() => {
     return res.data
 }
 
+const changePW = async (passwords) => {
+    console.log("chagne password")
+    const res = await axiosInstance({
+        method : "post",
+        url : `/changePassword`,
+        headers: { Authorization: `Bearer ${localStorage.getItem("jwt")}` },
+        data : passwords,
+    })
+    console.log(res)
+    return res.data
+}
+
+
 export {
   login, register, logout,
-  verifyJWT
+  verifyJWT, changePW
 };

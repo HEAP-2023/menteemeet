@@ -11,10 +11,10 @@ export const postProgramme = async(id,programme) => {
     return res;
 }
 
-export const delProgramme = async(programme_id) => {
+export const delProgramme = async(org_id, programme_id) => {
     const res = await axiosInstance({
         method : "delete",
         headers: { Authorization: `Bearer ${localStorage.getItem("jwt")}` },
-        url : `/programmes/${programme_id}`
+        url : `/organiser/${org_id}/programmes/${programme_id}`
     })
 }

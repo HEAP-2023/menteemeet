@@ -20,7 +20,7 @@ const Feedback = () => {
     const userType = useSelector((state) => state.user.userType);
     const rows = fetchPeople(userType);
 
-    const acctID = useSelector((state) => state.user.userDetails.acctID)
+    const acctID = useSelector((state) => state.user.userBasicDetails.accountID)
     const people = ["Organiser"].concat(rows.map((item, index) => item.name));
     
     const feedbackSchema = yup.object()
