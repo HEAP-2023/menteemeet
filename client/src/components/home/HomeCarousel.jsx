@@ -5,20 +5,30 @@ import { Link } from "react-router-dom";
 import Carousel from 'react-material-ui-carousel'
 import { Card, Button, CardMedia, Grid } from '@mui/material'
 import { splitObjIntoArrSize } from "../../functions";
+import { useSelector } from "react-redux";
 
-
-const Item = ({content}) => {
-    const {id, name, img, link} = content;
+const Item = ({ content }) => {
+    const userType = useSelector((state) => state.user.userType)
+    const { id, name, img, link } = content;
     return (
-        <Card sx={{height : "100%", display:"flex", flexDirection:"column", alignItems:"center"}}>
+        <Card sx={{ height: "100%", display: "flex", flexDirection: "column", alignItems: "center" }}>
             <CardMedia
-            sx={{ height: "85%", alt:"unable to display", objectFit: "contain" }}
-             component="img"
-             src={img}
+                sx={{ height: "85%", alt: "unable to display", objectFit: "contain" }}
+                component="img"
+                src={img}
             />
+
+            {userType   !== "organiser" ?  (
             <Button color="primary" variant="contained" component={Link} to={link}>
                 <Typography>Sign Up</Typography>
             </Button>
+            ) :  (
+            <Button color="primary" variant="contained" component={Link} to={link}>
+                <Typography>View</Typography>
+            </Button>
+            )
+            }
+
         </Card>
     )
 }

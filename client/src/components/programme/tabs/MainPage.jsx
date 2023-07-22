@@ -7,8 +7,8 @@ const MainPage = () => {
             <Box width="45%" height="100%" display="flex" flexDirection="column" alignItems="center" >
                 {/* Upcoming Sessions */}
                 <Section header="Upcoming Sessions" rows={upcomingSession} rowColor="#AEAEFF" highlight={true}></Section>
-                {/* Tasks */}
-                <Section header="Tasks" rows={tasks} rowColor="#AEAEFF" checkbox={true}></Section>
+                {/* Tasks -- Removed */}
+                {/* <Section header="Tasks" rows={tasks} rowColor="#AEAEFF" checkbox={true}></Section> */}
                 {/* Announcements */}
                 <Section header="Announcements" rows={announcements} rowColor="#AEAEFF" highlight={true}></Section>
             </Box>

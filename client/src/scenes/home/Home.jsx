@@ -18,15 +18,23 @@ const Home = () => {
         <PageHeader text={`Welcome, ${name}`}/>
         
         {/* carousel */}
-        <SectionHeader text={"Featured Events"}/>
-        <HomeCarousel content={recommended_programmes}/>
+        {userType !== "organiser" ? (
+            <SectionHeader text={"Featured Programmes"}/>
+        ): (
+            <SectionHeader text={"My Programmes"}/>
+        )}
+        {userType !== "organiser" ? (
+            <HomeCarousel content={recommended_programmes}/>
+        ) : (
+            <HomeCarousel content={programmes_enrolled}/>
+        )}
 
         <Box display="flex" justifyContent="space-around" width="100%" height="100%">
             <Box width="45%" height="100%" display="flex" flexDirection="column" alignItems="center" > 
                 {/* announcements */}
                 <Section header="Announcement" rows={announcements} rowColor="#AEAEFF" highlight={true}></Section>
                 {/* tasks */}
-                <Section header="Tasks" rows={tasks} checkbox={true}></Section>
+                {/* <Section header="Tasks" rows={tasks} checkbox={true}></Section> */}
             </Box>
 
             <Box width="45%">
@@ -35,8 +43,6 @@ const Home = () => {
             </Box>
 
         </Box>
-
-
     </Box>)
 }
 export default Home
@@ -136,3 +142,24 @@ const recommended_programmes = {
         link : "/mentorshipPrograms/available/6",
     },
 }
+
+const programmes_enrolled = [
+    {
+        id : 1,
+        name : "program_1",
+        img : "../../images/home/mentorship_1.jpg",
+        link: "/programmes/1"
+    },
+    {
+        id : 2,
+        name : "program_2",
+        img: "../../images/home/mentorship_2.png",
+        link : "/programmes/2",
+    },
+    {
+        id : 3,
+        name : "program_3",
+        img : "../../images/home/mentorship_3.jpg",
+        link: "/programmes/3"
+    },
+]
