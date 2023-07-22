@@ -96,7 +96,6 @@ const getUser = async (req, res) => {
 }
 
 const getAllProgByUserID = async (req, res) => {
-
   const { page, size } = req.query;
   const { limit, offset } = getPagination(page, size);
 
@@ -112,7 +111,7 @@ const getAllProgByUserID = async (req, res) => {
       return res.status(403).json({ message: "Not authorised!" });
     }
 
-    const getUserRole = req.params.role;
+    const getUserRole = req.body.role;
 
     //Returns array.
     const getUserProgObj = await UserProgramme.findAll({ where: { user_id : getUserID, role: getUserRole },
@@ -141,6 +140,72 @@ const getAllProgByUserID = async (req, res) => {
       });
       
   } catch (err) {
+    console.error(err);
+    return res.status(500).json({ error: err });
+  }
+}
+
+const getUnsignedProg = async (req, res) => {
+  const { page, size } = req.query;
+  const { limit, offset } = getPagination(page, size);
+
+  try {
+    var resp;
+
+    const account = req.account;
+    const getUserID = req.params.id;
+
+    const getUserObj = await User.findOne({ where: { user_id : getUserID }, raw: true });
+
+    //Ensure that the current user is authorised to update details
+    if (account.account_id !== getUserObj.account_id) {
+      return res.status(403).json({ message: "Not authorised!" });
+    }
+
+    //Returns array.
+    const getUserProgObj = await UserProgramme.findAll({ where: { user_id : getUserID },
+      raw: true });
+    
+    console.log(getUserProgObj);
+      
+    if (!getUserProgObj || getUserProgObj.length == 0) {
+      await Programme.findAndCountAll({ attributes: ['programme_id', 'name', 'description'
+        , 'category', 'display_image'], limit, offset, raw: true })
+        .then(data => {
+          const response = getPagingData(data, (Number(page) + 1), limit);
+          resp = response;
+
+          if (response.currentPage > response.totalPages) {
+            return res.status(400).json({message: "Nothing to retrieve. Exceeded page request", response });
+          }
+        });
+     
+    } else {
+      const arrIDs = [];
+      getUserProgObj.forEach(obj => {
+        arrIDs.push(obj.programme_id);
+      })
+      
+      const conditions = { [Op.not]: [ { programme_id: arrIDs } ]};
+
+      await Programme.findAndCountAll({ attributes: ['programme_id', 'name', 'description'
+        , 'category', 'display_image'], where: conditions, limit, offset, raw: true })
+        .then(data => {
+          const response = getPagingData(data, (Number(page) + 1), limit);
+          resp = response;
+
+          if (response.currentPage > response.totalPages) {
+            return res.status(400).json({message: "Nothing to retrieve. Exceeded page request", response });
+          }
+        });
+    }
+
+    return res.status(200).json({
+      message: "All programmes that are not signed up have been retrieved for User No: " 
+      + getUserID + ".", resp }) 
+      
+  } catch (err) {
+    console.error(err);
     return res.status(500).json({ error: err });
   }
 }
@@ -254,4 +319,4 @@ const getInterest = async (req, res) => {
   }
 }
 
-module.exports = { updateUser, getUser, getAllProgByUserID, getSkill, addSkill, addInterest, getInterest };
+module.exports = { updateUser, getUser, getAllProgByUserID, getUnsignedProg, getSkill, addSkill, addInterest, getInterest };

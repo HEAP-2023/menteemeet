@@ -13,10 +13,10 @@ const { authenticateToken } = require('../middlewares/authMiddlewares');
 //Instead of putting "authToken" as an arg in each route,
 // you can do this instead. So every route in this router will
 // use the auth function as a middleware.
-// router.use(authenticateToken);
+router.use(authenticateToken);
 
 //get Prog by UserID & Role
-router.get('/:id/programmes', authenticateToken, userController.getAllProgByUserID);
+router.get('/:id/programmes/:role', authenticateToken, userController.getAllProgByUserID);
 
 router.put('/:id', authenticateToken, userController.updateUser);
 
