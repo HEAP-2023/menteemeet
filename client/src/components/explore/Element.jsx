@@ -1,16 +1,18 @@
-import { Box, Button, Typography, Dialog, DialogContent, DialogTitle,  } from "@mui/material"
+import { Box, Button, Typography, Dialog, DialogContent } from "@mui/material"
 import { generateColors } from "../../theme"
 import SectionHeader from "../../components/SectionHeader"
 import { useState } from "react"
 import FindOutMore from "./FindOutMore"
 import SignUpForm from "./SignUpElements/SignUpForm"
 
-const Element = ({details, id}) => {
+const Element = ({details}) => {
     const colors = generateColors();
     const {
+        programme_id,
         name,  
         description,
-        media, 
+        category,
+        display_image,
     } = details
 
     const [dialogOpen, setDialogOpen] = useState(null)
@@ -23,23 +25,23 @@ const Element = ({details, id}) => {
         >
             <DialogContent>
                 {
-                    dialogOpen === "findOutMore" && <FindOutMore/>
+                    dialogOpen === "findOutMore" && <FindOutMore description={description}/>
                 }
                 {
-                    dialogOpen === "signUp" && <SignUpForm id={id}/>
+                    dialogOpen === "signUp" && <SignUpForm id={programme_id}/>
                 }
             </DialogContent>
         </Dialog>
 
         {/* image */}
         <Box width="30%" height="300px">
-            <img src={media} alt="no img" style={{width:"100%", height:"100%", objectFit:"contain"}}/>
+            <img src={!!display_image ? display_image : "../images/explore/noImageAvailable.jpeg"} alt="no img" style={{width:"100%", height:"100%", objectFit:"contain"}}/>
         </Box>
 
         {/* details */}
         <Box width="70%" height="300px" display="grid" gridTemplateRows="1fr 5fr 2fr" rowGap="20px" p="20px">
             <SectionHeader text={name} margin="0"/>
-            <Typography>{description}</Typography>
+            <Typography>category: {category}</Typography>
             <Box width="30%" display="flex" justifyContent="space-between" >
                 <Button variant="contained" sx={{borderRadius:20}} 
                 onClick={() => setDialogOpen("findOutMore")}

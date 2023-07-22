@@ -7,7 +7,7 @@ import MenteePreferenceSelector from "./MenteePreferenceSelector"
 import MentorPreferenceSelector from "./MentorPreferenceSelector"
 import SkillForm from "./SkillForm"
 import WeekSelectionCalendarSubmitable from "./WeekSelectionCalendarSubmitable"
-
+import { useEffect } from "react"
 import { useForm, Controller, FormProvider, useFieldArray } from "react-hook-form"
 import { DevTool } from "@hookform/devtools";
 import useGetSignUpForm from "../../../hooks/programmes/users/useGetSignUpForm"
@@ -29,12 +29,19 @@ const SignUpForm = ({id}) => {
             preferredMentees : [],
         }
     })
-    const {control,formState: {errors, defaultValues, dirtyFields, isDirty} , handleSubmit, reset, getValues, watch} = methods
+    const {control,formState: {errors, defaultValues, dirtyFields, isDirty}, isInitialLoading, handleSubmit, reset} = methods
 
     const {fields : skillFields} = useFieldArray({
         name : "skill",
         control, 
     })
+    useEffect(()=> {
+        if(getDetailsSuccess && !isLoading){
+        const skillSet = JSON.parse(details.data.programme.skills);
+        const skillArr = skillSet.map(skill => ({skillName : skill, rating : 0, elaboration : ""}) )
+        reset({skill : skillArr})
+        }
+    },[details, reset])
 
     if(isLoading){
         return <h2>loading...</h2>
@@ -54,13 +61,9 @@ const SignUpForm = ({id}) => {
             programmeEnd,
             programmeStart,
             skills,
-        } = details
-        
+        } = details.data.programme
+        console.log(details)
         const matching_criteria_set = JSON.parse(matching_criteria)    
-        const skillSet = JSON.parse(skills);
-        const skillArr = skillSet.map(skill => ({skillName : skill, rating : 0, elaboration : ""}) )
-        reset({skill : skillArr})
-
         const handleSave = (data) => {
             console.log("to be submitted")
             console.log(data)

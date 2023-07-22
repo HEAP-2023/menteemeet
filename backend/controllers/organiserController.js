@@ -116,7 +116,7 @@ const addProg = async (req, res) => {
       deadline,
       matching_criteria,
       skills,
-      organiser_id
+      id
     })
 
     const uploadFile = await awsS3Controller.uploadToS3(req.file, newProg.programme_id);

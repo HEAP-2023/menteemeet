@@ -58,6 +58,7 @@ const SkillSection = () => {
                 justifyContent : "center",
                 alignItems : "center",
             }}
+            onClose={()=>{toggleModal(false)}}
             >
                 <Box width="30%" height="20%" display="flex" flexDirection="column" alignItems="flex-start" gap="20px" bgcolor="#ffffff" p="20px">
                     <Typography>Skill: </Typography>
