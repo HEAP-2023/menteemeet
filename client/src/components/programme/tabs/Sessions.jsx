@@ -19,7 +19,7 @@ const Sessions = () => {
 
     return (
     <Box>
-        {userType !== "mentee" && <NewSessionLog/>}
+        {userType === "mentor" && <NewSessionLog/>}
         <Box width="100%" display="flex">
             <SectionHeader text="Upcoming Sessions" />
         </Box>
