@@ -12,6 +12,8 @@ import Step1 from "../../components/createProgramme/Step1";
 import Step2 from "../../components/createProgramme/Step2";
 import Step3 from "../../components/createProgramme/Step3";
 import PreviewForm from "../../components/createProgramme/PreviewForm";
+import axiosInstance from "../../utils/axiosInstance";
+import { postProgramme } from "../../services/programmes/organiserServices";
 
 
 
@@ -40,6 +42,7 @@ const CreateProgramme = () => {
     const {control,formState: {errors, defaultValues, dirtyFields, isDirty} , handleSubmit, reset, getValues, watch} = methods
     const watchMatching = watch("matching_criteria")
     let done = Object.keys(dirtyFields);
+
     useEffect(() => {
         const max = Object.keys(defaultValues).length
         const dirty = done.filter(key => dirtyFields[key] === true || dirtyFields[key].length > 0)
@@ -53,7 +56,7 @@ const CreateProgramme = () => {
     }, [done, watchMatching])
 
 
-    const { mutate : createProgramme } = usePostProgramme()
+    // const { mutate : createProgramme } = usePostProgramme()
 
     const handleSave = async (data) => {
         console.log("to be submitted")
@@ -62,7 +65,13 @@ const CreateProgramme = () => {
             matching_criteria : JSON.stringify(data.matching_criteria)
         }
         console.log(formattedData)
-        createProgramme(formattedData);
+        // createProgramme(formattedData);
+
+        try {
+            await postProgramme(formattedData);
+        } catch (err) {
+            console.log(err);
+        }
     }
     return (
     <Box width="100%" p="40px" display="flex" flexDirection="column">
@@ -83,10 +92,10 @@ const CreateProgramme = () => {
         {/* step 3 form creation */}
         <Step3 />
 
-        <Box display="flex" gap="20px">
-            <Button type="submit" variant="contained" color="secondary" onClick={() => {console.log("errors:",errors)}}>Submit</Button>
+        {/* <Box display="flex" gap="20px"> */}
+            <Button type="submit" variant="contained" color="secondary">Submit</Button>
             <Button /* disabled={progress < 100} */ variant="contained" color="secondary" onClick={() => {setPreview(!preview)}}>Preview Form </Button>
-        </Box>
+        {/* </Box> */}
 
         <PreviewForm open={preview} setPreview={setPreview} getValues={getValues}/>
         </form>

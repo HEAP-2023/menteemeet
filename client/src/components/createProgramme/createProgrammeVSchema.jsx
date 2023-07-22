@@ -49,7 +49,7 @@ export const createProgrammeSchema = yup.object()
             //                     /^((http|https):\/\/)?(www.)?(?!.*(http|https|www.))[a-zA-Z0-9_-]+(\.[a-zA-Z]+)+(\/)?.([\w\?[a-zA-Z-_%\/@?]+)*([^\/\w\?[a-zA-Z0-9_-]+=\w+(&[a-zA-Z0-9_]+=\w+)*)?$/,
             //                     'Enter a valid url'
             //                 ),
-            display_image : yup.string()
-                        .required("this field is required"),
+            // display_image : yup.string()
+            //             .required("this field is required"),
         }
     ).required("form not filled in yet") 
