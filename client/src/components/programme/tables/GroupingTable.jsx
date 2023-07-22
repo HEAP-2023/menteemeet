@@ -6,7 +6,7 @@ import { useSelector } from "react-redux";
 
 const GroupingTable = ({api, rows, columns, editable=false }) => {
     const colors = generateColors();
-    const acctID = useSelector((state) => state.user.userDetails.acctID)
+    const acctID = useSelector((state) => state.user.userBasicDetails.account_id)
     const getRowSpacing = useCallback((params) => {
         return {
           top: (params.isFirstVisible && params.isLastVisible) ? 0 : 5,

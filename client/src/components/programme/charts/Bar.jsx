@@ -25,7 +25,7 @@ const Bar = ({ data /* see data tab */ }) => (
         reverse={false}
         valueScale={{ type: 'linear' }}
         indexScale={{ type: 'band', round: true }}
-        colors={{ scheme: 'nivo' }}
+        colors={{ scheme: 'paired' }}
         colorBy="indexValue"
         borderWidth={0}
         borderRadius={0}
