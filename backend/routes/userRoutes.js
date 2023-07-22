@@ -17,6 +17,7 @@ router.use(authenticateToken);
 
 //get Prog by UserID & Role
 router.get('/:id/programmes/:role', authenticateToken, userController.getAllProgByUserID);
+router.get('/:id/programmes/', authenticateToken, userController.getUnsignedProg);
 
 router.put('/:id', authenticateToken, userController.updateUser);
 

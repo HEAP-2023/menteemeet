@@ -17,7 +17,7 @@ const { authenticateToken } = require('../middlewares/authMiddlewares');
 router.get('/:id', authenticateToken, organiserController.getOrg);
 router.put('/:id', authenticateToken, organiserController.updateOrg);
 router.get('/:id/programmes', authenticateToken, organiserController.getAllProgsByOrgID);
-router.post('/:id/programmes', authenticateToken, upload.single('display_image'), organiserController.addProg);
+router.post('/programmes', authenticateToken, upload.single('display_image'), organiserController.addProg);
 router.delete('/:id/programmes/:prog_id', authenticateToken, organiserController.deleteProg);
 
 // router.get('/:id', authenticateToken, organiserController.getOrg);

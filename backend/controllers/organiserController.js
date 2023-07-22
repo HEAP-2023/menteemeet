@@ -93,14 +93,17 @@ const updateOrg = async (req, res) => {
 
 const addProg = async (req, res) => {
   const account = req.account;
-  const id = req.params.id;
 
-  const org = await Organiser.findOne({ where: { organiser_id: id } });
+  // If account_type is not organiser, reject
+  if (account.account_type != "organiser")
+    return res.status(403).json({ message: "Not authorised! Only organisers can create programmes!" });
 
-  //Ensure that the current organiser is authorised to update details
-  if (account.account_id !== org.account_id) {
-    return res.status(403).json({ message: "Not authorised!" })
-  }
+  // Retrieve organiser from organiser table
+  const org = await Organiser.findOne({ where: { account_id: account.account_id } });
+
+  // If no organiser found, it would mean that the jwt is for a user that doesn't exist
+  if (!org)
+    return res.status(403).json({ message: "Not authorised! Only organisers can create programmes!" });
 
   const { name, description, category, programmeStart, programmeEnd, menteeCapacity, mentorCapacity, deadline, matching_criteria, skills } = req.body;
 
@@ -116,23 +119,27 @@ const addProg = async (req, res) => {
       deadline,
       matching_criteria,
       skills,
-      id
+      organiser_id: org.organiser_id
     })
 
-    const uploadFile = await awsS3Controller.uploadToS3(req.file, newProg.programme_id);
+    // const uploadFile = await awsS3Controller.uploadToS3(req.file, newProg.programme_id);
 
-    if (uploadFile) {
-      const prog = await Programme.update({ display_image: JSON.stringify(uploadFile) },{ where: { programme_id: newProg.programme_id } });
-      const progToReturn = {
-        ...newProg.dataValues,
-        display_image: JSON.stringify(uploadFile)
-      }
-      console.log("created programme but image failed")
-      return res.status(200).json({ message: 'Successfully created programme!', programme: progToReturn });
-    } else {
-      await Programme.destroy({ where: { programme_id: newProg.programme_id }});
-      res.status(500).json({ message: 'Failed to upload display image!' });
-    }
+    // if (uploadFile) {
+    //   const prog = await Programme.update({ display_image: JSON.stringify(uploadFile) },{ where: { programme_id: newProg.programme_id } });
+    //   const progToReturn = {
+    //     ...newProg.dataValues,
+    //     display_image: JSON.stringify(uploadFile)
+    //   }
+    //   console.log("created programme but image failed")
+    //   return res.status(200).json({ message: 'Successfully created programme!', programme: progToReturn });
+    // } else {
+    //   await Programme.destroy({ where: { programme_id: newProg.programme_id }});
+    //   res.status(500).json({ message: 'Failed to upload display image!' });
+    // }
+
+    // TODO: Remove after adding image upload code
+    return res.status(201).json(newProg);
+    
   } catch (err) {
     console.error(err);
     return res.status(500).json({ message: "Failed to create programme!" });
