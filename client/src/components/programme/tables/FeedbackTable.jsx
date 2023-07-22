@@ -1,7 +1,6 @@
 import { Box, Typography, Button } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 import { generateColors } from "../../../theme";
-import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 import { useCallback } from "react";
 
 const FeedbackTable = () => {
@@ -25,8 +24,8 @@ const FeedbackTable = () => {
             <DataGrid
                 rows={rows}
                 columns={columns}
-                // getRowSpacing={getRowSpacing}
-                // getRowHeight={() => 'auto'}
+                getRowSpacing={getRowSpacing}
+                getRowHeight={() => 'auto'}
                 disableRowSelectionOnClick
                 initialState={{
                     pagination: {
@@ -55,23 +54,6 @@ const FeedbackTable = () => {
 }
 
 export default FeedbackTable;
-// const displayUsers = (props) => {
-//     const { api, value } = props;
-    
-//     return (<Box width="100%" display="flex" flexDirection="column"     >
-//         {value.map((user) => {
-//             return (
-//             <Box key={user.id} draggable>
-//                 <Button variant="contained" sx={{m:"10px 0", borderRadius:"20px", bgcolor:"#EBEBEB"}}>
-//                     <AccountCircleOutlinedIcon/>
-//                     <Typography>{user.name}</Typography>
-//                 </Button>
-//             </Box>
-
-//             )}
-//         )}
-//     </Box>)
-// }
 
 const rows = [
     { id: 1, groupNo: 1, name: 'Jon Snow', role: 'Mentor', feedback: 'Lorem Ipsum es simplemente el texto de relleno de las imprentas y archivos de texto. Lorem Ipsum ha sido el texto de relleno' },
