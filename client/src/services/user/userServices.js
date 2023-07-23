@@ -9,11 +9,11 @@ export const getUserDetails = async (id) => {
     return res.data;
 }
 
-export const putUserDetails = async (id, data) => {
-    console.log(id, data)
+export const putUserDetails = async (data) => {
+    console.log(data)
     const res = await axiosInstance({
         method : "put",
-        url : `/users/${id}`,
+        url : `/users`,
         headers: { Authorization: `Bearer ${localStorage.getItem("jwt")}` },
         data : data
     })
