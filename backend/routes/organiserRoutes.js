@@ -12,11 +12,12 @@ const { authenticateToken } = require('../middlewares/authMiddlewares');
 //Instead of putting "authToken" as an arg in each route,
 // you can do this instead. So every route in this router will
 // use the auth function as a middleware.
-// router.use(authenticateToken);
+router.use(authenticateToken);
+router.get('/programmes', authenticateToken, organiserController.getAllProgsByOrgID);
 
 router.get('/:id', authenticateToken, organiserController.getOrg);
-router.put('/:id', authenticateToken, organiserController.updateOrg);
-router.get('/:id/programmes', authenticateToken, organiserController.getAllProgsByOrgID);
+router.put('/', authenticateToken, organiserController.updateOrg);
+
 router.post('/programmes', authenticateToken, upload.single('display_image'), organiserController.addProg);
 router.delete('/:id/programmes/:prog_id', authenticateToken, organiserController.deleteProg);
 
