@@ -111,7 +111,7 @@ const getAllProgByUserID = async (req, res) => {
       return res.status(403).json({ message: "Not authorised!" });
     }
 
-    const getUserRole = req.body.role;
+    const getUserRole = req.params.role;
 
     //Returns array.
     const getUserProgObj = await UserProgramme.findAll({ where: { user_id : getUserID, role: getUserRole },

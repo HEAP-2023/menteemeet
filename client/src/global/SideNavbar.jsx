@@ -5,11 +5,16 @@ import { Box } from "@mui/material";
 import { Link } from "react-router-dom";
 import { generateColors } from "../theme";
 import { useSelector } from "react-redux";
+import useGetAllProgsInvolved from "../hooks/programmes/organiser_authorised/useGetAllProgsInvolved";
 
 const SideNavbar = ({enrolled}) => {
     const colors = generateColors();
     const userType = useSelector((state) => state.user.userType);
+    const {data, isSuccess} = useGetAllProgsInvolved()
 
+    if(isSuccess){
+        console.log(data)
+    }
 
     return (
         <Box width="20%" bgcolor="primary.main">

@@ -20,3 +20,12 @@ export const putUserDetails = async (id, data) => {
     localStorage.setItem("jwt", res.data.getAccessToken);
     return res.data;
 }
+
+export const getAllProgsParticipating = async (id, role) => {
+    const res = await axiosInstance({
+        method : "get",
+        url : `/users/${id}/programmes/${role}`,
+        headers: { Authorization: `Bearer ${localStorage.getItem("jwt")}` },
+    })
+    return res.data;
+}
