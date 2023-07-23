@@ -122,23 +122,20 @@ const addProg = async (req, res) => {
       organiser_id: org.organiser_id
     })
 
-    // const uploadFile = await awsS3Controller.uploadToS3(req.file, newProg.programme_id);
+    const uploadFile = await awsS3Controller.uploadToS3(req.file, newProg.programme_id);
 
-    // if (uploadFile) {
-    //   const prog = await Programme.update({ display_image: JSON.stringify(uploadFile) },{ where: { programme_id: newProg.programme_id } });
-    //   const progToReturn = {
-    //     ...newProg.dataValues,
-    //     display_image: JSON.stringify(uploadFile)
-    //   }
-    //   console.log("created programme but image failed")
-    //   return res.status(200).json({ message: 'Successfully created programme!', programme: progToReturn });
-    // } else {
-    //   await Programme.destroy({ where: { programme_id: newProg.programme_id }});
-    //   res.status(500).json({ message: 'Failed to upload display image!' });
-    // }
-
-    // TODO: Remove after adding image upload code
-    return res.status(201).json(newProg);
+    if (uploadFile) {
+      const prog = await Programme.update({ display_image: JSON.stringify(uploadFile) },{ where: { programme_id: newProg.programme_id } });
+      const progToReturn = {
+        ...newProg.dataValues,
+        display_image: JSON.stringify(uploadFile)
+      }
+      console.log("created programme but image failed")
+      return res.status(200).json({ message: 'Successfully created programme!', programme: progToReturn });
+    } else {
+      await Programme.destroy({ where: { programme_id: newProg.programme_id }});
+      res.status(500).json({ message: 'Failed to upload display image!' });
+    }
     
   } catch (err) {
     console.error(err);

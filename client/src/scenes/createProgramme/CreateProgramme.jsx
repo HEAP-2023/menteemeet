@@ -58,17 +58,24 @@ const CreateProgramme = () => {
 
     // const { mutate : createProgramme } = usePostProgramme()
 
+    // The code below is working for creating programmes and uploading images (Axel)
     const handleSave = async (data) => {
         console.log("to be submitted")
         const formattedData = {...data, 
             skills : JSON.stringify(data.skills.map(skill => skill.skillName)),
             matching_criteria : JSON.stringify(data.matching_criteria)
         }
-        console.log(formattedData)
-        // createProgramme(formattedData);
+
+        const formData = new FormData();
+        for (const key in formattedData) {
+            formData.append(key, formattedData[key]);
+        }
+
+        console.log(formData);
+        // createProgramme(formData);
 
         try {
-            await postProgramme(formattedData);
+            await postProgramme(formData);
         } catch (err) {
             console.log(err);
         }

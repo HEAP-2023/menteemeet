@@ -242,15 +242,15 @@ const Step1 = () => {
                             onChange={(e) => {
                                 const [file] = e.target.files
                                 if (file) {
-                                    const blob = URL.createObjectURL(file)
-                                    imagePreview.current.src = blob
-                                    field.onChange(blob)
+                                    // const blob = URL.createObjectURL(file)
+                                    // imagePreview.current.src = blob
+                                    field.onChange(file);
                                   }
                             }}
                             />
-                            <img ref={imagePreview} alt="Image format is not supported" 
+                            {/* <img ref={imagePreview} alt="Image format is not supported" 
                             src="#" hidden={!imgUploaded}
-                            style={{height: "300px", objectFit : "scale-down" ,width: "auto"}}/>
+                            style={{height: "300px", objectFit : "scale-down" ,width: "auto"}}/> */}
                         </Stack>)}
                     }
                         />
