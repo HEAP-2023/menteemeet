@@ -18,7 +18,7 @@ const Statistics = () => {
                     <Bar data={barData} />
                 </Box>
                 <Box sx={{ height: "300px", width: "550px", bgcolor: `${colors.primary[500]}`, borderRadius: '20px', m: '10px' }} >
-                    <Typography sx={{ mt: '15px', ml: '15px' }}>Mentor and Mentee Satisfaction</Typography>
+                    <Typography sx={{ mt: '15px', ml: '15px' }}>Mentor and Mentee Satisfaction (scale of 1 to 10)</Typography>
                     <Box sx={{ display: "flex", height: "250px", width: "500px", marginLeft: "20px" }}>
                         <SatisfactionHistogram data={histogramData} />
                     </Box>

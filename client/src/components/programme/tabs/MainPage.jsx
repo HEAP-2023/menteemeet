@@ -7,18 +7,18 @@ const MainPage = () => {
             <Box width="45%" height="100%" display="flex" flexDirection="column" alignItems="center" >
                 {/* Upcoming Sessions */}
                 <Section header="Upcoming Sessions" rows={upcomingSession} rowColor="#AEAEFF" highlight={true}></Section>
-                {/* Tasks */}
-                <Section header="Tasks" rows={tasks} rowColor="#AEAEFF" checkbox={true}></Section>
+                {/* Tasks -- Removed */}
+                {/* <Section header="Tasks" rows={tasks} rowColor="#AEAEFF" checkbox={true}></Section> */}
                 {/* Announcements */}
                 <Section header="Announcements" rows={announcements} rowColor="#AEAEFF" highlight={true}></Section>
             </Box>
 
             <Box width="45%">
-                {/* events */}
+                {/* Progress */}
                 <Section header="Progress" rows={progress} rowColor="#AEAEFF" highlight={true}></Section>
-                {/* events */}
-                <Section header="Forum" rows={forum} rowColor="#AEAEFF"></Section>
-                {/* events */}
+                {/* Forum -- Removed */}
+                {/* <Section header="Forum" rows={forum} rowColor="#AEAEFF"></Section> */}
+                {/* Resources */}
                 <Section header="Resources" rows={resources} rowColor="#AEAEFF" highlight={true}></Section>
             </Box>
         </Box>
@@ -73,16 +73,16 @@ const announcements = [
 
 const progress = [
     {
-        body: "Mentor(s): Alice Mentee(s): Ben, Carl"
+        body: "Mentor(s): 40  Mentee(s): 60"
     }
 ]
 
-const forum = [
-    {
-        title: "Latest Dicussion on Agile",
-        body: "Q: What type of Agile Methodology should our group use?"
-    }
-]
+// const forum = [
+//     {
+//         title: "Latest Dicussion on Agile",
+//         body: "Q: What type of Agile Methodology should our group use?"
+//     }
+// ]
 
 const resources = [
     {
