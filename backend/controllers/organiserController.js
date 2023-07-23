@@ -151,8 +151,12 @@ const getAllProgsByOrgID = async (req, res) => {
   const { limit, offset } = getPagination(page, size);
 
   try {
+    const account = req.account;
+
+    const getOrgObj = await Organiser.findOne({ where: { account_id: account.account_id }, raw: true });
+
     //Returns array.
-    const getOrgProgObj = await Programme.findAll({ where: { organiser_id : getOrgID},
+    const getOrgProgObj = await Programme.findAll({ where: { organiser_id : getOrgObj.organiser_id},
       raw: true });
       
     if (!getOrgProgObj) {
@@ -174,7 +178,7 @@ const getAllProgsByOrgID = async (req, res) => {
         if (response.currentPage > response.totalPages) {
           return res.status(400).json({message: "Nothing to retrieve. Exceeded page request", response });
         }
-      return res.status(200).json({ message: "All programmes have been retrieved for Organiser No: " + getOrgID + ".", response }) 
+      return res.status(200).json({ message: "All programmes have been retrieved for Organiser No: " + getOrgObj.organiser_id + ".", response }) 
       });
       
   } catch (err) {

@@ -103,19 +103,17 @@ const getAllProgByUserID = async (req, res) => {
   try {
 
     const account = req.account;
-    const getUserID = req.params.id;
-
-    const getUserObj = await User.findOne({ where: { user_id : getUserID }, raw: true });
-
-    //Ensure that the current user is authorised to update details
-    if (account.account_id !== getUserObj.account_id) {
-      return res.status(403).json({ message: "Not authorised!" });
-    }
-
     const getUserRole = req.params.role;
 
+    const getUserObj = await User.findOne({ where: { account_id : account.account_id }, raw: true });
+
+    //Ensure that the current user is authorised to update details
+    // if (account.account_id !== getUserObj.account_id) {
+    //   return res.status(403).json({ message: "Not authorised!" });
+    // }
+
     //Returns array.
-    const getUserProgObj = await UserProgramme.findAll({ where: { user_id : getUserID, role: getUserRole },
+    const getUserProgObj = await UserProgramme.findAll({ where: { user_id : getUserObj.user_id, role: getUserRole },
       raw: true });
       
     if (!getUserProgObj) {
@@ -137,7 +135,7 @@ const getAllProgByUserID = async (req, res) => {
         if (response.currentPage > response.totalPages) {
           return res.status(400).json({message: "Nothing to retrieve. Exceeded page request", response });
         }
-      return res.status(200).json({message: "All programmes have been retrieved for User No: " + getUserID + ".", response }) 
+      return res.status(200).json({message: "All programmes have been retrieved for User No: " + getUserObj.user_id + ".", response }) 
       });
       
   } catch (err) {
@@ -154,20 +152,11 @@ const getUnsignedProg = async (req, res) => {
     var resp;
 
     const account = req.account;
-    const getUserID = req.params.id;
-
-    const getUserObj = await User.findOne({ where: { user_id : getUserID }, raw: true });
-
-    //Ensure that the current user is authorised to update details
-    if (account.account_id !== getUserObj.account_id) {
-      return res.status(403).json({ message: "Not authorised!" });
-    }
+    const getUserObj = await User.findOne({ where: { account_id : account.account_id }, raw: true });
 
     //Returns array.
-    const getUserProgObj = await UserProgramme.findAll({ where: { user_id : getUserID },
+    const getUserProgObj = await UserProgramme.findAll({ where: { user_id : getUserObj.user_id },
       raw: true });
-    
-    console.log(getUserProgObj);
       
     if (!getUserProgObj || getUserProgObj.length == 0) {
       await Programme.findAndCountAll({ attributes: ['programme_id', 'name', 'description'
@@ -203,7 +192,7 @@ const getUnsignedProg = async (req, res) => {
 
     return res.status(200).json({
       message: "All programmes that are not signed up have been retrieved for User No: " 
-      + getUserID + ".", resp }) 
+      + getUserObj.user_id + ".", resp }) 
       
   } catch (err) {
     console.error(err);
