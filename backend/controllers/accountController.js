@@ -16,18 +16,21 @@ function generateJwtId() {
   return jti;
 }
 
-const generateAccessToken = (account) => {
+const generateAccessToken = async (account) => {
 
   const jwtID = generateJwtId();
 
-  // Remove the encoded password property
-  delete account.password;
-  const tokenSigned = jwt.sign(account, ACCESS_TOKEN_SECRET, { jwtid: jwtID, expiresIn: EXPIRY });
-
+  //Handle updating to DB before signing. 
   //store into DB
-  Account.update(
+  await Account.update(
     { json_tokenID: jwtID },
     { where: { account_id: account.account_id }} )
+
+  const updatedAcc = await Account.findOne({ where: { account_id: account.account_id }, raw: true });
+
+  // Remove the encoded password property
+  delete updatedAcc.password;
+  const tokenSigned = jwt.sign(updatedAcc, ACCESS_TOKEN_SECRET, { jwtid: jwtID, expiresIn: EXPIRY });
 
   return tokenSigned;
 }
@@ -63,7 +66,7 @@ const register = async (req, res) => {
       account_type: account_type
     })
 
-    const accessToken = generateAccessToken(newAccount.dataValues);
+    const accessToken = await generateAccessToken(newAccount.dataValues);
 
     if (account_type === 'user') {
       const newUser = await User.create({
@@ -102,7 +105,7 @@ const login = async (req, res) => {
       return res.status(401).json({ message: "Your email/password is incorrect." });
     }
 
-    const accessToken = generateAccessToken(account);
+    const accessToken = await generateAccessToken(account);
 
     if (account.account_type === 'user'){
       const user = await User.findOne({ where: { account_id: account.account_id }, raw: true });
@@ -149,7 +152,7 @@ const changePassword = async (req, res) => {
       { password: hashedPass }, 
       { where: { account_id: account.account_id }})
 
-    return res.status(200).json({ message: "Password chaged successfully!" });
+    return res.status(200).json({ message: "Password changed successfully!" });
   } catch (err) {
     console.error(err);
     return res.status(500).json({ message: "Failed to change password!" });
