@@ -16,10 +16,10 @@ const { authenticateToken } = require('../middlewares/authMiddlewares');
 router.use(authenticateToken);
 
 //get Prog by UserID & Role
-router.get('/:id/programmes/:role', authenticateToken, userController.getAllProgByUserID);
-router.get('/:id/programmes/', authenticateToken, userController.getUnsignedProg);
+router.get('/programmes/:role', authenticateToken, userController.getAllProgByUserID);
+router.get('/programmes/', authenticateToken, userController.getUnsignedProg);
 
-router.put('/:id', authenticateToken, userController.updateUser);
+router.put('/', authenticateToken, userController.updateUser);
 
 router.get('/:id', authenticateToken, userController.getUser);
 router.get('/:id/skills', authenticateToken, userController.getSkill);

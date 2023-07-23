@@ -12,9 +12,9 @@ const { getPagination, getPagingData } = require('./programmeController');
 
 const { generateAccessToken } = require('./accountController');
 
-function updateJWT(getUserObj) {
+const updateJWT = async (getObj) => {
   try {
-    const accessToken = generateAccessToken(getUserObj);
+    const accessToken = await generateAccessToken(getObj);
 
     return accessToken;
 
@@ -30,36 +30,37 @@ const updateUser = async (req, res) => {
         //Filtering out each Object so that they == to the email.
 
         // const filteredObject = Object.fromEntries(Object.entries(storeUserObj).filter(([key, value]) => value === req.user.email));
-        // const filteredJsonString = JSON.stringify(filteredObject); // Stringify the filtered object        
-        
-        const getUserID = req.params.id;
-        const getUserObj = await User.findOne({ where: { user_id : getUserID }, raw: true });
+        // const filteredJsonString = JSON.stringify(filteredObject); // Stringify the filtered object   
+        if (req.body === undefined || Object.keys(req.body).length === 0) {
+          return res.status(400).json({ message: "Error. Fields are empty."});
+        }     
+      
+        // const getUserID = req.params.id;
+        const getUserObj = await User.findOne({ where: { account_id : account.account_id }, raw: true });
 
         //Ensure that the current user is authorised to update details
-        if (account.account_id !== getUserObj.account_id) {
-          return res.status(403).json({ message: "Not authorised!" });
-        }
-
-        if (req.body === undefined || Object.keys(req.body).length === 0) {
-          return res.status(400).json({ message: "Fields are empty."});
-        }
+        // if (account.account_id !== getUserObj.account_id) {
+        //   return res.status(403).json({ message: "Not authorised!" });
+        // }
 
         const email = req.body.email;
         const name = req.body.name;
         const contact = req.body.contact_no;
+
         const teleUsername = req.body.telegram_username;
+
+        await Account.update(
+          { email: email, name: name, contact_no: contact },
+          { where: { account_id: getUserObj.account_id }} );
+
+        const updatedAcc = await Account.findOne({ where: { account_id: getUserObj.account_id }, raw: true });
+        const accessToken = await updateJWT(updatedAcc);
 
         await User.update(
           { telegram_username: teleUsername },
-          { where: { user_id : getUserID }} );
+          { where: { account_id : account.account_id }} );
 
-        //Update function
-        await Account.update(
-          { email: email, name: name, contact_no: contact },
-          { where: { account_id: getUserObj.account_id }} )
-
-        const accessToken = updateJWT(getUserObj);
-        return res.status(200).json({ message: "Successfully updated!", accessToken });
+        return res.status(200).json({ message: "Successfully updated for all tables.", accessToken });
         
     } catch (err) {
         console.log(err);
@@ -102,19 +103,17 @@ const getAllProgByUserID = async (req, res) => {
   try {
 
     const account = req.account;
-    const getUserID = req.params.id;
+    const getUserRole = req.params.role;
 
-    const getUserObj = await User.findOne({ where: { user_id : getUserID }, raw: true });
+    const getUserObj = await User.findOne({ where: { account_id : account.account_id }, raw: true });
 
     //Ensure that the current user is authorised to update details
-    if (account.account_id !== getUserObj.account_id) {
-      return res.status(403).json({ message: "Not authorised!" });
-    }
-
-    const getUserRole = req.body.role;
+    // if (account.account_id !== getUserObj.account_id) {
+    //   return res.status(403).json({ message: "Not authorised!" });
+    // }
 
     //Returns array.
-    const getUserProgObj = await UserProgramme.findAll({ where: { user_id : getUserID, role: getUserRole },
+    const getUserProgObj = await UserProgramme.findAll({ where: { user_id : getUserObj.user_id, role: getUserRole },
       raw: true });
       
     if (!getUserProgObj) {
@@ -136,7 +135,7 @@ const getAllProgByUserID = async (req, res) => {
         if (response.currentPage > response.totalPages) {
           return res.status(400).json({message: "Nothing to retrieve. Exceeded page request", response });
         }
-      return res.status(200).json({message: "All programmes have been retrieved for User No: " + getUserID + ".", response }) 
+      return res.status(200).json({message: "All programmes have been retrieved for User No: " + getUserObj.user_id + ".", response }) 
       });
       
   } catch (err) {
@@ -153,20 +152,11 @@ const getUnsignedProg = async (req, res) => {
     var resp;
 
     const account = req.account;
-    const getUserID = req.params.id;
-
-    const getUserObj = await User.findOne({ where: { user_id : getUserID }, raw: true });
-
-    //Ensure that the current user is authorised to update details
-    if (account.account_id !== getUserObj.account_id) {
-      return res.status(403).json({ message: "Not authorised!" });
-    }
+    const getUserObj = await User.findOne({ where: { account_id : account.account_id }, raw: true });
 
     //Returns array.
-    const getUserProgObj = await UserProgramme.findAll({ where: { user_id : getUserID },
+    const getUserProgObj = await UserProgramme.findAll({ where: { user_id : getUserObj.user_id },
       raw: true });
-    
-    console.log(getUserProgObj);
       
     if (!getUserProgObj || getUserProgObj.length == 0) {
       await Programme.findAndCountAll({ attributes: ['programme_id', 'name', 'description'
@@ -202,7 +192,7 @@ const getUnsignedProg = async (req, res) => {
 
     return res.status(200).json({
       message: "All programmes that are not signed up have been retrieved for User No: " 
-      + getUserID + ".", resp }) 
+      + getUserObj.user_id + ".", resp }) 
       
   } catch (err) {
     console.error(err);

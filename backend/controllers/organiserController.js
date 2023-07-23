@@ -3,13 +3,13 @@ const Organiser = require('../models/organiser');
 const Programme = require('../models/programme');
 const awsS3Controller = require('./awsS3Controller');
 const { Op } = require("sequelize");
-const bcrypt = require("bcrypt");
+
 const { generateAccessToken } = require('./accountController');
 const { getPagination, getPagingData } = require('./programmeController');
 
-function updateJWT(getOrgObj) {
+const updateJWT = async (updatedAcc) => {
   try {
-    const accessToken = generateAccessToken(getOrgObj);
+    const accessToken = await generateAccessToken(updatedAcc);
 
     return accessToken;
 
@@ -33,8 +33,6 @@ const getOrg = async (req, res) => {
         }
       ], raw: true });
 
-    console.log(organiser);
-
     if (!organiser) {
       return res.status(404).json({ message: 'Organiser not found!' })
     }
@@ -50,13 +48,17 @@ const updateOrg = async (req, res) => {
     const account = req.account
 
     try {
-        //Filtering out each Object so that they == to the email.
-
-        // const filteredObject = Object.fromEntries(Object.entries(storeUserObj).filter(([key, value]) => value === req.user.email));
-        // const filteredJsonString = JSON.stringify(filteredObject); // Stringify the filtered object
-
         if (req.body === undefined || Object.keys(req.body).length === 0) {
           return res.status(400).json({ message: "Fields are empty."});
+        }
+
+        if (account.account_type != "organiser") {
+          return res.status(403).json({ message: "You are not an organiser." });
+        } 
+
+        const getOrgObj = await Organiser.findOne({ where: { account_id : getAccID }, raw: true });
+        if (!getOrgObj) {
+          return res.status(403).json({ message: "No such organiser." });
         }
 
         const email = req.body.email;
@@ -65,26 +67,23 @@ const updateOrg = async (req, res) => {
 
         const description = req.body.description;
 
-        const getOrgID = req.params.id;
-        const getOrgObj = await Organiser.findOne({ where: { organiser_id : getOrgID }, raw: true });
+        await Account.update(
+          { email: email, name: name, contact_no: contact },
+          { where: { account_id: getOrgObj.account_id }} );
 
-        //Ensure that the current organiser is authorised to update details
-        if (account.account_id !== getOrgObj.account_id) {
-          return res.status(403).json({ message: "Not authorised!" })
-        }
+        const updatedAcc = await Account.findOne({ where: { account_id: getOrgObj.account_id }, raw: true });
+        const accessToken = await updateJWT(updatedAcc);
 
         await Organiser.update(
           { description: description },
-          { where: { organiser_id : getOrgID }} );
+          { where: { account_id : getOrgObj.account_id }} );
 
-        //Update function
-        await Account.update(
-          { email: email, name: name, contact_no: contact }, 
-          { where: { account_id: getOrgObj.account_id }} )
+        //Ensure that the current organiser is authorised to update details
+        // if (account.account_id !== getOrgObj.account_id) {
+        //   return res.status(403).json({ message: "Not authorised!" })
+        // }
+        return res.status(200).json({ message: "Successfully updated for all tables!", accessToken });
 
-        const accessToken = updateJWT(getOrgObj);
-        return res.status(200).json({message: "Successfully updated!", accessToken });
-        
     } catch (err) {
         console.log(err);
         return res.status(500).json({ error: err });
@@ -148,14 +147,16 @@ const addProg = async (req, res) => {
 
 
 const getAllProgsByOrgID = async (req, res) => {
-
-  const getOrgID = req.params.id;
   const { page, size } = req.query;
   const { limit, offset } = getPagination(page, size);
 
   try {
+    const account = req.account;
+
+    const getOrgObj = await Organiser.findOne({ where: { account_id: account.account_id }, raw: true });
+
     //Returns array.
-    const getOrgProgObj = await Programme.findAll({ where: { organiser_id : getOrgID},
+    const getOrgProgObj = await Programme.findAll({ where: { organiser_id : getOrgObj.organiser_id},
       raw: true });
       
     if (!getOrgProgObj) {
@@ -177,7 +178,7 @@ const getAllProgsByOrgID = async (req, res) => {
         if (response.currentPage > response.totalPages) {
           return res.status(400).json({message: "Nothing to retrieve. Exceeded page request", response });
         }
-      return res.status(200).json({ message: "All programmes have been retrieved for Organiser No: " + getOrgID + ".", response }) 
+      return res.status(200).json({ message: "All programmes have been retrieved for Organiser No: " + getOrgObj.organiser_id + ".", response }) 
       });
       
   } catch (err) {
