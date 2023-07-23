@@ -7,14 +7,14 @@ const SatisfactionHistogram = ({data}) => {
       indexBy="labelName"
       colors={{ scheme: 'paired' }}
       groupMode='grouped'
-      margin={{bottom: 10, left: 40, top: 10}}
+      margin={{bottom: 20, left: 40, top: 10}}
       axisLeft={{
         tickSize: 5,
         tickPadding: 5,
         tickRotation: 0,
-        legend: 'food',
+        legend: 'Number of people',
         legendPosition: 'middle',
-        legendOffset: -30
+        legendOffset: -35
     }}
       />
     )
