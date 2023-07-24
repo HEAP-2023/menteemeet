@@ -7,7 +7,7 @@ const useDeleteProgramme = () => {
 
     return useMutation((prog_id) => delProgramme(id, prog_id), {
         onSuccess : (data) => {
-            console.log(data)
+            console.log("successfully deleted prog if exist since doesnt account for prog that doesnt exist")
         },
         onError : (data) => {
             console.log(data)

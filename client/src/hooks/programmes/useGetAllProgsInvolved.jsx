@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query"
-import { getAllProgsCreated } from "../../../services/programmes/organiserServices"
+import { getAllProgsCreated } from "../../services/programmes/organiserServices"
 import { useSelector } from "react-redux"
-import { getAllProgsParticipating } from "../../../services/user/userServices"
+import { getAllProgsParticipating } from "../../services/user/userServices"
 import { useCallback } from "react"
 
 const useGetAllProgsInvolved = () => {
@@ -12,9 +12,9 @@ const useGetAllProgsInvolved = () => {
         if (userType === "organiser"){
             return getAllProgsCreated(user_id)
         }
-        return getAllProgsParticipating(user_id, userType)
+        return getAllProgsParticipating(userType)
     })
-    return useQuery(["getCreated", user_id], queryFn)
+    return useQuery(["getInvolved"], queryFn)
 }
 
 export default useGetAllProgsInvolved;

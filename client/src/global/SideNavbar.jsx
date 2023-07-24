@@ -5,7 +5,7 @@ import { Box } from "@mui/material";
 import { Link } from "react-router-dom";
 import { generateColors } from "../theme";
 import { useSelector } from "react-redux";
-import useGetAllProgsInvolved from "../hooks/programmes/organiser_authorised/useGetAllProgsInvolved";
+import useGetAllProgsInvolved from "../hooks/programmes/useGetAllProgsInvolved";
 
 const SideNavbar = ({enrolled}) => {
     const colors = generateColors();

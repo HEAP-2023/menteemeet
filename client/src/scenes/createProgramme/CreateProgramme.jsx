@@ -56,7 +56,7 @@ const CreateProgramme = () => {
     }, [done, watchMatching])
 
 
-    // const { mutate : createProgramme } = usePostProgramme()
+    const { mutate : createProgramme } = usePostProgramme()
 
     const handleSave = async (data) => {
         console.log("to be submitted")
@@ -65,13 +65,13 @@ const CreateProgramme = () => {
             matching_criteria : JSON.stringify(data.matching_criteria)
         }
         console.log(formattedData)
-        // createProgramme(formattedData);
+        createProgramme(formattedData);
 
-        try {
-            await postProgramme(formattedData);
-        } catch (err) {
-            console.log(err);
-        }
+        // try {
+        //     await postProgramme(formattedData);
+        // } catch (err) {
+        //     console.log(err);
+        // }
     }
     return (
     <Box width="100%" p="40px" display="flex" flexDirection="column">

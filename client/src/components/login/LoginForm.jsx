@@ -6,7 +6,7 @@ import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup"
 import { loginSchema } from "./validationSchema";
 import { DevTool } from "@hookform/devtools";
-import useLogin from "../../hooks/login/useLogin";
+import useLogin from "../../hooks/auth/useLogin";
 
 const LoginForm = () => {
     const {control,formState: {errors} , handleSubmit, reset} = useForm({

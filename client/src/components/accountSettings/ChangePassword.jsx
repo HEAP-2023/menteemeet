@@ -8,7 +8,7 @@ import { Typography, Box, FormControl, InputAdornment, OutlinedInput, IconButton
 import { yupResolver } from "@hookform/resolvers/yup"
 import { ErrorMessage } from '@hookform/error-message';
 import * as yup from "yup"
-import useChangePW from '../../hooks/login/useChangePW';
+import useChangePW from '../../hooks/auth/useChangePW';
 
 const ChangePassword = ({acctInfo}) => {
     const {password} = acctInfo;

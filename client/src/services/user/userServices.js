@@ -21,10 +21,10 @@ export const putUserDetails = async (data) => {
     return res.data;
 }
 
-export const getAllProgsParticipating = async (id, role) => {
+export const getAllProgsParticipating = async (role) => {
     const res = await axiosInstance({
         method : "get",
-        url : `/users/${id}/programmes/${role}`,
+        url : `/users/programmes/${role}`,
         headers: { Authorization: `Bearer ${localStorage.getItem("jwt")}` },
     })
     return res.data;

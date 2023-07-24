@@ -78,7 +78,7 @@ export default Topbar;
 const NotificationExpanded = ({header, children=false}) => {
     return (
         <Stack p="20px">
-            <Typography fontWeight="700">header</Typography>
+            <Typography fontWeight="700">{header}</Typography>
             <Divider/>
             {!!children ? 
             children
