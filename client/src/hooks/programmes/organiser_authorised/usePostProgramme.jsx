@@ -4,8 +4,7 @@ import { useNavigate } from "react-router-dom"
 import { useSelector } from "react-redux"
 const usePostProgramme = () => {
     const navigate = useNavigate()
-    const id = useSelector((state) => state.user.userBasicDetails.user_id)
-    return useMutation((programme) => postProgramme(id, programme), {
+    return useMutation(postProgramme, {
         onSuccess : (data) =>  {
             console.log(data)
             navigate("/");

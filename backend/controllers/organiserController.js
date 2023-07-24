@@ -187,6 +187,7 @@ const getAllProgsByOrgID = async (req, res) => {
 const deleteProg = async (req, res) => {
   const account = req.account;
   const id = req.params.id;
+  const getProgID = req.params.prog_id
 
   const org = await Organiser.findOne({ where: { organiser_id: id } });
 

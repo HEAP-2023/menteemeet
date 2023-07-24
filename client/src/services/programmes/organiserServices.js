@@ -18,3 +18,14 @@ export const delProgramme = async(org_id, programme_id) => {
         url : `/organiser/${org_id}/programmes/${programme_id}`
     })
 }
+
+
+export const getAllProgsCreated = async(org_id) => {
+    const res = await axiosInstance({
+        method : "get",
+        headers: { Authorization: `Bearer ${localStorage.getItem("jwt")}` },
+        url : `/organiser/${org_id}/programmes`,
+    })
+    console.log(res)
+    return res;
+}

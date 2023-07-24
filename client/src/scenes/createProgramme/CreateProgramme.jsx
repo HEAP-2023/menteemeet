@@ -56,7 +56,7 @@ const CreateProgramme = () => {
     }, [done, watchMatching])
 
 
-    // const { mutate : createProgramme } = usePostProgramme()
+    const { mutate : createProgramme } = usePostProgramme()
 
     // The code below is working for creating programmes and uploading images (Axel)
     const handleSave = async (data) => {
@@ -65,6 +65,8 @@ const CreateProgramme = () => {
             skills : JSON.stringify(data.skills.map(skill => skill.skillName)),
             matching_criteria : JSON.stringify(data.matching_criteria)
         }
+        console.log(formattedData)
+        createProgramme(formattedData);
 
         const formData = new FormData();
         for (const key in formattedData) {
@@ -74,11 +76,11 @@ const CreateProgramme = () => {
         console.log(formData);
         // createProgramme(formData);
 
-        try {
-            await postProgramme(formData);
-        } catch (err) {
-            console.log(err);
-        }
+        // try {
+        //     await postProgramme(formattedData);
+        // } catch (err) {
+        //     console.log(err);
+        // }
     }
     return (
     <Box width="100%" p="40px" display="flex" flexDirection="column">

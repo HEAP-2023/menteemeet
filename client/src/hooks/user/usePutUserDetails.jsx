@@ -5,7 +5,7 @@ import { useQueryClient } from '@tanstack/react-query';
 export const usePutUserDetails = () => {
     const id = useSelector((state) => state.user.userBasicDetails["user_id"])
     const queryClient = useQueryClient()
-    return useMutation((data) => putUserDetails(id, data), {
+    return useMutation((data) => putUserDetails(data), {
         onMutate : async(newData) => {
             console.log(newData)
             

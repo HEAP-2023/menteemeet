@@ -5,7 +5,7 @@ import StandardTextField from "../StandardTextField";
 import { yupResolver } from "@hookform/resolvers/yup"
 import { signUpSchema } from "./validationSchema";
 import { DevTool } from "@hookform/devtools";
-import useSignup from "../../hooks/login/useSignup";
+import useSignup from "../../hooks/auth/useSignup"
 
 
 const SignUpForm = () => {

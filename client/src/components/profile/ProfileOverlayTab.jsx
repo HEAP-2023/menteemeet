@@ -17,7 +17,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { swap, profileOverlayToggle, logOut } from "../../state(kiv)";
 
 
-import useLogout from "../../hooks/login/useLogout"; 
+import useLogout from "../../hooks/auth/useLogout"; 
 
 const ProfileOverlayTab = ({acctInfo}) => {
     const dispatch = useDispatch();
