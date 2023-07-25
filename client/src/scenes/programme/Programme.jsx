@@ -8,7 +8,7 @@ import { useParams } from 'react-router-dom';
 import Sessions from "../../components/programme/tabs/Sessions";
 import MainPage from "../../components/programme/tabs/MainPage";
 import Feedback from "../../components/programme/tabs/Feedback";
-
+import Applications from "../../components/programme/tabs/Applications";
 // redux
 import { useSelector } from "react-redux";
 import Groupings from "../../components/programme/tabs/Groupings";
@@ -53,6 +53,9 @@ const Programme = ({programme_details}) => {
                     <Tab label="Groupings" value="groupings"/>
                     <Tab label="Feedback" value="feedback"/>
                     {userType === "organiser" &&
+                        <Tab label="Applications" value="applications"/>
+                    }
+                    {userType === "organiser" &&
                         <Tab label="Statistics" value="statistics"/>
                     }
                 </Tabs>
@@ -75,7 +78,12 @@ const Programme = ({programme_details}) => {
                     <Feedback />
                 </TabPanel>
                 {userType === "organiser" &&
-                    <TabPanel value="statistics" index={4}>
+                    <TabPanel value="applications" index={4}>
+                        <Applications/>
+                    </TabPanel>
+                }
+                {userType === "organiser" &&
+                    <TabPanel value="statistics" index={5}>
                         <Statistics/>
                     </TabPanel>
                 }
