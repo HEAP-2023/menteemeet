@@ -318,11 +318,17 @@ const signup = async (req, res) => {
     return res.status(400).json({ message: "User does not exist!" });
   }
 
-  const { availability, skills, interests, role, programme_id } = req.body;
+  const { availability, skills, interests, role, programmeID } = req.body;
 
   try {
     const date = new Date();
     const formattedDate = date.toISOString().slice(0, 10);
+
+    const checkProgExist = await Programme.findOne({ where: { programme_id: programmeID }, raw: true });
+
+    if (!checkProgExist) {
+      return res.status(400).json({ message: "Programme does not exist! Check properly leh." });
+    }
     
     const newApplication = await Application.create({
       date: formattedDate,
@@ -330,12 +336,12 @@ const signup = async (req, res) => {
       skills,
       interests,
       role,
-      programme_id,
+      programme_id: programmeID,
       is_accepted: 0,
       user_id: user.user_id
     })
 
-    return res.status(201).json({ message: "Successfully signed up!" });
+    return res.status(201).json({ message: "Successfully signed up!", newApplication });
   } catch (err) {
     console.error(err)
     return res.status(500).json({ message: "Failed to create an application!" });
