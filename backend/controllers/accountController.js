@@ -66,6 +66,8 @@ const register = async (req, res) => {
       account_type: account_type
     })
 
+    delete newAccount.dataValues.password;
+
     const accessToken = await generateAccessToken(newAccount.dataValues);
 
     if (account_type === 'user') {

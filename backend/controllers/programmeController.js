@@ -1,4 +1,5 @@
 const Programme = require("../models/programme");
+const Application = require("../models/application");
 
 const getEachProg = async (req, res) => {
   try {
@@ -59,4 +60,21 @@ const getAllProg = (req, res) => {
     }
 }
 
-module.exports = { getEachProg, getAllProg, getPagination, getPagingData };
+const getApplicationsByProgID = async (req, res) => {
+  const id = req.params.id;
+
+  try {
+    if (!await Programme.findOne({ where: { programme_id: id }})) {
+      return res.status(400).json({ message: "Programme does not exist!" });
+    }
+    
+    const applications = await Application.findAll({ where: { programme_id: id } });
+    
+    return res.status(200).json({ message: "All applications retrieved successfully!", applications });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ message: "Failed to fetch all appliations for the programme!" });
+  }
+};
+
+module.exports = { getEachProg, getAllProg, getPagination, getPagingData, getApplicationsByProgID };

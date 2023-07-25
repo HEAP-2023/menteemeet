@@ -327,7 +327,7 @@ const signup = async (req, res) => {
     const checkProgExist = await Programme.findOne({ where: { programme_id: programmeID }, raw: true });
 
     if (!checkProgExist) {
-      return res.status(400).json({ message: "Programme does not exist! Check properly leh." });
+      return res.status(400).json({ message: "Programme does not exist!" });
     }
     
     const newApplication = await Application.create({
