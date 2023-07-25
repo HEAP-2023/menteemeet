@@ -52,6 +52,11 @@ function initAssociations() {
   User.hasMany(Application, { foreignKey: 'user_id' });
   Application.belongsTo(User, { foreignKey: 'user_id' });
 
+  //Program and application
+  Programme.hasMany(Application, { foreignKey: 'programme_id' });
+  Application.belongsTo(Programme, { foreignKey: 'programme_id' });
+
+
   //Programme and forum
   // Programme.hasOne(Forum, { foreignKey: "programme_id" });
   // Forum.belongsTo(Programme, { foreignKey: "programme_id" });

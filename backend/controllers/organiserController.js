@@ -1,6 +1,10 @@
 const Account = require("../models/account");
 const Organiser = require('../models/organiser');
 const Programme = require('../models/programme');
+const Application = require('../models/application');
+
+const UserProgramme = require('../models/userProgramme');
+
 const awsS3Controller = require('./awsS3Controller');
 const { Op } = require("sequelize");
 
@@ -142,7 +146,6 @@ const addProg = async (req, res) => {
   }
 }
 
-
 const getAllProgsByOrgID = async (req, res) => {
   const { page, size } = req.query;
   const { limit, offset } = getPagination(page, size);
@@ -184,10 +187,47 @@ const getAllProgsByOrgID = async (req, res) => {
   }
 }
 
+const evaluateApp = async (req, res) => {
+  try {
+    const account = req.account;
+    if (account.account_type !== 'organiser') {
+      return res.status(403).json({ message: "You are not allowed to view this page." });
+    }
+
+    const getAppID = req.params.appID;
+
+    const getApplication = Application.findOne({ where: { application_id: getAppID } });
+    if (!getApplication) {
+      return res.status(404).json({ message: "Application not found!" });
+    }
+
+    const approval = req.body.approval;
+
+    if ((approval > 1 || approval < 0) || (approval === undefined) || (approval === "") || (approval === null)) {
+      return res.status(400).json({ message: "Approve Status Code is invalid." });
+    }
+
+    await Application.update({ is_accepted: approval }, { where: { application_id: getAppID }} );
+
+    if (approval === 1) {
+      const getApp = await Application.findOne({ where: { application_id: getAppID } });
+
+      await UserProgramme.create({ role: getApp.role, user_id: getApp.user_id, 
+        programme_id: getApp.programme_id });
+    }
+    
+    return res.status(200).json({ message: "Application and UserProgramme have been updated." });
+
+  } catch (err) {
+    return res.status(500).json({ error: err });
+  }
+}
+
 const deleteProg = async (req, res) => {
+
   const account = req.account;
   const id = req.params.id;
-  const getProgID = req.params.prog_id
+  const getProgID = req.params.progID
 
   const org = await Organiser.findOne({ where: { organiser_id: id } });
 
@@ -208,4 +248,4 @@ const deleteProg = async (req, res) => {
   }
 }
 
-module.exports = { getOrg, updateOrg, addProg, getAllProgsByOrgID, deleteProg };
+module.exports = { getOrg, updateOrg, addProg, getAllProgsByOrgID, evaluateApp, deleteProg };

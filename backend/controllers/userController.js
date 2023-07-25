@@ -318,7 +318,7 @@ const signup = async (req, res) => {
     return res.status(400).json({ message: "User does not exist!" });
   }
 
-  const { availability, skills, interests, role } = req.body;
+  const { availability, skills, interests, role, programme_id } = req.body;
 
   try {
     const date = new Date();
@@ -330,6 +330,7 @@ const signup = async (req, res) => {
       skills,
       interests,
       role,
+      programme_id,
       is_accepted: 0,
       user_id: user.user_id
     })

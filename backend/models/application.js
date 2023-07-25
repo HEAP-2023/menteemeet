@@ -16,7 +16,7 @@ const Application = sequelize.define(
         },
         availability: {
             type: DataTypes.STRING(),
-            allowNull: true,
+            allowNull: false,
         },
         skills: {
           type: DataTypes.STRING(),
@@ -25,6 +25,10 @@ const Application = sequelize.define(
         interests: {
           type: DataTypes.STRING(),
           allowNull: true,
+        },
+        role: {
+          type: DataTypes.STRING(),
+          allowNull: false,
         },
         is_accepted: {
           type: DataTypes.BOOLEAN,
