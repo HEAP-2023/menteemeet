@@ -196,7 +196,7 @@ const evaluateApp = async (req, res) => {
 
     const getAppID = req.params.appID;
 
-    const getApplication = Application.findOne({ where: { application_id: getAppID } });
+    const getApplication = await Application.findOne({ where: { application_id: getAppID }, raw: true });
     if (!getApplication) {
       return res.status(404).json({ message: "Application not found!" });
     }
@@ -209,14 +209,37 @@ const evaluateApp = async (req, res) => {
 
     await Application.update({ is_accepted: approval }, { where: { application_id: getAppID }} );
 
-    if (approval === 1) {
-      const getApp = await Application.findOne({ where: { application_id: getAppID } });
+    const getApp = await Application.findOne({ where: { application_id: getAppID }, raw: true });
 
+    if (approval === 1) {
       await UserProgramme.create({ role: getApp.role, user_id: getApp.user_id, 
         programme_id: getApp.programme_id });
+    } else {
+      await UserProgramme.destroy({ where: { programme_id: getApp.programme_id } });
     }
     
     return res.status(200).json({ message: "Application and UserProgramme have been updated." });
+
+  } catch (err) {
+    return res.status(500).json({ error: err });
+  }
+}
+
+const getApp = async (req, res) => {
+  try {
+    const account = req.account;
+    if (account.account_type !== 'organiser') {
+      return res.status(403).json({ message: "You are not allowed to view this page." });
+    }
+
+    const getProgID = req.params.progID;
+
+    const getApplication = await Application.findOne({ where: { programme_id: getProgID }, raw: true });
+    if (!getApplication) {
+      return res.status(404).json({ message: "Programme not signed up by any application." });
+    }
+
+    return res.status(200).json({ message: "Application retrieved.", getApplication });
 
   } catch (err) {
     return res.status(500).json({ error: err });
@@ -248,4 +271,4 @@ const deleteProg = async (req, res) => {
   }
 }
 
-module.exports = { getOrg, updateOrg, addProg, getAllProgsByOrgID, evaluateApp, deleteProg };
+module.exports = { getOrg, updateOrg, addProg, getAllProgsByOrgID, evaluateApp, getApp, deleteProg };

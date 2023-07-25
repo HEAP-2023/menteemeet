@@ -15,6 +15,7 @@ const { authenticateToken } = require('../middlewares/authMiddlewares');
 router.use(authenticateToken);
 router.get('/programmes', authenticateToken, organiserController.getAllProgsByOrgID);
 router.put('/applications/:appID', authenticateToken, organiserController.evaluateApp);
+router.get('/applications/:progID', authenticateToken, organiserController.getApp);
 
 router.get('/:id', authenticateToken, organiserController.getOrg);
 router.put('/', authenticateToken, organiserController.updateOrg);
