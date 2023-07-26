@@ -1,4 +1,4 @@
-import { Box, Typography, Button, Divider,Stack, TextField } from "@mui/material"
+import { Box, Typography, Button, Divider,Stack, TextField, FormControlLabel, RadioGroup, Radio } from "@mui/material"
 import { useSelector } from 'react-redux'
 import PageHeader from "../../PageHeader"
 import SectionHeader from "../../SectionHeader"
@@ -7,8 +7,11 @@ import MenteePreferenceSelector from "./MenteePreferenceSelector"
 import MentorPreferenceSelector from "./MentorPreferenceSelector"
 import SkillForm from "./SkillForm"
 import WeekSelectionCalendarSubmitable from "./WeekSelectionCalendarSubmitable"
-import { useEffect } from "react"
 import { useForm, Controller, FormProvider, useFieldArray } from "react-hook-form"
+
+
+
+import { useEffect } from "react"
 import { DevTool } from "@hookform/devtools";
 import useGetSignUpForm from "../../../hooks/programmes/users/useGetSignUpForm"
 const SignUpForm = ({id}) => {
@@ -17,9 +20,10 @@ const SignUpForm = ({id}) => {
     const {account_type, name : userName, email, telegram_username} = useSelector((state) => state.user.userBasicDetails)
     const methods = useForm({
         defaultValues :{
-            name : userName, 
+            name : userName,
             email : email, 
             tele : telegram_username,
+            role : "mentee",
             availabilities : [],
             skill : [], //array of objects {skillName : "", rating : "", elaboration : ""}
             interest_1 : "",
@@ -113,7 +117,23 @@ const SignUpForm = ({id}) => {
                         <StandardTextField errors={errors} field={field} name="tele" label="Telegram handle"/>
                     }/>
                     </Stack>
+                    
+                    <Stack direction="row" gap="20px" mt="10px" alignItems="center">
+                        <Typography>Sign Up as:</Typography>
+                        <Controller
+                                name="role"
+                                control={control}
+                                render={({field}) => 
+                                <RadioGroup
+                                row
+                                {...field}>
+                                <FormControlLabel value="mentee" control={<Radio color="secondary"/>} label="mentee" />
+                                <FormControlLabel value="mentor" control={<Radio color="secondary"/>} label="mentor" />
+                            </RadioGroup>
+                        }/>
+                    </Stack>
                 </Box>
+                
     
                 {/* Selection Criteria */}
                 <Box>

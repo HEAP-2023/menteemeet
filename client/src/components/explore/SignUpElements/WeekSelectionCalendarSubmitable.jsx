@@ -56,15 +56,34 @@ const WeekSelectionCalendarSubmitable = ({admin=false, programmeStart}) => {
     control={control}
     render={({field}) => {
 
-        const {value} = field; 
         return (<FullCalendar 
         ref={calendar}
         {...calendarOptions} 
         selectable={!admin}
+        slotDuration='04:00:00'
+        allDaySlot={false}
+        expandRows={true}
+        slotMinTime="08:00:00"
+        slotMaxTime="20:00:00"
+        slotLabelFormat= {(date) => getStartLabelText(date.date.hour)}
         editable={!admin}
         initialDate={programmeStart}
         eventsSet={(e) => {
-            const availableTimes = e.map(event => ({start : event.startStr, end :event.endStr}))
+            console.log(e)
+            // e.map(event => console.log(event.start.getDay()))
+            const availableTimes = e.map(event => {
+                console.log(event.start.getDay())
+                return {
+                    start : {
+                        day : event.start.getDay(),
+                        time : getStartLabelText(event.start.getHours())
+                    },
+                    end : {
+                        day : event.end.getDay(),
+                        time : getEndLabelText(event.end.getHours())
+                    },
+                }
+            })
             console.log(availableTimes)
             field.onChange(availableTimes)
         }}
@@ -79,3 +98,77 @@ const WeekSelectionCalendarSubmitable = ({admin=false, programmeStart}) => {
 export default WeekSelectionCalendarSubmitable;
 
 
+const getStartLabelText = (start) => {
+    
+    if(start === 8){
+        return "morning"
+    }
+    if(start === 12){
+        return "afternoon"
+    }
+    if(start === 16){
+        return "evening"
+    }
+    return "undefined"
+}
+
+const getEndLabelText = (end) => {
+    
+    if(end === 12){
+        return "morning"
+    }
+    if(end === 16){
+        return "afternoon"
+    }
+    if(end === 20){
+        return "evening"
+    }
+    return "undefined"
+}
+
+
+// const template = 
+// {
+//    day :  {
+//         mon : {
+//             morning : false,
+//             afternoon : false, 
+//             evening : false,
+//         },
+//         tue : {
+//             morning : false,
+//             afternoon : false, 
+//             evening : false,
+//         },
+//         wed : {
+//             morning : false,
+//             afternoon : false, 
+//             evening : false,
+//         },
+//         thu : {
+//             morning : false,
+//             afternoon : false, 
+//             evening : false,
+//         },
+//         fri : {
+//             morning : false,
+//             afternoon : false, 
+//             evening : false,
+//         },
+//         sat : {
+//             morning : false,
+//             afternoon : false, 
+//             evening : false,
+//         },
+//         sun : {
+//             morning : false,
+//             afternoon : false, 
+//             evening : false,
+//         },
+//         mon : {
+//             morning : false,
+//             afternoon : false, 
+//             evening : false,
+//         },
+//     }
+// }

@@ -17,14 +17,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { swap, profileOverlayToggle, logOut } from "../../state(kiv)";
 
 
-import useLogout from "../../hooks/auth/useLogout"; 
 
 const ProfileOverlayTab = ({acctInfo}) => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
     const {name, email} = useSelector((state) => state.user.userBasicDetails) 
-    const {mutate : logout} = useLogout()
+    // const {mutate : logout} = useLogout()
 
     // try use fixed width and / or media query
     return (<Box width="200px" height="300px" 
@@ -72,8 +71,9 @@ const ProfileOverlayTab = ({acctInfo}) => {
             <Box display="flex" onClick={() => {
                 dispatch(profileOverlayToggle());
                 // dispatch(logOut());
-                logout()
-                
+                // logout()
+                dispatch(logOut())
+                localStorage.setItem("jwt", "");
                 // navigate("/login/start") --> should be auto since home is protected
             }}>
                 <LogoutOutlinedIcon/>
