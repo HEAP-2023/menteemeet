@@ -5,7 +5,6 @@ const accountController = require('../controllers/accountController');
 
 router.post('/register', accountController.register);
 router.post('/login', accountController.login);
-//Axel dw logout
 // router.put('/logout', authenticateToken, accountController.logout);
 // router.use(authenticateToken);
 router.post('/changePassword', authenticateToken, accountController.changePassword);

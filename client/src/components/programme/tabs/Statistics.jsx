@@ -24,8 +24,8 @@ const Statistics = () => {
                     </Box>
                 </Box>
             </Box>
-            <Box display="flex" flexDirection="column">
-                <Box sx={{ height: "620px", width: "550px", display: "flex", flexDirection: "column", bgcolor: `${colors.primary[500]}`, borderRadius: '20px', m: '10px' }} >
+            <Box display="flex" flexDirection="column" flex={1}>
+                <Box sx={{ height: "620px", display: "flex", flexDirection: "column", bgcolor: `${colors.primary[500]}`, borderRadius: '20px', m: '10px'}} >
                     <Typography sx={{ mt: '15px', ml: '15px' }}>Mentee Interest Composition</Typography>
                     <Box sx={{height: "500px"}}>
                         <InterestPie data={pieData} />

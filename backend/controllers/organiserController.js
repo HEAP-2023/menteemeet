@@ -1,6 +1,10 @@
 const Account = require("../models/account");
 const Organiser = require('../models/organiser');
 const Programme = require('../models/programme');
+const Application = require('../models/application');
+
+const UserProgramme = require('../models/userProgramme');
+
 const awsS3Controller = require('./awsS3Controller');
 const { Op } = require("sequelize");
 
@@ -121,30 +125,26 @@ const addProg = async (req, res) => {
       organiser_id: org.organiser_id
     })
 
-    // const uploadFile = await awsS3Controller.uploadToS3(req.file, newProg.programme_id);
+    const uploadFile = await awsS3Controller.uploadToS3(req.file, newProg.programme_id);
 
-    // if (uploadFile) {
-    //   const prog = await Programme.update({ display_image: JSON.stringify(uploadFile) },{ where: { programme_id: newProg.programme_id } });
-    //   const progToReturn = {
-    //     ...newProg.dataValues,
-    //     display_image: JSON.stringify(uploadFile)
-    //   }
-    //   console.log("created programme but image failed")
-    //   return res.status(200).json({ message: 'Successfully created programme!', programme: progToReturn });
-    // } else {
-    //   await Programme.destroy({ where: { programme_id: newProg.programme_id }});
-    //   res.status(500).json({ message: 'Failed to upload display image!' });
-    // }
-
-    // TODO: Remove after adding image upload code
-    return res.status(201).json(newProg);
+    if (uploadFile) {
+      const prog = await Programme.update({ display_image: JSON.stringify(uploadFile) },{ where: { programme_id: newProg.programme_id } });
+      const progToReturn = {
+        ...newProg.dataValues,
+        display_image: JSON.stringify(uploadFile)
+      }
+      console.log("created programme but image failed")
+      return res.status(200).json({ message: 'Successfully created programme!', programme: progToReturn });
+    } else {
+      await Programme.destroy({ where: { programme_id: newProg.programme_id }});
+      res.status(500).json({ message: 'Failed to upload display image!' });
+    }
     
   } catch (err) {
     console.error(err);
     return res.status(500).json({ message: "Failed to create programme!" });
   }
 }
-
 
 const getAllProgsByOrgID = async (req, res) => {
   const { page, size } = req.query;
@@ -187,10 +187,70 @@ const getAllProgsByOrgID = async (req, res) => {
   }
 }
 
+const evaluateApp = async (req, res) => {
+  try {
+    const account = req.account;
+    if (account.account_type !== 'organiser') {
+      return res.status(403).json({ message: "You are not allowed to view this page." });
+    }
+
+    const getAppID = req.params.appID;
+
+    const getApplication = await Application.findOne({ where: { application_id: getAppID }, raw: true });
+    if (!getApplication) {
+      return res.status(404).json({ message: "Application not found!" });
+    }
+
+    const approval = req.body.approval;
+
+    if ((approval > 1 || approval < 0) || (approval === undefined) || (approval === "") || (approval === null)) {
+      return res.status(400).json({ message: "Approve Status Code is invalid." });
+    }
+
+    await Application.update({ is_accepted: approval }, { where: { application_id: getAppID }} );
+
+    const getApp = await Application.findOne({ where: { application_id: getAppID }, raw: true });
+
+    if (approval === 1) {
+      await UserProgramme.create({ role: getApp.role, user_id: getApp.user_id, 
+        programme_id: getApp.programme_id });
+    } else {
+      await UserProgramme.destroy({ where: { programme_id: getApp.programme_id } });
+    }
+    
+    return res.status(200).json({ message: "Application and UserProgramme have been updated." });
+
+  } catch (err) {
+    return res.status(500).json({ error: err });
+  }
+}
+
+const getApp = async (req, res) => {
+  try {
+    const account = req.account;
+    if (account.account_type !== 'organiser') {
+      return res.status(403).json({ message: "You are not allowed to view this page." });
+    }
+
+    const getProgID = req.params.progID;
+
+    const getApplication = await Application.findOne({ where: { programme_id: getProgID }, raw: true });
+    if (!getApplication) {
+      return res.status(404).json({ message: "Programme not signed up by any application." });
+    }
+
+    return res.status(200).json({ message: "Application retrieved.", getApplication });
+
+  } catch (err) {
+    return res.status(500).json({ error: err });
+  }
+}
+
 const deleteProg = async (req, res) => {
+
   const account = req.account;
   const id = req.params.id;
-  const getProgID = req.params.prog_id
+  const getProgID = req.params.progID
 
   const org = await Organiser.findOne({ where: { organiser_id: id } });
 
@@ -211,4 +271,4 @@ const deleteProg = async (req, res) => {
   }
 }
 
-module.exports = { getOrg, updateOrg, addProg, getAllProgsByOrgID, deleteProg };
+module.exports = { getOrg, updateOrg, addProg, getAllProgsByOrgID, evaluateApp, getApp, deleteProg };

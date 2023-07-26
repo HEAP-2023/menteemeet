@@ -51,7 +51,7 @@ const getFileFromS3 = (req, res) => {
 
   const downloadParams = {
     Bucket: 'menteemeet',
-    Key: filePath,
+    Key: fileName,
   };
 
   s3.getObject(downloadParams, (err, data) => {

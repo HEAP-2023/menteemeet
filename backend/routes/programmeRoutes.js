@@ -13,5 +13,6 @@ const { authenticateToken } = require('../middlewares/authMiddlewares');
 
 router.get('/', authenticateToken, programmeController.getAllProg);
 router.get('/:id', authenticateToken, programmeController.getEachProg);
+router.get('/:id/applications', authenticateToken, programmeController.getApplicationsByProgID);
 
 module.exports = router

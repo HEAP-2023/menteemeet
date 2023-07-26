@@ -94,7 +94,7 @@ const structure = (userType) => {
             },
             {
               field: 'remarks',
-              headerName: 'Remarks For' + (userType === "mentee" ? "Mentee" : "Mentor"),
+              headerName: 'Remarks For' + (userType === "mentee" ? " Mentee" : " Mentor"),
               description: 'This column has a value getter and is not sortable.',
               sortable: false,
               editable : false,

@@ -11,12 +11,24 @@ const Application = sequelize.define(
             autoIncrement: true,
         },
         date: {
-            type: DataTypes.DATE,
+            type: DataTypes.DATEONLY,
             allowNull: false,
         },
-        form_details: {
+        availability: {
             type: DataTypes.STRING(),
             allowNull: false,
+        },
+        skills: {
+          type: DataTypes.STRING(),
+          allowNull: true,
+        },
+        interests: {
+          type: DataTypes.STRING(),
+          allowNull: true,
+        },
+        role: {
+          type: DataTypes.STRING(),
+          allowNull: false,
         },
         is_accepted: {
           type: DataTypes.BOOLEAN,

@@ -4,6 +4,7 @@ const UserSkill = require('../models/userSkill');
 const Skill = require('../models/skill');
 const Interest = require('../models/interest');
 const UserInterest = require('../models/userInterest');
+const Application = require('../models/application');
 
 const UserProgramme = require('../models/userProgramme');
 const Programme = require('../models/programme');
@@ -309,4 +310,42 @@ const getInterest = async (req, res) => {
   }
 }
 
-module.exports = { updateUser, getUser, getAllProgByUserID, getUnsignedProg, getSkill, addSkill, addInterest, getInterest };
+const signup = async (req, res) => {
+  const account = req.account;
+  const user = await User.findOne({ where: { account_id: account.account_id } });
+  
+  if (!user) {
+    return res.status(400).json({ message: "User does not exist!" });
+  }
+
+  const { availability, skills, interests, role, programmeID } = req.body;
+
+  try {
+    const date = new Date();
+    const formattedDate = date.toISOString().slice(0, 10);
+
+    const checkProgExist = await Programme.findOne({ where: { programme_id: programmeID }, raw: true });
+
+    if (!checkProgExist) {
+      return res.status(400).json({ message: "Programme does not exist!" });
+    }
+    
+    const newApplication = await Application.create({
+      date: formattedDate,
+      availability,
+      skills,
+      interests,
+      role,
+      programme_id: programmeID,
+      is_accepted: 0,
+      user_id: user.user_id
+    })
+
+    return res.status(201).json({ message: "Successfully signed up!", newApplication });
+  } catch (err) {
+    console.error(err)
+    return res.status(500).json({ message: "Failed to create an application!" });
+  }
+}
+
+module.exports = { updateUser, getUser, getAllProgByUserID, getUnsignedProg, getSkill, addSkill, addInterest, getInterest, signup };

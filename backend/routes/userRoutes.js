@@ -27,4 +27,6 @@ router.post('/:id/skills', authenticateToken, userController.addSkill);
 router.get('/:id/interests', authenticateToken, userController.getInterest);
 router.post('/:id/interests', authenticateToken, userController.addInterest);
 
+router.post('/programmes', authenticateToken, userController.signup)
+
 module.exports = router;
