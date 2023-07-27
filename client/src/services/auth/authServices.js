@@ -44,16 +44,16 @@ async function register(user) {
     return (res.data.dataValues)
 }
 
-const logout = async() => {
-    console.log("logout")
-    const res = await axiosInstance({
-        method : "post",
-        url : `/logout`,
-        headers: { Authorization: `Bearer ${localStorage.getItem("jwt")}` },
-    })
-    console.log(res)
-    return res.data
-}
+// const logout = async() => {
+//     console.log("logout")
+//     const res = await axiosInstance({
+//         method : "post",
+//         url : `/logout`,
+//         headers: { Authorization: `Bearer ${localStorage.getItem("jwt")}` },
+//     })
+//     console.log(res)
+//     return res.data
+// }
 
 const changePW = async (passwords) => {
     console.log("chagne password")
@@ -69,6 +69,6 @@ const changePW = async (passwords) => {
 
 
 export {
-  login, register, logout,
+  login, register, 
   verifyJWT, changePW
 };
