@@ -1,6 +1,9 @@
 const Programme = require("../models/programme");
 const Application = require("../models/application");
 
+const Skill = require("../models/skill");
+const Interest = require("../models/interest");
+
 const getEachProg = async (req, res) => {
   try {
       const id = req.params.id;
@@ -157,26 +160,63 @@ const runAlgo = async (req, res) => {
       return res.status(404).json({ message: "Days of the week don't match" }); // 
     }
 
+    var avail1 = "";
+    var avail2 = "";
+
+    var isValid = false;
+
 console.log("Day 1 keys: ", day1Keys);
 
     if (day1Keys[i] === day2Keys[i]) {
+      console.log("TEST: ", dayOfAvail1.length);
 
-      const avail1 = dayOfAvail1[day1Keys[0]];
-      const avail2 = dayOfAvail2[day2Keys[0]];
+      for (let l = 0; l < dayOfAvail1.length; l++) {
+
+      }
+
+      avail1 = dayOfAvail1[day1Keys[0]];
+      avail2 = dayOfAvail2[day2Keys[0]];
+
+      isValid = true;
 
 console.log("Hello?");
 console.log(day1Keys[0]);
 
+    }
+
+    if (isValid) {
       // Check if the availability for the day of the week matches
       if (avail1.every((timeSlot) => avail2.includes(timeSlot))) {
         console.log("Pass");
         return res.status(200).json({ dayOfAvail1 }); // Availability for the day of the week doesn't match
       }
     }
+    
   }
 
   return res.status(200).json({ message: "test" });
 
 }
 
-module.exports = { getEachProg, getAllProg, getPagination, getPagingData, getApplicationsByProgID, getMenteeApplicationsByProgId, getMentorApplicationsByProgId,  runAlgo };
+const getAllSkills = async (req, res) => {
+  try {
+    const getSkillsObj = await Skill.findAll({ raw: true });
+    return res.status(200).json({ getSkillsObj });
+    
+  } catch (err) {
+    return res.status(500).json({ message: "Failed to fetch all skills!" });
+  }
+}
+
+const getAllInterests = async (req, res) => {
+  try {
+    const getInterestsObj = await Interest.findAll({ raw: true });
+    return res.status(200).json({ getInterestsObj });
+
+  } catch (err) {
+    return res.status(500).json({ message: "Failed to fetch all interests!" });
+  }
+}
+
+module.exports = { getEachProg, getAllProg, getPagination, getPagingData, getApplicationsByProgID, 
+  getMenteeApplicationsByProgId, getMentorApplicationsByProgId, runAlgo, getAllSkills, getAllInterests };
