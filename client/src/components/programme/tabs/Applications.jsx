@@ -1,10 +1,23 @@
 import { Box, Typography, Button } from "@mui/material"
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import { generateColors } from "../../../theme";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Tooltip from '@mui/material/Tooltip';
+import { getApplicationsByProgID } from "../../../services/programmes/organiserServices";
 
-const Applications = () => {
+const Applications = (programmeID) => {
+
+    const [fetchApplications, setFetchApplications] = useState([]);
+    useEffect(() => {
+        getApplicationsByProgID(programmeID.programmeID)
+        .then(res => {
+            setFetchApplications(res.data.getApplication);
+        })
+        .catch(err => {
+            console.log("ERROR:", err);
+        })
+    }, []) 
+
     const colors = generateColors();
     const menteeApplications = fetchApplications.filter((item)=> item.role === 'mentee' && item.is_accepted === 0);
     const mentorApplications = fetchApplications.filter((item) => item.role === 'mentor' && item.is_accepted === 0);
@@ -103,7 +116,7 @@ const Applications = () => {
 export default Applications
 
 const renderAvailability = (params) => {
-    const availability = params.row.availability;
+    const availability = JSON.parse(params.row.availability);
     const availabilityString = availability.map((item) => {
         const day = Object.keys(item)[0];
         const timeSlots = item[day].join(', ');
@@ -115,7 +128,7 @@ const renderAvailability = (params) => {
 };
 
 const renderSkills = (params) => {
-    const skills = params.row.skills;
+    const skills = JSON.parse(params.row.skills);
     const skillsString = skills.map((item) => item).join(', ');
 
     return (
@@ -126,7 +139,7 @@ const renderSkills = (params) => {
 };
 
 const renderInterests = (params) => {
-    const interests = params.row.interests;
+    const interests = JSON.parse(params.row.interests);
     const interestsString = interests.map((item) => item).join(', ');
 
     return (
@@ -136,53 +149,55 @@ const renderInterests = (params) => {
     )
 }
 
-const fetchApplications = [
-    {
-        application_id: 1,
-        name: "Jaime Lannister",
-        role: 'mentee',
-        availability: [{ "Wednesday": ["Afternoon", "Night"] }, { "Thursday": ["Afternoon"] }],
-        skills: ["C", "Java", "Python"],
-        interests: ["AI", "Software Engineering", "Data Analytics"],
-        is_accepted: 0
-    },
-    {
-        application_id: 2,
-        name: "Cersei Lannister",
-        role: 'mentee',
-        availability: [{ "Tuesday": ["Morning", "Afternoon", "Night"] }, { "Thursday    ": ["Afternoon"] }],
-        skills: ["C", "Java", "Python"],
-        interests: ["AI", "Software Engineering", "Data Analytics"],
-        is_accepted: 0
-    },
-    {
-        application_id: 3,
-        name: "Kelly Melisandre",
-        role: 'mentee',
-        availability: [{ "Monday": ["Afternoon", "Night"] }, { "Friday": ["Night"] }],
-        skills: ["C", "Java", "Python"],
-        interests: ["AI", "Software Engineering", "Data Analytics"],
-        is_accepted: 0
-    },
-    {
-        application_id: 4,
-        name: "Jon Snow",
-        role: 'mentor',
-        availability: [{ "Monday": ["Afternoon"] }, { "Sunday": ["Morning", "Afternoon", "Night"] }],
-        skills: ["C", "Java", "Python"],
-        interests: ["AI", "Software Engineering", "Data Analytics"],
-        is_accepted: 0
-    },
-    {
-        application_id: 5,
-        name: "Arya Stark",
-        role: 'mentor',
-        availability: [{ "Thursday": ["Morning", "Afternoon", "Night"] }, { "Friday": ["Afternoon"] }],
-        skills: ["C", "Java", "Python"],
-        interests: ["AI", "Software Engineering", "Data Analytics"],
-        is_accepted: 0
-    },
-]
+// const fetchApplications = [
+//     {
+//         application_id: 1,
+//         name: "Jaime Lannister",
+//         role: 'mentee',
+//         availability: [{ "Wednesday": ["Afternoon", "Night"] }, { "Thursday": ["Afternoon"] }],
+//         skills: ["C", "Java", "Python"],
+//         interests: ["AI", "Software Engineering", "Data Analytics"],
+//         is_accepted: 0,
+//         programme_id: 1,
+//     },
+//     {
+//         application_id: 2,
+//         name: "Cersei Lannister",
+//         role: 'mentee',
+//         availability: [{ "Tuesday": ["Morning", "Afternoon", "Night"] }, { "Thursday    ": ["Afternoon"] }],
+//         skills: ["C", "Java", "Python"],
+//         interests: ["AI", "Software Engineering", "Data Analytics"],
+//         is_accepted: 0,
+//         programme_id: 1,
+//     },
+//     {
+//         application_id: 3,
+//         name: "Kelly Melisandre",
+//         role: 'mentee',
+//         availability: [{ "Monday": ["Afternoon", "Night"] }, { "Friday": ["Night"] }],
+//         skills: ["C", "Java", "Python"],
+//         interests: ["AI", "Software Engineering", "Data Analytics"],
+//         is_accepted: 2  
+//     },
+//     {
+//         application_id: 4,
+//         name: "Jon Snow",
+//         role: 'mentor',
+//         availability: [{ "Monday": ["Afternoon"] }, { "Sunday": ["Morning", "Afternoon", "Night"] }],
+//         skills: ["C", "Java", "Python"],
+//         interests: ["AI", "Software Engineering", "Data Analytics"],
+//         is_accepted: 0
+//     },
+//     {
+//         application_id: 5,
+//         name: "Arya Stark",
+//         role: 'mentor',
+//         availability: [{ "Thursday": ["Morning", "Afternoon", "Night"] }, { "Friday": ["Afternoon"] }],
+//         skills: ["C", "Java", "Python"],
+//         interests: ["AI", "Software Engineering", "Data Analytics"],
+//         is_accepted: 0
+//     },
+// ]
 
 
 
@@ -199,16 +214,23 @@ const ApproveOrReject = () => {
     )
 }
 
+const Undo = () => {
+    const colors = generateColors();
+    return (<>
+        <Button sx={{ color: colors.text[500], bgcolor: colors.primary[500], '&:hover': { bgcolor: colors.primary[600] } }}>Undo</Button>
+    </>)
+}
+
 const columnHeading = [
     {
         field: 'name',
         headerName: 'Name',
         width: 200,
-        renderCell: (params) => (
-            <Tooltip title={params.value}>
-                <div>{params.value}</div>
-            </Tooltip>
-        ),
+        // renderCell: (params) => (
+        //     <Tooltip title={params.value}>
+        //         <div>{params.value}</div>
+        //     </Tooltip>
+        // ),
     },
     {
         field: 'availability',
@@ -265,6 +287,12 @@ const columnHeading2 = [
     {
         field: 'interests',
         headerName: 'Interests',
+        width: 280,
         renderCell:renderInterests
     }, 
+    {
+        field: 'undo',
+        headerName: 'Undo',
+        renderCell: Undo
+    }
 ]

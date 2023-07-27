@@ -12,7 +12,6 @@ export const getInfiniteProgramme = async(page) => {
 }
 
 export const getSignUpForm = async(id) => {
-    console.log("hello")
     const res = await axiosInstance({
         method : "get",
         url : `/programmes/${id}`,
@@ -20,4 +19,13 @@ export const getSignUpForm = async(id) => {
     })
     console.log(res)
     return res
+}
+
+export const getUserName = async(userID) => {
+    const res = await axiosInstance({
+        method : "get",
+        url : `/users/${userID}`,
+        headers: { Authorization: `Bearer ${localStorage.getItem("jwt")}` },
+    })
+    return res.user["Account.name"];
 }

@@ -10,6 +10,10 @@ const Application = sequelize.define(
             allowNull: false,
             autoIncrement: true,
         },
+        // name: {
+        //   type: DataTypes.STRING(),
+        //   allowNull: false,
+        // },
         date: {
             type: DataTypes.DATEONLY,
             allowNull: false,

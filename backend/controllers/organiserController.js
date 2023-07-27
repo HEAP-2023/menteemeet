@@ -10,6 +10,7 @@ const { Op } = require("sequelize");
 
 const { generateAccessToken } = require('./accountController');
 const { getPagination, getPagingData } = require('./programmeController');
+const User = require("../models/user");
 
 const updateJWT = async (updatedAcc) => {
   try {
@@ -233,10 +234,19 @@ const getApp = async (req, res) => {
 
     const getProgID = req.params.progID;
 
-    const getApplication = await Application.findOne({ where: { programme_id: getProgID }, raw: true });
+    const getApplication = await Application.findAll({ where: { programme_id: getProgID }, raw: true });
     if (!getApplication) {
       return res.status(404).json({ message: "Programme not signed up by any application." });
     }
+
+    const combine = getApplication.map(async (app) => {
+      const foundUser = await (User.findOne(
+        { where: { user_id: app.user_id }, include: Account}
+      ));
+      app["name"] = foundUser.Account.name;
+    })
+
+    await Promise.all(combine);
 
     return res.status(200).json({ message: "Application retrieved.", getApplication });
 

@@ -79,7 +79,7 @@ const Programme = ({programme_details}) => {
                 </TabPanel>
                 {userType === "organiser" &&
                     <TabPanel value="applications" index={4}>
-                        <Applications/>
+                        <Applications programmeID={id}/>
                     </TabPanel>
                 }
                 {userType === "organiser" &&
