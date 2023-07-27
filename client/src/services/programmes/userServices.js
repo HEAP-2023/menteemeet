@@ -12,13 +12,24 @@ export const getInfiniteProgramme = async(page) => {
 }
 
 export const getSignUpForm = async(id) => {
+    // console.log("hello")
     const res = await axiosInstance({
         method : "get",
         url : `/programmes/${id}`,
         headers: { Authorization: `Bearer ${localStorage.getItem("jwt")}` },
     })
     console.log(res)
-    return res
+    return res;
+}
+
+export const postSignUp = async(signUpForm) => {
+    const res = await axiosInstance({
+        method : "post",
+        url : `users/programmes/`,
+        headers: { Authorization: `Bearer ${localStorage.getItem("jwt")}` },
+        data : signUpForm
+    })
+    return res;
 }
 
 export const getUserName = async(userID) => {
@@ -28,4 +39,5 @@ export const getUserName = async(userID) => {
         headers: { Authorization: `Bearer ${localStorage.getItem("jwt")}` },
     })
     return res.user["Account.name"];
+    // return res;
 }
