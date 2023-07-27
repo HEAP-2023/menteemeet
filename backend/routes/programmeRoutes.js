@@ -17,4 +17,7 @@ router.get('/:id/applications', authenticateToken, programmeController.getApplic
 router.get('/:id/mentee-applications', authenticateToken, programmeController.getMenteeApplicationsByProgId);
 router.get('/:id/mentor-applications', authenticateToken, programmeController.getMentorApplicationsByProgId);
 
+//Testing Only.
+router.post('/', authenticateToken, programmeController.runAlgo);
+
 module.exports = router;

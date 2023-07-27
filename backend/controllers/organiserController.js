@@ -203,7 +203,8 @@ const evaluateApp = async (req, res) => {
 
     const approval = req.body.approval;
 
-    if ((approval > 1 || approval < 0) || (approval === undefined) || (approval === "") || (approval === null)) {
+    //Only 0 = Pending Approval, 1 = Approved, 2 = Rejected
+    if ((approval > 2 || approval < 0) || (approval === undefined) || (approval === "") || (approval === null)) {
       return res.status(400).json({ message: "Approve Status Code is invalid." });
     }
 
