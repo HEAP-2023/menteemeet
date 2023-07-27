@@ -77,4 +77,73 @@ const getApplicationsByProgID = async (req, res) => {
   }
 };
 
-module.exports = { getEachProg, getAllProg, getPagination, getPagingData, getApplicationsByProgID };
+//Testing Only.
+const runAlgo = async (req, res) => {
+
+  //Application ID passed in
+  const getAppID1 = req.body.appID1;
+  const getAppID2 = req.body.appID2;
+
+
+  const getAppObj1 = await Application.findOne({ where: { application_id: getAppID1 }, raw: true });
+  const getAppObj2 = await Application.findOne({ where: { application_id: getAppID2 }, raw: true });
+
+
+  const getAvail1 = JSON.parse(getAppObj1.availability);
+  // const getSkills1 = getAppObj1.skills;
+  // const getInterests1 = getAppObj1.interests;
+
+  const getAvail2 = JSON.parse(getAppObj2.availability);
+  // const getSkills2 = getAppObj2.skills;
+  // const getInterests2 = getAppObj2.interests;
+
+  console.log("Avail: ", getAvail1);
+  // console.log("Skills: ", getSkills);
+  // console.log("Interests: ", getInterests);
+  console.log("Avail: ", getAvail2);
+
+  console.log("Start");
+  console.log(getAvail1[0]);
+  console.log("End");
+
+  if (getAvail1.length !== getAvail2.length) {
+    console.log("false"); // If the schedules have different lengths, they don't match
+    return res.status(404).json({ message: "Length False" });
+  }
+
+  for (let i = 0; i < getAvail1.length; i++) {
+    const dayOfAvail1 = getAvail1[i];
+    const dayOfAvail2 = getAvail2[i];
+
+    const day1Keys = Object.keys(dayOfAvail1);
+    const day2Keys = Object.keys(dayOfAvail2);
+
+     // Check if the days of the week match
+    if (day1Keys.length !== 1 || day2Keys.length !== 1) {
+      console.log("false"); 
+      return res.status(404).json({ message: "Days of the week don't match" }); // 
+    }
+
+console.log("Day 1 keys: ", day1Keys);
+
+    if (day1Keys[i] === day2Keys[i]) {
+
+      const avail1 = dayOfAvail1[day1Keys[0]];
+      const avail2 = dayOfAvail2[day2Keys[0]];
+
+console.log("Hello?");
+console.log(day1Keys[0]);
+
+      // Check if the availability for the day of the week matches
+      if (avail1.every((timeSlot) => avail2.includes(timeSlot))) {
+        console.log("Pass");
+        return res.status(200).json({ dayOfAvail1 }); // Availability for the day of the week doesn't match
+      }
+    }
+  }
+
+  return res.status(200).json({ message: "test" });
+
+}
+
+module.exports = { getEachProg, getAllProg, getPagination, getPagingData, getApplicationsByProgID, runAlgo };

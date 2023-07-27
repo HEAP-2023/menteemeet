@@ -15,4 +15,7 @@ router.get('/', authenticateToken, programmeController.getAllProg);
 router.get('/:id', authenticateToken, programmeController.getEachProg);
 router.get('/:id/applications', authenticateToken, programmeController.getApplicationsByProgID);
 
+//Testing Only.
+router.post('/', authenticateToken, programmeController.runAlgo);
+
 module.exports = router
