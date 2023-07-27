@@ -2,10 +2,8 @@ import { Box, Divider, Modal, Stack, TextField, Typography } from "@mui/material
 import PageHeader from "../PageHeader"
 import SectionHeader from "../SectionHeader"
 import NonFormTextField from "../NonFormTextField"
-import SkillUsers from "./SkillUsers"
-import MenteeGroupingSection from "./createForm/MenteeGroupingSection"
-import MentorGroupingSection from "./createForm/MentorGroupingSection"
 import WeekSelectionCalendar from "./createForm/WeekSelectionCalendar"
+import AvailabilityCBox from "./formComponents/AvailabilityCBox"
 
 const PreviewForm = ({open, setPreview, getValues}) => {
     const name = getValues("name")
@@ -16,8 +14,7 @@ const PreviewForm = ({open, setPreview, getValues}) => {
     const applicationDeadline = getValues("deadline")
 
     const matchingCriteria = getValues("matching_criteria")
-    const skills = getValues("skills")
-    const category = getValues("category")
+    
 
     return (
     <Modal 
@@ -68,23 +65,40 @@ const PreviewForm = ({open, setPreview, getValues}) => {
                     </Stack>
                 }
 
-                {matchingCriteria.includes("skill") &&
-                    <Stack>
-                        {
-                            skills.map(skill => {
-                                return (
-                                <SkillUsers key={skill.skillName}>
-                                    <Typography fontWeight="700">{skill.skillName}</Typography>
-                                </SkillUsers>)
-                            })
-                        }
-                    </Stack>
-                }
+                <Stack>
+                    <Typography fontWeight="700">Skills</Typography>
+                    <Typography>Select the top 3 relevant skill</Typography>
 
-                {matchingCriteria.includes("interest") && 
+                    <Box display="flex" gap="20px">
+                    <TextField fullWidth
+                        select
+                        value=""
+                        label="Skill 1"
+                        variant="outlined"
+                        children={[]}
+                    />
+                    <TextField fullWidth
+                        select
+                        value=""
+                        label="Skill 2"
+                        variant="outlined"
+                        children={[]}
+                    />
+                    <TextField fullWidth
+                        select
+                        value=""
+                        label="Skill 3"
+                        variant="outlined"
+                        children={[]}
+                    />
+                </Box>
+                </Stack>
+                
+
+
                 <Stack>
                     <Typography fontWeight="700">Interest</Typography>
-                    <Typography>Select the top 3 areas you are interested in {category}</Typography>
+                    <Typography>Select the top 3 areas you are interested in </Typography>
 
                     <Box display="flex" gap="20px">
                     <TextField fullWidth
@@ -110,15 +124,8 @@ const PreviewForm = ({open, setPreview, getValues}) => {
                     />
                 </Box>
                 </Stack>
-                }
 
-                {matchingCriteria.includes("mentorGrouping") && 
-                    <MentorGroupingSection/>
-                }
-
-                {matchingCriteria.includes("menteeGrouping") && 
-                    <MenteeGroupingSection/>
-                }
+               <AvailabilityCBox/>
             </Box>
         </Box>
     </Modal>

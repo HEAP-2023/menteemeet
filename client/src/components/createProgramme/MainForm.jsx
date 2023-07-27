@@ -1,0 +1,92 @@
+import { Box, Stack, Typography, Input, TextField} from "@mui/material"
+import SectionHeader from "../SectionHeader";
+import { Controller } from "react-hook-form";
+import StandardTextField from "../StandardTextField";
+import UploadFileIcon from "@mui/icons-material/UploadFile";
+import { useRef } from "react";
+import { useFormContext } from "react-hook-form";
+import Duration from "./formComponents/Duration"
+import Capacity from "./formComponents/Capacity";
+import Deadline from "./formComponents/Deadline";
+import Intro from "./formComponents/Intro";
+import MatchingCriterias from "./formComponents/MatchingCriterias";
+
+const MainForm = () => {
+    const {control, watch, formState : {errors}} = useFormContext();
+    const imagePreview = useRef();
+    const imgUploaded = watch("display_image", false)
+    return (
+    <Box width="100%" p="40px" m="20px 0" display="flex" flexDirection="column" bgcolor="#F1F1F1" >
+        <SectionHeader margin="0 20px" text="Tell us about the basic information of the program"/>
+            
+            {/* name */}
+            <Box display="flex" flexDirection="column" width="100%" gap="20px" p="20px">
+                <Box display="flex" width="100%">
+                        <Controller
+                        name="name"
+                        control={control}
+                        render={({field}) => 
+                    <StandardTextField errors={errors} field={field} 
+                    name="name" label="Programme Name" />
+                    }
+                        />
+                </Box>
+
+
+            {/* duration */}
+            <Duration/>
+
+            {/* capacity */}
+            <Capacity/>
+
+            {/* deadline */}
+            <Deadline/>
+
+            {/* intro */}
+            <Intro/>
+
+
+            <Stack display="flex" width="100%" >
+                    <Controller
+                    name="display_image"
+                    control={control}
+                    render={({field}) => {
+                    const {value, ...others} = field; 
+                    return (
+                    <Stack width="50%">
+                        <Typography fontWeight="bold" m="10px 0">Add a cover image for your programme</Typography>
+                        <TextField {...others} type="file" 
+                        inputProps={{accept : "image/*"}} 
+                        InputProps={{endAdornment:<UploadFileIcon/>}} 
+                        error={errors["display_image"] !== undefined} 
+                        helperText={errors["display_image"]?.message} 
+                        variant="outlined"
+                        onChange={(e) => {
+                            const [file] = e.target.files
+                            if (file) {
+                                const blob = URL.createObjectURL(file)
+                                imagePreview.current.src = blob
+                                field.onChange(file);
+                                }
+                        }}
+                        />
+                        <img ref={imagePreview} alt="Image format is not supported" 
+                        src="#" hidden={!imgUploaded}
+                        style={{height: "300px", objectFit : "scale-down" ,width: "auto"}}/>
+                    </Stack>)}
+                }
+                    />
+            </Stack>
+
+            {/* matching criteria */}
+            <MatchingCriterias/>
+
+            </Box>
+
+        </Box>);
+}
+
+export default MainForm;
+
+
+
