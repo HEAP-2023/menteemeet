@@ -59,7 +59,7 @@ const changePW = async (passwords) => {
     console.log("chagne password")
     const res = await axiosInstance({
         method : "post",
-        url : `/changePassword`,
+        url : `/change-password`,
         headers: { Authorization: `Bearer ${localStorage.getItem("jwt")}` },
         data : passwords,
     })

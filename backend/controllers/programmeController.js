@@ -1,6 +1,9 @@
 const Programme = require("../models/programme");
 const Application = require("../models/application");
 
+const Skill = require("../models/skill");
+const Interest = require("../models/interest");
+
 const getEachProg = async (req, res) => {
   try {
       const id = req.params.id;
@@ -41,8 +44,7 @@ const getAllProg = (req, res) => {
   const { limit, offset } = getPagination(page, size);
 
   try {
-    Programme.findAndCountAll({ attributes: ['programme_id', 'name', 'description'
-      , 'category', 'display_image'], limit, offset, raw: true })
+    Programme.findAndCountAll({  limit, offset, raw: true })
 
       .then(data => {
         const response = getPagingData(data, (Number(page) + 1), limit);
@@ -73,8 +75,148 @@ const getApplicationsByProgID = async (req, res) => {
     return res.status(200).json({ message: "All applications retrieved successfully!", applications });
   } catch (err) {
     console.error(err);
-    return res.status(500).json({ message: "Failed to fetch all appliations for the programme!" });
+    return res.status(500).json({ message: "Failed to fetch all applications for the programme!" });
   }
 };
 
-module.exports = { getEachProg, getAllProg, getPagination, getPagingData, getApplicationsByProgID };
+const getMenteeApplicationsByProgId = async (req, res) => {
+  const id = req.params.id;
+
+  try {
+    if (!await Programme.findOne({ where: { programme_id: id }})) {
+      return res.status(400).json({ message: "Programme does not exist!" });
+    }
+    
+    const applications = await Application.findAll({ where: { programme_id: id, role: "mentee" } });
+    
+    return res.status(200).json({ message: "All mentee applications retrieved successfully!", applications });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ message: "Failed to fetch all mentee applications for the programme!" });
+  }
+};
+
+const getMentorApplicationsByProgId = async (req, res) => {
+  const id = req.params.id;
+
+  try {
+    if (!await Programme.findOne({ where: { programme_id: id }})) {
+      return res.status(400).json({ message: "Programme does not exist!" });
+    }
+    
+    const applications = await Application.findAll({ where: { programme_id: id, role: "mentor" } });
+    
+    return res.status(200).json({ message: "All mentor applications retrieved successfully!", applications });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ message: "Failed to fetch all mentor applications for the programme!" });
+  }
+};
+
+//Testing Only.
+const runAlgo = async (req, res) => {
+
+  //Application ID passed in
+  const getAppID1 = req.body.appID1;
+  const getAppID2 = req.body.appID2;
+
+
+  const getAppObj1 = await Application.findOne({ where: { application_id: getAppID1 }, raw: true });
+  const getAppObj2 = await Application.findOne({ where: { application_id: getAppID2 }, raw: true });
+
+
+  const getAvail1 = JSON.parse(getAppObj1.availability);
+  // const getSkills1 = getAppObj1.skills;
+  // const getInterests1 = getAppObj1.interests;
+
+  const getAvail2 = JSON.parse(getAppObj2.availability);
+  // const getSkills2 = getAppObj2.skills;
+  // const getInterests2 = getAppObj2.interests;
+
+  console.log("Avail: ", getAvail1);
+  // console.log("Skills: ", getSkills);
+  // console.log("Interests: ", getInterests);
+  console.log("Avail: ", getAvail2);
+
+  console.log("Start");
+  console.log(getAvail1[0]);
+  console.log("End");
+
+  if (getAvail1.length !== getAvail2.length) {
+    console.log("false"); // If the schedules have different lengths, they don't match
+    return res.status(404).json({ message: "Length False" });
+  }
+
+  for (let i = 0; i < getAvail1.length; i++) {
+    const dayOfAvail1 = getAvail1[i];
+    const dayOfAvail2 = getAvail2[i];
+
+    const day1Keys = Object.keys(dayOfAvail1);
+    const day2Keys = Object.keys(dayOfAvail2);
+
+     // Check if the days of the week match
+    if (day1Keys.length !== 1 || day2Keys.length !== 1) {
+      console.log("false"); 
+      return res.status(404).json({ message: "Days of the week don't match" }); // 
+    }
+
+    var avail1 = "";
+    var avail2 = "";
+
+    var isValid = false;
+
+console.log("Day 1 keys: ", day1Keys);
+
+    if (day1Keys[i] === day2Keys[i]) {
+      console.log("TEST: ", dayOfAvail1.length);
+
+      for (let l = 0; l < dayOfAvail1.length; l++) {
+
+      }
+
+      avail1 = dayOfAvail1[day1Keys[0]];
+      avail2 = dayOfAvail2[day2Keys[0]];
+
+      isValid = true;
+
+console.log("Hello?");
+console.log(day1Keys[0]);
+
+    }
+
+    if (isValid) {
+      // Check if the availability for the day of the week matches
+      if (avail1.every((timeSlot) => avail2.includes(timeSlot))) {
+        console.log("Pass");
+        return res.status(200).json({ dayOfAvail1 }); // Availability for the day of the week doesn't match
+      }
+    }
+    
+  }
+
+  return res.status(200).json({ message: "test" });
+
+}
+
+const getAllSkills = async (req, res) => {
+  try {
+    const getSkillsObj = await Skill.findAll({ raw: true });
+    return res.status(200).json({ getSkillsObj });
+    
+  } catch (err) {
+    return res.status(500).json({ message: "Failed to fetch all skills!" });
+  }
+}
+
+const getAllInterests = async (req, res) => {
+  try {
+    const getInterestsObj = await Interest.findAll({ raw: true });
+    return res.status(200).json({ getInterestsObj });
+
+  } catch (err) {
+    return res.status(500).json({ message: "Failed to fetch all interests!" });
+  }
+}
+
+module.exports = { getEachProg, getAllProg, getPagination, getPagingData, getApplicationsByProgID, 
+  getMenteeApplicationsByProgId, getMentorApplicationsByProgId, runAlgo, getAllSkills, getAllInterests };

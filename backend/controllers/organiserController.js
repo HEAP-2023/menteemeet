@@ -203,19 +203,18 @@ const evaluateApp = async (req, res) => {
 
     const approval = req.body.approval;
 
-    if ((approval > 1 || approval < 0) || (approval === undefined) || (approval === "") || (approval === null)) {
+    //Only 0 = Pending Approval, 1 = Approved, 2 = Rejected
+    if ((approval > 2 || approval < 0) || (approval === undefined) || (approval === "") || (approval === null)) {
       return res.status(400).json({ message: "Approve Status Code is invalid." });
     }
 
     await Application.update({ is_accepted: approval }, { where: { application_id: getAppID }} );
 
-    const getApp = await Application.findOne({ where: { application_id: getAppID }, raw: true });
-
     if (approval === 1) {
-      await UserProgramme.create({ role: getApp.role, user_id: getApp.user_id, 
-        programme_id: getApp.programme_id });
+      await UserProgramme.create({ role: getApplication.role, user_id: getApplication.user_id, 
+        programme_id: getApplication.programme_id });
     } else {
-      await UserProgramme.destroy({ where: { programme_id: getApp.programme_id } });
+      await UserProgramme.destroy({ where: { programme_id: getApplication.programme_id } });
     }
     
     return res.status(200).json({ message: "Application and UserProgramme have been updated." });
@@ -247,16 +246,13 @@ const getApp = async (req, res) => {
 }
 
 const deleteProg = async (req, res) => {
-
   const account = req.account;
-  const id = req.params.id;
   const getProgID = req.params.progID
 
-  const org = await Organiser.findOne({ where: { organiser_id: id } });
+  const org = await Organiser.findOne({ where: { account_id: account.account_id } });
 
-  //Ensure that the current organiser is authorised to update details
-  if (account.account_id !== org.account_id) {
-    return res.status(403).json({ message: "Not authorised!" })
+  if (!org) {
+    return res.status(400).json({ message: "Organiser not found!" });
   }
 
   try {
