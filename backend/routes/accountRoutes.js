@@ -7,6 +7,6 @@ router.post('/register', accountController.register);
 router.post('/login', accountController.login);
 // router.put('/logout', authenticateToken, accountController.logout);
 // router.use(authenticateToken);
-router.post('/changePassword', authenticateToken, accountController.changePassword);
+router.post('/change-password', authenticateToken, accountController.changePassword);
 
 module.exports = router;
