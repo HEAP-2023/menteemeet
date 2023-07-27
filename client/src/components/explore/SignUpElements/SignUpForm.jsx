@@ -3,19 +3,15 @@ import { useSelector } from 'react-redux'
 import PageHeader from "../../PageHeader"
 import SectionHeader from "../../SectionHeader"
 import StandardTextField from "../../StandardTextField"
-import MenteePreferenceSelector from "./MenteePreferenceSelector"
-import MentorPreferenceSelector from "./MentorPreferenceSelector"
-import SkillForm from "./SkillForm"
-import WeekSelectionCalendarSubmitable from "./WeekSelectionCalendarSubmitable"
-import { useForm, Controller, FormProvider, useFieldArray } from "react-hook-form"
+import { useForm, Controller, FormProvider } from "react-hook-form"
 
-
-
-import { useEffect } from "react"
 import { DevTool } from "@hookform/devtools";
 import useGetSignUpForm from "../../../hooks/programmes/users/useGetSignUpForm"
+import Interests from "./Interests"
+import Skills from "./Skills"
+import AvailabilityCBox from "./AvailabilityCBox"
+import usePostSignUpForm from "../../../hooks/user/usePostSignUpForm"
 const SignUpForm = ({id}) => {
-    console.log(id)
     const {error, isError ,isLoading, isSuccess : getDetailsSuccess, data : details} = useGetSignUpForm({id})
     const {account_type, name : userName, email, telegram_username} = useSelector((state) => state.user.userBasicDetails)
     const methods = useForm({
@@ -24,28 +20,25 @@ const SignUpForm = ({id}) => {
             email : email, 
             tele : telegram_username,
             role : "mentee",
-            availabilities : [],
-            skill : [], //array of objects {skillName : "", rating : "", elaboration : ""}
-            interest_1 : "",
-            interest_2 : "",
-            interest_3 : "",
-            preferredMentors : [],
-            preferredMentees : [],
+            skills : [{skill : ""}, {skill : ""}, {skill : ""}],
+            interests : [{interest : ""}, {interest : ""}, {interest : ""}],
+            availability : []
         }
     })
     const {control,formState: {errors, defaultValues, dirtyFields, isDirty}, isInitialLoading, handleSubmit, reset} = methods
-
-    const {fields : skillFields} = useFieldArray({
-        name : "skill",
-        control, 
-    })
-    useEffect(()=> {
-        if(getDetailsSuccess && !isLoading){
-        const skillSet = JSON.parse(details.data.programme.skills);
-        const skillArr = skillSet.map(skill => ({skillName : skill, rating : 0, elaboration : ""}) )
-        reset({skill : skillArr})
+    const {mutate : signUp} = usePostSignUpForm()
+    const handleSave = (data) => {
+        console.log("to be submitted")
+        const formattedData = {
+            programmeID : id,
+            ...data, 
+            availability : JSON.stringify(data.availability),
+            interests : JSON.stringify(data.interests.map(x => x.interest)),
+            skills : JSON.stringify(data.skills.map(x => x.skill)),
         }
-    },[details, reset])
+        console.log(formattedData)
+        signUp(formattedData)
+    }
 
     if(isLoading){
         return <h2>loading...</h2>
@@ -57,21 +50,14 @@ const SignUpForm = ({id}) => {
 
     if(getDetailsSuccess){
         const {
-            category ,
             deadline,
             description,
-            matching_criteria,
             name,
             programmeEnd,
             programmeStart,
-            skills,
         } = details.data.programme
         console.log(details)
-        const matching_criteria_set = JSON.parse(matching_criteria)    
-        const handleSave = (data) => {
-            console.log("to be submitted")
-            console.log(data)
-        }
+        
         return (
             <Box>
                 <FormProvider {...methods}>
@@ -137,79 +123,9 @@ const SignUpForm = ({id}) => {
     
                 {/* Selection Criteria */}
                 <Box>
-                    <SectionHeader text="Selection Criteria" margin="20px 0 0 0"/>
-                    <Divider/>
-                    {matching_criteria_set.includes("availability") &&
-                        <Stack>
-                            <WeekSelectionCalendarSubmitable programmeStart={programmeStart}/>
-                        </Stack>
-                    }
-    
-                    {matching_criteria_set.includes("skill") &&
-                        <Stack>
-                            {
-                                skillFields.map((skill, index) => {
-                                    return (
-                                    <SkillForm key={skill.skillName} index={index}>
-                                        <Typography fontWeight="700">{skill.skillName}</Typography>
-                                    </SkillForm>)
-                                })
-                            }
-                        </Stack>
-                    }
-    
-                    {matching_criteria_set.includes("interest") && 
-                    <Stack>
-                        <Typography fontWeight="700">Interest</Typography>
-                        <Typography>Select the top 3 areas you are interested in {category}</Typography>
-    
-                        <Box display="flex" gap="20px">
-                            <Controller name="interest_1" control={control} 
-                            render={({field}) =>
-                            <TextField 
-                                name="interest_1"
-                                {...field}
-                                fullWidth
-                                select
-                                label="Interest 1"
-                                variant="outlined"
-                                children={[]}
-                            />}/>
-    
-                            <Controller name="interest_2" control={control} 
-                            render={({field}) =>
-                            <TextField 
-                                name="interest_2"
-                                {...field}
-                                fullWidth
-                                select
-                                label="Interest 2"
-                                variant="outlined"
-                                children={[]}
-                            />}/>
-                            
-                            <Controller name="interest_3" control={control} 
-                            render={({field}) =>
-                            <TextField 
-                                name="interest_3"
-                                {...field}
-                                fullWidth
-                                select
-                                label="Interest 3"
-                                variant="outlined"
-                                children={[]}
-                            />}/>
-                    </Box>
-                    </Stack>
-                    }
-    
-                    {matching_criteria_set.includes("mentorGrouping") && 
-                        <MentorPreferenceSelector/>
-                    }
-    
-                    {matching_criteria_set.includes("menteeGrouping") && 
-                        <MenteePreferenceSelector/>
-                    }
+                    <Interests/>
+                    <Skills/>
+                    <AvailabilityCBox/>
                 </Box>
                 <Button type="submit" variant="contained" color="secondary" sx={{mt : "20px"}}>Submit</Button>
        

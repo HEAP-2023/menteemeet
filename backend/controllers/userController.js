@@ -329,7 +329,7 @@ const signup = async (req, res) => {
     if (!checkProgExist) {
       return res.status(400).json({ message: "Programme does not exist!" });
     }
-    
+    console.log("programmeID: ", programmeID)
     const newApplication = await Application.create({
       date: formattedDate,
       availability,

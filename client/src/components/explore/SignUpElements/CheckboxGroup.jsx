@@ -4,8 +4,40 @@ import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import { useState, useEffect } from 'react';
 
-const IndeterminateCheckbox = ({pLabel}) => {
+const CheckboxGroup = ({pLabel, state, setState}) => {
   const [checked, setChecked] = useState([false, false, false]);
+
+  useEffect(() => {
+      console.log("hey")
+      if(checked.includes(true)){
+          setState(
+            {...state,
+            [pLabel] : {
+            dirty : true,
+            children : {
+                morning : checked[0],
+                afternoon : checked[1],
+                evening : checked[2]
+            }
+          }
+        })
+        }
+      else {
+        setState(
+            {...state,
+            [pLabel] : {
+            dirty : false,
+            children : {
+                morning : checked[0],
+                afternoon : checked[1],
+                evening : checked[2]
+                }
+            }
+        })
+      }
+    }
+, checked)
+
 
   const handleChange1 = (event) => {
     setChecked([event.target.checked, event.target.checked, event.target.checked]);
@@ -58,6 +90,7 @@ const IndeterminateCheckbox = ({pLabel}) => {
             sx={{
                 '&.Mui-checked': {color: "#AEAEFF"}
             }}
+            value={checked}
           />
         }
       />
@@ -67,4 +100,4 @@ const IndeterminateCheckbox = ({pLabel}) => {
 }
 
 
-export default IndeterminateCheckbox
+export default CheckboxGroup
