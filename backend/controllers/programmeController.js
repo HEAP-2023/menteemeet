@@ -41,8 +41,7 @@ const getAllProg = (req, res) => {
   const { limit, offset } = getPagination(page, size);
 
   try {
-    Programme.findAndCountAll({ attributes: ['programme_id', 'name', 'description'
-      , 'category', 'display_image'], limit, offset, raw: true })
+    Programme.findAndCountAll({  limit, offset, raw: true })
 
       .then(data => {
         const response = getPagingData(data, (Number(page) + 1), limit);
@@ -73,8 +72,42 @@ const getApplicationsByProgID = async (req, res) => {
     return res.status(200).json({ message: "All applications retrieved successfully!", applications });
   } catch (err) {
     console.error(err);
-    return res.status(500).json({ message: "Failed to fetch all appliations for the programme!" });
+    return res.status(500).json({ message: "Failed to fetch all applications for the programme!" });
   }
 };
 
-module.exports = { getEachProg, getAllProg, getPagination, getPagingData, getApplicationsByProgID };
+const getMenteeApplicationsByProgId = async (req, res) => {
+  const id = req.params.id;
+
+  try {
+    if (!await Programme.findOne({ where: { programme_id: id }})) {
+      return res.status(400).json({ message: "Programme does not exist!" });
+    }
+    
+    const applications = await Application.findAll({ where: { programme_id: id, role: "mentee" } });
+    
+    return res.status(200).json({ message: "All mentee applications retrieved successfully!", applications });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ message: "Failed to fetch all mentee applications for the programme!" });
+  }
+};
+
+const getMentorApplicationsByProgId = async (req, res) => {
+  const id = req.params.id;
+
+  try {
+    if (!await Programme.findOne({ where: { programme_id: id }})) {
+      return res.status(400).json({ message: "Programme does not exist!" });
+    }
+    
+    const applications = await Application.findAll({ where: { programme_id: id, role: "mentor" } });
+    
+    return res.status(200).json({ message: "All mentor applications retrieved successfully!", applications });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ message: "Failed to fetch all mentor applications for the programme!" });
+  }
+};
+
+module.exports = { getEachProg, getAllProg, getPagination, getPagingData, getApplicationsByProgID, getMenteeApplicationsByProgId, getMentorApplicationsByProgId };
