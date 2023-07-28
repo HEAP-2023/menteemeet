@@ -50,7 +50,7 @@ sequelize
   .then(() => {
     console.log("[SYSTEM] All models synchronized successfully!");
 
-    seedData();
+    // seedData();
   })
   .catch((err) => {
     console.error("[ERROR] Error synchronizing models:", err);

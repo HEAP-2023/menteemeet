@@ -361,6 +361,19 @@ const getAllSessions = async (req, res) => {
   }
 }
 
+
+//- WIP //
+const addSession = async (req, res) => {
+  try {
+    const account = req.account;
+
+
+    return res.status(201).json({ message: "Session added successfully."});
+  } catch (err) {
+    return res.status(500).json({ message: "Failed to add session." });
+  }
+}
+
 const signup = async (req, res) => {
   const account = req.account;
   const user = await User.findOne({ where: { account_id: account.account_id } });
