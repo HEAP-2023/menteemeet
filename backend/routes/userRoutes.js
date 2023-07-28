@@ -20,6 +20,8 @@ router.get('/programmes/:role', authenticateToken, userController.getAllProgByUs
 router.get('/programmes/', authenticateToken, userController.getUnsignedProg);
 
 router.get('/session', authenticateToken, userController.getAllSessions);
+router.get('/session/:progID', authenticateToken, userController.getSessionsByProgID);
+
 
 router.put('/', authenticateToken, userController.updateUser);
 

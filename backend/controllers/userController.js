@@ -13,6 +13,9 @@ const { getPagination, getPagingData } = require('./programmeController');
 
 const { generateAccessToken } = require('./accountController');
 
+const UserGroup = require("../models/userGroup");
+const Session = require("../models/session");
+
 const updateJWT = async (getObj) => {
   try {
     const accessToken = await generateAccessToken(getObj);
@@ -358,6 +361,48 @@ const getAllSessions = async (req, res) => {
   }
 }
 
+const getSessionsByProgID = async (req, res) => {
+  try {
+    const progID = req.params.progID;
+
+    let groupArray = [];
+    const getGroup = await UserGroup.findOne({
+      where: { programme_id: progID }, raw: true });
+
+    const userProgObj = await UserProgramme.findAll({
+      where: { programme_id: progID }, raw: true });
+
+    for (const item of userProgObj) {
+    
+      if (getGroup !== null && getGroup !== undefined) {
+        groupArray.push({...getGroup, role: item.role });
+      }
+    }
+
+    if (!getGroup) {
+      return res.status(404).json({ message: "Grouping does not exist."});
+    }
+    
+    const getAllSessions = await Session.findAll({
+      where: { group_id: { [Op.in]: groupArray.map(group => group.group_id) }},
+      raw: true
+    })
+
+    const sessionsWithRole = getAllSessions.map(session => {
+      const matchingGroup = groupArray.find(group => group.group_id === session.group_id);
+      if (matchingGroup) {
+        return { ...session, role: matchingGroup.role };
+      }
+      return session;
+    });
+
+    return res.status(200).json({ message: "Retrieved Session By Programme ", sessionsWithRole });
+    
+  } catch (err) {
+    return res.status(500).json({ message: "Failed to get session!" });
+  }
+}
+
 const signup = async (req, res) => {
   const account = req.account;
   const user = await User.findOne({ where: { account_id: account.account_id } });
@@ -396,4 +441,5 @@ const signup = async (req, res) => {
   }
 }
 
-module.exports = { updateUser, getUser, getAllProgByUserID, getUnsignedProg, getSkill, addSkill, addInterest, getInterest, getAllSessions, signup };
+module.exports = { updateUser, getUser, getAllProgByUserID, getUnsignedProg, getSkill, 
+  addSkill, addInterest, getInterest, getAllSessions, getSessionsByProgID, signup };
