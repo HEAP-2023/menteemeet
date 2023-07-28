@@ -37,3 +37,14 @@ export const getApplicationsByProgID = async(progID) => {
     })
     return res;
 }
+
+export const putApplicationAcceptance = async(appID, approval) => {
+    const res = await axiosInstance({
+        method: "put",
+        headers: { Authorization: `Bearer ${localStorage.getItem("jwt")}` },
+        url: `/organisers/applications/${appID}`,
+        data: approval
+    })
+    console.log("res:", res);
+    return res
+}
