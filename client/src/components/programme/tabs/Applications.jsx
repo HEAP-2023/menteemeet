@@ -194,32 +194,9 @@ const Applications = (programmeID) => {
                     getRowId={(row) => row.application_id}
                 />
             </Box>
-            <Box >
-                <Typography sx={{ mt: '20px' }}>Mentor Applications</Typography>
-                <DataGrid rows={mentorApplications} columns={columnHeading} slots={{ toolbar: GridToolbar }} sx={{
-                    width: '100%', "& .css-j337ty-MuiButtonBase-root-MuiButton-root": {
-                        color: colors.text[500],
-                        // bgcolor: colors.primary[500]
-                    },
-                    "& .MuiDataGrid-columnHeaders": { backgroundColor: `${colors.primary[500]}` }
-                }} disableRowSelectionOnClick
-                getRowId={(row) => row.application_id}
-                />
-            </Box>
             <Box>
                 <Typography sx={{ mt: '20px' }}>Enrolled Mentees</Typography>
                 <DataGrid rows={menteesEnrolled} columns={columnHeading2} slots={{ toolbar: GridToolbar }} sx={{
-                    width: '100%', "& .css-j337ty-MuiButtonBase-root-MuiButton-root": {
-                        color: colors.text[500],
-                        // bgcolor: colors.primary[500]
-                    },
-                    "& .MuiDataGrid-columnHeaders": { backgroundColor: `${colors.primary[500]}` }
-                }} disableRowSelectionOnClick 
-                getRowId={(row) => row.application_id}/>
-            </Box>
-            <Box>
-                <Typography sx={{ mt: '20px' }}>Enrolled Mentors</Typography>
-                <DataGrid rows={mentorsEnrolled} columns={columnHeading2} slots={{ toolbar: GridToolbar }} sx={{
                     width: '100%', "& .css-j337ty-MuiButtonBase-root-MuiButton-root": {
                         color: colors.text[500],
                         // bgcolor: colors.primary[500]
@@ -238,6 +215,29 @@ const Applications = (programmeID) => {
                     "& .MuiDataGrid-columnHeaders": { backgroundColor: `${colors.primary[500]}` }
                 }} disableRowSelectionOnClick
                 getRowId={(row) => row.application_id} />
+            </Box>
+            <Box >
+                <Typography sx={{ mt: '20px' }}>Mentor Applications</Typography>
+                <DataGrid rows={mentorApplications} columns={columnHeading} slots={{ toolbar: GridToolbar }} sx={{
+                    width: '100%', "& .css-j337ty-MuiButtonBase-root-MuiButton-root": {
+                        color: colors.text[500],
+                        // bgcolor: colors.primary[500]
+                    },
+                    "& .MuiDataGrid-columnHeaders": { backgroundColor: `${colors.primary[500]}` }
+                }} disableRowSelectionOnClick
+                getRowId={(row) => row.application_id}
+                />
+            </Box>
+            <Box>
+                <Typography sx={{ mt: '20px' }}>Enrolled Mentors</Typography>
+                <DataGrid rows={mentorsEnrolled} columns={columnHeading2} slots={{ toolbar: GridToolbar }} sx={{
+                    width: '100%', "& .css-j337ty-MuiButtonBase-root-MuiButton-root": {
+                        color: colors.text[500],
+                        // bgcolor: colors.primary[500]
+                    },
+                    "& .MuiDataGrid-columnHeaders": { backgroundColor: `${colors.primary[500]}` }
+                }} disableRowSelectionOnClick 
+                getRowId={(row) => row.application_id}/>
             </Box>
             <Box>
                 <Typography sx={{ mt: '20px' }}>Rejected Mentors</Typography>
