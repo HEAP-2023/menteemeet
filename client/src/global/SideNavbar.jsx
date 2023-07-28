@@ -9,12 +9,12 @@ import useGetAllProgsInvolved from "../hooks/programmes/useGetAllProgsInvolved";
 
 const SideNavbar = ({enrolled}) => {
     const colors = generateColors();
-    const userType = useSelector((state) => state.user.userType);
-    const {data, isSuccess} = useGetAllProgsInvolved()
+    const userType = useSelector((state) => state.user.userBasicDetails.account_type);
+    // const {data, isSuccess} = useGetAllProgsInvolved()
 
-    if(isSuccess){
-        console.log(data)
-    }
+    // if(isSuccess){
+    //     console.log(data)
+    // }
 
     return (
         <Box width="20%" bgcolor="primary.main">

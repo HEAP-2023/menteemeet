@@ -58,6 +58,7 @@ const CreateProgramme = () => {
             matching_criteria : JSON.stringify(data.matching_criteria)
         }
         console.log(formattedData)
+        // createProgramme(formattedData);
 
         const formData = new FormData();
         for (const key in formattedData) {
@@ -65,13 +66,12 @@ const CreateProgramme = () => {
         }
 
         console.log(formData);
-        // createProgramme(formData);
 
-        // try {
-        //     await postProgramme(formattedData);
-        // } catch (err) {
-        //     console.log(err);
-        // }
+        try {
+            await postProgramme(formattedData);
+        } catch (err) {
+            console.log(err);
+        }
     }
     return (
     <Box width="100%" p="40px" display="flex" flexDirection="column">
@@ -87,7 +87,7 @@ const CreateProgramme = () => {
 
         {/* <Box display="flex" gap="20px"> */}
             <Button type="submit" variant="contained" color="secondary" >Submit</Button>
-            <Button /* disabled={progress < 100} */ variant="contained" color="secondary" onClick={() => {setPreview(!preview)}}>Preview Form </Button>
+            <Button disabled={progress < 100}  variant="contained" color="secondary" onClick={() => {setPreview(!preview)}}>Preview Form </Button>
         {/* </Box> */}
 
         <PreviewForm open={preview} setPreview={setPreview} getValues={getValues}/>

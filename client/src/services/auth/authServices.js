@@ -40,8 +40,8 @@ async function register(user) {
     url: "/register",
     data: user
   })
-
-    return (res.data.dataValues)
+  localStorage.setItem("jwt", res.data.accessToken);
+    return (res.data)
 }
 
 // const logout = async() => {

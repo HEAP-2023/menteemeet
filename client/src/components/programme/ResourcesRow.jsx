@@ -12,7 +12,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import { useForm, Controller } from "react-hook-form";
 
 const ResourcesRow = ({ resources }) => {
-    const userType = useSelector((state) => state.user.userType)
+    const userType = useSelector((state) => state.user.userBasicDetails.account_type)
     const links = resources.filter((item) => item.link);
     const downloads = resources.filter((item) => !item.link)
     const [linkModalOpen, setLinkModalOpen] = useState(false);

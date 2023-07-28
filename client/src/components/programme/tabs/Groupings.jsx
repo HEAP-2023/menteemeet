@@ -11,7 +11,7 @@ import DraggableParking from "../DraggableParking";
 
 const Groupings = () => {
     const api = useGridApiRef();
-    const userType = useSelector((state) => state.user.userType);
+    const userType = useSelector((state) => state.user.userBasicDetails.account_type);
     const dispatch = useDispatch(); 
     const [parent, setParent] = useState(null)
     const [child, setChild] = useState(null)

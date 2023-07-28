@@ -1,3 +1,5 @@
+import jwt_decode from "jwt-decode";
+
 export const splitObjIntoArrSize = (size, object) => {
     let output = [];
     let i = 0;
@@ -11,6 +13,7 @@ export const splitObjIntoArrSize = (size, object) => {
    return output
 }
 
+export const decodeJWT = (token) => jwt_decode(token);
 
 
 
@@ -88,3 +91,5 @@ export const DnDchanges = (initial, changes) => {
     });
     return final;
 }
+
+

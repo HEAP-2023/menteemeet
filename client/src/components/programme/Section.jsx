@@ -15,7 +15,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { ErrorMessage } from '@hookform/error-message';
 
 const Section = ({ header, rows, rowColor = "primary.main", highlight = false, checkbox = false, showDTG = false }) => {
-    const userType = useSelector((state) => state.user.userType)
+    const userType = useSelector((state) => state.user.userBasicDetails.account_type)
     const progress = 90; // to change
     const [announcementModalOpen, setAnnouncementModalOpen] = useState(false);
     const handleModalOpen = () => setAnnouncementModalOpen(true);

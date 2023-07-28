@@ -17,8 +17,8 @@ const Feedback = () => {
     const handleChange = (event) => {
         setPerson(event.target.value);
     };
-    const userType = useSelector((state) => state.user.userType);
-    const rows = fetchPeople(userType);
+    const userType = useSelector((state) => state.user.userBasicDetails.account_type);
+    const rows = fetchPeople(fetchRoleInProg);
 
     const acctID = useSelector((state) => state.user.userBasicDetails.account_id);
     const people = ["Organiser"].concat(rows.map((item, index) => item.name));
@@ -56,7 +56,7 @@ const Feedback = () => {
     // console.log(store)
     let hasContent = store.length > 0 ? true : false;
     // console.log(hasContent);
-    if (userType === "mentee" || userType === "mentor") {
+    if (userType === "user") {
 
         content =
             <Box display="grid" gridTemplateColumns="1fr 1fr">
@@ -149,8 +149,8 @@ const Feedback = () => {
 
 export default Feedback;
 
-const fetchPeople = (userType) => {
-    if (userType === "mentor") {
+const fetchPeople = (role) => {
+    if (role === "mentor") {
         return [{
             name: "Olivia"
         }, {
@@ -158,7 +158,7 @@ const fetchPeople = (userType) => {
         }, {
             name: "Bruce"
         }]
-    } else if (userType === "mentee") {
+    } else if (role === "mentee") {
         return [{
             name: "Hong Yao"
         }, {
@@ -170,3 +170,4 @@ const fetchPeople = (userType) => {
 }
 
 
+const fetchRoleInProg = "mentee";

@@ -1,16 +1,8 @@
 import {createSlice} from '@reduxjs/toolkit'
+import { decodeJWT } from '../functions';
 
-const fetchUserType = () => {
-    // here should be get jwt from localstorage if have then just login ah
-    return undefined;
-}
-const fetchAllProfiles = () => {
-    // go fetch
-    return {
-        mentor : true,
-        mentee : true,
-    }
-}
+//to change userType go to initialState (3 functions below) change_type
+
 const fetchProgrammesEnrolled = () => {
         // go fetch
     return ([
@@ -31,16 +23,23 @@ const fetchTasks = () => {
     ]);
 }
 
+const getAccountType = () => {
+    const jwt = localStorage.getItem("jwt")
+    if(!jwt){
+        return {name : "default", email : "defaultEmail", account_type : undefined};
+    } 
+    const details = decodeJWT(jwt)
+    return details
+}
 
 const initialState = {
     loginOverlay : false,
     profileOverlay : false,
-    userType : fetchUserType(), // organiser, mentee, mentor
-    userTypes : fetchAllProfiles(), //{mentor : true, mentee : true}
+    // userType : fetchUserType(), // organiser, mentee, mentor
     programmesEnrolled : fetchProgrammesEnrolled(),
     programmesCreated : fetchProgrammesCreated(),
     tasks : fetchTasks(),
-    userBasicDetails : {id : "" ,name : "default", email : "defaultEmail"},
+    userBasicDetails : getAccountType(),
 // structure after logging in should be
 // account_id
 // account_type
@@ -67,28 +66,15 @@ export const userSlice = createSlice({
         profileOverlayToggle : (state) => {
             state.profileOverlay = !state.profileOverlay; 
         },
-        logIn : (state, action) => {
-            if(action.payload.type === "user"){
-                state.userType = "mentee";
-            }else if(action.payload.type === "organiser"){
-                state.userType = "organiser";
-            }
-        },
         logOut : (state) => {
-            state.userType = undefined;
-        },
-        swap : (state) => {
-            if(state.userType === "mentee" && state.userTypes.mentor){
-                state.userType = "mentor"
-            }
-            else if(state.userType === "mentor" && state.userTypes.mentee){
-                state.userType = "mentee"
-            }
+            state.userBasicDetails.account_type = undefined;
         },
         updateDetails : (state, action) => {
             state.userBasicDetails = {...action.payload}
         },
-        
+        modifyDetails : (state, action) => {
+            state.userBasicDetails = {...state.userBasicDetails, ...action.payload}
+        },
         addTasks : (state, action) => {
             state.tasks = [...state.tasks, action.payload.task]
         },
@@ -111,10 +97,9 @@ export const userSlice = createSlice({
 
 export const {loginOverlayToggle ,
     profileOverlayToggle,
-    logIn, logOut,
-    swap, updateDetails,
+    logOut, updateDetails,
     addTasks, removeTask,
-    dragToggle,
+    dragToggle, modifyDetails,
     addToParking, removeFromParking} = userSlice.actions;
 export default userSlice.reducer
 

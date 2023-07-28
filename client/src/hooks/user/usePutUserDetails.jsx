@@ -6,13 +6,8 @@ export const usePutUserDetails = () => {
     const id = useSelector((state) => state.user.userBasicDetails["user_id"])
     const queryClient = useQueryClient()
     return useMutation((data) => putUserDetails(data), {
-        onMutate : async(newData) => {
-            console.log(newData)
-            
-            // queryClient.setQueryData(['userBasicDetails', id], newData)
-            await queryClient.cancelQueries(["userBasicDetails", id])
-        },
         onSuccess : (data) => {
+            localStorage.setItem("jwt", data.accessToken)
             queryClient.invalidateQueries({queryKey : ["userBasicDetails", id]})
             console.log(data)
             // alert("successfully change details")

@@ -29,7 +29,7 @@ const Programme = ({programme_details}) => {
     } 
     const [deleteModal, setDeleteModal] = useState(false)
 
-    const userType = useSelector((state) => state.user.userType);
+    const userType = useSelector((state) => state.user.userBasicDetails.account_type);
     const userName = useSelector((state) => state.user.userBasicDetails.name)
 
     return (
