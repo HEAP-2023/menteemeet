@@ -13,9 +13,6 @@ const { getPagination, getPagingData } = require('./programmeController');
 
 const { generateAccessToken } = require('./accountController');
 
-const UserGroup = require("../models/userGroup");
-const Session = require("../models/session");
-
 const updateJWT = async (getObj) => {
   try {
     const accessToken = await generateAccessToken(getObj);
@@ -361,19 +358,6 @@ const getAllSessions = async (req, res) => {
   }
 }
 
-
-//- WIP //
-const addSession = async (req, res) => {
-  try {
-    const account = req.account;
-
-
-    return res.status(201).json({ message: "Session added successfully."});
-  } catch (err) {
-    return res.status(500).json({ message: "Failed to add session." });
-  }
-}
-
 const signup = async (req, res) => {
   const account = req.account;
   const user = await User.findOne({ where: { account_id: account.account_id } });
@@ -412,4 +396,4 @@ const signup = async (req, res) => {
   }
 }
 
-module.exports = { updateUser, getUser, getAllProgByUserID, getUnsignedProg, getSkill, addSkill, addInterest, getInterest, getAllSessions, signup };
+module.exports = { updateUser, getUser, getAllProgByUserID, getUnsignedProg, getSkill, addSkill, addInterest, getInterest, signup };
