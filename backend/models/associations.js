@@ -1,7 +1,7 @@
 const User = require('./user');
 const Skill = require('./skill');
 const Interest = require('./interest');
-const Group = require('./group');
+const Grouping = require('./grouping');
 const Programme = require('./programme');
 const Review = require('./review');
 const Session = require('./session');
@@ -27,20 +27,20 @@ function initAssociations() {
   Interest.belongsToMany(User, { foreignKey: 'interest_id', through: UserInterest });
 
   //User and group
-  Group.belongsToMany(User, { foreignKey: 'group_id', through: UserProgramme });
-  User.belongsToMany(Group, { foreignKey: 'user_id', through: UserProgramme });
+  Grouping.belongsToMany(User, { foreignKey: 'group_id', through: UserProgramme });
+  User.belongsToMany(Grouping, { foreignKey: 'user_id', through: UserProgramme });
 
   //Programme and group
-  Programme.hasMany(Group, { foreignKey: "programme_id" });
-  Group.belongsTo(Programme, { foreignKey: "programme_id" });
+  Programme.hasMany(Grouping, { foreignKey: "programme_id" });
+  Grouping.belongsTo(Programme, { foreignKey: "programme_id" });
 
   //User and programme
   User.belongsToMany(Programme,{ foreignKey: 'user_id', through: UserProgramme });
   Programme.belongsToMany(User, { foreignKey: 'programme_id', through: UserProgramme });
 
-  //Group and mentorsession
-  Group.hasMany(Session, { foreignKey: "group_id" });
-  Session.belongsTo(Group, { foreignKey: "group_id" });
+  //Grouping and mentorsession
+  Grouping.hasMany(Session, { foreignKey: "group_id" });
+  Session.belongsTo(Grouping, { foreignKey: "group_id" });
 
   //User and review
   User.hasMany(Review, { foreignKey: 'receiver_id', as: 'receivedReviews' });
