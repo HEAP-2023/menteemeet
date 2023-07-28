@@ -14,7 +14,7 @@ import SectionHeader from "../SectionHeader";
 
 // redux imports
 import { useDispatch, useSelector } from "react-redux";
-import { swap, profileOverlayToggle, logOut } from "../../state(kiv)";
+import { profileOverlayToggle, logOut } from "../../state(kiv)";
 
 
 
@@ -51,21 +51,6 @@ const ProfileOverlayTab = ({acctInfo}) => {
                 </Typography>
             </Box>
 
-
-            <Box display="flex" onClick={() => {
-                // basically close the overlay and go home
-                
-                dispatch(profileOverlayToggle())
-                dispatch(swap());
-                navigate("/");
-                }}>
-
-                    
-                <ChangeCircleOutlinedIcon/>
-                <Typography sx={{":hover":{cursor:"pointer"}}}>
-                    Switch view
-                </Typography>
-            </Box>
 
 
             <Box display="flex" onClick={() => {

@@ -20,7 +20,7 @@ const Transition = forwardRef(function Transition(props, ref) {
 
 const Topbar = ({acctInfo}) => {
     const dispatch = useDispatch();
-    const userType = useSelector((state) => state.user.userType)
+    const userType = useSelector((state) => state.user.userBasicDetails.account_type)
     const profileOverlay = useSelector((state) => state.user.profileOverlay);
 
     const [openNotifs, setOpenNotifs] = useState(false)

@@ -5,22 +5,22 @@ import { useForm, Controller } from "react-hook-form";
 import { ErrorMessage } from '@hookform/error-message';
 import { yupResolver } from "@hookform/resolvers/yup"
 import * as yup from "yup"
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { useUserDetails } from '../../hooks/user/useUserDetails';
 import { useEffect } from 'react';
 import { usePutUserDetails } from '../../hooks/user/usePutUserDetails';
-
+import { modifyDetails } from '../../state(kiv)';
 const MyDetails = () => {
     const defaultValues = {
             name: "",
             email: "",
-            contactNumber: "",
-            telegramUsername:  "", 
+            contact_no: "",
+            telegram_username:  "", 
             description: "",
         }
     
-    const userType = useSelector((state) => state.user.userType)
-
+    const userType = useSelector((state) => state.user.userBasicDetails.account_type)
+    const dispatch = useDispatch()
     const myDetailsSchema = yup.object()
         .shape(
             {
@@ -29,7 +29,7 @@ const MyDetails = () => {
                 email: yup.string()
                     .email("Invalid email format")
                     .required("Email is required"),
-                contactNumber: yup.string()
+                contact_no: yup.string()
                     .required("Contact number is required")
                     .matches(/^\d{8,}$/, "Invalid contact number format")
             }
@@ -41,7 +41,7 @@ const MyDetails = () => {
 
 
     // fetching / mutating
-    const {error, isError, isSuccess : getDetailsSuccess, data, refetch} = useUserDetails();
+    const {error, isError, isSuccess : getDetailsSuccess, data} = useUserDetails();
     if(isError){
         alert(error.message)
     }
@@ -49,25 +49,34 @@ const MyDetails = () => {
 
     useEffect(() => {
         if(getDetailsSuccess){
-            const { "Account.name" : name, "Account.email" : email, telegram_username: telegramUsername, "Account.contact_no" : contactNumber, description} = data.user
+            const { "Account.name" : name, "Account.email" : email, telegram_username, "Account.contact_no" : contact_no, description} = data.user
             reset({
                 name: name,
                 email: email,
-                contactNumber: !!contactNumber ? contactNumber : "",
-                telegramUsername: !!telegramUsername ? telegramUsername : "", 
+                contact_no: !!contact_no ? contact_no : "",
+                telegram_username: !!telegram_username ? telegram_username : "", 
                 description: !!description ? description : "",
             })
+            console.log(data.user)
+            dispatch(modifyDetails(
+                {
+                    name : name, 
+                    email : email, 
+                    telegram_username : telegram_username, 
+                    contact_no : contact_no, 
+                    description : description
+                }
+            ))
         }
-        
-    }, [getDetailsSuccess, data, reset, refetch, saveFormSuccess])
+    }, [getDetailsSuccess, data, reset, saveFormSuccess])
 
 
     const handleSave = (data) => {
         const accountSettingsSave = {
             name: data.name,
             email: data.email,
-            contact_no: data.contactNumber,
-            telegram_username: data.telegramUsername,
+            contact_no: data.contact_no,
+            telegram_username: data.telegram_username,
             description: data.description
         }
         saveDetails(accountSettingsSave)
@@ -108,9 +117,9 @@ const MyDetails = () => {
                             })
                         }
 
-                        {(userType === "mentee" || userType === "mentor") && <Grid display="flex" flexDirection="column" margin="5px" xs={4} item={true}>
+                        {(userType === "user") && <Grid display="flex" flexDirection="column" margin="5px" xs={4} item={true}>
                             <label>Telegram Username</label>
-                            <Controller name="telegramUsername" control={control} render={({ field }) =>
+                            <Controller name="telegram_username" control={control} render={({ field }) =>
                                 <TextField {...field} variant="outlined" size="small" />
                             } />
                         </Grid>}
@@ -147,7 +156,7 @@ const inputs = [
     },
     {
         id: 3,
-        name: "contactNumber",
+        name: "contact_no",
         label: "Contact Number",
     },
 ]

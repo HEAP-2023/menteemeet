@@ -4,7 +4,7 @@ import { useSelector } from "react-redux"
 
 export const ProtectedRoute = () => {
     // const {data, isSuccess} = useVerifyJWT()
-    const userType = useSelector((state) => state.user.userType)
+    const userType = useSelector((state) => state.user.userBasicDetails.account_type)
 
     return (
         userType ? 
@@ -15,7 +15,7 @@ export const ProtectedRoute = () => {
 
 export const UnprotectedRoute = () => {
     // const {data, isSuccess} = useVerifyJWT()
-    const userType = useSelector((state) => state.user.userType)
+    const userType = useSelector((state) => state.user.userBasicDetails.account_type)
 
     return (
         userType ? 

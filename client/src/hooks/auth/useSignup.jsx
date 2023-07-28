@@ -1,6 +1,6 @@
 import { register } from "../../services/auth/authServices";
 import { useMutation } from "@tanstack/react-query"
-import { logIn, updateDetails } from "../../state(kiv)";
+import { updateDetails } from "../../state(kiv)";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
@@ -12,7 +12,6 @@ const useSignup = (reset) => {
     return useMutation(register, {
         onSuccess : (data) => {
             console.log(data)
-            dispatch(logIn({ type : data.account_type }))
             dispatch(updateDetails({...data}))
             navigate("/");
         },
@@ -24,3 +23,10 @@ const useSignup = (reset) => {
     })
 }
 export default useSignup;
+
+// accessToken
+// account_id
+// account_type
+// email
+// name
+// user_id

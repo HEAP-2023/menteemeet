@@ -10,7 +10,7 @@ import { useSelector } from "react-redux"
 
 
 const Home = () => {
-    const userType = useSelector((state) => state.user.userType)    
+    const userType = useSelector((state) => state.user.userBasicDetails.account_type)    
     const name = useSelector((state) => state.user.userBasicDetails.name)
     
     return (

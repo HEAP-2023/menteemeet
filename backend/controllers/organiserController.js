@@ -126,6 +126,7 @@ const addProg = async (req, res) => {
       organiser_id: org.organiser_id
     })
 
+    console.log("request:", req.file)
     const uploadFile = await awsS3Controller.uploadToS3(req.file, newProg.programme_id);
 
     if (uploadFile) {
