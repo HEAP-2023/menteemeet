@@ -1,19 +1,14 @@
 import { useState } from "react";
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
-import { Box, Typography, Button} from "@mui/material";
+import { Box, Typography, Button, TextField} from "@mui/material";
 import { generateColors } from "../../theme";
 import PageHeader from "../../components/PageHeader"
 import Header from "../../components/login/start/Header"
-import RSearchBox from "../../components/explore/SearchBox";
 import LoginOverlay from "../../components/login/LoginOverlay"
-
+import RSearchBox from "../../components/explore/SearchBox";
 
 const LoginExplore = () => {
     const color = generateColors();
-    const [searchTerm, setSearchTerm] = useState("");
-    const handleSearch = (term) => {
-        setSearchTerm(term);
-    }
 
     return (
     <Box width="100%" position="relative">
@@ -52,9 +47,7 @@ const LoginExplore = () => {
                     fontFamily="prompt" fontWeight="500" variant="h5" paddingBottom="7px">
                     All Programmes
                 </Typography>
-                <input
-                    type="text" placeholder="Search for programmes" onChange={(e) => setName(e.target.value)}
-                ></input>
+                <RSearchBox />
             </Box>
         </Box>
 
