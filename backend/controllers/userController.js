@@ -396,4 +396,4 @@ const signup = async (req, res) => {
   }
 }
 
-module.exports = { updateUser, getUser, getAllProgByUserID, getUnsignedProg, getSkill, addSkill, addInterest, getInterest, signup };
+module.exports = { updateUser, getUser, getAllProgByUserID, getUnsignedProg, getSkill, addSkill, addInterest, getInterest, getAllSessions, signup };

@@ -46,7 +46,7 @@ sequelize
   })
 
 sequelize
-  .sync({ alter: false })
+  .sync({ alter: true })
   .then(() => {
     console.log("[SYSTEM] All models synchronized successfully!");
 
