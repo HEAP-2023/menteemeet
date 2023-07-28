@@ -6,7 +6,7 @@ import { useCallback } from "react"
 
 const useGetAllProgsInvolved = () => {
     const user_id = useSelector((state) => state.user.userBasicDetails.user_id)
-    const userType = useSelector((state) => state.user.userType)
+    const userType = useSelector((state) => state.user.userBasicDetails.account_type)
 
     const queryFn = useCallback(() => {
         if (userType === "organiser"){

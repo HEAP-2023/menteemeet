@@ -8,7 +8,7 @@ import { splitObjIntoArrSize } from "../../functions";
 import { useSelector } from "react-redux";
 
 const Item = ({ content }) => {
-    const userType = useSelector((state) => state.user.userType)
+    const userType = useSelector((state) => state.user.userBasicDetails.account_type)
     const { id, name, img, link } = content;
     return (
         <Card sx={{ height: "100%", display: "flex", flexDirection: "column", alignItems: "center" }}>

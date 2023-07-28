@@ -1,6 +1,6 @@
 import { changePW } from "../../services/auth/authServices";
 import { useMutation } from "@tanstack/react-query"
-import { logOut, updateDetails } from "../../state(kiv)";
+import { logOut } from "../../state(kiv)";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 

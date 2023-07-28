@@ -12,21 +12,22 @@ import NewSessionLog from "./NewSessionLog"
 
 
 const Sessions = () => {
-    const userType = useSelector((state) => state.user.userType);
+    const userType = useSelector((state) => state.user.userBasicDetails.account_type);
     const colors = generateColors();
-    const rows = fetchUpcomingSessions(userType)
-    const columns = structure(userType)
+    const role = "mentee";
+    const rows = fetchUpcomingSessions(role)
+    const columns = structure(role)
 
     return (
     <Box>
-        {userType === "mentor" && <NewSessionLog/>}
+        {role === "mentor" && <NewSessionLog/>}
         <Box width="100%" display="flex">
             <SectionHeader text="Upcoming Sessions" />
         </Box>
             <SessionTable rows={rows} columns={columns} 
-            checkbox={userType === "mentee" ? false : true} 
+            checkbox={role === "mentee" ? false : true} 
             color={colors.primary[500]}
-            editable={userType === "mentee" ? false : true}/>
+            editable={role === "mentee" ? false : true}/>
         <SectionHeader text="Past Sessions" />
         <SessionTable rows={rows} columns={columns}/>
 
@@ -37,8 +38,8 @@ export default Sessions;
 
 
 
-const fetchUpcomingSessions = (userType) => {
-    if(userType === " mentee"){
+const fetchUpcomingSessions = (role) => {
+    if(role === " mentee"){
         return ( [
             { id: 1, groupNo: 5 , date: "05/06/23", time: "13:50- 14:50", topicsCovered: "topic", remarks : "mentee's remarks " },
             { id: 2, groupNo: 5 , date: "05/06/23", time: "13:50- 14:50", topicsCovered: "topic", remarks : "mentee's remarks " },
@@ -64,7 +65,7 @@ const fetchUpcomingSessions = (userType) => {
       ]);
 }
 
-const structure = (userType) => {
+const structure = (role) => {
     return (
         [
             { field: 'id', headerName: 'ID', width: 90 },
@@ -94,7 +95,7 @@ const structure = (userType) => {
             },
             {
               field: 'remarks',
-              headerName: 'Remarks For' + (userType === "mentee" ? " Mentee" : " Mentor"),
+              headerName: 'Remarks For' + (role === "mentee" ? " Mentee" : " Mentor"),
               description: 'This column has a value getter and is not sortable.',
               sortable: false,
               editable : false,

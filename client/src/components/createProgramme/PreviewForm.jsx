@@ -59,11 +59,6 @@ const PreviewForm = ({open, setPreview, getValues}) => {
             <Box>
                 <SectionHeader text="Selection Criteria" margin="20px 0 0 0"/>
                 <Divider/>
-                {matchingCriteria.includes("availability") &&
-                    <Stack>
-                        <WeekSelectionCalendar/>
-                    </Stack>
-                }
 
                 <Stack>
                     <Typography fontWeight="700">Skills</Typography>

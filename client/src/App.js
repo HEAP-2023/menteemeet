@@ -21,7 +21,7 @@ import AccountSettings from "./scenes/accountSettings/AccountSettings";
 
 
 function App() {
-    const userType = useSelector((state) => state.user.userType)
+    const userType = useSelector((state) => state.user.userBasicDetails.account_type)
     return (
     <ThemeProvider theme={theme}>
         <CssBaseline/>
