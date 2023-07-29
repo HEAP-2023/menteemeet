@@ -45,7 +45,7 @@ export const getUserName = async(userID) => {
 export const getSessionsByProgID = async(progID) => {
     const res = await axiosInstance({
         method: "get",
-        url: `/sessions/${progID}`,
+        url: `/users/session/${progID}`,
         headers: { Authorization: `Bearer ${localStorage.getItem("jwt")}` },
     })
     return res;
