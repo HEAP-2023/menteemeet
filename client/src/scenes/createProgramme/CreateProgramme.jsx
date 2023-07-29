@@ -68,7 +68,7 @@ const CreateProgramme = () => {
         console.log(formData);
 
         try {
-            await postProgramme(formattedData);
+            await postProgramme(formData);
         } catch (err) {
             console.log(err);
         }

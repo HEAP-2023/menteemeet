@@ -10,15 +10,20 @@ import { putApplicationAcceptance } from "../../../services/programmes/organiser
 const Applications = (programmeID) => {
 
     const [fetchApplications, setFetchApplications] = useState([]);
+    const [tempApplications, setTempApplications] = useState([]);
+
     useEffect(() => {
-        getApplicationsByProgID(programmeID.programmeID)
-        .then(res => {
-            setFetchApplications(res.data.getApplication);
-        })
-        .catch(err => {
-            console.log("ERROR:", err);
-        })
-    }, [fetchApplications]) 
+      const areEqual = fetchApplications.length === tempApplications.length && fetchApplications.every(item => tempApplications.includes(item));
+
+      if (tempApplications.length > 0 && areEqual) return;
+      getApplicationsByProgID(programmeID.programmeID)
+      .then(res => {
+          setFetchApplications(res.data.getApplication);
+      })
+      .catch(err => {
+          console.log("ERROR:", err);
+      })
+    }, [tempApplications]) 
 
     const colors = generateColors();
     const menteeApplications = fetchApplications.filter((item)=> item.role === 'mentee' && item.is_accepted === 0);
@@ -68,7 +73,8 @@ const Applications = (programmeID) => {
             .catch(err => {
                 console.log("ERROR:", err);
             })
-            console.log(approval)
+            const newApps = await getApplicationsByProgID(programmeID.programmeID);
+            setTempApplications(newApps);
         }
         
         return (
@@ -95,7 +101,9 @@ const Applications = (programmeID) => {
             .catch(err => {
                 console.log("ERROR:", err);
             })
-            console.log(approval)
+            console.log(approval);
+            const newApps = await getApplicationsByProgID(programmeID.programmeID);
+            setTempApplications(newApps);
         }
         return (<>
             <Button 

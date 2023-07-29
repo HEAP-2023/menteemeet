@@ -15,9 +15,9 @@ const { authenticateToken } = require('../middlewares/authMiddlewares');
 router.use(authenticateToken);
 
 router.get('/', authenticateToken, programmeController.getAllProg);
-router.get('/:id/applications', authenticateToken, programmeController.getApplicationsByProgID);
-router.get('/:id/mentee-applications', authenticateToken, programmeController.getMenteeApplicationsByProgId);
-router.get('/:id/mentor-applications', authenticateToken, programmeController.getMentorApplicationsByProgId);
+// router.get('/:id/applications', authenticateToken, programmeController.getApplicationsByProgID);
+// router.get('/:id/mentee-applications', authenticateToken, programmeController.getMenteeApplicationsByProgId);
+// router.get('/:id/mentor-applications', authenticateToken, programmeController.getMentorApplicationsByProgId);
 router.get('/:id', authenticateToken, programmeController.getEachProg);
 
 //Testing Only.
