@@ -37,6 +37,7 @@ const SessionTable = ({rows, columns, checkbox=false, color="#EBEBEB", editable=
     <DataGrid
       rows={rows}
       columns={columns}
+      getRowId={(row) => row.session_id}
       getRowSpacing={getRowSpacing}
       isCellEditable={() => editable}
       processRowUpdate={(newRow, oldRow) => handleDataChange(newRow, oldRow)}
