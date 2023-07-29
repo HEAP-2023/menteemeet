@@ -117,7 +117,7 @@ const getAllProgByUserID = async (req, res) => {
     // }
 
     //Returns array.
-    const getUserProgObj = await User.findAll({ where: { user_id : getUserObj.user_id, /* role: getUserRole */ }, include: Programme,
+    const getUserProgObj = await User.findAll({ where: { user_id : getUserObj.user_id, /* role: getUserRole */ }, include: { model: Programme, required: true },
       raw: true });
       
     if (!getUserProgObj) {
