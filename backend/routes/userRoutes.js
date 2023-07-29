@@ -16,7 +16,7 @@ const { authenticateToken } = require('../middlewares/authMiddlewares');
 router.use(authenticateToken);
 
 //get Prog by UserID & Role
-router.get('/programmes/:role', authenticateToken, userController.getAllProgByUserID);
+router.get('/programmes/enrolled', authenticateToken, userController.getAllProgByUserID); /* prev was /:role instead of enrolled  -- bruce*/
 router.get('/programmes/', authenticateToken, userController.getUnsignedProg);
 
 router.put('/', authenticateToken, userController.updateUser);

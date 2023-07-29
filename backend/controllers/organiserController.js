@@ -61,7 +61,7 @@ const updateOrg = async (req, res) => {
           return res.status(403).json({ message: "You are not an organiser." });
         } 
 
-        const getOrgObj = await Organiser.findOne({ where: { account_id : getAccID }, raw: true });
+        const getOrgObj = await Organiser.findOne({ where: { account_id : account.account_id }, raw: true });
         if (!getOrgObj) {
           return res.status(403).json({ message: "No such organiser." });
         }
@@ -165,24 +165,28 @@ const getAllProgsByOrgID = async (req, res) => {
       return res.status(400).json({ message: "Organiser has not created any programmes." });
     }
 
-    const ProgIDarr = [];
-    getOrgProgObj.forEach(obj => {
-      ProgIDarr.push(obj.programme_id);
-    })
+    //bruce
+    return res.status(200).json({ message: "Programmes retrieved", getOrgProgObj });
 
-    const conditions = { [Op.or]: [ { programme_id: ProgIDarr } ]};
+    // const ProgIDarr = [];
+    // getOrgProgObj.forEach(obj => {
+    //   ProgIDarr.push(obj.programme_id);
+    // })
 
-    await Programme.findAndCountAll({ attributes: ['programme_id', 'name', 'description'
-      , 'category', 'display_image'], where: conditions, limit, offset, raw: true })
-      .then(data => {
-        const response = getPagingData(data, (Number(page) + 1), limit);
+    // const conditions = { [Op.or]: [ { programme_id: ProgIDarr } ]};
+    // await Programme.findAndCountAll({ attributes: ['programme_id', 'name', 'description'
+    //   , 'category', 'display_image'], where: conditions, limit, offset, raw: true })
+    //   .then(data => {
+    //     const response = getPagingData(data, (Number(page) + 1), limit);
 
-        if (response.currentPage > response.totalPages) {
-          return res.status(400).json({message: "Nothing to retrieve. Exceeded page request", response });
-        }
-      return res.status(200).json({ message: "All programmes have been retrieved for Organiser No: " + getOrgObj.organiser_id + ".", response }) 
-      });
+    //     if (response.currentPage > response.totalPages) {
+    //       return res.status(400).json({message: "Nothing to retrieve. Exceeded page request", response });
+    //     }
+    //   return res.status(200).json({ message: "All programmes have been retrieved for Organiser No: " + getOrgObj.organiser_id + ".", response }) 
+    //   });
       
+
+    //bruce
   } catch (err) {
     console.error(err);
     return res.status(500).json({ error: err });

@@ -5,16 +5,19 @@ import { getAllProgsParticipating } from "../../services/user/userServices"
 import { useCallback } from "react"
 
 const useGetAllProgsInvolved = () => {
-    const user_id = useSelector((state) => state.user.userBasicDetails.user_id)
+    // const user_id = useSelector((state) => state.user.userBasicDetails.user_id)
     const userType = useSelector((state) => state.user.userBasicDetails.account_type)
 
     const queryFn = useCallback(() => {
         if (userType === "organiser"){
-            return getAllProgsCreated(user_id)
+            return getAllProgsCreated()
         }
-        return getAllProgsParticipating(userType)
+        return getAllProgsParticipating()
     })
-    return useQuery(["getInvolved"], queryFn)
+    return useQuery(["getInvolved"], queryFn, {
+        staleTime: Infinity,
+        cacheTime: Infinity
+    })
 }
 
 export default useGetAllProgsInvolved;

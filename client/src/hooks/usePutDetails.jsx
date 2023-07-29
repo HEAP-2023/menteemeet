@@ -1,11 +1,14 @@
-import { putUserDetails } from "../../services/user/userServices";
+import { putUserDetails } from "../services/user/userServices";
 import { useMutation } from "@tanstack/react-query"
 import { useSelector } from "react-redux";
 import { useQueryClient } from '@tanstack/react-query';
-export const usePutUserDetails = () => {
+import { putOrganiserDetails } from "../services/organiser/organiserServices";
+export const usePutDetails = () => {
     const id = useSelector((state) => state.user.userBasicDetails["user_id"])
     const queryClient = useQueryClient()
-    return useMutation((data) => putUserDetails(data), {
+    const account_type = useSelector((state) => state.user.userBasicDetails.account_type)
+    const queryFn = account_type === "organiser" ? putOrganiserDetails : putUserDetails;
+    return useMutation((data) => queryFn(data), {
         onSuccess : (data) => {
             localStorage.setItem("jwt", data.accessToken)
             queryClient.invalidateQueries({queryKey : ["userBasicDetails", id]})
