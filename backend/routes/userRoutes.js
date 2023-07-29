@@ -19,13 +19,18 @@ router.use(authenticateToken);
 router.get('/programmes/enrolled', authenticateToken, userController.getAllProgByUserID); /* prev was /:role instead of enrolled  -- bruce*/
 router.get('/programmes/', authenticateToken, userController.getUnsignedProg);
 
+router.get('/session', authenticateToken, userController.getAllSessions);
+router.get('/session/:progID', authenticateToken, userController.getSessionsByProgID);
+
+
 router.put('/', authenticateToken, userController.updateUser);
 
-router.get('/:id', authenticateToken, userController.getUser);
 router.get('/:id/skills', authenticateToken, userController.getSkill);
 router.post('/:id/skills', authenticateToken, userController.addSkill);
 router.get('/:id/interests', authenticateToken, userController.getInterest);
 router.post('/:id/interests', authenticateToken, userController.addInterest);
+router.get('/:id', authenticateToken, userController.getUser);
+
 
 router.post('/programmes', authenticateToken, userController.signup)
 

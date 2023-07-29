@@ -18,7 +18,7 @@ const Feedback = () => {
         setPerson(event.target.value);
     };
     const userType = useSelector((state) => state.user.userBasicDetails.account_type);
-    const rows = fetchPeople(fetchRoleInProg());
+    const rows = fetchPeople(fetchRoleInProg);
 
     const acctID = useSelector((state) => state.user.userBasicDetails.account_id);
     const people = ["Organiser"].concat(rows.map((item, index) => item.name));

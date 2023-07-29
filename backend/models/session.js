@@ -11,7 +11,7 @@ const Session = sequelize.define(
             autoIncrement: true,
         },
         date: {
-            type: DataTypes.DATE,
+            type: DataTypes.DATEONLY,
             allowNull: false,
         },
         start_time: {
