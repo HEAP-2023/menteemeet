@@ -41,3 +41,12 @@ export const getUserName = async(userID) => {
     return res.user["Account.name"];
     // return res;
 }
+
+export const getSessionsByProgID = async(progID) => {
+    const res = await axiosInstance({
+        method: "get",
+        url: `/sessions/${progID}`,
+        headers: { Authorization: `Bearer ${localStorage.getItem("jwt")}` },
+    })
+    return res;
+}
