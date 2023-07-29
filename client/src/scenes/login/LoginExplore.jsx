@@ -42,7 +42,7 @@ const LoginExplore = () => {
             </Box>
             <Box></Box>
             <Box borderRadius="20px" bgcolor="#8091FF"
-            paddingTop="60px" paddingLeft="60px" color = "#000000">
+            paddingTop="60px" padding="60px" color = "#000000">
                 <Typography
                     fontFamily="prompt" fontWeight="500" variant="h5" paddingBottom="7px">
                     All Programmes
