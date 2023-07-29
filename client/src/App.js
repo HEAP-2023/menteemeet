@@ -72,7 +72,7 @@ const acctInfo = {
 
 const programmes_enrolled = [
     {
-        id : 1,
+        id : 14,
         name : "program_1",
         img : "../../images/home/mentorship_1.jpg",
     },

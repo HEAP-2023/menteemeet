@@ -1,21 +1,19 @@
 // https://www.npmjs.com/package/react-pro-sidebar
 
-import { Sidebar, Menu, MenuItem, SubMenu } from "react-pro-sidebar";
+import { Sidebar, Menu, MenuItem } from "react-pro-sidebar";
 import { Box } from "@mui/material";
 import { Link } from "react-router-dom";
 import { generateColors } from "../theme";
 import { useSelector } from "react-redux";
 import useGetAllProgsInvolved from "../hooks/programmes/useGetAllProgsInvolved";
+import { useDispatch } from "react-redux";
+import { updateProgrammes } from "../state(kiv)";
+import Submenu from "./Submenu";
 
-const SideNavbar = ({enrolled}) => {
+const SideNavbar = () => {
     const colors = generateColors();
     const userType = useSelector((state) => state.user.userBasicDetails.account_type);
-    // const {data, isSuccess} = useGetAllProgsInvolved()
-
-    // if(isSuccess){
-    //     console.log(data)
-    // }
-
+    
     return (
         <Box width="20%" bgcolor="primary.main">
             {/* logo */}
@@ -57,21 +55,27 @@ const SideNavbar = ({enrolled}) => {
                     }
                     
                     <MenuItem component={<Link to="/calendar" />}> Calendar </MenuItem>
-                    <SubMenu label={userType==="organiser" ? "Programmes" : "My Programmes"} 
+                    {/* <SubMenu label={userType==="organiser" ? "Programmes" : "My Programmes"} 
                     rootStyles={{
                         [`& .ps-submenu-content`]: {
                             width : "80%"
                         },
                     }}>
-                        {Object.entries(enrolled).map(([key, {id, name, img}]) => {
-                            return (<MenuItem component={<Link to={`programmes/${id}`} />} key={id} >
+                        {enrolled.length > 0 && 
+                        Object.entries(enrolled).map(([key, {programme_id, name}]) => {
+                            return (<MenuItem component={<Link to={`programmes/${programme_id}`} />} key={programme_id} >
                                 {name}
                             </MenuItem>);
-                        })}
-                    </SubMenu>
+                        })
+                        }
+                    </SubMenu> */}
+                    <Submenu/>
                 </Menu>
             </Sidebar>
         </Box>
     );
+    // }
+
+
 }
 export default SideNavbar

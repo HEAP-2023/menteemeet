@@ -6,7 +6,7 @@ export const getUserDetails = async (id) => {
         url : `/users/${id}`,
         headers: { Authorization: `Bearer ${localStorage.getItem("jwt")}` },
     })
-    return res.data;
+    return res.data.user;
 }
 
 export const putUserDetails = async (data) => {
@@ -21,11 +21,12 @@ export const putUserDetails = async (data) => {
     return res.data;
 }
 
-export const getAllProgsParticipating = async (role) => {
+export const getAllProgsParticipating = async () => {
     const res = await axiosInstance({
         method : "get",
-        url : `/users/programmes/${role}`,
+        url : `/users/programmes/enrolled`,
         headers: { Authorization: `Bearer ${localStorage.getItem("jwt")}` },
     })
-    return res.data;
+    console.log(res.data.getUserProgObj)
+    return res.data.getUserProgObj;
 }

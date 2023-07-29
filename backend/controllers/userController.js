@@ -13,6 +13,9 @@ const { getPagination, getPagingData } = require('./programmeController');
 
 const { generateAccessToken } = require('./accountController');
 
+const UserGroup = require("../models/userGroup");
+const Session = require("../models/session");
+
 const updateJWT = async (getObj) => {
   try {
     const accessToken = await generateAccessToken(getObj);
@@ -104,7 +107,7 @@ const getAllProgByUserID = async (req, res) => {
   try {
 
     const account = req.account;
-    const getUserRole = req.params.role;
+    // const getUserRole = req.params.role;
 
     const getUserObj = await User.findOne({ where: { account_id : account.account_id }, raw: true });
 
@@ -114,31 +117,35 @@ const getAllProgByUserID = async (req, res) => {
     // }
 
     //Returns array.
-    const getUserProgObj = await UserProgramme.findAll({ where: { user_id : getUserObj.user_id, role: getUserRole },
+    const getUserProgObj = await UserProgramme.findAll({ where: { user_id : getUserObj.user_id, /* role: getUserRole */ },
       raw: true });
       
     if (!getUserProgObj) {
       return res.status(400).json({ message: "User is not enrolled in any programme!" });
     }
 
-    const arrIDs = [];
-    getUserProgObj.forEach(obj => {
-      arrIDs.push(obj.programme_id);
-    })
+    //bruce
+    return res.status(200).json({ message: "Programmes retrieved", getUserProgObj });
 
-    const conditions = { [Op.or]: [ { programme_id: arrIDs } ]};
+    // const arrIDs = [];
+    // getUserProgObj.forEach(obj => {
+    //   arrIDs.push(obj.programme_id);
+    // })
 
-    await Programme.findAndCountAll({ attributes: ['programme_id', 'name', 'description'
-      , 'category', 'display_image'], where: conditions, limit, offset, raw: true })
-      .then(data => {
-        const response = getPagingData(data, (Number(page) + 1), limit);
+    // const conditions = { [Op.or]: [ { programme_id: arrIDs } ]};
 
-        if (response.currentPage > response.totalPages) {
-          return res.status(400).json({message: "Nothing to retrieve. Exceeded page request", response });
-        }
-      return res.status(200).json({message: "All programmes have been retrieved for User No: " + getUserObj.user_id + ".", response }) 
-      });
+    // await Programme.findAndCountAll({ attributes: ['programme_id', 'name', 'description'
+    //   , 'category', 'display_image'], where: conditions, limit, offset, raw: true })
+    //   .then(data => {
+    //     const response = getPagingData(data, (Number(page) + 1), limit);
+
+    //     if (response.currentPage > response.totalPages) {
+    //       return res.status(400).json({message: "Nothing to retrieve. Exceeded page request", response });
+    //     }
+    //   return res.status(200).json({message: "All programmes have been retrieved for User No: " + getUserObj.user_id + ".", response }) 
+    //   });
       
+    //bruce
   } catch (err) {
     console.error(err);
     return res.status(500).json({ error: err });
@@ -310,6 +317,96 @@ const getInterest = async (req, res) => {
   }
 }
 
+const getAllSessions = async (req, res) => {
+  try {
+    const account = req.account;
+    const getUser = await User.findOne({ 
+      where: { account_id: account.account_id }, raw: true });
+
+    const userProgObj = await UserProgramme.findAll({
+      where: { user_id: getUser.user_id }, raw: true });
+
+    let getGroup = null;
+    let groupArray = [];
+
+    for (const item of userProgObj) {
+      const programmeId = item.programme_id;
+
+      getGroup = await UserGroup.findOne({
+        where: { programme_id: programmeId }, raw: true });
+
+      if (getGroup !== null && getGroup !== undefined) {
+        groupArray.push({...getGroup, role: item.role });
+      }
+    }
+    // console.log(groupArray);
+
+    if (!getGroup) {
+      return res.status(404).json({ message: "Grouping does not exist."});
+    }
+    
+    const getAllSessions = await Session.findAll({
+      where: { group_id: { [Op.in]: groupArray.map(group => group.group_id) }},
+      raw: true
+    })
+
+    const sessionsWithRole = getAllSessions.map(session => {
+      const matchingGroup = groupArray.find(group => group.group_id === session.group_id);
+      if (matchingGroup) {
+        return { ...session, role: matchingGroup.role };
+      }
+      return session;
+    });
+
+    return res.status(200).json({ message: "Retrieved Sessions for Account: " + account.name, sessionsWithRole });
+    
+  } catch (err) {
+    return res.status(500).json({ message: "Failed to find session!" });
+  }
+}
+
+const getSessionsByProgID = async (req, res) => {
+  try {
+    const progID = req.params.progID;
+
+    let groupArray = [];
+    const getGroup = await UserGroup.findOne({
+      where: { programme_id: progID }, raw: true });
+
+    const userProgObj = await UserProgramme.findAll({
+      where: { programme_id: progID }, raw: true });
+
+    for (const item of userProgObj) {
+    
+      if (getGroup !== null && getGroup !== undefined) {
+        groupArray.push({...getGroup, role: item.role });
+      }
+    }
+
+    if (!getGroup) {
+      return res.status(404).json({ message: "Grouping does not exist."});
+    }
+    
+    const getAllSessions = await Session.findAll({
+      where: { group_id: { [Op.in]: groupArray.map(group => group.group_id) }},
+      raw: true
+    })
+
+    const sessionsWithRole = getAllSessions.map(session => {
+      const matchingGroup = groupArray.find(group => group.group_id === session.group_id);
+      if (matchingGroup) {
+        return { ...session, role: matchingGroup.role };
+      }
+      return session;
+    });
+
+    return res.status(200).json({ message: "Retrieved Session By Programme ", sessionsWithRole });
+    
+  } catch (err) {
+    return res.status(500).json({ message: "Failed to get session!" });
+  }
+}
+
 const signup = async (req, res) => {
   const account = req.account;
   const user = await User.findOne({ where: { account_id: account.account_id } });
@@ -348,4 +445,5 @@ const signup = async (req, res) => {
   }
 }
 
-module.exports = { updateUser, getUser, getAllProgByUserID, getUnsignedProg, getSkill, addSkill, addInterest, getInterest, signup };
+module.exports = { updateUser, getUser, getAllProgByUserID, getUnsignedProg, getSkill, 
+  addSkill, addInterest, getInterest, getAllSessions, getSessionsByProgID, signup };

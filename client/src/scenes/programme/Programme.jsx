@@ -16,12 +16,11 @@ import Statistics from "../../components/programme/tabs/Statistics";
 import DeleteProgrammeModal from "../../components/programme/DeleteProgrammeModal";
 
 
-
 const Programme = ({programme_details}) => {
     const {id} = useParams();
-  
-    const programme = programme_details.find(program => program.id === Number(id));
-
+    const programmes = useSelector((state) => state.user.programmes)
+    const programme = programmes.find(program => program.programme_id === Number(id));
+    console.log(programme);
     const [tab, changeTab] = useState("main")
 
     const tabChange = (event, newValue) => {

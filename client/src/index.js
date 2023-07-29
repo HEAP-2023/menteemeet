@@ -1,27 +1,26 @@
-import React, { useReducer } from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import { Provider } from "react-redux"
-import { configureStore } from '@reduxjs/toolkit';
-import userReducer from "./state(kiv)"
-
+import { store } from './state(kiv)';
+import { PersistGate } from 'redux-persist/integration/react'
+import { persistStore } from 'redux-persist'
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 
-const store = configureStore({
-    reducer : { user : userReducer}
-})
-
 const queryClient = new QueryClient(); 
+let persistor = persistStore(store);
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient} >
         <Provider store={store}>
-            <App />
+            <PersistGate loading={null} persistor={persistor}>
+                <App />
+            </PersistGate>
         </Provider>
         <ReactQueryDevtools initialIsOpen={false} position='bottom-right'/>
     </QueryClientProvider>
