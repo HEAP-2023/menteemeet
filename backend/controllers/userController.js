@@ -107,7 +107,7 @@ const getAllProgByUserID = async (req, res) => {
   try {
 
     const account = req.account;
-    const getUserRole = req.params.role;
+    // const getUserRole = req.params.role;
 
     const getUserObj = await User.findOne({ where: { account_id : account.account_id }, raw: true });
 
@@ -117,31 +117,35 @@ const getAllProgByUserID = async (req, res) => {
     // }
 
     //Returns array.
-    const getUserProgObj = await UserProgramme.findAll({ where: { user_id : getUserObj.user_id, role: getUserRole },
+    const getUserProgObj = await UserProgramme.findAll({ where: { user_id : getUserObj.user_id, /* role: getUserRole */ },
       raw: true });
       
     if (!getUserProgObj) {
       return res.status(400).json({ message: "User is not enrolled in any programme!" });
     }
 
-    const arrIDs = [];
-    getUserProgObj.forEach(obj => {
-      arrIDs.push(obj.programme_id);
-    })
+    //bruce
+    return res.status(200).json({ message: "Programmes retrieved", getUserProgObj });
 
-    const conditions = { [Op.or]: [ { programme_id: arrIDs } ]};
+    // const arrIDs = [];
+    // getUserProgObj.forEach(obj => {
+    //   arrIDs.push(obj.programme_id);
+    // })
 
-    await Programme.findAndCountAll({ attributes: ['programme_id', 'name', 'description'
-      , 'category', 'display_image'], where: conditions, limit, offset, raw: true })
-      .then(data => {
-        const response = getPagingData(data, (Number(page) + 1), limit);
+    // const conditions = { [Op.or]: [ { programme_id: arrIDs } ]};
 
-        if (response.currentPage > response.totalPages) {
-          return res.status(400).json({message: "Nothing to retrieve. Exceeded page request", response });
-        }
-      return res.status(200).json({message: "All programmes have been retrieved for User No: " + getUserObj.user_id + ".", response }) 
-      });
+    // await Programme.findAndCountAll({ attributes: ['programme_id', 'name', 'description'
+    //   , 'category', 'display_image'], where: conditions, limit, offset, raw: true })
+    //   .then(data => {
+    //     const response = getPagingData(data, (Number(page) + 1), limit);
+
+    //     if (response.currentPage > response.totalPages) {
+    //       return res.status(400).json({message: "Nothing to retrieve. Exceeded page request", response });
+    //     }
+    //   return res.status(200).json({message: "All programmes have been retrieved for User No: " + getUserObj.user_id + ".", response }) 
+    //   });
       
+    //bruce
   } catch (err) {
     console.error(err);
     return res.status(500).json({ error: err });
