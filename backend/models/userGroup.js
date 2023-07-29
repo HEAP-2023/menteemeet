@@ -1,8 +1,8 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("../config/database");
 
-const Grouping = sequelize.define(
-    "Grouping",
+const userGroup = sequelize.define(
+    "userGroup",
     {
         group_id: {
             type: DataTypes.INTEGER,
@@ -17,8 +17,8 @@ const Grouping = sequelize.define(
     },
     {
       timestamps: false,
-      tableName: 'grouping'
+      tableName: 'usergroup'
     }
 );
 
-module.exports = Grouping;
+module.exports = userGroup;

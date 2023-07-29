@@ -1,6 +1,6 @@
 const Programme = require("../models/programme");
 const Application = require("../models/application");
-
+const {Op} = require('sequelize');
 const Skill = require("../models/skill");
 const Interest = require("../models/interest");
 
@@ -218,5 +218,22 @@ const getAllInterests = async (req, res) => {
   }
 }
 
+const searchProgByName = async (req, res) => {
+  const progName = req.params.name;
+  try {
+    const foundProgs = await Programme.findAll({
+      where:{
+        name:{
+          [Op.substring]: progName,
+        }
+      },
+    });
+    console.log("debug found progs", foundProgs);
+    return res.status(200).json(foundProgs);
+  }catch(err){
+    return res.status(500).json({message: "No Results Found"});
+  }
+}
+
 module.exports = { getEachProg, getAllProg, getPagination, getPagingData, getApplicationsByProgID, 
-  getMenteeApplicationsByProgId, getMentorApplicationsByProgId, runAlgo, getAllSkills, getAllInterests };
+  getMenteeApplicationsByProgId, getMentorApplicationsByProgId, runAlgo, getAllSkills, getAllInterests, searchProgByName };

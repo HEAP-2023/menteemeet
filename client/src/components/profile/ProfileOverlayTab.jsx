@@ -15,12 +15,14 @@ import SectionHeader from "../SectionHeader";
 // redux imports
 import { useDispatch, useSelector } from "react-redux";
 import { profileOverlayToggle, logOut } from "../../state(kiv)";
+import { useQueryClient } from "@tanstack/react-query";
 
 
 
 const ProfileOverlayTab = ({acctInfo}) => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const queryClient = useQueryClient()
 
     const {name, email} = useSelector((state) => state.user.userBasicDetails) 
     // const {mutate : logout} = useLogout()
@@ -58,6 +60,7 @@ const ProfileOverlayTab = ({acctInfo}) => {
                 // dispatch(logOut());
                 // logout()
                 dispatch(logOut())
+                queryClient.clear()
                 localStorage.setItem("jwt", "");
                 // navigate("/login/start") --> should be auto since home is protected
             }}>

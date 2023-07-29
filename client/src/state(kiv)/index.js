@@ -1,20 +1,13 @@
 import {createSlice} from '@reduxjs/toolkit'
 import { decodeJWT } from '../functions';
+import { configureStore } from '@reduxjs/toolkit';
 
-//to change userType go to initialState (3 functions below) change_type
+import storage from 'redux-persist/lib/storage'
+import {combineReducers} from "redux"; 
+import { persistReducer } from 'redux-persist'
+import thunk from 'redux-thunk'
+//to change userType go to initialState (3 functions below) change account_type
 
-const fetchProgrammesEnrolled = () => {
-        // go fetch
-    return ([
-
-    ]);
-}
-const fetchProgrammesCreated = () => {
-     // go fetch
-     return ([
-
-     ]);
-}
 
 const fetchTasks = () => {
     // go fetch
@@ -23,23 +16,21 @@ const fetchTasks = () => {
     ]);
 }
 
-const getAccountType = () => {
-    const jwt = localStorage.getItem("jwt")
-    if(!jwt){
-        return {name : "default", email : "defaultEmail", account_type : undefined};
-    } 
-    const details = decodeJWT(jwt)
-    return details
-}
+// const getAccountType = () => {
+//     const jwt = localStorage.getItem("jwt")
+//     if(!jwt){
+//         return;
+//     } 
+//     const details = decodeJWT(jwt)
+//     return details
+// }
 
 const initialState = {
     loginOverlay : false,
     profileOverlay : false,
-    // userType : fetchUserType(), // organiser, mentee, mentor
-    programmesEnrolled : fetchProgrammesEnrolled(),
-    programmesCreated : fetchProgrammesCreated(),
+    programmes : [],
     tasks : fetchTasks(),
-    userBasicDetails : getAccountType(),
+    userBasicDetails :  {name : "default", email : "defaultEmail", account_type : undefined},
 // structure after logging in should be
 // account_id
 // account_type
@@ -67,7 +58,7 @@ export const userSlice = createSlice({
             state.profileOverlay = !state.profileOverlay; 
         },
         logOut : (state) => {
-            state.userBasicDetails.account_type = undefined;
+            return initialState;
         },
         updateDetails : (state, action) => {
             state.userBasicDetails = {...action.payload}
@@ -90,6 +81,9 @@ export const userSlice = createSlice({
         removeFromParking : (state, action) => {
             state.dragParking = state.dragParking.filter((x) => {
                 return (x.id !== action.payload.id)})
+        },
+        updateProgrammes : (state, action) => {
+            state.programmes = [...action.payload]
         }
     }
 })
@@ -100,8 +94,24 @@ export const {loginOverlayToggle ,
     logOut, updateDetails,
     addTasks, removeTask,
     dragToggle, modifyDetails,
+    updateProgrammes, 
     addToParking, removeFromParking} = userSlice.actions;
-export default userSlice.reducer
 
 
 
+    
+    const persistConfig = {
+        key: 'user',
+        storage
+    };
+
+    export const userReducer = persistReducer(persistConfig, userSlice.reducer);
+
+    export const store = configureStore({
+        reducer : { user : userReducer},
+        middleware: [thunk]
+    })
+
+
+
+export default store;

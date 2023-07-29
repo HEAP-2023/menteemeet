@@ -6,9 +6,9 @@ import { ErrorMessage } from '@hookform/error-message';
 import { yupResolver } from "@hookform/resolvers/yup"
 import * as yup from "yup"
 import { useSelector, useDispatch } from "react-redux";
-import { useUserDetails } from '../../hooks/user/useUserDetails';
+import { useDetails } from '../../hooks/useDetails';
 import { useEffect } from 'react';
-import { usePutUserDetails } from '../../hooks/user/usePutUserDetails';
+import { usePutDetails } from '../../hooks/usePutDetails';
 import { modifyDetails } from '../../state(kiv)';
 const MyDetails = () => {
     const defaultValues = {
@@ -41,15 +41,15 @@ const MyDetails = () => {
 
 
     // fetching / mutating
-    const {error, isError, isSuccess : getDetailsSuccess, data} = useUserDetails();
+    const {error, isError, isSuccess : getDetailsSuccess, data} = useDetails();
     if(isError){
         alert(error.message)
     }
-    const {mutate : saveDetails, isSuccess : saveFormSuccess} = usePutUserDetails()
+    const {mutate : saveDetails, isSuccess : saveFormSuccess} = usePutDetails()
 
     useEffect(() => {
         if(getDetailsSuccess){
-            const { "Account.name" : name, "Account.email" : email, telegram_username, "Account.contact_no" : contact_no, description} = data.user
+            const { "Account.name" : name, "Account.email" : email, telegram_username, "Account.contact_no" : contact_no, description} = data
             reset({
                 name: name,
                 email: email,
@@ -57,7 +57,6 @@ const MyDetails = () => {
                 telegram_username: !!telegram_username ? telegram_username : "", 
                 description: !!description ? description : "",
             })
-            console.log(data.user)
             dispatch(modifyDetails(
                 {
                     name : name, 
