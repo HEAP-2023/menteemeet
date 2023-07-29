@@ -9,11 +9,6 @@ router.get('/interests', programmeController.getAllInterests);
 //call authToken func
 const { authenticateToken } = require('../middlewares/authMiddlewares');
 
-//Instead of putting "authToken" as an arg in each route,
-// you can do this instead. So every route in this router will
-// use the auth function as a middleware.
-// router.use(authenticateToken);
-
 // AUTHENTICATED ROUTES
 router.get('/', authenticateToken, programmeController.getAllProg);
 // router.get('/:id/applications', authenticateToken, programmeController.getApplicationsByProgID);

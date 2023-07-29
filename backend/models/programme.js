@@ -34,17 +34,9 @@ const Programme = sequelize.define(
             type: DataTypes.INTEGER,
             allowNull: true
         },
-        category: {
-            type: DataTypes.STRING(30),
-            allowNull: true,
-        },
         deadline: {
           type: DataTypes.DATEONLY,
           allowNull: false,
-        },
-        matching_criteria: {
-            type: DataTypes.STRING(),
-            allowNull: false,
         },
         skills: {
           type: DataTypes.STRING(),
