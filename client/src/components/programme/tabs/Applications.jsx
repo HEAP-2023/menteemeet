@@ -10,20 +10,23 @@ import { putApplicationAcceptance } from "../../../services/programmes/organiser
 const Applications = (programmeID) => {
 
     const [fetchApplications, setFetchApplications] = useState([]);
-    const [tempApplications, setTempApplications] = useState([]);
+    const [rerender, setRerender] = useState(true);
+
 
     useEffect(() => {
-      const areEqual = fetchApplications.length === tempApplications.length && fetchApplications.every(item => tempApplications.includes(item));
+        // If already rendered, do nothing
+        if (!rerender) return;
 
-      if (tempApplications.length > 0 && areEqual) return;
-      getApplicationsByProgID(programmeID.programmeID)
-      .then(res => {
-          setFetchApplications(res.data.getApplication);
-      })
-      .catch(err => {
-          console.log("ERROR:", err);
-      })
-    }, [tempApplications]) 
+        // Fetch applications from backend
+        getApplicationsByProgID(programmeID.programmeID)
+        .then(res => {
+            setFetchApplications(res.data.getApplication);
+            setRerender(false);
+        })
+        .catch(err => {
+            console.log("ERROR:", err);
+        })
+    }, [rerender]) 
 
     const colors = generateColors();
     const menteeApplications = fetchApplications.filter((item)=> item.role === 'mentee' && item.is_accepted === 0);
@@ -70,6 +73,7 @@ const Applications = (programmeID) => {
         const colors = generateColors();
         const handleClick = async(approval) => {
             putApplicationAcceptance(params.id, {approval: approval})
+            .then(_ => setRerender(true))
             .catch(err => {
                 console.log("ERROR:", err);
             })
@@ -98,6 +102,7 @@ const Applications = (programmeID) => {
         const colors = generateColors();
         const handleClick = async(approval) => {
             putApplicationAcceptance(params.id, {approval: approval})
+            .then(_ => setRerender(true))
             .catch(err => {
                 console.log("ERROR:", err);
             })

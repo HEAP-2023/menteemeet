@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 import useGetAllProgsInvolved from "../hooks/programmes/useGetAllProgsInvolved";
 import { useDispatch } from "react-redux";
 import { updateProgrammes } from "../state(kiv)";
+import { Box } from "@mui/material";
 
 const Submenu = () => {
     const userType = useSelector((state) => state.user.userBasicDetails.account_type)
@@ -27,13 +28,16 @@ const Submenu = () => {
                             width : "80%"
                         },
                     }}>
+                <Box overflowY="scroll" maxHeight="400px">
+
                         {programmes.length > 0 && 
                         Object.entries(programmes).map(([key, {programme_id, name}]) => {
                             return (<MenuItem component={<Link to={`programmes/${programme_id}`} />} key={programme_id} >
-                                {name}
+                                {name}  
                             </MenuItem>);
                         })
                         }
+                </Box>
         </SubMenu>
     );
 }
