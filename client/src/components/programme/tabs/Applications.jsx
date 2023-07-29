@@ -78,7 +78,6 @@ const Applications = (programmeID) => {
                 console.log("ERROR:", err);
             })
             const newApps = await getApplicationsByProgID(programmeID.programmeID);
-            setTempApplications(newApps);
         }
         
         return (
@@ -108,7 +107,6 @@ const Applications = (programmeID) => {
             })
             console.log(approval);
             const newApps = await getApplicationsByProgID(programmeID.programmeID);
-            setTempApplications(newApps);
         }
         return (<>
             <Button 

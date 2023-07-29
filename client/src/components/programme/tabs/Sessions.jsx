@@ -12,12 +12,15 @@ import { getSessionsByProgID } from "../../../services/programmes/userServices";
 import { useState, useEffect } from "react";
 const Sessions = (programmeID) => {
   const [rows, setRows] = useState([]);
+  const today = new Date().toISOString().split('T')[0];
+  const pastRows = rows.filter((item) => (item.date) < today);
+  const upcomingRows = rows.filter((item) => (item.date) > today);
   console.log(programmeID)
   useEffect(() => {
     getSessionsByProgID(programmeID.programmeID)
       .then(res => {
-        console.log(res)
-        setRows(res);
+        console.log("res", res)
+        setRows(res.data.sessionsWithRole);
       })
       .catch(err => {
         console.log("ERROR:", err);
@@ -35,12 +38,12 @@ const Sessions = (programmeID) => {
       <Box width="100%" display="flex">
         <SectionHeader text="Upcoming Sessions" />
       </Box>
-      <SessionTable rows={rows} columns={columns}
+      <SessionTable rows={upcomingRows} columns={columns}
         checkbox={role === "mentee" ? false : true}
         color={colors.primary[500]}
         editable={role === "mentee" ? false : true} />
       <SectionHeader text="Past Sessions" />
-      <SessionTable rows={rows} columns={columns} />
+      <SessionTable rows={pastRows} columns={columns} />
 
     </Box>
   );
@@ -81,7 +84,7 @@ const structure = (role) => {
     [
       { field: 'id', headerName: 'ID', width: 90 },
       {
-        field: 'groupNo',
+        field: 'group_id',
         headerName: 'Group No.',
         width: 100,
         editable: true,
@@ -93,13 +96,19 @@ const structure = (role) => {
         editable: true,
       },
       {
-        field: 'time',
-        headerName: 'Time',
+        field: 'start_time',
+        headerName: 'Start time',
         width: 150,
         editable: true,
       },
       {
-        field: 'topicsCovered',
+        field: 'end_time',
+        headerName: 'End time',
+        width: 150,
+        editable: true,
+      },
+      {
+        field: 'topic',
         headerName: 'Topics covered',
         width: 200,
         editable: true,
