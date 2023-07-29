@@ -342,7 +342,7 @@ const getAllSessions = async (req, res) => {
     // console.log(groupArray);
 
     if (!getGroup) {
-      return res.status(404).json({ message: "Grouping does not exist."});
+      return res.status(404).json({ message: "Grouping does not exist for all sessions."});
     }
     
     const getAllSessions = await Session.findAll({
@@ -384,7 +384,7 @@ const getSessionsByProgID = async (req, res) => {
     }
 
     if (!getGroup) {
-      return res.status(404).json({ message: "Grouping does not exist."});
+      return res.status(404).json({ message: "Grouping does not exist for each prog ID."});
     }
     
     const getAllSessions = await Session.findAll({
