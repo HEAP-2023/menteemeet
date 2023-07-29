@@ -52,9 +52,9 @@ const LoginExplore = () => {
                     fontFamily="prompt" fontWeight="500" variant="h5" paddingBottom="7px">
                     All Programmes
                 </Typography>
-                <input
+                {/* <input
                     type="text" placeholder="Search for programmes" onChange={(e) => setName(e.target.value)}
-                ></input>
+                ></input> */}
             </Box>
         </Box>
 

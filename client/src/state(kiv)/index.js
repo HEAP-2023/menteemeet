@@ -102,7 +102,8 @@ export const {loginOverlayToggle ,
     
     const persistConfig = {
         key: 'user',
-        storage
+        blacklist : ["dragParking"],
+        storage,
     };
 
     export const userReducer = persistReducer(persistConfig, userSlice.reducer);

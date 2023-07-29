@@ -5,31 +5,41 @@ import Element from "../../components/explore/Element"
 import SearchBar from "../../components/explore/SearchBar"
 import useGetExploreProgramme from "../../hooks/programmes/users/useGetExploreProgramme"
 import CircularProgress from '@mui/material/CircularProgress';
-import { useRef } from "react"
+import { useInView } from 'react-intersection-observer';
+import { useEffect } from "react"
 
 
 const Explore = () => {
-    const {isLoading, data, hasNextPage, fetchNextPage, isSuccess, isFetching} = useGetExploreProgramme()
-    const bottom = useRef()
-    console.log(data?.pages[0].programmes)
-    // if(bottom?.getBoundingClientRect().bottom <= window.innerHeight){
-        // console.log(bottom?.current.offsetTop)
-        // console.log(window.scrollY)
-    // }
-    if(isLoading){
+    const { ref, inView } = useInView({
+        threshold: 0.1,
+      });
+      const {isLoading, data, hasNextPage, fetchNextPage, isSuccess, isFetching} = useGetExploreProgramme()
+      
+      useEffect(() => {
+          if(inView && hasNextPage){
+              console.log("reached bottom")
+              fetchNextPage()
+          }
+      }, [inView])
+
+
+      if(isLoading){
         console.log("loading")
         return  <CircularProgress />
     }
     if(isSuccess){
-        const programmes = data.pages[0].programmes
+         
+        const programmes = Object.entries(data.pages).map(([key, value]) => value.programmes).flat(1)
         console.log(programmes)
+
         if(programmes.length === 0){
             return (
             <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center">
                 No Programmes Available Yet
             </Box>)
         }
-        return (<Box display="flex" flexDirection="column" >
+        return (
+        <Box display="flex" flexDirection="column">
             <PageHeader text="Explore Programmes" />
             
             {/* search bar */}
@@ -40,10 +50,12 @@ const Explore = () => {
 
             {/* programme should have overflowY */}
             {
-                programmes.map((p)  => <Element key={p.programme_id} details={p} />)
+                programmes.map((p) => <Element key={p.programme_id} details={p} />)
             }
+
+            {/* bottom */}
             {isFetching && <CircularProgress/>}
-            <div ref={bottom}></div>
+            <Box ref={ref} height="20px"></Box>
         </Box>);
     }
 }
