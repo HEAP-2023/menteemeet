@@ -18,7 +18,7 @@ import { useQueryClient } from "@tanstack/react-query";
 
 
 
-const ProfileOverlayTab = ({acctInfo}) => {
+const ProfileOverlayTab = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const queryClient = useQueryClient()
@@ -59,8 +59,8 @@ const ProfileOverlayTab = ({acctInfo}) => {
                 // dispatch(logOut());
                 // logout()
                 dispatch(logOut())
-                queryClient.clear()
                 localStorage.setItem("jwt", "");
+                queryClient.clear()
                 // navigate("/login/start") --> should be auto since home is protected
             }}>
                 <LogoutOutlinedIcon/>

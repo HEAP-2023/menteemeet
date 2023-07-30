@@ -7,11 +7,10 @@ import PeerReview from "../../components/profile/PeerReview";
 import History from "../../components/profile/History";
 import { useNavigate } from "react-router-dom";
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
+import { useSelector } from "react-redux";
 
-const Profile = ({ peerReviews, history, acctInfo }) => {
-    const {acctID,
-        name,
-        email} = acctInfo
+const Profile = ({ peerReviews, history }) => {
+    const {name, email} = useSelector((state) => state.user.userBasicDetails) 
     const navigate = useNavigate();
 
     return (<Box height="100%" display="grid" gridTemplateRows="1fr 3fr 1fr 6fr">
