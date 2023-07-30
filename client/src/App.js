@@ -41,7 +41,7 @@ function App() {
                     {/* private routes */}
                     <Route element={<ProtectedRoute/>}>
                         <Route path="/" element={<Home/>} role={userType}></Route>
-                        <Route path="/explore" element={<Explore />}></Route>
+                        <Route path="/explore/:id?" element={<Explore />}></Route>
                         <Route path="/profile" element={<Profile peerReviews={peerReviews} history={history} acctInfo={acctInfo}/>}></Route>
                         {userType === "organiser" 
                             && <Route path="/programme/create" element={<CreateProgramme/>}/>}

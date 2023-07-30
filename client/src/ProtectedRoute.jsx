@@ -27,7 +27,6 @@ export const ProtectedRoute = () => {
 }
 
 export const UnprotectedRoute = () => {
-    // const {data, isSuccess} = useVerifyJWT()
     const userType = useSelector((state) => state.user.userBasicDetails.account_type)
 
     return (

@@ -27,6 +27,19 @@ export const getAllProgsParticipating = async () => {
         url : `/users/programmes/enrolled`,
         headers: { Authorization: `Bearer ${localStorage.getItem("jwt")}` },
     })
-    console.log(res.data.getUserProgObj)
-    return res.data.getUserProgObj;
+    const data = res.data.getUserProgObj
+    const formattedObj = data.map(prog => ({
+        deadline : prog["Programmes.deadline"], 
+        description : prog["Programmes.description"], 
+        display_image : prog["Programmes.display_image"], 
+        menteeCapacity : prog["Programmes.menteeCapacity"], 
+        mentorCapacity : prog["Programmes.mentorCapacity"], 
+        name : prog["Programmes.name"], 
+        organiser_id : prog["Programmes.organiser_id"], 
+        programmeEnd : prog["Programmes.programmeEnd"], 
+        programmeStart : prog["Programmes.programmeStart"], 
+        programme_id : prog["Programmes.programme_id"], 
+    }))
+    console.log(formattedObj)
+    return formattedObj;
 }

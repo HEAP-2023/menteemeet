@@ -3,12 +3,17 @@ import PageHeader from "../../components/PageHeader"
 import { useState } from "react"
 import DisplayProgs from "../../components/explore/DisplayProgs"
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
+import { useNavigate, useParams } from "react-router-dom";
 
 
 const Explore = () => {
     const [userQuery, setUserQuery] = useState("");
-  
+    const prog_id = useParams();
+    const navigate = useNavigate()
     const onchange = (e) => {
+        if(prog_id){
+            navigate("/explore")
+        }
         setUserQuery(e.target.value);
     }
     
@@ -27,7 +32,7 @@ const Explore = () => {
                 sx:{borderRadius: "20px"}
               }}
             />
-            <DisplayProgs  userQuery={userQuery}/>
+            <DisplayProgs userQuery={userQuery}/>
         </Box>);
     
 }

@@ -6,7 +6,6 @@ import { Link, useNavigate } from "react-router-dom";
 // icons
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 import ManageAccountsOutlinedIcon from '@mui/icons-material/ManageAccountsOutlined';
-import ChangeCircleOutlinedIcon from '@mui/icons-material/ChangeCircleOutlined';
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
 import SectionHeader from "../SectionHeader";
 

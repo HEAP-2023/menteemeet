@@ -25,10 +25,12 @@ const Submenu = () => {
         <SubMenu label={userType==="organiser" ? "Programmes" : "My Programmes"} 
                     rootStyles={{
                         [`& .ps-submenu-content`]: {
-                            width : "80%"
+                            width : "80%",
+                            borderRadius : "20px",
+                            scrollbarWidth : "none"
                         },
                     }}>
-                <Box overflowY="scroll" maxHeight="400px">
+                <Box maxHeight="400px">
 
                         {programmes.length > 0 && 
                         Object.entries(programmes).map(([key, {programme_id, name}]) => {

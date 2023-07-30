@@ -1,10 +1,10 @@
 import axiosInstance from "../../utils/axiosInstance"
 
 
-export const getInfiniteProgramme = async(page) => {
+export const getInfiniteProgramme = async(page,size) => {
     const res = await axiosInstance({
         method : "get",
-        url : `/programmes/?page=${page}&size=5`,
+        url : `/programmes/?page=${page}&size=${size}`,
         headers: { Authorization: `Bearer ${localStorage.getItem("jwt")}` },
     })
     return res.data.response

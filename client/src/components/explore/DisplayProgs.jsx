@@ -4,11 +4,12 @@ import useGetExploreProgramme from "../../hooks/programmes/users/useGetExplorePr
 import CircularProgress from '@mui/material/CircularProgress';
 import { useInView } from 'react-intersection-observer';
 import { useEffect, useState } from "react"
+import { useParams } from "react-router-dom";
 
 
 
 const DisplayProgs = ({userQuery}) => {
-    
+    const prog_id = useParams().id;
     const { ref, inView } = useInView({
         threshold: 0.5,
       });
@@ -25,16 +26,18 @@ const DisplayProgs = ({userQuery}) => {
 
 
       if(isLoading){
-        console.log("loading")
         return  <CircularProgress />
     }
     if(isSuccess){
-         
         const programmes = Object.entries(data.pages).map(([key, value]) => value.programmes).flat(1)
-        const filteredProgrammes = programmes.filter(p => p.name.includes(userQuery))
-
-        console.log(programmes)
-        console.log(filteredProgrammes)
+        const filteredProgrammes = !prog_id ? 
+        programmes.filter(p => p.name.includes(userQuery)) : 
+        programmes.filter(p => {
+            return p.programme_id === Number(prog_id)
+        }) 
+        
+        // console.log(programmes)
+        // console.log(filteredProgrammes)
         if(filteredProgrammes.length === 0){
             return (
             <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center">
