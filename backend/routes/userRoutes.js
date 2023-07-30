@@ -17,6 +17,7 @@ router.get('/programmes/', authenticateToken, userController.getUnsignedProg);
 router.get('/session', authenticateToken, userController.getAllSessions);
 router.get('/session/:progID', authenticateToken, userController.getSessionsByProgID);
 
+router.get('/approvedApps', authenticateToken, userController.getApprovedApps);
 
 router.put('/', authenticateToken, userController.updateUser);
 

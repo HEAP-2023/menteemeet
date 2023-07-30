@@ -377,14 +377,13 @@ const getSessionsByProgID = async (req, res) => {
       where: { programme_id: progID }, raw: true });
 
     for (const item of userProgObj) {
-    
       if (getGroup !== null && getGroup !== undefined) {
         groupArray.push({...getGroup, role: item.role });
       }
     }
 
     if (!getGroup) {
-      return res.status(404).json({ message: "Grouping does not exist for each prog ID."});
+      return res.status(404).json({ message: "Grouping does not exist for programme ID: " + progID });
     }
     
     const getAllSessions = await Session.findAll({
@@ -404,6 +403,56 @@ const getSessionsByProgID = async (req, res) => {
     
   } catch (err) {
     return res.status(500).json({ message: "Failed to get session!" });
+  }
+}
+
+const getApprovedApps = async (req, res) => {
+
+  try {
+    const account = req.account;
+
+    const getUserObj = await User.findOne({ where: { account_id: account.account_id }, raw: true });
+    const getAppObj = await Application.findAll({ where: { user_id: getUserObj.user_id, is_accepted: 1 } });
+
+    if (!getAppObj) {
+      return res.status(404).json({ message: "Application does not exist." });
+    }
+
+    let appArray = [];
+    //can change to forEach.
+    for (const item of getAppObj) {
+      if (getAppObj !== null && getAppObj !== undefined) {
+        appArray.push(item.toJSON());
+      }
+    }
+    return res.status(200).json({ message: "Retrieved Approved Applications", appArray });
+  } catch (err) {
+    return res.status(500).json({ message: "Failed to get applications!" });
+  }
+}
+
+// - WIP -- 
+const getPendingApps = async (req, res) => {
+  try {
+    const account = req.account;
+
+    const getUserObj = await User.findOne({ where: { account_id: account.account_id }, raw: true });
+    const getAppObj = await Application.findAll({ where: { user_id: getUserObj.user_id, is_accepted: 1 } });
+
+    if (!getAppObj) {
+      return res.status(404).json({ message: "Application does not exist." });
+    }
+
+    let appArray = [];
+    //can change to forEach.
+    for (const item of getAppObj) {
+      if (getAppObj !== null && getAppObj !== undefined) {
+        appArray.push(item.toJSON());
+      }
+    }
+    return res.status(200).json({ message: "Retrieved Applications", appArray });
+  } catch (err) {
+    return res.status(500).json({ message: "Failed to get applications!" });
   }
 }
 
@@ -446,4 +495,5 @@ const signup = async (req, res) => {
 }
 
 module.exports = { updateUser, getUser, getAllProgByUserID, getUnsignedProg, getSkill, 
-  addSkill, addInterest, getInterest, getAllSessions, getSessionsByProgID, signup };
+  addSkill, addInterest, getInterest, getAllSessions, getSessionsByProgID, 
+  getApprovedApps, signup };
