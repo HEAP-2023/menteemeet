@@ -12,9 +12,9 @@ import { getSessionsByProgID } from "../../../services/programmes/userServices";
 import { useState, useEffect } from "react";
 const Sessions = (programmeID) => {
   const [rows, setRows] = useState([]);
-  const today = new Date().toISOString().split('T')[0];
-  const pastRows = rows.filter((item) => (item.date) < today);
-  const upcomingRows = rows.filter((item) => (item.date) > today);
+  const now = new Date().getTime();
+  const pastRows = rows.filter((item) => new Date(`${item.date} ${item.end_time}`).getTime() < now);
+  const upcomingRows = rows.filter((item) => new Date(`${item.date} ${item.end_time}`).getTime() >= now);
   console.log(programmeID)
   useEffect(() => {
     getSessionsByProgID(programmeID.programmeID)
@@ -44,40 +44,11 @@ const Sessions = (programmeID) => {
         editable={role === "mentee" ? false : true} />
       <SectionHeader text="Past Sessions" />
       <SessionTable rows={pastRows} columns={columns} />
-
     </Box>
   );
 }
 export default Sessions;
 
-
-
-// const fetchUpcomingSessions = (role) => {
-//     if(role === " mentee"){
-//         return ( [
-//             { id: 1, groupNo: 5 , date: "05/06/23", time: "13:50- 14:50", topicsCovered: "topic", remarks : "mentee's remarks " },
-//             { id: 2, groupNo: 5 , date: "05/06/23", time: "13:50- 14:50", topicsCovered: "topic", remarks : "mentee's remarks " },
-//             { id: 3, groupNo: 5 , date: "05/06/23", time: "13:50- 14:50", topicsCovered: "topic", remarks : "mentee's remarks " },
-//             { id: 4, groupNo: 5 , date: "05/06/23", time: "13:50- 14:50", topicsCovered: "topic", remarks : "mentee's remarks " },
-//             { id: 5, groupNo: 5 , date: "05/06/23", time: "13:50- 14:50", topicsCovered: "topic", remarks : "mentee's remarks " },
-//             { id: 6, groupNo: 5 , date: "05/06/23", time: "13:50- 14:50", topicsCovered: "topic", remarks : "mentee's remarks " },
-//             { id: 7, groupNo: 5 , date: "05/06/23", time: "13:50- 14:50", topicsCovered: "topic", remarks : "mentee's remarks " },
-//             { id: 8, groupNo: 5 , date: "05/06/23", time: "13:50- 14:50", topicsCovered: "topic", remarks : "mentee's remarks " },
-//             { id: 9, groupNo: 5 , date: "05/06/23", time: "13:50- 14:50", topicsCovered: "topic", remarks : "mentee's remarks " },
-//           ]);
-//     }
-//     return ([
-//         { id: 1, groupNo: 5 , date: "05/06/23", time: "13:50- 14:50", topicsCovered: "topic", remarks : "mentor's remarks " },
-//         { id: 2, groupNo: 5 , date: "05/06/23", time: "13:50- 14:50", topicsCovered: "topic", remarks : "mentor's remarks " },
-//         { id: 3, groupNo: 5 , date: "05/06/23", time: "13:50- 14:50", topicsCovered: "topic", remarks : "mentor's remarks " },
-//         { id: 4, groupNo: 5 , date: "05/06/23", time: "13:50- 14:50", topicsCovered: "topic", remarks : "mentor's remarks " },
-//         { id: 5, groupNo: 5 , date: "05/06/23", time: "13:50- 14:50", topicsCovered: "topic", remarks : "mentor's remarks " },
-//         { id: 6, groupNo: 5 , date: "05/06/23", time: "13:50- 14:50", topicsCovered: "topic", remarks : "mentor's remarks " },
-//         { id: 7, groupNo: 5 , date: "05/06/23", time: "13:50- 14:50", topicsCovered: "topic", remarks : "mentor's remarks " },
-//         { id: 8, groupNo: 5 , date: "05/06/23", time: "13:50- 14:50", topicsCovered: "topic", remarks : "mentor's remarks " },
-//         { id: 9, groupNo: 5 , date: "05/06/23", time: "13:50- 14:50", topicsCovered: "topic", remarks : "mentor's remarks " },
-//       ]);
-// }
 
 const structure = (role) => {
   return (
