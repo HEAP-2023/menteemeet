@@ -498,13 +498,15 @@ const signup = async (req, res) => {
 
     const checkProgExist = await Programme.findOne({ where: { programme_id: programmeID }, raw: true });
 
-    if (!checkProgExist) {
-      return res.status(400).json({ message: "Programme does not exist!" });
+    if (!checkProgExist || (formattedDate > checkProgExist.deadline)) {
+      return res.status(400).json({ message: "Programme does not exist or has ended! You are too late." });
     }
     // console.log("programmeID: ", programmeID)
 
     const isCapacityMax = checkCapacity(programmeID, role);
     if (isCapacityMax) {
+      //I still choose to create because organiser can change it to approve when some guy might 
+      //decide to open the spot
       await Application.create({
         date: formattedDate,
         availability,
@@ -518,8 +520,6 @@ const signup = async (req, res) => {
       return res.status(200).json({ message: "[SYSTEM] Rejected. Application has max capacity." });
     }
 
-    //I still choose to create because organiser can change it to approve when some guy might 
-    //decide to open the spot
     const newApplication = await Application.create({
       date: formattedDate,
       availability,
