@@ -1,0 +1,23 @@
+{
+    "mentors":
+    [
+        {"name": "Mary Anne"},
+        {"name": "James Tan"},
+        {"name": "Jeremy Koh"}
+    ],
+    "mentees":
+    [
+        {"name": "Kimberly"},
+        {"name": "Candy"},
+        {"name": "Elijah"},
+        {"name": "Teresa"},
+        {"name": "Brendan"},
+        {"name": "Angeline"},
+        {"name": "Hongyao"},
+        {"name": "Axel"},
+        {"name": "Bruce"},
+        {"name": "Kangmin"},
+        {"name": "Ruey"},
+        {"name": "Olivia"}
+    ]
+}
