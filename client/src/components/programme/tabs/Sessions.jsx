@@ -13,8 +13,14 @@ import { useState, useEffect } from "react";
 const Sessions = (programmeID) => {
   const [rows, setRows] = useState([]);
   const now = new Date().getTime();
-  const pastRows = rows.filter((item) => new Date(`${item.date} ${item.end_time}`).getTime() < now);
-  const upcomingRows = rows.filter((item) => new Date(`${item.date} ${item.end_time}`).getTime() >= now);
+  let pastRows = rows.filter((item) => new Date(`${item.date} ${item.end_time}`).getTime() < now);
+  pastRows = pastRows.sort(
+    (objA, objB) => Number(new Date(`${objA.date} ${objA.start_time}`).getTime()) - Number(new Date(`${objB.date} ${objB.start_time}`).getTime())
+  )
+  let upcomingRows = rows.filter((item) => new Date(`${item.date} ${item.end_time}`).getTime() >= now);
+  upcomingRows = upcomingRows.sort(
+    (objA, objB) => Number(new Date(`${objA.date} ${objA.start_time}`).getTime()) - Number(new Date(`${objB.date} ${objB.start_time}`).getTime())
+  )
   console.log(programmeID)
   useEffect(() => {
     getSessionsByProgID(programmeID.programmeID)
@@ -29,7 +35,7 @@ const Sessions = (programmeID) => {
 
   const userType = useSelector((state) => state.user.userBasicDetails.account_type);
   const colors = generateColors();
-  const role = "mentee";
+  const role = "mentor";
   const columns = structure(role)
 
   return (
@@ -80,18 +86,18 @@ const structure = (role) => {
       },
       {
         field: 'topic',
-        headerName: 'Topics covered',
+        headerName: 'Topics / Location',
         width: 200,
         editable: true,
       },
-      {
-        field: 'remarks',
-        headerName: 'Remarks For' + (role === "mentee" ? " Mentee" : " Mentor"),
-        description: 'This column has a value getter and is not sortable.',
-        sortable: false,
-        editable: false,
-        width: 400
-      },
+      // {
+      //   field: 'remarks',
+      //   headerName: 'Remarks For' + (role === "mentee" ? " Mentee" : " Mentor"),
+      //   description: 'This column has a value getter and is not sortable.',
+      //   sortable: false,
+      //   editable: false,
+      //   width: 400
+      // },
       {
         field: 'actions',
         headerName: 'Actions',

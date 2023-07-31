@@ -1,12 +1,32 @@
 import { Box } from "@mui/material";
 import Section from "../Section"
+import {useEffect, useState} from "react";
+import { getSessionsByProgID } from "../../../services/programmes/userServices";
 
-const MainPage = () => {
+const MainPage = (programmeID) => {
+    const [rows, setRows] = useState([]);
+    const now = new Date().getTime();
+    let upcomingSessions = rows.filter((item) => new Date(`${item.date} ${item.end_time}`).getTime() >= now);
+    upcomingSessions = upcomingSessions.sort(
+        (objA, objB) => Number(new Date(`${objA.date} ${objA.start_time}`).getTime()) - Number(new Date(`${objB.date} ${objB.start_time}`).getTime())
+    )
+    useEffect(() => {
+        getSessionsByProgID(programmeID.programmeID)
+      .then(res => {
+        console.log("res", res)
+        setRows(res.data.sessionsWithRole);
+        console.log("rows:", rows);
+      })
+      .catch(err => {
+        console.log("ERROR:", err);
+      })
+  }, [])
+  
     return (
         <Box display="flex" justifyContent="space-around" width="100%" height="100%">
             <Box width="45%" height="100%" display="flex" flexDirection="column" alignItems="center" >
                 {/* Upcoming Sessions */}
-                <Section header="Upcoming Sessions" rows={upcomingSession} rowColor="#AEAEFF" highlight={true}></Section>
+                <Section header="Upcoming Sessions" rows={upcomingSessions} rowColor="#AEAEFF" highlight={true} showDTG={true}></Section>
                 {/* Tasks -- Removed */}
                 {/* <Section header="Tasks" rows={tasks} rowColor="#AEAEFF" checkbox={true}></Section> */}
                 {/* Announcements */}
@@ -29,20 +49,20 @@ export default MainPage;
 
 // hardcoded content to be fetched maybe tanstack query aka react query
 
-const upcomingSession = [
-    {
-        title: "Session 1",
-        body: "body",
-        dtg: "dtg1",
-        location: "location1"
-    },
-    {
-        title: "Session 2",
-        body: "body",
-        dtg: "dtg 2",
-        location: "location 2"
-    }
-]
+// const upcomingSession = [
+//     {
+//         title: "Session 1",
+//         body: "body",
+//         dtg: "dtg1",
+//         location: "location1"
+//     },
+//     {
+//         title: "Session 2",
+//         body: "body",
+//         dtg: "dtg 2",
+//         location: "location 2"
+//     }
+// ]
 
 const tasks = {
     task_1 : {

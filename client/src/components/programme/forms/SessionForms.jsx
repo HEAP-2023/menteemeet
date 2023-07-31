@@ -5,23 +5,29 @@ import { useForm, Controller } from "react-hook-form";
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { TimePicker } from '@mui/x-date-pickers/TimePicker';
 import { useSelector } from "react-redux";
-
+import { format} from 'date-fns';
 const SessionForms = () => {
     const acctID = useSelector((state) => state.user.userBasicDetails.account_id)
     const { control, handleSubmit } = useForm({
         defaultValues: {
-          firstName: '',
+          group_id: '',
           date : "",
           startTime : "",
           endTime : "",
           topic : "",
-          location : "",
         }
       });
 
 const handleSave = (data) => {
     console.log("to be submitted")
-    console.log(data)
+    const submitThis = {
+        group_id: data.group_id,
+        date: format(data.date.$d, 'yyyy-MM-dd'),
+        startTime: format(data.startTime.$d, 'HH:mm:ss'),
+        endTime: format(data.endTime.$d, 'HH:mm:ss'),
+        topic: data.topic,
+    }
+    console.log(submitThis)
     console.log("submitted by")
     console.log(acctID);
 }
@@ -36,7 +42,7 @@ const handleSave = (data) => {
                         <label>Group No: </label>
                     </Box>
                     <Controller
-                    name="firstName"
+                    name="group_id"
                     control={control}
                     render={({ field }) => <TextField {...field} variant="outlined" sx={{width:"20%"}}/>}
                     />
@@ -87,7 +93,7 @@ const handleSave = (data) => {
 
             <Box display="flex" flexDirection="column" width="45%">
                 <Box display="flex" justifyContent="space-between" mb="20px">
-                    <label> Topic </label>
+                    <label> Topic / Location</label>
                     <Controller
                         name="topic"
                         control={control}
@@ -96,7 +102,7 @@ const handleSave = (data) => {
                         />
                 </Box>
 
-                <Box display="flex"  justifyContent="space-between" mb="20px">
+                {/* <Box display="flex"  justifyContent="space-between" mb="20px">
                     <label> Location </label>
                     <Controller
                         name="location"
@@ -104,7 +110,7 @@ const handleSave = (data) => {
                         render={({ field }) => <TextField {...field} variant="outlined"
                         multiline rows={4} sx={{width:"70%"}} />}
                         />
-                </Box>
+                </Box> */}
 
                 <Box display="flex" justifyContent="flex-end" alignItems="flex-end">
                     <Button type="submit" variant="contained" color="secondary">Add</Button>

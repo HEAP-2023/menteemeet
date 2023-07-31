@@ -65,7 +65,7 @@ const Programme = ({programme_details}) => {
                 }
             </Box>
                 <TabPanel value="main" index={0}>   
-                    <MainPage />
+                    <MainPage programmeID={id}/>
                 </TabPanel>
                 <TabPanel value="sessions" index={1}>
                     <Sessions programmeID={id}/>

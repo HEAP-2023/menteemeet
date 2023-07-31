@@ -160,7 +160,7 @@ const AddEventPopover = ({ isOpen, onRequestClose, selectedDateInfo, addEvent })
                             <Controller
                                 name="topic"
                                 control={control}
-                                render={({ field }) => <TextField {...field} variant="standard" label="Topic"
+                                render={({ field }) => <TextField {...field} variant="standard" label="Topic / Location"
                                     sx={{
                                         width: "79%",
                                         "& label.Mui-focused": {
@@ -174,7 +174,7 @@ const AddEventPopover = ({ isOpen, onRequestClose, selectedDateInfo, addEvent })
                                     }} />}
                             />
                         </Box>
-                        <Box sx={{ mb: '20px' }}>
+                        {/* <Box sx={{ mb: '20px' }}>
                             <Controller
                                 name="location"
                                 control={control}
@@ -190,7 +190,7 @@ const AddEventPopover = ({ isOpen, onRequestClose, selectedDateInfo, addEvent })
                                         }
                                     }} />}
                             />
-                        </Box>
+                        </Box> */}
                         <Box display="flex"  >
                             <Button type="submit" variant="contained">Add</Button>
                         </Box>
