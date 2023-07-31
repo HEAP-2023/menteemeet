@@ -1,4 +1,4 @@
-import { Badge, Box, Divider, IconButton, Stack, Typography, ClickAwayListener } from "@mui/material";
+import { Badge, Box, Divider, IconButton, Stack, Typography, ClickAwayListener, Button } from "@mui/material";
 import ProfileNav from "../components/profile/ProfileNav";
 import ProfileOverlayTab from "../components/profile/ProfileOverlayTab";
 import NotificationsOutlinedIcon from '@mui/icons-material/NotificationsOutlined';
@@ -43,11 +43,8 @@ const Topbar = () => {
         </IconButton>
 
         <ClickAwayListener onClickAway={() => dispatch(closeProfileOverlay())}>
-            <Box width="10%" minWidth="200px" display="flex" flexDirection="column">
-                
-                <Box onClick={() => dispatch(profileOverlayToggle())}> 
+            <Box width="10%" minWidth="200px" display="flex" >
                     <ProfileNav />
-                </Box>
                     {profileOverlay && <ProfileOverlayTab /> }
             </Box>
         </ClickAwayListener>
@@ -63,7 +60,6 @@ const Topbar = () => {
            </NotificationExpanded>
 
            <NotificationExpanded header="Pending Applications">
-
            </NotificationExpanded>
             
         </Stack>

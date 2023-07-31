@@ -20,7 +20,7 @@ const Submenu = () => {
     }
     return (
         <SubMenu label={userType==="organiser" ? "Programmes" : "My Programmes"} 
-                    rootStyles={{
+        rootStyles={{
                         [`& .ps-submenu-content`]: {
                             width : "80%",
                             borderRadius : "20px",
@@ -28,12 +28,13 @@ const Submenu = () => {
                         },
                     }}>
                 <Box maxHeight="400px">
-
                         {programmes.length > 0 && 
                         Object.entries(programmes).map(([key, {programme_id, name}]) => {
-                            return (<MenuItem component={<Link to={`programmes/${programme_id}`} />} key={programme_id} >
+                            return (
+                            <MenuItem component={<Link to={`programmes/${programme_id}`} />} key={programme_id} >
                                 {name}  
-                            </MenuItem>);
+                            </MenuItem>
+                            );
                         })
                         }
                 </Box>
