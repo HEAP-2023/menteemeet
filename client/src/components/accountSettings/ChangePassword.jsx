@@ -10,8 +10,7 @@ import { ErrorMessage } from '@hookform/error-message';
 import * as yup from "yup"
 import useChangePW from '../../hooks/auth/useChangePW';
 
-const ChangePassword = ({acctInfo}) => {
-    const {password} = acctInfo;
+const ChangePassword = () => {
 
     const getCharacterValidationError = (str) => {
         return `Your password must have at least 1 ${str} character`;

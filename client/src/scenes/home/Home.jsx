@@ -10,31 +10,23 @@ import { useSelector } from "react-redux"
 
 
 const Home = () => {
-    const userType = useSelector((state) => state.user.userBasicDetails.account_type)    
+    const userType = useSelector((state) => state.user.userBasicDetails.account_type)
     const name = useSelector((state) => state.user.userBasicDetails.name)
-    
+   
     return (
     <Box width="100%" height="100%" display="flex" flexDirection="column">
         <PageHeader text={`Welcome, ${name}`}/>
         
         {/* carousel */}
-        {userType !== "organiser" ? (
-            <SectionHeader text={"Featured Programmes"}/>
-        ): (
-            <SectionHeader text={"My Programmes"}/>
-        )}
-        {userType !== "organiser" ? (
-            <HomeCarousel content={recommended_programmes}/>
-        ) : (
-            <HomeCarousel content={programmes_enrolled}/>
-        )}
+
+        <SectionHeader text={userType === "organiser" ? "My Programmes" : "Featured Programmes"}/>
+
+        <HomeCarousel/>
 
         <Box display="flex" justifyContent="space-around" width="100%" height="100%">
             <Box width="45%" height="100%" display="flex" flexDirection="column" alignItems="center" > 
                 {/* announcements */}
                 <Section header="Announcement" rows={announcements} rowColor="#AEAEFF" highlight={true}></Section>
-                {/* tasks */}
-                {/* <Section header="Tasks" rows={tasks} checkbox={true}></Section> */}
             </Box>
 
             <Box width="45%">
@@ -88,19 +80,6 @@ const events = {
         title : "event header3",
         body : "event body3",
         dtg : "dtg3",
-    },
-}
-
-const tasks = {
-    task_1 : {
-        title : "task header1",
-        body : "task body1",
-        dtg : "dtg1",
-    },
-    task_2 : {
-        title : "task header2",
-        body : "task body2",
-        dtg : "dtg2",
     },
 }
 

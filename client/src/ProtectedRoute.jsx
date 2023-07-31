@@ -1,24 +1,34 @@
-import { Navigate, Outlet } from "react-router-dom"
+import { Navigate, Outlet, useNavigate } from "react-router-dom"
 import { useSelector, useDispatch } from "react-redux"
-import { updateProgrammes } from "./state(kiv)"
+import { logOut, updateProgrammes } from "./state(kiv)"
 import useGetAllProgsInvolved from "./hooks/programmes/useGetAllProgsInvolved"
 import { useEffect } from "react"
+import { useQueryClient } from "@tanstack/react-query"
+
+
 
 export const ProtectedRoute = () => {
     const userType = useSelector((state) => state.user.userBasicDetails.account_type)
-    const {data, isSuccess, isError} = useGetAllProgsInvolved()
+    const {data, isSuccess, isError, error} = useGetAllProgsInvolved()
+    const queryClient = useQueryClient()
+    const navigate = useNavigate()
     const dispatch = useDispatch()
     useEffect(() => {
         if(isError){
-            console.log("error")
-        }
-    
+            if(error.response.status === 400 || error.response.status === 403){
+                dispatch(logOut())
+                queryClient.clear()
+                localStorage.setItem("jwt", "");
+                navigate("/login/start")
+            }
+            }
+
         if(isSuccess){
             dispatch(updateProgrammes(data))
             const programmes = data
             console.log(programmes)
         }
-    },[isSuccess])
+    },[isSuccess, isError])
     return (
         userType ? 
         <Outlet/> :
@@ -27,7 +37,6 @@ export const ProtectedRoute = () => {
 }
 
 export const UnprotectedRoute = () => {
-    // const {data, isSuccess} = useVerifyJWT()
     const userType = useSelector((state) => state.user.userBasicDetails.account_type)
 
     return (

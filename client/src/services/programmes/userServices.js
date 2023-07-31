@@ -1,18 +1,16 @@
 import axiosInstance from "../../utils/axiosInstance"
 
 
-export const getInfiniteProgramme = async(page) => {
+export const getInfiniteProgramme = async(page,size) => {
     const res = await axiosInstance({
         method : "get",
-        url : `/programmes/?page=${page}&size=5`,
+        url : `/programmes/?page=${page}&size=${size}`,
         headers: { Authorization: `Bearer ${localStorage.getItem("jwt")}` },
     })
-    console.log(res.data.message)
     return res.data.response
 }
 
 export const getSignUpForm = async(id) => {
-    // console.log("hello")
     const res = await axiosInstance({
         method : "get",
         url : `/programmes/${id}`,

@@ -16,6 +16,8 @@ const { generateAccessToken } = require('./accountController');
 const UserGroup = require("../models/userGroup");
 const Session = require("../models/session");
 
+const { checkCapacity } = require('./organiserController');
+
 const updateJWT = async (getObj) => {
   try {
     const accessToken = await generateAccessToken(getObj);
@@ -406,24 +408,37 @@ const getSessionsByProgID = async (req, res) => {
   }
 }
 
+const getApps = async (getUserObj, statusOfApp) => {
+
+  const getAppObj = await Application.findAll({ where: { user_id: getUserObj.user_id, 
+    is_accepted: statusOfApp } });
+  
+  if (!getAppObj || getAppObj.length < 1) {
+    return false;
+  }
+
+  let appArray = [];
+  //can change to forEach.
+  for (const item of getAppObj) {
+    if (getAppObj !== null && getAppObj !== undefined) {
+      appArray.push(item.toJSON());
+    }
+  }
+
+  return appArray;
+}
+
 const getApprovedApps = async (req, res) => {
 
   try {
     const account = req.account;
-
     const getUserObj = await User.findOne({ where: { account_id: account.account_id }, raw: true });
-    const getAppObj = await Application.findAll({ where: { user_id: getUserObj.user_id, is_accepted: 1 } });
+    
+    const pendingStatus = 1;
+    const appArray = await getApps(getUserObj, pendingStatus);
 
-    if (!getAppObj) {
-      return res.status(404).json({ message: "Application does not exist." });
-    }
-
-    let appArray = [];
-    //can change to forEach.
-    for (const item of getAppObj) {
-      if (getAppObj !== null && getAppObj !== undefined) {
-        appArray.push(item.toJSON());
-      }
+    if (!appArray) {
+      return res.status(404).json({ message: "Application does not exist." })
     }
     return res.status(200).json({ message: "Retrieved Approved Applications", appArray });
   } catch (err) {
@@ -431,26 +446,37 @@ const getApprovedApps = async (req, res) => {
   }
 }
 
-// - WIP -- 
 const getPendingApps = async (req, res) => {
   try {
     const account = req.account;
-
     const getUserObj = await User.findOne({ where: { account_id: account.account_id }, raw: true });
-    const getAppObj = await Application.findAll({ where: { user_id: getUserObj.user_id, is_accepted: 1 } });
 
-    if (!getAppObj) {
-      return res.status(404).json({ message: "Application does not exist." });
-    }
+    const pendingStatus = 0;
+    const appArray = await getApps(getUserObj, pendingStatus);
 
-    let appArray = [];
-    //can change to forEach.
-    for (const item of getAppObj) {
-      if (getAppObj !== null && getAppObj !== undefined) {
-        appArray.push(item.toJSON());
-      }
+    if (!appArray) {
+      return res.status(404).json({ message: "Application does not exist." })
     }
-    return res.status(200).json({ message: "Retrieved Applications", appArray });
+    
+    return res.status(200).json({ message: "Retrieved Pending Applications", appArray });
+  } catch (err) {
+    return res.status(500).json({ message: "Failed to get applications!" });
+  }
+}
+
+const getRejectedApps = async (req, res) => {
+  try {
+    const account = req.account;
+    const getUserObj = await User.findOne({ where: { account_id: account.account_id }, raw: true });
+
+    const pendingStatus = 2;
+    const appArray = await getApps(getUserObj, pendingStatus);
+
+    if (!appArray) {
+      return res.status(404).json({ message: "Application does not exist." })
+    }
+    
+    return res.status(200).json({ message: "Retrieved Rejected Applications", appArray });
   } catch (err) {
     return res.status(500).json({ message: "Failed to get applications!" });
   }
@@ -472,10 +498,28 @@ const signup = async (req, res) => {
 
     const checkProgExist = await Programme.findOne({ where: { programme_id: programmeID }, raw: true });
 
-    if (!checkProgExist) {
-      return res.status(400).json({ message: "Programme does not exist!" });
+    if (!checkProgExist || (formattedDate > checkProgExist.deadline)) {
+      return res.status(400).json({ message: "Programme does not exist or has ended! You are too late." });
     }
-    console.log("programmeID: ", programmeID)
+    // console.log("programmeID: ", programmeID)
+
+    const isCapacityMax = checkCapacity(programmeID, role);
+    if (isCapacityMax) {
+      //I still choose to create because organiser can change it to approve when some guy might 
+      //decide to open the spot
+      await Application.create({
+        date: formattedDate,
+        availability,
+        skills,
+        interests,
+        role,
+        programme_id: programmeID,
+        is_accepted: 2,
+        user_id: user.user_id
+      })
+      return res.status(200).json({ message: "[SYSTEM] Rejected. Application has max capacity." });
+    }
+
     const newApplication = await Application.create({
       date: formattedDate,
       availability,
@@ -485,7 +529,7 @@ const signup = async (req, res) => {
       programme_id: programmeID,
       is_accepted: 0,
       user_id: user.user_id
-    })
+    }) 
 
     return res.status(201).json({ message: "Successfully signed up!", newApplication });
   } catch (err) {
@@ -496,4 +540,4 @@ const signup = async (req, res) => {
 
 module.exports = { updateUser, getUser, getAllProgByUserID, getUnsignedProg, getSkill, 
   addSkill, addInterest, getInterest, getAllSessions, getSessionsByProgID, 
-  getApprovedApps, signup };
+  getPendingApps, getApprovedApps, getRejectedApps, signup };

@@ -1,5 +1,5 @@
-import { Box, Button, Typography } from "@mui/material"
-import { useEffect, useState } from 'react';
+import { Box, Button, Dialog, DialogTitle, DialogContent, DialogActions, Slide, DialogContentText } from "@mui/material"
+import { useEffect, useState, forwardRef } from 'react';
 import ProgressBar from "../../components/createProgramme/ProgressBar";
 import SectionHeader from "../../components/SectionHeader";
 import { useForm, Controller, FormProvider } from "react-hook-form";
@@ -14,9 +14,12 @@ import axiosInstance from "../../utils/axiosInstance";
 import { postProgramme } from "../../services/programmes/organiserServices";
 
 
+const Transition = forwardRef(function Transition(props, ref) {
+    return <Slide direction="up" ref={ref} {...props} />;
+  });
 
 const CreateProgramme = () => {
-
+    const [confirmSubmission, setConfirmSubmission] = useState(false)
     const [progress, setProgress] = useState(0)
     const [preview, setPreview] = useState(false)
     const methods = useForm({
@@ -28,7 +31,7 @@ const CreateProgramme = () => {
             display_image : "",
             mentorCapacity : "",
             menteeCapacity : "",
-            matching_criteria : [],
+            // matching_criteria : [],
             description : "",
         },
         resolver : yupResolver(createProgrammeSchema)
@@ -53,25 +56,25 @@ const CreateProgramme = () => {
     const handleSave = async (data) => {
         console.log(errors)
         console.log("to be submitted")
-        const formattedData = {...data, 
-            // skills : JSON.stringify(data.skills.map(skill => skill.skillName)),
-            matching_criteria : JSON.stringify(data.matching_criteria)
-        }
-        console.log(formattedData)
-        // createProgramme(formattedData);
+        // const formattedData = {...data, 
+        //     // skills : JSON.stringify(data.skills.map(skill => skill.skillName)),
+        //     // matching_criteria : JSON.stringify(data.matching_criteria)
+        // }
+        // console.log(formattedData)
 
         const formData = new FormData();
-        for (const key in formattedData) {
-            formData.append(key, formattedData[key]);
+        for (const key in data) {
+            formData.append(key, data[key]);
         }
 
         console.log(formData);
+        createProgramme(formData);
 
-        try {
-            await postProgramme(formData);
-        } catch (err) {
-            console.log(err);
-        }
+        // try {
+        //     await postProgramme(formData);
+        // } catch (err) {
+        //     console.log(err);
+        // }
     }
     return (
     <Box width="100%" p="40px" display="flex" flexDirection="column">
@@ -81,16 +84,34 @@ const CreateProgramme = () => {
         <SectionHeader margin="20px" text="Welcome organiser, let’s start to create your mentoring programme." />
 
     <FormProvider {...methods}>
-        <form onSubmit={handleSubmit(handleSave)} width="100%" >
-
+        <form onSubmit={handleSubmit(handleSave)} width="100%" id="createProgForm">
+       
         <MainForm />
 
         {/* <Box display="flex" gap="20px"> */}
-            <Button type="submit" variant="contained" color="secondary" >Submit</Button>
+            <Button variant="contained" color="secondary" onClick={() => setConfirmSubmission(true)}>Submit</Button>
             <Button disabled={progress < 100}  variant="contained" color="secondary" onClick={() => {setPreview(!preview)}}>Preview Form </Button>
         {/* </Box> */}
 
         <PreviewForm open={preview} setPreview={setPreview} getValues={getValues}/>
+        <Dialog
+        open={confirmSubmission}
+        TransitionComponent={Transition}
+        keepMounted
+        onClose={() => setConfirmSubmission(false)}
+        aria-describedby="alert-dialog-slide-description"
+      >
+        <DialogTitle>{"Confirm Creation of Programme?"}</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            If you change your mind later, go to the programme under my programmes to delete
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions >
+          <Button color="secondary" type="submit" form="createProgForm" onClick={() => setConfirmSubmission(false)}>Confirm</Button>
+          <Button color="secondary" onClick={() => setConfirmSubmission(false)}>Cancel</Button>
+        </DialogActions>
+      </Dialog>
         </form>
     </FormProvider>
         <DevTool control={control}/>

@@ -1,9 +1,12 @@
-import { Box, Typography } from "@mui/material"
+import { Box, Divider, Typography } from "@mui/material"
+import SectionHeader from "../SectionHeader"
 
-const FindOutMore = () => {
+const FindOutMore = ({description}) => {
     return (
         <Box>
-            <Typography>FIndOutMore</Typography>
+            <SectionHeader text="About Programme" margin="0"/>
+            <Divider/>
+            <Typography>{description}</Typography>
         </Box>
     )
 }
