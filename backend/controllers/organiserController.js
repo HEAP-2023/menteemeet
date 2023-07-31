@@ -218,7 +218,7 @@ const evaluateApp = async (req, res) => {
 
     if (approval === 1) {
       await UserProgramme.create({ role: getApplication.role, user_id: getApplication.user_id, 
-        programme_id: getApplication.programme_id });
+        programme_id: getApplication.programme_id, application_id: getAppID });
     } else {
       await UserProgramme.destroy({ where: { programme_id: getApplication.programme_id } });
     }

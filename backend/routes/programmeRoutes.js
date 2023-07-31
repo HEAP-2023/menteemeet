@@ -16,6 +16,8 @@ router.get('/', authenticateToken, programmeController.getAllProg);
 // router.get('/:id/mentor-applications', authenticateToken, programmeController.getMentorApplicationsByProgId);
 router.get('/:id', authenticateToken, programmeController.getEachProg);
 router.post('/', authenticateToken, programmeController.runAlgo);
+router.get('/:id/get-all-mentees', authenticateToken, programmeController.getAllMenteeByProgID);
+router.get('/:id/scorer', authenticateToken, programmeController.scorer);
 
 // UNAUTHENTICATED ROUTES
 router.get('/search-by-name/:name', programmeController.searchProgByName);
