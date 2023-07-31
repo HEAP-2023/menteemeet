@@ -9,12 +9,6 @@ import thunk from 'redux-thunk'
 //to change userType go to initialState (3 functions below) change account_type
 
 
-const fetchTasks = () => {
-    // go fetch
-    return ([
-
-    ]);
-}
 
 // const getAccountType = () => {
 //     const jwt = localStorage.getItem("jwt")
@@ -29,7 +23,6 @@ const initialState = {
     loginOverlay : false,
     profileOverlay : false,
     programmes : [],
-    tasks : fetchTasks(),
     userBasicDetails :  {name : "default", email : "defaultEmail", account_type : undefined},
 // structure after logging in should be
 // account_id
@@ -57,6 +50,9 @@ export const userSlice = createSlice({
         profileOverlayToggle : (state) => {
             state.profileOverlay = !state.profileOverlay; 
         },
+        closeProfileOverlay : (state) => {
+            state.profileOverlay = false; 
+        },
         logOut : (state) => {
             return initialState;
         },
@@ -65,12 +61,6 @@ export const userSlice = createSlice({
         },
         modifyDetails : (state, action) => {
             state.userBasicDetails = {...state.userBasicDetails, ...action.payload}
-        },
-        addTasks : (state, action) => {
-            state.tasks = [...state.tasks, action.payload.task]
-        },
-        removeTask : (state, action) => {
-            state.tasks = state.tasks.filter(task => task.id !== action.payload.id)
         },
         dragToggle : (state) => {
             state.disableDrag = !state.disableDrag; 
@@ -90,9 +80,8 @@ export const userSlice = createSlice({
 
 
 export const {loginOverlayToggle ,
-    profileOverlayToggle,
+    profileOverlayToggle, closeProfileOverlay,
     logOut, updateDetails,
-    addTasks, removeTask,
     dragToggle, modifyDetails,
     updateProgrammes, 
     addToParking, removeFromParking} = userSlice.actions;
@@ -102,7 +91,8 @@ export const {loginOverlayToggle ,
     
     const persistConfig = {
         key: 'user',
-        storage
+        blacklist : ["dragParking"],
+        storage,
     };
 
     export const userReducer = persistReducer(persistConfig, userSlice.reducer);

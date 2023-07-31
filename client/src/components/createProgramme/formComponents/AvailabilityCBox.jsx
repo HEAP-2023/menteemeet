@@ -8,7 +8,7 @@ const AvailabilityCBox = () => {
             <Grid container columns={12}>
                 {
                     days.map(day => (
-                        <Grid item>
+                        <Grid item key={day}>
                             <IndeterminateCheckbox pLabel={day} />
                         </Grid>
                         ))

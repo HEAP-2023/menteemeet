@@ -6,7 +6,6 @@ import { Link, useNavigate } from "react-router-dom";
 // icons
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 import ManageAccountsOutlinedIcon from '@mui/icons-material/ManageAccountsOutlined';
-import ChangeCircleOutlinedIcon from '@mui/icons-material/ChangeCircleOutlined';
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
 import SectionHeader from "../SectionHeader";
 
@@ -19,7 +18,7 @@ import { useQueryClient } from "@tanstack/react-query";
 
 
 
-const ProfileOverlayTab = ({acctInfo}) => {
+const ProfileOverlayTab = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const queryClient = useQueryClient()
@@ -60,8 +59,8 @@ const ProfileOverlayTab = ({acctInfo}) => {
                 // dispatch(logOut());
                 // logout()
                 dispatch(logOut())
-                queryClient.clear()
                 localStorage.setItem("jwt", "");
+                queryClient.clear()
                 // navigate("/login/start") --> should be auto since home is protected
             }}>
                 <LogoutOutlinedIcon/>

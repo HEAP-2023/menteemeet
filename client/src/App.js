@@ -30,7 +30,7 @@ function App() {
             {userType && <SideNavbar enrolled={programmes_enrolled}/>}
             
            <main className="content">
-                {userType && <Topbar acctInfo={acctInfo}></Topbar>}
+                {userType && <Topbar></Topbar>}
                 <Routes>
                     {/* public routes */}
                     <Route element={<UnprotectedRoute/>}>
@@ -41,13 +41,13 @@ function App() {
                     {/* private routes */}
                     <Route element={<ProtectedRoute/>}>
                         <Route path="/" element={<Home/>} role={userType}></Route>
-                        <Route path="/explore" element={<Explore />}></Route>
-                        <Route path="/profile" element={<Profile peerReviews={peerReviews} history={history} acctInfo={acctInfo}/>}></Route>
+                        <Route path="/explore/:id?" element={<Explore />}></Route>
+                        <Route path="/profile" element={<Profile peerReviews={peerReviews} history={history}/>}></Route>
                         {userType === "organiser" 
                             && <Route path="/programme/create" element={<CreateProgramme/>}/>}
                         <Route path="/programmes/:id" element={<Programme programme_details={programmes_enrolled}/>}></Route>
                         <Route path="/test" element={<Test/>} />
-                        <Route path="/accountSettings" element={<AccountSettings acctInfo={acctInfo}/>} />
+                        <Route path="/accountSettings" element={<AccountSettings/>} />
                         <Route path="/calendar" element={<Calendar />} />
                     </Route>
                 </Routes>
@@ -60,15 +60,6 @@ function App() {
 
 export default App;
 
-const acctInfo = {
-    acctId : 1,
-    name : "NEO SHYH RUEY",
-    email : "srneo.2022@scis.smu.edu.sg",
-    password: "hello123",
-    contactNumber: "81234567",
-    telegramUsername: "@shyhruey",
-    description: 'description'
-}
 
 const programmes_enrolled = [
     {
@@ -90,48 +81,6 @@ const programmes_enrolled = [
 
 
 
-
-const Programmes_available = {
-    programmeID1 : {
-        PID : 1,
-        name : "Programme 1",
-        description : "this is the 1st programme  Lorem Ipsum es simplemente el texto de relleno de las imprentas y archivos de texto. Lorem Ipsum ha sido el texto de relleno estándar de las industrias desde el año 1500, cuando un impresor (N. del T. persona que se dedica a la imprenta) desconocido usó una galería de textos y los mezcló de tal manera que logró hacer un libro de textos especimen. No sólo sobrevivió 500 años",
-        category : "test",
-        capacity : 50,
-        startDate : "18/3/2023",
-        endDate : "19/9/2023",
-        applicationDeadline : "17/2/2023",
-        media : "../../images/home/mentorship_1.jpg",
-        criteria : {1 : "criteria 1", 2 : "criteria 2"},
-        link : "https://youtu.be/dQw4w9WgXcQ",
-    },
-    programmeID2 : {
-        PID : 2,
-        name : "Programme 2",
-        description : "this is the 2nd programme",
-        category : "test",
-        capacity : 50,
-        startDate : "18/3/2023",
-        endDate : "19/9/2023",
-        applicationDeadline : "17/2/2023",
-        media : "../../images/home/mentorship_2.png",
-        criteria : {1 : "criteria 3", 2 : "criteria 4"},
-        link : "https://youtu.be/dQw4w9WgXcQ",
-    },
-    programmeID3 : {
-        PID : 3,
-        name : "Programme 3",
-        description : "this is the 3rd programme",
-        category : "test",
-        capacity : 50,
-        startDate : "18/3/2023",
-        endDate : "19/9/2023",
-        applicationDeadline : "17/2/2023",
-        media : "../../images/home/mentorship_3.jpg",
-        criteria : {1 : "criteria 3", 2 : "criteria 4"},
-        link : "https://youtu.be/dQw4w9WgXcQ",
-    }
-}
 
 
 const peerReviews = {

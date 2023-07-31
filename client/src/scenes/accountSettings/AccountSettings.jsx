@@ -8,7 +8,7 @@ import MyDetails from '../../components/accountSettings/MyDetails';
 import ChangePassword from '../../components/accountSettings/ChangePassword';
 
 
-const AccountSettings = ({ acctInfo }) => {
+const AccountSettings = () => {
     const [tab, changeTab] = useState("myDetails")
     const tabChange = (event, newValue) => {
         changeTab(newValue);
@@ -36,7 +36,7 @@ const AccountSettings = ({ acctInfo }) => {
                         <MyDetails/>
                     </TabPanel>
                     <TabPanel value="changePassword" index={1}>
-                        <ChangePassword acctInfo={acctInfo}/>
+                        <ChangePassword />
                     </TabPanel>
                 </TabContext>
               

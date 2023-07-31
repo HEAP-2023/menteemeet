@@ -11,8 +11,8 @@ const Element = ({details}) => {
         programme_id,
         name,  
         description,
-        category,
         display_image,
+        deadline,
     } = details
 
     const [dialogOpen, setDialogOpen] = useState(null)
@@ -41,12 +41,12 @@ const Element = ({details}) => {
         {/* details */}
         <Box width="70%" height="300px" display="grid" gridTemplateRows="1fr 5fr 2fr" rowGap="20px" p="20px">
             <SectionHeader text={name} margin="0"/>
-            <Typography>category: {category}</Typography>
+            <Typography>Application Deadline: {deadline}</Typography>
             <Box width="30%" display="flex" justifyContent="space-between" >
-                <Button variant="contained" sx={{borderRadius:20}} 
+                <Button variant="contained" sx={{borderRadius:"20px"}} 
                 onClick={() => setDialogOpen("findOutMore")}
                 >Find Out More</Button>
-                <Button variant="contained" sx={{borderRadius:20, bgcolor: `${colors.text[500]}` ,color:"#ffffff"}}
+                <Button variant="contained" sx={{borderRadius:"20px", bgcolor: `${colors.text[500]}` ,color:"#ffffff"}}
                 onClick={() => setDialogOpen("signUp")}
                 >Sign Up</Button>
             </Box>

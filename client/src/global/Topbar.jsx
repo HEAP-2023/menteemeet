@@ -1,24 +1,20 @@
-import { Badge, Box, Divider, IconButton, Stack, Typography } from "@mui/material";
+import { Badge, Box, Divider, IconButton, Stack, Typography, ClickAwayListener } from "@mui/material";
 import ProfileNav from "../components/profile/ProfileNav";
 import ProfileOverlayTab from "../components/profile/ProfileOverlayTab";
 import NotificationsOutlinedIcon from '@mui/icons-material/NotificationsOutlined';
 import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
 import Slide from '@mui/material/Slide';
 
 // redux
 import { useDispatch, useSelector } from "react-redux";
-import { profileOverlayToggle } from "../state(kiv)";
+import { closeProfileOverlay, profileOverlayToggle } from "../state(kiv)";
 import { useState, forwardRef } from "react";
 
 const Transition = forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
   });
 
-const Topbar = ({acctInfo}) => {
+const Topbar = () => {
     const dispatch = useDispatch();
     const userType = useSelector((state) => state.user.userBasicDetails.account_type)
     const profileOverlay = useSelector((state) => state.user.profileOverlay);
@@ -46,13 +42,15 @@ const Topbar = ({acctInfo}) => {
             </Badge>
         </IconButton>
 
+        <ClickAwayListener onClickAway={() => dispatch(closeProfileOverlay())}>
             <Box width="10%" minWidth="200px" display="flex" flexDirection="column">
                 
                 <Box onClick={() => dispatch(profileOverlayToggle())}> 
                     <ProfileNav />
                 </Box>
-                {profileOverlay && <ProfileOverlayTab acctInfo={acctInfo}/> }
+                    {profileOverlay && <ProfileOverlayTab /> }
             </Box>
+        </ClickAwayListener>
 
         <Dialog
         open={openNotifs}

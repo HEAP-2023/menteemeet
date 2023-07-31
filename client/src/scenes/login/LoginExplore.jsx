@@ -1,5 +1,4 @@
 import { useState } from "react";
-import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 import { Box, Typography, Button, TextField} from "@mui/material";
 import { generateColors } from "../../theme";
 import PageHeader from "../../components/PageHeader"

@@ -7,14 +7,9 @@ const userController = require('../controllers/userController');
 // router.post('/token', refreshTokFunc)
 
 //FOR UPDATING.
-//call authToken func
 const { authenticateToken } = require('../middlewares/authMiddlewares');
 
-//Instead of putting "authToken" as an arg in each route,
-// you can do this instead. So every route in this router will
-// use the auth function as a middleware.
-router.use(authenticateToken);
-
+//AUTHENTICATED ROUTES
 //get Prog by UserID & Role
 router.get('/programmes/enrolled', authenticateToken, userController.getAllProgByUserID); /* prev was /:role instead of enrolled  -- bruce*/
 router.get('/programmes/', authenticateToken, userController.getUnsignedProg);
@@ -22,6 +17,9 @@ router.get('/programmes/', authenticateToken, userController.getUnsignedProg);
 router.get('/session', authenticateToken, userController.getAllSessions);
 router.get('/session/:progID', authenticateToken, userController.getSessionsByProgID);
 
+router.get('/approvedApps', authenticateToken, userController.getApprovedApps);
+router.get('/pendingApps', authenticateToken, userController.getPendingApps);
+router.get('/rejectedApps', authenticateToken, userController.getRejectedApps);
 
 router.put('/', authenticateToken, userController.updateUser);
 

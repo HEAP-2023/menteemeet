@@ -9,7 +9,7 @@ import Duration from "./formComponents/Duration"
 import Capacity from "./formComponents/Capacity";
 import Deadline from "./formComponents/Deadline";
 import Intro from "./formComponents/Intro";
-import MatchingCriterias from "./formComponents/MatchingCriterias";
+// import MatchingCriterias from "./formComponents/MatchingCriterias";
 
 const MainForm = () => {
     const {control, watch, formState : {errors}} = useFormContext();
@@ -79,10 +79,8 @@ const MainForm = () => {
             </Stack>
 
             {/* matching criteria */}
-            <MatchingCriterias/>
-
+            {/* <MatchingCriterias/> */}
             </Box>
-
         </Box>);
 }
 

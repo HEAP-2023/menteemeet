@@ -193,7 +193,26 @@ const getAllProgsByOrgID = async (req, res) => {
   }
 }
 
-const evaluateApp = async (req, res) => {
+//Check if capacity reached.
+const checkCapacity = async (progID, roleApplied) => {
+
+  const getCapacity = await Application.findAndCountAll({ where: { programme_id: progID, is_accepted: 1}, 
+    raw: true });
+  const getProgramme = await Programme.findOne({ where: {programme_id: progID}, raw: true});
+
+  if (roleApplied === "mentor") {
+    if (getCapacity.count >= getProgramme.mentorCapacity) {
+      return true;
+    }
+  } else {
+    if (getCapacity.count >= getProgramme.menteeCapacity) {
+      return true;
+    }
+  }
+  return false;
+}
+
+const evaluateApp = async (req, res) => { 
   try {
     const account = req.account;
     if (account.account_type !== 'organiser') {
@@ -214,11 +233,16 @@ const evaluateApp = async (req, res) => {
       return res.status(400).json({ message: "Approve Status Code is invalid." });
     }
 
+    const isCapacityMax = await checkCapacity(getApplication.programme_id, getApplication.role);
+    if (isCapacityMax) {
+      return res.status(200).json({ message: "Capacity reached. No approvals allowed." });
+    }
+
     await Application.update({ is_accepted: approval }, { where: { application_id: getAppID }} );
 
     if (approval === 1) {
       await UserProgramme.create({ role: getApplication.role, user_id: getApplication.user_id, 
-        programme_id: getApplication.programme_id });
+        programme_id: getApplication.programme_id, application_id: getAppID });
     } else {
       await UserProgramme.destroy({ where: { programme_id: getApplication.programme_id } });
     }
@@ -282,4 +306,5 @@ const deleteProg = async (req, res) => {
   }
 }
 
-module.exports = { getOrg, updateOrg, addProg, getAllProgsByOrgID, evaluateApp, getApp, deleteProg };
+module.exports = { getOrg, updateOrg, addProg, getAllProgsByOrgID, checkCapacity, evaluateApp, 
+  getApp, deleteProg };
