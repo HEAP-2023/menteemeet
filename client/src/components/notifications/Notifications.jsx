@@ -4,6 +4,7 @@ import { toggleNotifs, updateApplications } from "../../state(kiv)";
 // redux
 import { useDispatch, useSelector } from "react-redux";
 import { forwardRef } from "react";
+import SectionHeader from "../SectionHeader";
 
 const Transition = forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
@@ -23,9 +24,9 @@ const Notifications = () => {
             keepMounted
             onClose = {() => dispatch(toggleNotifs())}
     >
+            <SectionHeader margin="0" text="Applications"/>
             <Stack>
                <NotificationExpanded header="Approved Applications" apps={approvedApp} status={approvedStatus}/>
-    
                <NotificationExpanded header="Pending Applications"/>
                <NotificationExpanded header="Rejected Applications"/>
 
@@ -38,6 +39,13 @@ const Notifications = () => {
 
 
 const NotificationExpanded = ({header, apps=[], status}) => {
+    if(status === "error"){
+        return (
+        <Typography>
+            no applications yet
+        </Typography>
+    )
+    }
     if(status === "loading"){
         return <CircularProgress/>
     }
@@ -47,11 +55,8 @@ const NotificationExpanded = ({header, apps=[], status}) => {
                 <Typography fontWeight="700">{header}</Typography>
                 <Divider/>
                 {
-                (apps.length > 0) ? 
-                apps.map(app => <Typography>{app}</Typography>) : 
-                <Typography>
-                    no applications yet
-                </Typography>}
+                apps.map(app => <Typography>{app}</Typography>)
+                }
             </Stack>
         )
     }

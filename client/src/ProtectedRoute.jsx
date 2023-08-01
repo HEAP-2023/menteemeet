@@ -21,6 +21,9 @@ export const ProtectedRoute = () => {
                 localStorage.setItem("jwt", "");
                 navigate("/login/start")
             }
+        if(isError){
+            console.log(error)
+        }
 
         if(isSuccess){
             dispatch(updateProgrammes(data))
