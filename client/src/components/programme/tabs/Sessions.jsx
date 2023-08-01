@@ -32,7 +32,7 @@ const Sessions = (programmeID) => {
       .catch(err => {
         console.log("ERROR:", err);
       })
-  }, [])
+  }, [programmeID.programmeID])
 
   const userType = useSelector((state) => state.user.userBasicDetails.account_type);
   const colors = generateColors();

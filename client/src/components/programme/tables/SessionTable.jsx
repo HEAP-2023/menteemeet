@@ -33,7 +33,7 @@ const SessionTable = ({rows, columns, checkbox=false, color="#EBEBEB", editable=
     } 
     // https://mui.com/x/react-data-grid/editing/
 
-    return ( <Box sx={{ height: 400, width: '100%' }}>
+    return ( <Box sx={{width: '100%' }}>
     <DataGrid
       rows={rows}
       columns={columns}

@@ -3,7 +3,7 @@ import { Box, Typography, Divider } from "@mui/material"
 const SectionRow = ({details, rowColor, checkbox, highlight, showDTG}) => {
     const {title, body, dtg} = details;
     return  (
-    <Box display="flex" flexDirection="row" width="95%" bgcolor="background.main" marginY="5px" p="10px"  minHeight="100px" borderRadius="5px">
+    <Box display="flex" flexDirection="row" width="95%" bgcolor="background.main" marginY="5px" p="10px" mb="18px" minHeight="100px" borderRadius="5px">
         {highlight && <Box p="5px"  px="20px">
             <Divider orientation="vertical"  sx={{ borderRightWidth: 3 , borderColor: rowColor }}/>
         </Box>}
