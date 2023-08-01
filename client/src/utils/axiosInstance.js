@@ -11,21 +11,20 @@ const axiosInstance = axios.create({
   withCredentials: false,
 });
 
-// axiosInstance.interceptors.response.use(response => 
-//     {
-//         console.log(response)
-//         return response
-//     }, 
-//     error => {
+axiosInstance.interceptors.response.use(response => 
+    {
+        return response
+    }, 
+    // error => {
     
-//     if (error.response.status === 403 ){
-//        // redirect to 403 page
-//        console.log("errror is handled")
+    // if (error.response.status >= 400 &&  error.response.status < 500){
+    //    // redirect to 403 page
+    //    console.log("errror is handled")
     
-//        window.location = '/login/start'
-//        alert("please relogin")
-//     }
-//     });
+    //    localStorage.clear();
+    //    window.location = '/login/start'
+    // }
+    );
 
 // either we loggout for every request on 403 error or we do this but idk how to clear everything
 

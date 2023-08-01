@@ -9,12 +9,14 @@ import { sliceIntoChunks } from "../../functions";
 import SectionHeader from "../SectionHeader";
 
 import useGetExploreProgramme from "../../hooks/programmes/users/useGetExploreProgramme"
-
+import { ImgGetUrl } from "../../functions";
 
 const Item = ({ content }) => {
     const userType = useSelector((state) => state.user.userBasicDetails.account_type)
     const { programme_id, name, display_image } = content;
     const link = userType === "organiser" ? `/programmes/${programme_id}` : `/explore/${programme_id}`
+    const img = ImgGetUrl(display_image)
+
     return (
         <Card sx={{ height: "100%", display: "flex", flexDirection: "column" }}>
             <SectionHeader text={name} margin="0"/>
@@ -22,7 +24,7 @@ const Item = ({ content }) => {
                 <CardMedia
                     sx={{ height: "85%", alt: "unable to display", objectFit: "contain" }}
                     component="img"
-                    src={!!display_image ? display_image : "../images/explore/noImageAvailable.jpeg"}
+                    src={!!img ? img : "../images/explore/noImageAvailable.jpeg"}
                 />
 
                 {userType !== "organiser" ?  (

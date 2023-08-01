@@ -18,10 +18,10 @@ const SignUpForm = ({id}) => {
         defaultValues :{
             name : userName,
             email : email, 
-            tele : telegram_username,
+            tele : !!telegram_username ? telegram_username : "none",
             role : "mentee",
-            skills : [{skill : ""}, {skill : ""}, {skill : ""}],
-            interests : [{interest : ""}, {interest : ""}, {interest : ""}],
+            skills : [{skill : "-"}, {skill : "-"}, {skill : "-"}],
+            interests : [{interest : "-"}, {interest : "-"}, {interest : "-"}],
             availability : []
         }
     })
@@ -56,7 +56,6 @@ const SignUpForm = ({id}) => {
             programmeEnd,
             programmeStart,
         } = details.data.programme
-        console.log(details)
         
         return (
             <Box>

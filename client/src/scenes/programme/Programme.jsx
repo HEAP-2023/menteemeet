@@ -59,7 +59,10 @@ const Programme = ({programme_details}) => {
                     }
                 </Tabs>
                 {userType === "organiser" &&
-                    <Button variant="contained" color="warning" sx={{mr :"20px", borderRadius:"20px"}}
+                    <Button variant="contained" disableElevation sx={{mr :"20px", borderRadius:"20px", color:"#ffffff", background:"#E44949", '&:hover': {
+                        color: '#ffffff',
+                        backgroundColor: '#E44949',
+                    },}}
                     onClick={() => setDeleteModal(true)}
                     >Delete Programme</Button>
                 }

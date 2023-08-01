@@ -4,6 +4,7 @@ import SectionHeader from "../../components/SectionHeader"
 import { useState } from "react"
 import FindOutMore from "./FindOutMore"
 import SignUpForm from "./SignUpElements/SignUpForm"
+import { ImgGetUrl } from "../../functions"
 
 const Element = ({details}) => {
     const colors = generateColors();
@@ -16,7 +17,7 @@ const Element = ({details}) => {
     } = details
 
     const [dialogOpen, setDialogOpen] = useState(null)
-
+    const img = ImgGetUrl(display_image)
     return (<Box display="flex" p="20px" >
         <Dialog
             open={!!dialogOpen}
@@ -35,7 +36,7 @@ const Element = ({details}) => {
 
         {/* image */}
         <Box width="30%" height="300px">
-            <img src={!!display_image ? display_image : "../images/explore/noImageAvailable.jpeg"} alt="no img" style={{width:"100%", height:"100%", objectFit:"contain"}}/>
+            <img src={!!img ? img : "../images/explore/noImageAvailable.jpeg"} alt="no img" style={{width:"100%", height:"100%", objectFit:"contain"}}/>
         </Box>
 
         {/* details */}

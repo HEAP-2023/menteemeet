@@ -40,6 +40,15 @@ export const getAllProgsParticipating = async () => {
         programmeStart : prog["Programmes.programmeStart"], 
         programme_id : prog["Programmes.programme_id"], 
     }))
-    console.log(formattedObj)
     return formattedObj;
+}
+
+
+export const getApprovedApplications = async ()  => {
+    const res = await axiosInstance({
+        method : "get",
+        url : `/users/approvedApps`,
+        headers: { Authorization: `Bearer ${localStorage.getItem("jwt")}` },
+    })
+    return res.data.appArray
 }
