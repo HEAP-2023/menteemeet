@@ -10,7 +10,7 @@ import AddEventPopover from './AddEventPopover';
 import { format } from 'date-fns';
 import CalendarFilter from './CalendarFilter';
 import { Box } from '@mui/material';
-import { getAllSessions } from '../../services/user/userServices';
+// import { getAllSessions } from '../../services/user/userServices';
 const MainCalendar = () => {
 
     const [events, setEvents] = useState([
@@ -55,15 +55,15 @@ const MainCalendar = () => {
         // },
     ]);
 
-    useEffect(() => {
-        getAllSessions()
-        .then(res => {
-            console.log("res:", res)
-           })
-        .catch(err => {
-            console.log("ERROR:", err);
-          })
-    },[])
+    // useEffect(() => {
+    //     getAllSessions()
+    //     .then(res => {
+    //         console.log("res:", res)
+    //        })
+    //     .catch(err => {
+    //         console.log("ERROR:", err);
+    //       })
+    // },[])
 
     const [showEvents, setShowEvents] = useState(events);
     const [selectedEvent, setSelectedEvent] = useState(null);
