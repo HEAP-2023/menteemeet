@@ -18,6 +18,8 @@ router.get('/session', authenticateToken, userController.getAllSessions);
 router.get('/session/:progID', authenticateToken, userController.getSessionsByProgID);
 
 router.get('/approvedApps', authenticateToken, userController.getApprovedApps);
+router.get('/pendingApps', authenticateToken, userController.getPendingApps);
+router.get('/rejectedApps', authenticateToken, userController.getRejectedApps);
 
 router.put('/', authenticateToken, userController.updateUser);
 

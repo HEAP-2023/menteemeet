@@ -27,8 +27,8 @@ function initAssociations() {
   Interest.belongsToMany(User, { foreignKey: 'interest_id', through: UserInterest });
 
   //User and group
-  UserGroup.belongsToMany(User, { foreignKey: 'group_id', through: UserProgramme });
-  User.belongsToMany(UserGroup, { foreignKey: 'user_id', through: UserProgramme });
+  // UserGroup.belongsToMany(User, { foreignKey: 'group_id', through: UserProgramme });
+  // User.belongsToMany(UserGroup, { foreignKey: 'user_id', through: UserProgramme });
 
   //Programme and group
   Programme.hasMany(UserGroup, { foreignKey: "programme_id" });
@@ -56,6 +56,9 @@ function initAssociations() {
   Programme.hasMany(Application, { foreignKey: 'programme_id' });
   Application.belongsTo(Programme, { foreignKey: 'programme_id' });
 
+  //Application and userprogramme
+  Application.hasOne(UserProgramme, { foreignKey: 'application_id' });
+  UserProgramme.belongsTo(Application, { foreignKey: 'application_id' });
 
   //Programme and forum
   // Programme.hasOne(Forum, { foreignKey: "programme_id" });

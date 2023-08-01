@@ -9,12 +9,19 @@ import DoneOutlinedIcon from '@mui/icons-material/DoneOutlined';
 import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
 import NewSessionLog from "./NewSessionLog"
 import { getSessionsByProgID } from "../../../services/programmes/userServices";
-import { useState, useEffect } from "react";
+import { useState, useEffect } from "react";    
+import { useParams } from "react-router-dom";
 const Sessions = (programmeID) => {
   const [rows, setRows] = useState([]);
-  const today = new Date().toISOString().split('T')[0];
-  const pastRows = rows.filter((item) => (item.date) < today);
-  const upcomingRows = rows.filter((item) => (item.date) > today);
+  const now = new Date().getTime();
+  let pastRows = rows.filter((item) => new Date(`${item.date} ${item.end_time}`).getTime() < now);
+  pastRows = pastRows.sort(
+    (objA, objB) => Number(new Date(`${objA.date} ${objA.start_time}`).getTime()) - Number(new Date(`${objB.date} ${objB.start_time}`).getTime())
+  )
+  let upcomingRows = rows.filter((item) => new Date(`${item.date} ${item.end_time}`).getTime() >= now);
+  upcomingRows = upcomingRows.sort(
+    (objA, objB) => Number(new Date(`${objA.date} ${objA.start_time}`).getTime()) - Number(new Date(`${objB.date} ${objB.start_time}`).getTime())
+  )
   console.log(programmeID)
   useEffect(() => {
     getSessionsByProgID(programmeID.programmeID)
@@ -29,7 +36,11 @@ const Sessions = (programmeID) => {
 
   const userType = useSelector((state) => state.user.userBasicDetails.account_type);
   const colors = generateColors();
-  const role = "mentee";
+
+  const {id} = useParams();
+  const programmes = useSelector((state) => state.user.programmes)
+  const programme = programmes.find(program => program.programme_id === Number(id));
+  const role = programme.role;
   const columns = structure(role)
 
   return (
@@ -44,40 +55,11 @@ const Sessions = (programmeID) => {
         editable={role === "mentee" ? false : true} />
       <SectionHeader text="Past Sessions" />
       <SessionTable rows={pastRows} columns={columns} />
-
     </Box>
   );
 }
 export default Sessions;
 
-
-
-// const fetchUpcomingSessions = (role) => {
-//     if(role === " mentee"){
-//         return ( [
-//             { id: 1, groupNo: 5 , date: "05/06/23", time: "13:50- 14:50", topicsCovered: "topic", remarks : "mentee's remarks " },
-//             { id: 2, groupNo: 5 , date: "05/06/23", time: "13:50- 14:50", topicsCovered: "topic", remarks : "mentee's remarks " },
-//             { id: 3, groupNo: 5 , date: "05/06/23", time: "13:50- 14:50", topicsCovered: "topic", remarks : "mentee's remarks " },
-//             { id: 4, groupNo: 5 , date: "05/06/23", time: "13:50- 14:50", topicsCovered: "topic", remarks : "mentee's remarks " },
-//             { id: 5, groupNo: 5 , date: "05/06/23", time: "13:50- 14:50", topicsCovered: "topic", remarks : "mentee's remarks " },
-//             { id: 6, groupNo: 5 , date: "05/06/23", time: "13:50- 14:50", topicsCovered: "topic", remarks : "mentee's remarks " },
-//             { id: 7, groupNo: 5 , date: "05/06/23", time: "13:50- 14:50", topicsCovered: "topic", remarks : "mentee's remarks " },
-//             { id: 8, groupNo: 5 , date: "05/06/23", time: "13:50- 14:50", topicsCovered: "topic", remarks : "mentee's remarks " },
-//             { id: 9, groupNo: 5 , date: "05/06/23", time: "13:50- 14:50", topicsCovered: "topic", remarks : "mentee's remarks " },
-//           ]);
-//     }
-//     return ([
-//         { id: 1, groupNo: 5 , date: "05/06/23", time: "13:50- 14:50", topicsCovered: "topic", remarks : "mentor's remarks " },
-//         { id: 2, groupNo: 5 , date: "05/06/23", time: "13:50- 14:50", topicsCovered: "topic", remarks : "mentor's remarks " },
-//         { id: 3, groupNo: 5 , date: "05/06/23", time: "13:50- 14:50", topicsCovered: "topic", remarks : "mentor's remarks " },
-//         { id: 4, groupNo: 5 , date: "05/06/23", time: "13:50- 14:50", topicsCovered: "topic", remarks : "mentor's remarks " },
-//         { id: 5, groupNo: 5 , date: "05/06/23", time: "13:50- 14:50", topicsCovered: "topic", remarks : "mentor's remarks " },
-//         { id: 6, groupNo: 5 , date: "05/06/23", time: "13:50- 14:50", topicsCovered: "topic", remarks : "mentor's remarks " },
-//         { id: 7, groupNo: 5 , date: "05/06/23", time: "13:50- 14:50", topicsCovered: "topic", remarks : "mentor's remarks " },
-//         { id: 8, groupNo: 5 , date: "05/06/23", time: "13:50- 14:50", topicsCovered: "topic", remarks : "mentor's remarks " },
-//         { id: 9, groupNo: 5 , date: "05/06/23", time: "13:50- 14:50", topicsCovered: "topic", remarks : "mentor's remarks " },
-//       ]);
-// }
 
 const structure = (role) => {
   return (
@@ -109,18 +91,18 @@ const structure = (role) => {
       },
       {
         field: 'topic',
-        headerName: 'Topics covered',
+        headerName: 'Topics / Location',
         width: 200,
         editable: true,
       },
-      {
-        field: 'remarks',
-        headerName: 'Remarks For' + (role === "mentee" ? " Mentee" : " Mentor"),
-        description: 'This column has a value getter and is not sortable.',
-        sortable: false,
-        editable: false,
-        width: 400
-      },
+      // {
+      //   field: 'remarks',
+      //   headerName: 'Remarks For' + (role === "mentee" ? " Mentee" : " Mentor"),
+      //   description: 'This column has a value getter and is not sortable.',
+      //   sortable: false,
+      //   editable: false,
+      //   width: 400
+      // },
       {
         field: 'actions',
         headerName: 'Actions',

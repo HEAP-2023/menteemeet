@@ -3,6 +3,7 @@ const Application = require("../models/application");
 const {Op} = require('sequelize');
 const Skill = require("../models/skill");
 const Interest = require("../models/interest");
+const UserProgramme = require("../models/userProgramme");
 
 const getEachProg = async (req, res) => {
   try {
@@ -235,5 +236,108 @@ const searchProgByName = async (req, res) => {
   }
 }
 
+const getMenteesMentorsByProgID = async (req, res) => {
+  const id = req.params.id;
+
+  const mentees = await UserProgramme.findAll({ where: { programme_id: id, role: "mentee" }, include: { 
+    model: Application,
+    attributes: ["availability", "skills", "interests"],
+  },
+    raw: true });
+
+  const mentors = await UserProgramme.findAll({ where: { programme_id: id, role: "mentor" }, include: { 
+    model: Application,
+    attributes: ["availability", "skills", "interests"],
+  },
+    raw: true });
+
+  return res.status(400).json({ mentees, mentors });
+}
+
+const scorer = async (req, res) => {
+  const id = req.params.id;
+
+  //Get all mentees for the programme
+  const mentees = await UserProgramme.findAll({ where: { programme_id: id, role: "mentee" }, include: { 
+    model: Application,
+    attributes: ["availability", "skills", "interests"],
+  },
+    raw: true });
+  //Get all mentors for the programme
+  const mentors = await UserProgramme.findAll({ where: { programme_id: id, role: "mentor" }, include: { 
+    model: Application,
+    attributes: ["availability", "skills", "interests"],
+  },
+    raw: true });
+
+    //Calculate the score for each mentee with all mentors
+  const result = calculateOverallScore(mentees[0], mentors);
+
+  return res.status(400).json({ result });
+}
+
+const calculateAvailabilityScore = (menteeAvailability, mentorAvailability) => {
+  let availabilityScore = 0;
+
+  for (const mentorDay of mentorAvailability) {
+    for (const menteeDay of menteeAvailability) {
+      if (Object.keys(mentorDay)[0] === Object.keys(menteeDay)[0]) {
+        const mentorTimeSlots = mentorDay[Object.keys(mentorDay)[0]];
+        const menteeTimeSlots = menteeDay[Object.keys(menteeDay)[0]];
+
+        for (const mentorTimeSlot of mentorTimeSlots) {
+          if (menteeTimeSlots.includes(mentorTimeSlot)) {
+            // Increase the score if the mentor and mentee have availability on the same day and time slot
+            availabilityScore += 1;
+          }
+        }
+      }
+    }
+  }
+
+  return availabilityScore;
+}
+
+const calculateSkillScore = (menteeSkill, mentorSkill) => {
+  let skillScore = 0;
+
+  for (const mentorDay of mentorAvailability) {
+    for (const menteeDay of menteeAvailability) {
+      if (Object.keys(mentorDay)[0] === Object.keys(menteeDay)[0]) {
+        const mentorTimeSlots = mentorDay[Object.keys(mentorDay)[0]];
+        const menteeTimeSlots = menteeDay[Object.keys(menteeDay)[0]];
+
+        for (const mentorTimeSlot of mentorTimeSlots) {
+          if (menteeTimeSlots.includes(mentorTimeSlot)) {
+            // Increase the score if the mentor and mentee have availability on the same day and time slot
+            availabilityScore += 1;
+          }
+        }
+      }
+    }
+  }
+
+  return availabilityScore;
+}
+
+const calculateOverallScore = (mentee, mentors) => {
+
+  const WEIGHT_AVAILABILITY = 0.6;
+  const WEIGHT_SKILLS = 0.2;
+  const WEIGHT_INTERESTS = 0.2;
+
+  const score = {};
+
+  const menteeAvailbility = JSON.parse(mentee["Application.availability"]);
+
+  mentors.forEach(mentor => {
+    console.log('mentee', mentee);
+    console.log('mentor', mentor);
+    const mentorAvailability = JSON.parse(mentor["Application.availability"]);
+    const availabilityScore = Math.round(calculateAvailabilityScore(menteeAvailbility, mentorAvailability) / 21 * 100); //21 is the maximum score
+    console.log(availabilityScore);
+  })
+}
+
 module.exports = { getEachProg, getAllProg, getPagination, getPagingData, getApplicationsByProgID, 
-  getMenteeApplicationsByProgId, getMentorApplicationsByProgId, runAlgo, getAllSkills, getAllInterests, searchProgByName };
+  getMenteeApplicationsByProgId, getMentorApplicationsByProgId, runAlgo, getAllSkills, getAllInterests, searchProgByName, getMenteesMentorsByProgID, scorer };

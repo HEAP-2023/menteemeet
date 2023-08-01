@@ -9,7 +9,9 @@ password = config.MYSQL_PASSWORD;
 //Setting up connection to DB
 const sequelize = new Sequelize(database, user, password, {
     host: host,
-    dialect: 'mysql'
+    dialect: 'mysql',
+    //Force Sequelize to store and retrieve as GMT+8
+    timezone: '+08:00',
 });
 
 module.exports = sequelize;

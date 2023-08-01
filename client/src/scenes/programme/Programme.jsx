@@ -16,10 +16,11 @@ import Statistics from "../../components/programme/tabs/Statistics";
 import DeleteProgrammeModal from "../../components/programme/DeleteProgrammeModal";
 
 
-const Programme = ({programme_details}) => {
+const Programme = () => {
     const {id} = useParams();
     const programmes = useSelector((state) => state.user.programmes)
     const programme = programmes.find(program => program.programme_id === Number(id));
+    const userRole = programme.role;
     console.log(programme);
     const [tab, changeTab] = useState("main")
 
@@ -37,7 +38,7 @@ const Programme = ({programme_details}) => {
 
             {/* header */}
             <Box display="flex" justifyContent="space-between">
-                <PageHeader text={`Welcome, ${userName}`}/>
+                <PageHeader text={`Welcome, ${userName} (${userRole})`}/>
                 <PageHeader text={`${programme.name} Mentorship Programme`}/>
             </Box>
             <TabContext value={tab}>
@@ -68,7 +69,7 @@ const Programme = ({programme_details}) => {
                 }
             </Box>
                 <TabPanel value="main" index={0}>   
-                    <MainPage />
+                    <MainPage programmeID={id}/>
                 </TabPanel>
                 <TabPanel value="sessions" index={1}>
                     <Sessions programmeID={id}/>

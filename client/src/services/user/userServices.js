@@ -39,6 +39,7 @@ export const getAllProgsParticipating = async () => {
         programmeEnd : prog["Programmes.programmeEnd"], 
         programmeStart : prog["Programmes.programmeStart"], 
         programme_id : prog["Programmes.programme_id"], 
+        role : prog["Programmes.UserProgramme.role"],
     }))
     return formattedObj;
 }

@@ -27,7 +27,7 @@ function App() {
         <CssBaseline/>
             <BrowserRouter>
         <div className="app">
-            {userType && <SideNavbar enrolled={programmes_enrolled}/>}
+            {userType && <SideNavbar/>}
             
            <main className="content">
                 {userType && <Topbar></Topbar>}
@@ -45,7 +45,7 @@ function App() {
                         <Route path="/profile" element={<Profile peerReviews={peerReviews} history={history}/>}></Route>
                         {userType === "organiser" 
                             && <Route path="/programme/create" element={<CreateProgramme/>}/>}
-                        <Route path="/programmes/:id" element={<Programme programme_details={programmes_enrolled}/>}></Route>
+                        <Route path="/programmes/:id" element={<Programme/>}></Route>
                         <Route path="/test" element={<Test/>} />
                         <Route path="/accountSettings" element={<AccountSettings/>} />
                         <Route path="/calendar" element={<Calendar />} />
@@ -59,28 +59,6 @@ function App() {
 }
 
 export default App;
-
-
-const programmes_enrolled = [
-    {
-        id : 14,
-        name : "program_1",
-        img : "../../images/home/mentorship_1.jpg",
-    },
-    {
-        id : 2,
-        name : "program_2",
-        img : "../../images/home/mentorship_2.png",
-    },
-    {
-        id : 3,
-        name : "program_3",
-        img : "../../images/home/mentorship_3.jpg",
-    },
-]
-
-
-
 
 
 const peerReviews = {
