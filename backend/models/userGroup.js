@@ -10,6 +10,14 @@ const userGroup = sequelize.define(
             allowNull: false,
             autoIncrement: true,
         },
+        mentee_id: {
+          type: DataTypes.INTEGER,
+          allowNull: false,
+        },
+        mentor_id: {
+          type: DataTypes.INTEGER,
+          allowNull: false,
+        },
         group_no: {
             type: DataTypes.INTEGER,
             allowNull: true

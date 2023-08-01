@@ -236,7 +236,7 @@ const searchProgByName = async (req, res) => {
   }
 }
 
-const getAllMenteeByProgID = async (req, res) => {
+const getMenteesMentorsByProgID = async (req, res) => {
   const id = req.params.id;
 
   const mentees = await UserProgramme.findAll({ where: { programme_id: id, role: "mentee" }, include: { 
@@ -245,7 +245,13 @@ const getAllMenteeByProgID = async (req, res) => {
   },
     raw: true });
 
-  return res.status(400).json({ mentees });
+  const mentors = await UserProgramme.findAll({ where: { programme_id: id, role: "mentor" }, include: { 
+    model: Application,
+    attributes: ["availability", "skills", "interests"],
+  },
+    raw: true });
+
+  return res.status(400).json({ mentees, mentors });
 }
 
 const scorer = async (req, res) => {
@@ -334,4 +340,4 @@ const calculateOverallScore = (mentee, mentors) => {
 }
 
 module.exports = { getEachProg, getAllProg, getPagination, getPagingData, getApplicationsByProgID, 
-  getMenteeApplicationsByProgId, getMentorApplicationsByProgId, runAlgo, getAllSkills, getAllInterests, searchProgByName, getAllMenteeByProgID, scorer };
+  getMenteeApplicationsByProgId, getMentorApplicationsByProgId, runAlgo, getAllSkills, getAllInterests, searchProgByName, getMenteesMentorsByProgID, scorer };
