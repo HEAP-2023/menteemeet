@@ -2,7 +2,7 @@ import { Box } from "@mui/material";
 import Section from "../Section"
 import {useEffect, useState} from "react";
 import { getSessionsByProgID } from "../../../services/programmes/userServices";
-
+import { getAnnouncementsByProgID } from "../../../services/organiser/organiserServices";
 const MainPage = (programmeID) => {
     const [rows, setRows] = useState([]);
     const now = new Date().getTime();
@@ -10,17 +10,32 @@ const MainPage = (programmeID) => {
     upcomingSessions = upcomingSessions.sort(
         (objA, objB) => Number(new Date(`${objA.date} ${objA.start_time}`).getTime()) - Number(new Date(`${objB.date} ${objB.start_time}`).getTime())
     )
+
     useEffect(() => {
         getSessionsByProgID(programmeID.programmeID)
       .then(res => {
-        console.log("res", res)
+        // console.log("res", res)
         setRows(res.data.sessionsWithRole);
-        console.log("rows:", rows);
       })
       .catch(err => {
-        console.log("ERROR:", err);
+        // console.log("ERROR:", err);
       })
-  }, [])
+  },[programmeID.programmeID])
+
+    
+
+    const [announcements, setAnnouncements] = useState([]);
+    useEffect(() => {
+        console.log("DATAAAAA")
+        getAnnouncementsByProgID(programmeID.programmeID)
+        .then(res => {
+            setAnnouncements(res.data.announcementArray)
+            console.log("announcements:" ,announcements)
+        })
+        .catch(err => {
+            console.log("ERROR:", err);
+          })
+    }, [programmeID.programmeID])
   
     return (
         <Box display="flex" justifyContent="space-around" width="100%" height="100%">
@@ -76,20 +91,6 @@ const tasks = {
         dtg : "dtg2",
     },
 }
-
-const announcements = [
-    {
-        title : "Project Delivery Reminder - 2 Weeks Left!",
-        body : "Attention to all team members! Just a friendly reminder that the project deadline is swiftly approaching, with only 2 weeks left for delivery. Let's stay focused, collaborate, and bring our best efforts to achieve success together. Keep up the great work! 🚀",
-        dtg : "dtg1",
-    },
-    {
-        title : "Save the Date! Upcoming Event - Join Us!",
-        body : "We are excited to announce an upcoming event that promises to be both informative and enjoyable! Mark your calendars and join us on 29 December for an enriching experience filled with insightful discussions, engaging activities, and networking opportunities. Stay tuned for more details and be sure to join us for this incredible event! 🎉",
-        dtg : "dtg2",
-    },
-    
-]
 
 const progress = [
     {

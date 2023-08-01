@@ -78,9 +78,9 @@ const Section = ({ header, rows, rowColor = "primary.main", highlight = false, c
         content = <Box display="inline-flex" flexDirection="column" alignItems="center">
             {
                 Object.entries(rows).map((row) => {
-                    const [key, details] = row
+                    const [announcement_id, details] = row;
                     return (
-                        <SectionRow key={`${details.title}-${details.dtg}`} details={details} rowColor={rowColor} checkbox={checkbox} highlight={highlight} showDTG={showDTG} />
+                        <SectionRow key={announcement_id} details={details} rowColor={rowColor} checkbox={checkbox} highlight={highlight} showDTG={showDTG} />
                     );
                 })
             }
