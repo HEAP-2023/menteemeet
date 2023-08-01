@@ -121,6 +121,7 @@ const getAllProgByUserID = async (req, res) => {
     //Returns array.
     const getUserProgObj = await User.findAll({ where: { user_id : getUserObj.user_id, /* role: getUserRole */ }, include: { model: Programme, required: true },
       raw: true });
+    // console.log("getUserProgObj:", getUserProgObj);
       
     if (getUserProgObj.length === 0) {
       return res.status(400).json({ message: "User is not enrolled in any programme!" });

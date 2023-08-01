@@ -9,7 +9,8 @@ import DoneOutlinedIcon from '@mui/icons-material/DoneOutlined';
 import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
 import NewSessionLog from "./NewSessionLog"
 import { getSessionsByProgID } from "../../../services/programmes/userServices";
-import { useState, useEffect } from "react";
+import { useState, useEffect } from "react";    
+import { useParams } from "react-router-dom";
 const Sessions = (programmeID) => {
   const [rows, setRows] = useState([]);
   const now = new Date().getTime();
@@ -35,7 +36,11 @@ const Sessions = (programmeID) => {
 
   const userType = useSelector((state) => state.user.userBasicDetails.account_type);
   const colors = generateColors();
-  const role = "mentor";
+
+  const {id} = useParams();
+  const programmes = useSelector((state) => state.user.programmes)
+  const programme = programmes.find(program => program.programme_id === Number(id));
+  const role = programme.role;
   const columns = structure(role)
 
   return (

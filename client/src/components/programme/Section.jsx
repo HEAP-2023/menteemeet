@@ -47,7 +47,7 @@ const Section = ({ header, rows, rowColor = "primary.main", highlight = false, c
         </>
     }
     else if (header === 'Upcoming Sessions') {
-        content = <Box display="inline-flex" flexDirection="column">
+        content = <Box display="inline-flex" flexDirection="column" alignItems="center">
             {
                 rows.map((item) => {
                     const day = format(new Date(item.date), "EEE");
