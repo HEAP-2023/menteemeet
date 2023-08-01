@@ -1,7 +1,7 @@
-import { Stack, Typography, TextField, Box } from "@mui/material"
+import { Stack, Typography, TextField, Box, Autocomplete } from "@mui/material"
 import {Controller, useFieldArray, useFormContext } from "react-hook-form"
-import StandardTextField from "../../StandardTextField";
-import SelectField from "../../SelectField";
+import { styled } from '@mui/system';
+
 const Skills = () => {
     const {control, formState : {errors}} = useFormContext();
     const { fields } = useFieldArray({
@@ -23,13 +23,35 @@ const Skills = () => {
             name={`skills.${index}.skill`}
             control={control} 
             render={({field}) =>
-                <SelectField
-                select={true}
-                selectChildren={getSkills}
-                field={field}
-                label={`skill ${index + 1}`}
-                errors={errors}
-                name="skill"
+               
+                <Autocomplete
+                sx={{ width: 200 }}
+                options={options.sort((a, b) => -b.firstLetter.localeCompare(a.firstLetter))}
+                groupBy={(option) => option.firstLetter}
+                getOptionLabel={(option) => option.title}
+                value={{firstLetter: field.value[0].toUpperCase(), title : field.value}}
+                clearOnBlur={false}
+                onChange={(event, value) => {
+                    field.onChange(value.title);
+                }
+            }
+                renderInput={(params) => 
+                    <TextField {...params} 
+                        value={field.value}
+                        label={`skill ${index + 1}`} 
+                        name={`skills.${index}.skill`} 
+                        error={errors[`skills.${index}.skill`] !== undefined}
+                        helperText={errors[`skills.${index}.skill`]?.message}
+                        />
+                }
+                renderGroup={(params) => (
+                    <li key={params.key}>
+                        <GroupHeader>{params.group}</GroupHeader>
+                        <GroupItems>{params.children}</GroupItems>
+                    </li>
+                    )
+                }
+                isOptionEqualToValue={(option, value) => option.title == value.title}
                 />
             }/>
 
@@ -43,29 +65,65 @@ const Skills = () => {
 }
 export default Skills
 
+    
 
-// <Controller name="skill_2" control={control} 
-// render={({field}) =>
-// <TextField 
-//     name="skill_2"
-//     {...field}
-//     fullWidth
-//     select
-//     label="skill 2"
-//     variant="outlined"
-//     children={[]}
-// />}/>
+const getSkills =  [
+    "-",
+    "Negotiation",
+    "Public Speaking",
+    "Networking",
+    "Sales",
+    "Marketing",
+    "Customer Service",
+    "Leadership",
+    "Conflict Management",
+    "Collaboration",
+    "Budgeting",
+    "Taxation",
+    "Financial Planning",
+    "Investment",
+    "Retirement Planning",
+    "Insurance",
+    "Risk Management",
+    "Real Estate",
+    "Funds",
+    "Bonds",
+    "Python",
+    "Java",
+    "Web Development",
+    "Data Science",
+    "Machine Learning",
+    "AI Ethics",
+    "Cloud computing",
+    "Internet of Things",
+    "Cyber security",
+    ]
 
-// <Controller name="skill_3" control={control} 
-// render={({field}) =>
-// <TextField 
-//     name="skill_3"
-//     {...field}
-//     fullWidth
-//     select
-//     label="skill 3"
-//     variant="outlined"
-//     children={[]}
-// />}/>
+    const options = getSkills.map((option) => {
+        if(option == "-"){
+            return {
+                firstLetter : "-",
+                title : "-"
+            }
+        }
+        const firstLetter = option[0].toUpperCase();
+        return {
+          firstLetter: /[0-9]/.test(firstLetter) ? '0-9' : firstLetter,
+          title : option,
+        };
+      });
 
-const getSkills = ["skill_a", "skill_b", "skill_c"]
+      const GroupHeader = styled('div')(() => ({
+        position: 'sticky',
+        top: '-8px',
+        padding: '4px 10px',
+        color: "secondary.main",
+        backgroundColor: "#f0f0ff"
+      }));
+      
+      const GroupItems = styled('ul')({
+        padding: 0,
+      });
+
+
+      

@@ -101,3 +101,25 @@ export const sliceIntoChunks = (arr, chunkSize) => {
     return res;
 }
 
+
+
+export const ImgGetUrl = (path) => {
+    try {
+        const temp = JSON.parse(path)
+        return temp.fileUrl
+    } catch (error) {
+        return null;
+    }
+}
+
+export const jwtHasExpired = () => {
+    const jwt = localStorage.getItem("jwt")
+    try {
+        const expiry = jwt_decode(jwt).exp
+        const currentTime = new Date().getTime() / 1000;
+        return (currentTime > expiry);
+    } catch (error) {
+        console.log("invalid jwt")
+        return false;
+    }
+}
