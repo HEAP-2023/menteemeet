@@ -17,6 +17,14 @@ const Announcement = sequelize.define(
         type: {
             type: DataTypes.STRING(),
             allowNull: false,
+        },
+        createdAt: {
+            type: DataTypes.DATE,
+            allowNull: false
+        },
+        updatedAt: {
+            type: DataTypes.DATE,
+            allowNull: true
         }
     },
     {

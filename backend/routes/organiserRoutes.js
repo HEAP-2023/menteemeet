@@ -17,6 +17,10 @@ router.put('/', authenticateToken, organiserController.updateOrg);
 router.post('/programmes', authenticateToken, upload.single('display_image'), organiserController.addProg);
 router.delete('/programmes/:progID', authenticateToken, organiserController.deleteProg);
 
+router.post('/announcements', authenticateToken, organiserController.addAnnouncementByProgID);
+router.put('/announcements', authenticateToken, organiserController.updateAnnouncementByProgID);
+router.get('/announcements/:progID', authenticateToken, organiserController.getAnnouncementsByProgID);
+
 // router.get('/:id', authenticateToken, organiserController.getOrg);
 
 module.exports = router;

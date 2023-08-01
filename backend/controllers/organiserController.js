@@ -2,11 +2,13 @@ const Account = require("../models/account");
 const Organiser = require('../models/organiser');
 const Programme = require('../models/programme');
 const Application = require('../models/application');
+const Announcement = require('../models/announcement');
 
 const UserProgramme = require('../models/userProgramme');
 
 const awsS3Controller = require('./awsS3Controller');
 const { Op } = require("sequelize");
+const moment = require("moment-timezone");
 
 const { generateAccessToken } = require('./accountController');
 const { getPagination, getPagingData } = require('./programmeController');
@@ -47,6 +49,13 @@ const getOrg = async (req, res) => {
     console.log(err);
     return res.status(500).json({ error: err });
   }
+}
+
+const checkValidOrganiser = async (req) => {
+  if (req.account_type !== 'organiser') {
+    return false;
+  }
+  return true;
 }
 
 const updateOrg = async (req, res) => {
@@ -306,5 +315,123 @@ const deleteProg = async (req, res) => {
   }
 }
 
+function customSort(a, b) {
+  if (a.updatedAt !== null && b.updatedAt !== null) {
+    // Sort based on updatedAt timestamps
+    return b.updatedAt - a.updatedAt; 
+    
+  } else if (a.updatedAt === null && b.updatedAt !== null) {
+    // A has no updatedAt, compare A.createdAt with B.updatedAt
+    return b.updatedAt - a.createdAt; 
+
+  } else if (a.updatedAt !== null && b.updatedAt === null) {
+    // B has no updatedAt, compare B.createdAt with A.updatedAt
+    return b.createdAt - a.updatedAt; 
+
+  } else {
+    // Both have null updatedAt, sort based on createdAt
+    return b.createdAt - a.createdAt; 
+  }
+}
+
+/* Announcements */
+const getAnnouncementsByProgID = async (req, res) => {
+  try {
+    const isValidOrganiser = await checkValidOrganiser(req.account);
+
+    if (!isValidOrganiser) {
+      return res.status(403).json({ message: "You are not allowed to view this page." });
+    }
+
+    const getProgID = req.params.progID;
+    const getAnnouncementObj = await Announcement.findAll({ where: { programme_id: getProgID }, raw: true });
+
+    if (!getAnnouncementObj || getAnnouncementObj.length < 1) {
+      return false;
+    }
+
+    if (getAnnouncementObj !== null && getAnnouncementObj !== undefined) {
+      getAnnouncementObj.sort(customSort);
+    }
+
+    // const topThreeLatestItems = getAnnouncementObj.slice(0, 3);
+
+    //After sorting set all to GMT+8
+    // Convert each Date object to local timezone (GMT+8) before logging
+    const announcementsInLocalTimezone = getAnnouncementObj.map(item => ({
+      ...item,
+      createdAt: item.createdAt.toLocaleString('en-SG', { timeZone: 'Asia/Singapore' }),
+      updatedAt: item.updatedAt ? item.updatedAt.toLocaleString('en-SG', { timeZone: 'Asia/Singapore' }) : null,
+    }));
+
+    let announcementArray = [];
+    for (const item of announcementsInLocalTimezone) {
+        announcementArray.push(item);
+    }
+    // if (announcementArray.length > 3) {
+    // }
+    return res.status(200).json({ message: "Successfully retrieved all announcements.", announcementArray });
+
+  } catch (err) {
+    return res.status(500).json({ message: "Error getting announcements.", err });
+  }
+  
+}
+
+const getCurrDateTime = async () => {
+  moment.tz.setDefault('Asia/Singapore');
+  const createdDateTime = moment().format('YYYY-MM-DD HH:mm:ss');
+
+  return createdDateTime;
+}
+
+const addAnnouncementByProgID = async (req, res) => {
+  try {
+    const isValidOrganiser = await checkValidOrganiser(req.account);
+
+    if (!isValidOrganiser) {
+      return res.status(403).json({ message: "You are not allowed to view this page." });
+    }
+    const getOrganiser = await Organiser.findOne({ where: {account_id: req.account.account_id }, raw: true });
+  
+    const { inputMessage, type, programmeID } = req.body;
+    const currDateTime = await getCurrDateTime();
+  
+    await Announcement.create({ 
+      message: inputMessage,
+      type: type,
+      createdAt: currDateTime,
+      programme_id: programmeID,
+      organiser_id: getOrganiser.organiser_id
+    })
+    return res.status(201).json({ message: "Announcement has been successfully added." });
+  } catch (err) {
+    return res.status(500).json({ message: "Error adding announcements.", err });
+  }
+}
+
+const updateAnnouncementByProgID = async (req, res) => {
+  try {
+    const isValidOrganiser = await checkValidOrganiser(req.account);
+
+    if (!isValidOrganiser) {
+      return res.status(403).json({ message: "You are not allowed to view this page." });
+    }
+
+    const { inputMessage, type, announcementID } = req.body;
+    const currDateTime = await getCurrDateTime();
+
+    await Announcement.update({ 
+      message: inputMessage,
+      type: type,
+      updatedAt: currDateTime,
+    }, { where: { announcement_id: announcementID } })
+
+    return res.status(201).json({ message: "Announcement has been successfully updated." });
+  } catch (err) {
+    return res.status(500).json({ message: "Error updating announcements.", err });
+  }
+}
+
 module.exports = { getOrg, updateOrg, addProg, getAllProgsByOrgID, checkCapacity, evaluateApp, 
-  getApp, deleteProg };
+  getApp, deleteProg, getAnnouncementsByProgID, addAnnouncementByProgID, updateAnnouncementByProgID };
