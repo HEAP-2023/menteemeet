@@ -79,13 +79,13 @@ const tasks = {
 
 const announcements = [
     {
-        title : "announcement header1",
-        body : "announcement body1",
+        title : "Project Delivery Reminder - 2 Weeks Left!",
+        body : "Attention to all team members! Just a friendly reminder that the project deadline is swiftly approaching, with only 2 weeks left for delivery. Let's stay focused, collaborate, and bring our best efforts to achieve success together. Keep up the great work! 🚀",
         dtg : "dtg1",
     },
     {
-        title : "announcement header2",
-        body : "announcement body2",
+        title : "Save the Date! Upcoming Event - Join Us!",
+        body : "We are excited to announce an upcoming event that promises to be both informative and enjoyable! Mark your calendars and join us on 29 December for an enriching experience filled with insightful discussions, engaging activities, and networking opportunities. Stay tuned for more details and be sure to join us for this incredible event! 🎉",
         dtg : "dtg2",
     },
     

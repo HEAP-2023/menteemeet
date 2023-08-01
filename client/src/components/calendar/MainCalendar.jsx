@@ -10,49 +10,61 @@ import AddEventPopover from './AddEventPopover';
 import { format } from 'date-fns';
 import CalendarFilter from './CalendarFilter';
 import { Box } from '@mui/material';
-
+import { getAllSessions } from '../../services/user/userServices';
 const MainCalendar = () => {
+
     const [events, setEvents] = useState([
-        {
-            id: 1,
-            title: 'Event 1',
-            start: '2023-07-07T10:30:00',
-            end: '2023-07-07T11:00:00',
-            mentorshipProgramme: 'ABC Programme',
-            topic: 'Topic ABC',
-            location: 'Zoom'
-        },
-        {
-            id: 2,
-            title: 'Event 2',
-            start: '2023-07-07T10:45:00',
-            end: '2023-07-07T11:20:00',
-            mentorshipProgramme: 'DEF Programme',
-            location: 'SMU SCIS'
-        },
-        {
-            id: 3,
-            title: 'Event 3',
-            start: '2023-07-08T09:30:00',
-            end: '2023-07-08T13:00:00',
-            mentorshipProgramme: 'XYZ Programme',
-            topic: 'Interview Preparation'
-        },
-        {
-            id: 4,
-            title: 'Event 4',
-            start: '2023-07-08T09:30:00',
-            end: '2023-07-08T13:00:00',
-            mentorshipProgramme: 'XYZ Programme'
-        },
-        {
-            id: 5,
-            title: 'Event 5',
-            start: '2023-07-08T14:30:00',
-            end: '2023-07-08T16:00:00',
-            mentorshipProgramme: 'XYZ Programme'
-        },
+        // {
+        //     id: 1,
+        //     title: 'Event 1',
+        //     start: '2023-07-07T10:30:00',
+        //     end: '2023-07-07T11:00:00',
+        //     mentorshipProgramme: 'ABC Programme',
+        //     topic: 'Topic ABC',
+        //     location: 'Zoom'
+        // },
+        // {
+        //     id: 2,
+        //     title: 'Event 2',
+        //     start: '2023-07-07T10:45:00',
+        //     end: '2023-07-07T11:20:00',
+        //     mentorshipProgramme: 'DEF Programme',
+        //     location: 'SMU SCIS'
+        // },
+        // {
+        //     id: 3,
+        //     title: 'Event 3',
+        //     start: '2023-07-08T09:30:00',
+        //     end: '2023-07-08T13:00:00',
+        //     mentorshipProgramme: 'XYZ Programme',
+        //     topic: 'Interview Preparation'
+        // },
+        // {
+        //     id: 4,
+        //     title: 'Event 4',
+        //     start: '2023-07-08T09:30:00',
+        //     end: '2023-07-08T13:00:00',
+        //     mentorshipProgramme: 'XYZ Programme'
+        // },
+        // {
+        //     id: 5,
+        //     title: 'Event 5',
+        //     start: '2023-07-08T14:30:00',
+        //     end: '2023-07-08T16:00:00',
+        //     mentorshipProgramme: 'XYZ Programme'
+        // },
     ]);
+
+    useEffect(() => {
+        getAllSessions()
+        .then(res => {
+            console.log("res:", res)
+           })
+        .catch(err => {
+            console.log("ERROR:", err);
+          })
+    },[])
+
     const [showEvents, setShowEvents] = useState(events);
     const [selectedEvent, setSelectedEvent] = useState(null);
     const [isPopOpen, setIsPopOpen] = useState(false);
