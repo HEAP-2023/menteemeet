@@ -10,11 +10,11 @@ const Announcement = sequelize.define(
             allowNull: false,
             autoIncrement: true,
         },
-        message: {
+        title: {
           type: DataTypes.STRING(),
           allowNull: true,
         },
-        type: {
+        description: {
             type: DataTypes.STRING(),
             allowNull: false,
         },
