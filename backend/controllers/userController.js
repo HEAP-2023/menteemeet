@@ -356,7 +356,7 @@ const getAllSessions = async (req, res) => {
     const sessionsWithRole = getAllSessions.map(session => {
       const matchingGroup = groupArray.find(group => group.group_id === session.group_id);
       if (matchingGroup) {
-        return { ...session, role: matchingGroup.role };
+        return { ...session, role: matchingGroup.role, programme_id: matchingGroup.programme_id };
       }
       return session;
     });

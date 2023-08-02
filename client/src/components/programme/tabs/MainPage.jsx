@@ -26,7 +26,6 @@ const MainPage = (programmeID) => {
 
     const [announcements, setAnnouncements] = useState([]);
     useEffect(() => {
-        console.log("DATAAAAA")
         getAnnouncementsByProgID(programmeID.programmeID)
         .then(res => {
             setAnnouncements(res.data.announcementArray)

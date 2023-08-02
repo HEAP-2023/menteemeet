@@ -53,3 +53,12 @@ export const getApprovedApplications = async ()  => {
     })
     return res.data.appArray
 }
+
+export const getAllSessions = async () => {
+    const res = await axiosInstance({
+        method: "get",
+        url: "/users/session",
+        headers: { Authorization: `Bearer ${localStorage.getItem("jwt")}` },
+    })
+    return res
+}
