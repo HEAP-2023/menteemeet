@@ -255,8 +255,6 @@ const getMenteesMentorsByProgID = async (req, res) => {
     menteesObj["name"] = foundUser.Account.name;
   })
 
-  await Promise.all(combineMentees);
-
   //name of the mentor
   const mentors = await UserProgramme.findAll({ where: { programme_id: id, role: "mentor" }, include: { 
     model: Application,
@@ -264,12 +262,14 @@ const getMenteesMentorsByProgID = async (req, res) => {
   },
     raw: true });
 
-  const combineMentors = mentees.map(async (mentorsObj) => {
+  const combineMentors = mentors.map(async (mentorsObj) => {
     const foundUser = await (User.findOne({
       where: { user_id: mentorsObj.user_id }, include: Account
     }));
     mentorsObj["name"] = foundUser.Account.name;
   })
+
+  await Promise.all(combineMentees);
   await Promise.all(combineMentors);
 
   return res.status(400).json({ mentees, mentors });
