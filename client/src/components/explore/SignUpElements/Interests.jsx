@@ -1,6 +1,8 @@
 import { Stack, Typography, Box, Autocomplete, TextField } from "@mui/material"
 import {Controller, useFormContext, useFieldArray } from "react-hook-form"
 import { styled } from '@mui/system';
+import { ErrorMessage } from "@hookform/error-message";
+
 
 const Interests = () => {
     const {control, formState : {errors}} = useFormContext();
@@ -8,6 +10,7 @@ const Interests = () => {
         control,
         name: "interests"
     })
+    console.log(errors)
     return (
         <Stack>
         <Typography fontWeight="700">Interest</Typography>
@@ -16,18 +19,19 @@ const Interests = () => {
         <Box display="flex" gap="20px">
         {fields.map((item, index) => (
         <Box key={item.id} width="100%">
-            
             <Controller 
             name={`interests.${index}.interest`}
             control={control} 
             render={({field}) =>
                 <Autocomplete
-                sx={{ width: 200 }}
+                disableClearable
+                sx={{ width: "100%" }}
                 options={options.sort((a, b) => -b.firstLetter.localeCompare(a.firstLetter))}
                 groupBy={(option) => option.firstLetter}
                 getOptionLabel={(option) => option.title}
                 value={{firstLetter: field.value[0].toUpperCase(), title : field.value}}
                 clearOnBlur={false}
+                name={`interests.${index}.interest`} 
                 onChange={(event, value) => {
                     field.onChange(value.title);
                 }
@@ -36,9 +40,10 @@ const Interests = () => {
                     <TextField {...params} 
                         value={field.value}
                         label={`interest ${index + 1}`} 
-                        name={`interest.${index}.interest`} 
-                        error={errors[`interest.${index}.interest`] !== undefined}
-                        helperText={errors[`interest.${index}.interest`]?.message}
+                        name={`interests.${index}.interest`} 
+                        variant="outlined"
+                        error={!!errors.interests && errors.interests[index] && errors.interests[index].interest !== 'undefined'}
+                        helperText={!!errors.interests && errors.interests[index] && errors.interests[index]?.interests?.message}
                         />
                 }
                 renderGroup={(params) => (
@@ -50,6 +55,7 @@ const Interests = () => {
                 }
                 isOptionEqualToValue={(option, value) => option.title == value.title}
                 />
+
             }/>
 
         </Box>))}

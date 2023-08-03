@@ -8,6 +8,7 @@ import History from "../../components/profile/History";
 import { useNavigate } from "react-router-dom";
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 import { useSelector } from "react-redux";
+import NameAvatar from "../../components/NameAvatar";
 
 const Profile = ({ peerReviews, history }) => {
     const {name, email} = useSelector((state) => state.user.userBasicDetails) 
@@ -19,7 +20,8 @@ const Profile = ({ peerReviews, history }) => {
 
         {/* name and profile pic? */}
         <Box display="flex" p="20px">
-            <AccountCircleOutlinedIcon fontSize="large" sx={{ transform: "scale(4)", margin: "40px" }} />
+            {/* <AccountCircleOutlinedIcon fontSize="large" sx={{ transform: "scale(4)", margin: "40px" }} /> */}
+            <NameAvatar name={name} />
             <PageHeader text={name} />
         </Box>
 

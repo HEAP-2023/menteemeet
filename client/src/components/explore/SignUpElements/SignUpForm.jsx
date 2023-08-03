@@ -11,6 +11,9 @@ import Interests from "./Interests"
 import Skills from "./Skills"
 import AvailabilityCBox from "./AvailabilityCBox"
 import usePostSignUpForm from "../../../hooks/user/usePostSignUpForm"
+import { applicationVschema } from "./applicationVschema"
+import { yupResolver } from "@hookform/resolvers/yup"
+
 const SignUpForm = ({id}) => {
     const {error, isError ,isLoading, isSuccess : getDetailsSuccess, data : details} = useGetSignUpForm({id})
     const {account_type, name : userName, email, telegram_username} = useSelector((state) => state.user.userBasicDetails)
@@ -23,7 +26,8 @@ const SignUpForm = ({id}) => {
             skills : [{skill : "-"}, {skill : "-"}, {skill : "-"}],
             interests : [{interest : "-"}, {interest : "-"}, {interest : "-"}],
             availability : []
-        }
+        },
+        resolver : yupResolver(applicationVschema)
     })
     const {control,formState: {errors, defaultValues, dirtyFields, isDirty}, isInitialLoading, handleSubmit, reset} = methods
     const {mutate : signUp} = usePostSignUpForm()
@@ -126,7 +130,10 @@ const SignUpForm = ({id}) => {
                     <Skills/>
                     <AvailabilityCBox/>
                 </Box>
-                <Button type="submit" variant="contained" color="secondary" sx={{mt : "20px"}}>Submit</Button>
+                <Button type="submit" variant="contained" 
+                color="secondary" sx={{mt : "20px"}}
+                onClick={()=>{console.log(errors)}}
+                >Submit</Button>
        
                 </form>
                 </FormProvider>
@@ -140,22 +147,3 @@ const SignUpForm = ({id}) => {
    }
 export default SignUpForm 
 
-const fetch_details = (id) => {
-    
-    return (
-        {
-            category : "Tech",
-            deadline: "2023-07-21",
-            description: "description of this programme is as follows",
-            display_image: "blob:http://localhost:3000/f58c0e27-d8d4-4b5d-8fbe-24ad6fc6a5e1",
-            matching_criteria:  "[\"availability\",\"skill\",\"interest\",\"mentorGrouping\",\"menteeGrouping\"]",
-            menteeCapacity: "100",
-            mentorCapacity: "20",
-            name: "Heap2023",
-            programmeEnd: "2023-07-25",
-            programmeStart: "2023-07-20",
-            skills:  "[\"skill_a\",\"skill_b\"]"
-        }
-    )
-    
-}

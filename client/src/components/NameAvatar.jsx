@@ -41,8 +41,8 @@ function stringAvatar(name) {
   };
 }
 
-export default function NameAvatar({name}) {
+export default function NameAvatar({name, scale=3, m="40px"}) {
   return (
-      <Avatar {...stringAvatar(name)} />
+      <Avatar {...stringAvatar(name)} sx={{ transform: scale=`scale(${scale})`, margin: m }} />
   );
 }
