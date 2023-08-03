@@ -171,7 +171,7 @@ const getAllProgsByOrgID = async (req, res) => {
       raw: true });
       
     if (!getOrgProgObj) {
-      return res.status(400).json({ message: "Organiser has not created any programmes." });
+      return res.status(200).json({ message: "Organiser has not created any programmes." });
     }
 
     //bruce

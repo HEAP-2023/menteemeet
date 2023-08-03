@@ -103,8 +103,8 @@ const getUser = async (req, res) => {
 }
 
 const getAllProgByUserID = async (req, res) => {
-  const { page, size } = req.query;
-  const { limit, offset } = getPagination(page, size);
+  // const { page, size } = req.query;
+  // const { limit, offset } = getPagination(page, size);
 
   try {
 
@@ -123,8 +123,8 @@ const getAllProgByUserID = async (req, res) => {
       raw: true });
     // console.log("getUserProgObj:", getUserProgObj);
       
-    if (getUserProgObj.length === 0) {
-      return res.status(400).json({ message: "User is not enrolled in any programme!" });
+    if (getUserProgObj.length === 0 || !getUserProgObj) {
+      return res.status(200).json({ message: "User is not enrolled in any programme!" });
     }
 
     //bruce
@@ -177,7 +177,7 @@ const getUnsignedProg = async (req, res) => {
           resp = response;
 
           if (response.currentPage > response.totalPages) {
-            return res.status(400).json({message: "Nothing to retrieve. Exceeded page request", response });
+            return res.status(200).json({message: "Nothing to retrieve. Exceeded page request", response });
           }
         });
      
@@ -196,7 +196,7 @@ const getUnsignedProg = async (req, res) => {
           resp = response;
 
           if (response.currentPage > response.totalPages) {
-            return res.status(400).json({message: "Nothing to retrieve. Exceeded page request", response });
+            return res.status(200).json({message: "Nothing to retrieve. Exceeded page request", response });
           }
         });
     }
@@ -439,7 +439,7 @@ const getApprovedApps = async (req, res) => {
     const appArray = await getApps(getUserObj, pendingStatus);
 
     if (!appArray) {
-      return res.status(404).json({ message: "Application does not exist." })
+      return res.status(200).json({ message: "Application does not exist." })
     }
     return res.status(200).json({ message: "Retrieved Approved Applications", appArray });
   } catch (err) {
@@ -456,7 +456,7 @@ const getPendingApps = async (req, res) => {
     const appArray = await getApps(getUserObj, pendingStatus);
 
     if (!appArray) {
-      return res.status(404).json({ message: "Application does not exist." })
+      return res.status(200).json({ message: "Application does not exist." })
     }
     
     return res.status(200).json({ message: "Retrieved Pending Applications", appArray });
@@ -474,7 +474,7 @@ const getRejectedApps = async (req, res) => {
     const appArray = await getApps(getUserObj, pendingStatus);
 
     if (!appArray) {
-      return res.status(404).json({ message: "Application does not exist." })
+      return res.status(200).json({ message: "Application does not exist." })
     }
     
     return res.status(200).json({ message: "Retrieved Rejected Applications", appArray });
