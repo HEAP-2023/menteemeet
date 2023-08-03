@@ -418,22 +418,50 @@ const addSessionByGrpID = async (req, res) => {
       return res.status(401).json({ message: "Only mentors are allowed to add sessions."});
     }
 
-    const getUserGroupObj = UserGroup.findOne({ where: { group_id: groupID }, raw: true });
+    const getUserGroupObj = await UserGroup.findOne({ where: { group_id: groupID }, raw: true });
     if (!getUserGroupObj) {
       return res.status(404).json({ message: "Group ID does not exist."});
     }
 
     const convertDate = moment.tz(date, "Asia/Singapore");
 
-    Session.create({
+    await Session.create({
       date: convertDate,
       start_time: startTime,
       end_time: endTime,
       topic: topic,
-      group_id: getUserGroupObj.group_id,
+      group_id: groupID,
     })
 
     return res.status(201).json({ message: "Session successfully created." });
+
+  } catch (err) {
+    return res.status(500).json({ message: "Failed to add session!" });
+  }
+}
+
+const updateSessionBySessionID = async (req, res) => {
+  try {
+    const { date, startTime, endTime, topic, groupID, sessionID } = req.body;
+
+    const getUserGroupObj = await UserGroup.findOne({ where: { group_id: groupID }, raw: true });
+    if (!getUserGroupObj) {
+      return res.status(404).json({ message: "Group ID does not exist."});
+    }
+
+    const convertDate = moment.tz(date, "Asia/Singapore");
+
+    console.log(groupID);
+
+    await Session.update({
+      date: convertDate,
+      start_time: startTime,
+      end_time: endTime,
+      topic: topic,
+      group_id: groupID
+    }, { where: {session_id: sessionID } })
+
+    return res.status(201).json({ message: "Session successfully updated." });
 
   } catch (err) {
     return res.status(500).json({ message: "Failed to add session!" });
@@ -571,5 +599,5 @@ const signup = async (req, res) => {
 }
 
 module.exports = { updateUser, getUser, getAllProgByUserID, getUnsignedProg, getSkill, 
-  addSkill, addInterest, getInterest, getAllSessions, getSessionsByProgID, addSessionByGrpID,  
-  getPendingApps, getApprovedApps, getRejectedApps, signup };
+  addSkill, addInterest, getInterest, getAllSessions, getSessionsByProgID, 
+  addSessionByGrpID, updateSessionBySessionID, getPendingApps, getApprovedApps, getRejectedApps, signup };
