@@ -251,7 +251,7 @@ const getMenteesMentorsByProgID = async (req, res) => {
   },
     raw: true });
 
-  return res.status(400).json({ mentees, mentors });
+  return res.status(200).json({ mentees, mentors });
 }
 
 const scorer = async (req, res) => {

@@ -50,7 +50,7 @@ const CreateProgramme = () => {
     }, [done])
 
 
-    const { mutate : createProgramme } = usePostProgramme()
+    // const { mutate : createProgramme } = usePostProgramme()
 
     // The code below is working for creating programmes and uploading images (Axel)
     const handleSave = async (data) => {
@@ -68,13 +68,13 @@ const CreateProgramme = () => {
         }
 
         console.log(formData);
-        createProgramme(formData);
+        // createProgramme(formData);
 
-        // try {
-        //     await postProgramme(formData);
-        // } catch (err) {
-        //     console.log(err);
-        // }
+        try {
+            await postProgramme(formData);
+        } catch (err) {
+            console.log(err);
+        }
     }
     return (
     <Box width="100%" p="40px" display="flex" flexDirection="column">
