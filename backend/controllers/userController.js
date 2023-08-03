@@ -15,6 +15,7 @@ const { generateAccessToken } = require('./accountController');
 
 const UserGroup = require("../models/userGroup");
 const Session = require("../models/session");
+const moment = require("moment-timezone");
 
 const { checkCapacity } = require('./organiserController');
 
@@ -409,6 +410,36 @@ const getSessionsByProgID = async (req, res) => {
   }
 }
 
+const addSessionByGrpID = async (req, res) => {
+  try {
+    const { date, startTime, endTime, topic, userRole, groupID } = req.body;
+
+    if (userRole !== "mentor") {
+      return res.status(401).json({ message: "Only mentors are allowed to add sessions."});
+    }
+
+    const getUserGroupObj = UserGroup.findOne({ where: { group_id: groupID }, raw: true });
+    if (!getUserGroupObj) {
+      return res.status(404).json({ message: "Group ID does not exist."});
+    }
+
+    const convertDate = moment.tz(date, "Asia/Singapore");
+
+    Session.create({
+      date: convertDate,
+      start_time: startTime,
+      end_time: endTime,
+      topic: topic,
+      group_id: getUserGroupObj.group_id,
+    })
+
+    return res.status(201).json({ message: "Session successfully created." });
+
+  } catch (err) {
+    return res.status(500).json({ message: "Failed to add session!" });
+  }
+}
+
 const getApps = async (getUserObj, statusOfApp) => {
 
   const getAppObj = await Application.findAll({ where: { user_id: getUserObj.user_id, 
@@ -540,5 +571,5 @@ const signup = async (req, res) => {
 }
 
 module.exports = { updateUser, getUser, getAllProgByUserID, getUnsignedProg, getSkill, 
-  addSkill, addInterest, getInterest, getAllSessions, getSessionsByProgID, 
+  addSkill, addInterest, getInterest, getAllSessions, getSessionsByProgID, addSessionByGrpID,  
   getPendingApps, getApprovedApps, getRejectedApps, signup };
