@@ -20,6 +20,12 @@ const Groupings = () => {
     const handleDragEnd = (event) => {
         const {over} = event;
         console.log(`draggable id = ${event.active.id} is dropped into container with id = ${event.over.id}`)
+        const droppingRole = event.active.data.current.role
+        const containerRole = getRoleFromId(event.over.id)
+        if(droppingRole != containerRole){
+            console.log("not allowed")
+            return
+        }
         setParent(over ? over.id : null);
         const data = event.active.data.current
         modifyRows(api, event.over.id, data);
@@ -148,4 +154,9 @@ const displayDate = (props) => {
             )}
         )}
     </Box>)
+}
+
+const getRoleFromId = (id) => {
+    console.log(id.split('-')[1])
+    return id.split('-')[1]
 }

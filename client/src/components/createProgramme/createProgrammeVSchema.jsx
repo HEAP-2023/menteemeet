@@ -34,8 +34,8 @@ export const createProgrammeSchema = yup.object()
                                 "application deadline can't be after start date"
                             )
                             .required("this field is required"),
-            display_image : yup.string()
-                        .required("this field is required"),
+            // display_image : yup.string()
+            //             .required("this field is required"),
         }
     ).required("form not filled in yet") 
 

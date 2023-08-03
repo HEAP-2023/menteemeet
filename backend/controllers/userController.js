@@ -15,6 +15,7 @@ const { generateAccessToken } = require('./accountController');
 
 const UserGroup = require("../models/userGroup");
 const Session = require("../models/session");
+const moment = require("moment-timezone");
 
 const { checkCapacity } = require('./organiserController');
 
@@ -103,8 +104,8 @@ const getUser = async (req, res) => {
 }
 
 const getAllProgByUserID = async (req, res) => {
-  const { page, size } = req.query;
-  const { limit, offset } = getPagination(page, size);
+  // const { page, size } = req.query;
+  // const { limit, offset } = getPagination(page, size);
 
   try {
 
@@ -123,8 +124,8 @@ const getAllProgByUserID = async (req, res) => {
       raw: true });
     // console.log("getUserProgObj:", getUserProgObj);
       
-    if (getUserProgObj.length === 0) {
-      return res.status(400).json({ message: "User is not enrolled in any programme!" });
+    if (getUserProgObj.length === 0 || !getUserProgObj) {
+      return res.status(200).json({ message: "User is not enrolled in any programme!" });
     }
 
     //bruce
@@ -177,7 +178,7 @@ const getUnsignedProg = async (req, res) => {
           resp = response;
 
           if (response.currentPage > response.totalPages) {
-            return res.status(400).json({message: "Nothing to retrieve. Exceeded page request", response });
+            return res.status(200).json({message: "Nothing to retrieve. Exceeded page request", response });
           }
         });
      
@@ -196,7 +197,7 @@ const getUnsignedProg = async (req, res) => {
           resp = response;
 
           if (response.currentPage > response.totalPages) {
-            return res.status(400).json({message: "Nothing to retrieve. Exceeded page request", response });
+            return res.status(200).json({message: "Nothing to retrieve. Exceeded page request", response });
           }
         });
     }
@@ -409,6 +410,64 @@ const getSessionsByProgID = async (req, res) => {
   }
 }
 
+const addSessionByGrpID = async (req, res) => {
+  try {
+    const { date, startTime, endTime, topic, userRole, groupID } = req.body;
+
+    if (userRole !== "mentor") {
+      return res.status(401).json({ message: "Only mentors are allowed to add sessions."});
+    }
+
+    const getUserGroupObj = await UserGroup.findOne({ where: { group_id: groupID }, raw: true });
+    if (!getUserGroupObj) {
+      return res.status(404).json({ message: "Group ID does not exist."});
+    }
+
+    const convertDate = moment.tz(date, "Asia/Singapore");
+
+    await Session.create({
+      date: convertDate,
+      start_time: startTime,
+      end_time: endTime,
+      topic: topic,
+      group_id: groupID,
+    })
+
+    return res.status(201).json({ message: "Session successfully created." });
+
+  } catch (err) {
+    return res.status(500).json({ message: "Failed to add session!" });
+  }
+}
+
+const updateSessionBySessionID = async (req, res) => {
+  try {
+    const { date, startTime, endTime, topic, groupID, sessionID } = req.body;
+
+    const getUserGroupObj = await UserGroup.findOne({ where: { group_id: groupID }, raw: true });
+    if (!getUserGroupObj) {
+      return res.status(404).json({ message: "Group ID does not exist."});
+    }
+
+    const convertDate = moment.tz(date, "Asia/Singapore");
+
+    console.log(groupID);
+
+    await Session.update({
+      date: convertDate,
+      start_time: startTime,
+      end_time: endTime,
+      topic: topic,
+      group_id: groupID
+    }, { where: {session_id: sessionID } })
+
+    return res.status(201).json({ message: "Session successfully updated." });
+
+  } catch (err) {
+    return res.status(500).json({ message: "Failed to add session!" });
+  }
+}
+
 const getApps = async (getUserObj, statusOfApp) => {
 
   const getAppObj = await Application.findAll({ where: { user_id: getUserObj.user_id, 
@@ -439,7 +498,7 @@ const getApprovedApps = async (req, res) => {
     const appArray = await getApps(getUserObj, pendingStatus);
 
     if (!appArray) {
-      return res.status(404).json({ message: "Application does not exist." })
+      return res.status(200).json({ message: "Application does not exist." })
     }
     return res.status(200).json({ message: "Retrieved Approved Applications", appArray });
   } catch (err) {
@@ -456,7 +515,7 @@ const getPendingApps = async (req, res) => {
     const appArray = await getApps(getUserObj, pendingStatus);
 
     if (!appArray) {
-      return res.status(404).json({ message: "Application does not exist." })
+      return res.status(200).json({ message: "Application does not exist." })
     }
     
     return res.status(200).json({ message: "Retrieved Pending Applications", appArray });
@@ -474,7 +533,7 @@ const getRejectedApps = async (req, res) => {
     const appArray = await getApps(getUserObj, pendingStatus);
 
     if (!appArray) {
-      return res.status(404).json({ message: "Application does not exist." })
+      return res.status(200).json({ message: "Application does not exist." })
     }
     
     return res.status(200).json({ message: "Retrieved Rejected Applications", appArray });
@@ -541,4 +600,4 @@ const signup = async (req, res) => {
 
 module.exports = { updateUser, getUser, getAllProgByUserID, getUnsignedProg, getSkill, 
   addSkill, addInterest, getInterest, getAllSessions, getSessionsByProgID, 
-  getPendingApps, getApprovedApps, getRejectedApps, signup };
+  addSessionByGrpID, updateSessionBySessionID, getPendingApps, getApprovedApps, getRejectedApps, signup };

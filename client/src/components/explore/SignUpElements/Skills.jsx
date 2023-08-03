@@ -25,7 +25,8 @@ const Skills = () => {
             render={({field}) =>
                
                 <Autocomplete
-                sx={{ width: 200 }}
+                sx={{ width: "100%" }}
+                disableClearable
                 options={options.sort((a, b) => -b.firstLetter.localeCompare(a.firstLetter))}
                 groupBy={(option) => option.firstLetter}
                 getOptionLabel={(option) => option.title}
@@ -40,8 +41,8 @@ const Skills = () => {
                         value={field.value}
                         label={`skill ${index + 1}`} 
                         name={`skills.${index}.skill`} 
-                        error={errors[`skills.${index}.skill`] !== undefined}
-                        helperText={errors[`skills.${index}.skill`]?.message}
+                        error={!!errors.skills && errors.skills[index] && errors.skills[index].skill !== 'undefined'}
+                        helperText={!!errors.skills && errors.skills[index] && errors.skills[index]?.skills?.message}
                         />
                 }
                 renderGroup={(params) => (

@@ -3,12 +3,13 @@ import {useDraggable} from '@dnd-kit/core';
 import {CSS} from '@dnd-kit/utilities';
 
 
-const Draggable = ({id, name, children, disableDrag=true}) => {
+const Draggable = ({id, name, role, children, disableDrag=true}) => {
     const {attributes, listeners, setNodeRef, transform} = useDraggable({
         id: id,
         data : {
             id : id,
             name : name,
+            role : role,
         },
         disabled : disableDrag,
     })

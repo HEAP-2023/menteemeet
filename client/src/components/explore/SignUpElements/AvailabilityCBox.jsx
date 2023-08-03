@@ -28,7 +28,6 @@ const AvailabilityCBox = () => {
 
     useEffect(() => {
         setValue("availability", filterFn(state))
-        // filterFn(state)
     })
     return (
         <Box mt="20px">

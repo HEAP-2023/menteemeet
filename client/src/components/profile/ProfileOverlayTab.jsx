@@ -18,6 +18,7 @@ import { useQueryClient } from "@tanstack/react-query";
 
 import { motion, Variants } from "framer-motion";
 import { ListParent, ListItem } from "../../animations/List";
+import NameAvatar from "../NameAvatar";
 
 
 const ProfileOverlayTab = () => {
@@ -41,7 +42,8 @@ const ProfileOverlayTab = () => {
         <ListParent>
             <ListItem>
                 <IconButton component={Link} to={"/profile"}>
-                    <AccountCircleOutlinedIcon fontSize="large" sx={{transform : "scale(2)"}}/>
+                    {/* <AccountCircleOutlinedIcon fontSize="large" sx={{transform : "scale(2)"}}/> */}
+                    <NameAvatar name={name} scale={2} m="0"/>
                 </IconButton>
             </ListItem>
 
