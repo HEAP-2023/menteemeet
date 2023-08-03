@@ -7,15 +7,14 @@ import TopicOutlinedIcon from '@mui/icons-material/TopicOutlined';
 import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
 
 const EventPopover = ({ isOpen, onRequestClose, event, anchorEl, deleteEvent }) => {
-    const start = format(event.start, 'EEE, MMM dd HH:mm');
-    const end = format(event.end, 'EEE, MMM dd HH:mm');
-
+    const start = format(event.start, 'p');
+    const end = format(event.end, 'p');
+    const date = format(event.start, 'EEE, MMM dd');
     const handleDelete = () => {
         console.log(event);
         deleteEvent(event._def.publicId);
         onRequestClose();
     }
-
     return (
         <Popover
             // id={event._def.publicId}
@@ -38,10 +37,10 @@ const EventPopover = ({ isOpen, onRequestClose, event, anchorEl, deleteEvent }) 
                 </Box>
                 <Box sx={{ padding: '10px' }}>
                     <Box sx={{ display: 'flex', marginY: '16px' }}><EventOutlinedIcon sx={{ mr: '15px' }} /><Typography>{event._def.title}</Typography></Box>
+                    <Typography sx={{marginY: '16px', marginLeft: '39px'}}>{date}</Typography>
                     <Typography sx={{marginY: '16px', marginLeft: '39px'}}>{start} - {end}</Typography>
-                    <Typography sx={{marginY: '16px', marginLeft: '39px'}}>{event.extendedProps.mentorshipProgramme}</Typography>
                     {event._def.extendedProps.topic && (<Box sx={{ display: 'flex', marginY: '16px' }}><TopicOutlinedIcon sx={{ mr: '15px' }} /><Typography>{event._def.extendedProps.topic}</Typography></Box>)}
-                    {event._def.extendedProps.location && (<Box sx={{ display: 'flex', marginY: '16px' }}><LocationOnOutlinedIcon sx={{ mr: '15px' }} /> <Typography>{event._def.extendedProps.location}</Typography></Box>)}
+                    {/* {event._def.extendedProps.location && (<Box sx={{ display: 'flex', marginY: '16px' }}><LocationOnOutlinedIcon sx={{ mr: '15px' }} /> <Typography>{event._def.extendedProps.location}</Typography></Box>)} */}
                 </Box>
             </Box>
         </Popover>
