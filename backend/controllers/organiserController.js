@@ -205,8 +205,8 @@ const getAllProgsByOrgID = async (req, res) => {
 //Check if capacity reached.
 const checkCapacity = async (progID, roleApplied) => {
 
-  const getCapacity = await Application.findAndCountAll({ where: { programme_id: progID, is_accepted: 1}, 
-    raw: true });
+  const getCapacity = await Application.findAndCountAll({ where: { programme_id: progID, is_accepted: 1, 
+    role: roleApplied }, raw: true });
   const getProgramme = await Programme.findOne({ where: {programme_id: progID}, raw: true});
 
   const programme_capacity = roleApplied === "mentor" ? getProgramme.mentorCapacity : getProgramme.menteeCapacity;
