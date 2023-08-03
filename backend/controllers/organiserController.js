@@ -209,16 +209,13 @@ const checkCapacity = async (progID, roleApplied) => {
     raw: true });
   const getProgramme = await Programme.findOne({ where: {programme_id: progID}, raw: true});
 
-  if (roleApplied === "mentor") {
-    if (getCapacity.count >= getProgramme.mentorCapacity) {
-      return true;
-    }
-  } else {
-    if (getCapacity.count >= getProgramme.menteeCapacity) {
-      return true;
-    }
+  const programme_capacity = roleApplied === "mentor" ? getProgramme.mentorCapacity : getProgramme.menteeCapacity;
+  if (getCapacity.count >= programme_capacity) {
+    return true;
   }
+
   return false;
+  
 }
 
 const evaluateApp = async (req, res) => { 
