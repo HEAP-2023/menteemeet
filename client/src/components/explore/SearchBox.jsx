@@ -49,6 +49,7 @@ const RSearchBox = () => {
               return (
                 <ProgrammeCards
                   key={prog.programme_id}
+                  progImg={prog.display_image}
                   progName={prog.name}
                   progDesc={prog.description}
                   progDL={prog.deadline}

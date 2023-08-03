@@ -14,14 +14,14 @@ export const ProtectedRoute = () => {
     const navigate = useNavigate()
     const dispatch = useDispatch()
     useEffect(() => {
-        if(isError){
-            if(error.response.status === 400 || error.response.status === 403){
-                dispatch(logOut())
-                queryClient.clear()
-                localStorage.setItem("jwt", "");
-                navigate("/login/start")
-            }
-            }
+        // if(isError){
+        //     if(error.response.status === 400 || error.response.status === 403){
+        //         dispatch(logOut())
+        //         queryClient.clear()
+        //         localStorage.setItem("jwt", "");
+        //         navigate("/login/start")
+        //     }
+        //     }
 
         if(isSuccess){
             dispatch(updateProgrammes(data))
