@@ -20,3 +20,12 @@ export const getOrganiserDetails = async (id) => {
     })
     return res.data.organiser;
 }
+
+export const getAnnouncementsByProgID = async (progID) => {
+    const res = await axiosInstance({
+        method: "get",
+        url: `/organisers/announcements/${progID}`,
+        headers: { Authorization: `Bearer ${localStorage.getItem("jwt")}` },
+    })
+    return res
+}

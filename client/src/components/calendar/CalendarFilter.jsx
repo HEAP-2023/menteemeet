@@ -1,10 +1,14 @@
 import { Box, Typography, FormControlLabel, FormControl, Checkbox, FormGroup } from '@mui/material';
 import { useForm, Controller } from "react-hook-form";
 import { useState, useEffect } from 'react';
-
+import { useSelector } from 'react-redux';
 const CalendarFilter = ({ onFiltersChange }) => {
     const { handleSubmit, control } = useForm();
-    const mentorshipProgrammes = fetchMentorshipProgrammes();
+    const programmes = useSelector((state) => state.user.programmes)
+    // console.log("prog:", programmes);
+
+    const mentorshipProgrammes = programmes.map(item => item.name);
+    // console.log("prog names:", mentorshipProgrammes);
     const [selectedFilters, setSelectedFilters] = useState(() => {
         const initialFilters = {};
         mentorshipProgrammes.forEach((item) => {
@@ -14,7 +18,7 @@ const CalendarFilter = ({ onFiltersChange }) => {
     })
 
     const handleSave = (data) => {
-        console.log(data);
+        // console.log(data);
         onFiltersChange(selectedFilters);   
     }
 
@@ -24,7 +28,7 @@ const CalendarFilter = ({ onFiltersChange }) => {
 
     return (
         <Box sx={{ marginTop: '57px', marginX: '16px' }}>
-            <Typography>Filter events</Typography>
+            <Typography>Filter programmes</Typography>
             <hr />
             <FormControl>
 
@@ -64,6 +68,6 @@ const CalendarFilter = ({ onFiltersChange }) => {
 
 export default CalendarFilter
 
-const fetchMentorshipProgrammes = () => {
-    return ['ABC Programme', 'DEF Programme', 'XYZ Programme']
-}
+// const fetchMentorshipProgrammes = () => {
+//     return ['ABC Programme', 'DEF Programme', 'XYZ Programme']
+// }

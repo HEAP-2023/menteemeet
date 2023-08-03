@@ -2,7 +2,7 @@ import { Box } from "@mui/material";
 import Section from "../Section"
 import {useEffect, useState} from "react";
 import { getSessionsByProgID } from "../../../services/programmes/userServices";
-
+import { getAnnouncementsByProgID } from "../../../services/organiser/organiserServices";
 const MainPage = (programmeID) => {
     const [rows, setRows] = useState([]);
     const now = new Date().getTime();
@@ -10,17 +10,31 @@ const MainPage = (programmeID) => {
     upcomingSessions = upcomingSessions.sort(
         (objA, objB) => Number(new Date(`${objA.date} ${objA.start_time}`).getTime()) - Number(new Date(`${objB.date} ${objB.start_time}`).getTime())
     )
+
     useEffect(() => {
         getSessionsByProgID(programmeID.programmeID)
       .then(res => {
-        console.log("res", res)
+        // console.log("res", res)
         setRows(res.data.sessionsWithRole);
-        console.log("rows:", rows);
       })
       .catch(err => {
-        console.log("ERROR:", err);
+        // console.log("ERROR:", err);
       })
-  }, [])
+  },[programmeID.programmeID])
+
+    
+
+    const [announcements, setAnnouncements] = useState([]);
+    useEffect(() => {
+        getAnnouncementsByProgID(programmeID.programmeID)
+        .then(res => {
+            setAnnouncements(res.data.announcementArray)
+            console.log("announcements:" ,announcements)
+        })
+        .catch(err => {
+            console.log("ERROR:", err);
+          })
+    }, [programmeID.programmeID])
   
     return (
         <Box display="flex" justifyContent="space-around" width="100%" height="100%">
@@ -76,20 +90,6 @@ const tasks = {
         dtg : "dtg2",
     },
 }
-
-const announcements = [
-    {
-        title : "announcement header1",
-        body : "announcement body1",
-        dtg : "dtg1",
-    },
-    {
-        title : "announcement header2",
-        body : "announcement body2",
-        dtg : "dtg2",
-    },
-    
-]
 
 const progress = [
     {
