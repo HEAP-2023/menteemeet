@@ -1,18 +1,17 @@
 import { Box, Typography, Divider } from "@mui/material"
-
+import {format} from "date-fns"
 const SectionRow = ({details, rowColor, checkbox, highlight, showDTG}) => {
-    const {title, body, dtg} = details;
+    const {title, description,createdAt} = details;
+    const date = format(new Date(createdAt), 'yyyy-MM-dd p')
     return  (
-    <Box display="flex" flexDirection="row" width="90%" bgcolor="background.main" marginY="5px" p="10px"  minHeight="100px" borderRadius="20px">
-        {highlight && <Box p="5px">
+    <Box display="flex" flexDirection="row" width="95%" bgcolor="background.main" marginY="5px" p="10px" mb="18px" minHeight="100px" borderRadius="5px">
+        {highlight && <Box p="5px"  px="20px">
             <Divider orientation="vertical"  sx={{ borderRightWidth: 3 , borderColor: rowColor }}/>
         </Box>}
-        {showDTG && <Box p="5px" display="flex" flexDirection="column" alignItems="center" justifyContent="center">
-            {dtg}
-        </Box>}
         <Box display="flex" flexDirection="column">
+            <Typography>{date}</Typography>
             <Typography  fontWeight="700" >{title}</Typography>
-            <Typography>{body}</Typography>
+            <Typography>{description}</Typography>
         </Box>
     </Box>)
 }

@@ -41,6 +41,24 @@ export const getAllProgsParticipating = async () => {
         programme_id : prog["Programmes.programme_id"], 
         role : prog["Programmes.UserProgramme.role"],
     }))
-    console.log(formattedObj)
     return formattedObj;
+}
+
+
+export const getApprovedApplications = async ()  => {
+    const res = await axiosInstance({
+        method : "get",
+        url : `/users/approvedApps`,
+        headers: { Authorization: `Bearer ${localStorage.getItem("jwt")}` },
+    })
+    return res.data.appArray
+}
+
+export const getAllSessions = async () => {
+    const res = await axiosInstance({
+        method: "get",
+        url: "/users/session",
+        headers: { Authorization: `Bearer ${localStorage.getItem("jwt")}` },
+    })
+    return res
 }

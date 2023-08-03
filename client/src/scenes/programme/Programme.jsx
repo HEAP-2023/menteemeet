@@ -20,7 +20,7 @@ const Programme = () => {
     const {id} = useParams();
     const programmes = useSelector((state) => state.user.programmes)
     const programme = programmes.find(program => program.programme_id === Number(id));
-    const userRole = programme.role;
+    let userRole = programme.role;
     console.log(programme);
     const [tab, changeTab] = useState("main")
 
@@ -32,6 +32,9 @@ const Programme = () => {
     const userType = useSelector((state) => state.user.userBasicDetails.account_type);
     const userName = useSelector((state) => state.user.userBasicDetails.name)
 
+    if(userRole === undefined){
+        userRole = "organiser";
+    }
     return (
         <Box>
             <DeleteProgrammeModal id={id} open={deleteModal} setDeleteModal={setDeleteModal} programme_name={programme.name}/>
@@ -60,7 +63,10 @@ const Programme = () => {
                     }
                 </Tabs>
                 {userType === "organiser" &&
-                    <Button variant="contained" color="warning" sx={{mr :"20px", borderRadius:"20px"}}
+                    <Button variant="contained" disableElevation sx={{mr :"20px", borderRadius:"20px", color:"#ffffff", background:"#E44949", '&:hover': {
+                        color: '#ffffff',
+                        backgroundColor: '#E44949',
+                    },}}
                     onClick={() => setDeleteModal(true)}
                     >Delete Programme</Button>
                 }

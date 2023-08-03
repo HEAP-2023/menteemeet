@@ -7,6 +7,8 @@ export const getInfiniteProgramme = async(page,size) => {
         url : `/programmes/?page=${page}&size=${size}`,
         headers: { Authorization: `Bearer ${localStorage.getItem("jwt")}` },
     })
+
+    console.log(res.data.response)
     return res.data.response
 }
 

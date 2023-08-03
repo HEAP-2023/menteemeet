@@ -14,9 +14,11 @@ import LoginExplore from "./scenes/login/LoginExplore"
 import Test from "./scenes/testingGrounds/Test";
 import CreateProgramme from "./scenes/createProgramme/CreateProgramme";
 import Calendar from "./scenes/calendar/Calendar";
+import FAQ from "./scenes/login/FAQ";
 import { useSelector } from "react-redux";
 import { ProtectedRoute, UnprotectedRoute } from "./ProtectedRoute"
 import AccountSettings from "./scenes/accountSettings/AccountSettings";
+import { AnimatePresence } from "framer-motion";
 
 
 
@@ -31,26 +33,29 @@ function App() {
             
            <main className="content">
                 {userType && <Topbar></Topbar>}
+            <AnimatePresence mode="wait" initial={false} >
                 <Routes>
                     {/* public routes */}
                     <Route element={<UnprotectedRoute/>}>
                         <Route path="/login/start" element={<LoginStart/>}></Route>
                         <Route path="/login/explore" element={<LoginExplore/>}></Route>
+                        <Route path="/login/faq" element={<FAQ/>}></Route>
                     </Route>
 
                     {/* private routes */}
-                    <Route element={<ProtectedRoute/>}>
-                        <Route path="/" element={<Home/>} role={userType}></Route>
-                        <Route path="/explore/:id?" element={<Explore />}></Route>
-                        <Route path="/profile" element={<Profile peerReviews={peerReviews} history={history}/>}></Route>
-                        {userType === "organiser" 
-                            && <Route path="/programme/create" element={<CreateProgramme/>}/>}
-                        <Route path="/programmes/:id" element={<Programme/>}></Route>
-                        <Route path="/test" element={<Test/>} />
-                        <Route path="/accountSettings" element={<AccountSettings/>} />
-                        <Route path="/calendar" element={<Calendar />} />
-                    </Route>
+                        <Route element={<ProtectedRoute/>}>
+                            <Route path="/" element={<Home/>} role={userType}/>                        
+                            <Route path="/explore/:id?" element={<Explore />}></Route>
+                            <Route path="/profile" element={<Profile peerReviews={peerReviews} history={history}/>}></Route>
+                            {userType === "organiser" 
+                                && <Route path="/programme/create" element={<CreateProgramme/>}/>}
+                            <Route path="/programmes/:id" element={<Programme/>}></Route>
+                            <Route path="/test" element={<Test/>} />
+                            <Route path="/accountSettings" element={<AccountSettings/>} />
+                            <Route path="/calendar" element={<Calendar />} />
+                        </Route>
                 </Routes>
+            </AnimatePresence>
             </main>
         </div>
                 </BrowserRouter>

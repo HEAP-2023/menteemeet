@@ -10,49 +10,46 @@ import AddEventPopover from './AddEventPopover';
 import { format } from 'date-fns';
 import CalendarFilter from './CalendarFilter';
 import { Box } from '@mui/material';
-
+import { getAllSessions } from '../../services/user/userServices';
+import { useSelector } from 'react-redux';
 const MainCalendar = () => {
-    const [events, setEvents] = useState([
-        {
-            id: 1,
-            title: 'Event 1',
-            start: '2023-07-07T10:30:00',
-            end: '2023-07-07T11:00:00',
-            mentorshipProgramme: 'ABC Programme',
-            topic: 'Topic ABC',
-            location: 'Zoom'
-        },
-        {
-            id: 2,
-            title: 'Event 2',
-            start: '2023-07-07T10:45:00',
-            end: '2023-07-07T11:20:00',
-            mentorshipProgramme: 'DEF Programme',
-            location: 'SMU SCIS'
-        },
-        {
-            id: 3,
-            title: 'Event 3',
-            start: '2023-07-08T09:30:00',
-            end: '2023-07-08T13:00:00',
-            mentorshipProgramme: 'XYZ Programme',
-            topic: 'Interview Preparation'
-        },
-        {
-            id: 4,
-            title: 'Event 4',
-            start: '2023-07-08T09:30:00',
-            end: '2023-07-08T13:00:00',
-            mentorshipProgramme: 'XYZ Programme'
-        },
-        {
-            id: 5,
-            title: 'Event 5',
-            start: '2023-07-08T14:30:00',
-            end: '2023-07-08T16:00:00',
-            mentorshipProgramme: 'XYZ Programme'
-        },
-    ]);
+    const programmes = useSelector((state) => state.user.programmes);
+    console.log("programmes:", programmes);
+    const [events, setEvents] = useState([]);
+
+    useEffect(() => {
+        getAllSessions()
+        .then(res => {
+            // setEvents(res.data.sessionsWithRole);
+            const sessions = res.data.sessionsWithRole;
+            console.log("sessions:", res)
+            const eventSessions = sessions.map((session) => {
+                const programme = programmes.find((prog) => prog.programme_id === session.programme_id);
+                const eventTitle = programme.name;
+                
+                return {
+                    id: session.session_id,
+                    title: `${eventTitle} mentoring session`,
+                    start: `${session.date}T${session.start_time}`,
+                    end: `${session.date}T${session.end_time}`,
+                    extendedProps:{
+                        group_id: session.group_id,
+                        role: session.role,
+                        programme_id: session.programme_id,
+                        topic: session.topic,
+                        programme_name: eventTitle
+                    }
+                }
+            })
+            setEvents(eventSessions);
+            console.log("eventSessions:", eventSessions);
+        })
+        .catch(err => {
+            console.log("ERROR:", err);
+        })
+    },[])
+
+
     const [showEvents, setShowEvents] = useState(events);
     const [selectedEvent, setSelectedEvent] = useState(null);
     const [isPopOpen, setIsPopOpen] = useState(false);
@@ -99,7 +96,7 @@ const MainCalendar = () => {
         initialView: "dayGridMonth",
         firstDay: 1, // first day is a Monday
         headerToolbar: {
-            start: 'dayGridMonth,timeGridWeek,listMonth', // will normally be on the left. if RTL, will be on the right
+            start: 'dayGridMonth,timeGridWeek,listYear', // will normally be on the left. if RTL, will be on the right
             center: 'title',
             end: 'today prev,next' // will normally be on the right. if RTL, will be on the left
         },
@@ -147,10 +144,10 @@ const MainCalendar = () => {
     const handleFiltersChange = (filters) => {
         setSelectedFilters(filters);
         // console.log(`selected filters: ` + selectedFilters);
-        console.log(JSON.stringify(filters));
+        console.log("FILTERS:", JSON.stringify(filters));
         const filteredEvents = events.filter((event) => {
-            console.log(`${event.mentorshipProgramme}: ` + filters[event.mentorshipProgramme]);
-            return filters[event.mentorshipProgramme];
+            // console.log(`${event.extendedProps.programme_name}: ` + filters[event.extendedProps.programme_name]);
+            return filters[event.extendedProps.programme_name];
         })
         setShowEvents(filteredEvents);
     }

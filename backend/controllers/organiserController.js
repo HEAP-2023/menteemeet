@@ -171,7 +171,7 @@ const getAllProgsByOrgID = async (req, res) => {
       raw: true });
       
     if (!getOrgProgObj) {
-      return res.status(400).json({ message: "Organiser has not created any programmes." });
+      return res.status(200).json({ message: "Organiser has not created any programmes." });
     }
 
     //bruce
@@ -337,11 +337,11 @@ function customSort(a, b) {
 /* Announcements */
 const getAnnouncementsByProgID = async (req, res) => {
   try {
-    const isValidOrganiser = await checkValidOrganiser(req.account);
+    // const isValidOrganiser = await checkValidOrganiser(req.account);
 
-    if (!isValidOrganiser) {
-      return res.status(403).json({ message: "You are not allowed to view this page." });
-    }
+    // if (!isValidOrganiser) {
+    //   return res.status(403).json({ message: "You are not allowed to view this page." });
+    // }
 
     const getProgID = req.params.progID;
     const getAnnouncementObj = await Announcement.findAll({ where: { programme_id: getProgID }, raw: true });

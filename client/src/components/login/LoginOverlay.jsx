@@ -31,7 +31,7 @@ const LoginOverlay = () => {
                     <Box></Box>
                     <Box  display="flex" flexDirection="column" justifyContent="center" alignItems="center">
                         <img src="../../../images/global/menteemeet.png" style={{width: "200px", margin: "5px 0px 0p 0px", height: "100px", objectFit: "contain", padding:"0px"}} />
-                        <Typography fontWeight="700">Log in to continue</Typography>
+                        <Typography fontWeight="700">{newUser ? "Sign up"  : "Log in"} to continue</Typography>
                     </Box>
                     <IconButton sx={{width:"40px", height:"40px", ml:"auto"}} onClick={() => dispatch(loginOverlayToggle())}>
                         <CancelOutlinedIcon/>
@@ -42,9 +42,8 @@ const LoginOverlay = () => {
                 {!newUser &&
                 <Box display="flex" flexDirection="column" gap="10px" p="0 20px">
                     <LoginForm/>
-                    <Typography>Forgot Password</Typography>
                     <Box display="flex" alignItems="center">
-                        <Typography>don't have an account?</Typography>
+                        <Typography>Don't have an account?</Typography>
                         <Button onClick={() => setNewUser(true)} sx={{color: colors.text[500]}}>
                             <Typography sx={{textDecoration:"underline"}}>
                                 Sign Up

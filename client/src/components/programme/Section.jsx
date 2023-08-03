@@ -54,7 +54,7 @@ const Section = ({ header, rows, rowColor = "primary.main", highlight = false, c
                     const dayOfMonth = format(new Date(item.date), 'dd');
                     const month = format(new Date(item.date), 'MMM');
                     return (
-                        <Box display="flex" flexDirection="row" width="90%" bgcolor="background.main" marginY="5px" p="10px" minHeight="100px" borderRadius="20px">
+                        <Box display="flex" flexDirection="row" width="95%" bgcolor="background.main" mt="5px" mb="18px" p="10px" minHeight="100px" borderRadius="5px"  >
                             <Box p="5px" display="flex" flexDirection="column" alignItems="center" justifyContent="center">
                                 <Typography>{day}</Typography>
                                 <Typography sx={{fontSize: '24px', fontWeight: '700'}}>{dayOfMonth}</Typography>
@@ -78,9 +78,9 @@ const Section = ({ header, rows, rowColor = "primary.main", highlight = false, c
         content = <Box display="inline-flex" flexDirection="column" alignItems="center">
             {
                 Object.entries(rows).map((row) => {
-                    const [key, details] = row
+                    const [announcement_id, details] = row;
                     return (
-                        <SectionRow key={`${details.title}-${details.dtg}`} details={details} rowColor={rowColor} checkbox={checkbox} highlight={highlight} showDTG={showDTG} />
+                        <SectionRow key={announcement_id} details={details} rowColor={rowColor} checkbox={checkbox} highlight={highlight} showDTG={showDTG} />
                     );
                 })
             }
@@ -153,7 +153,7 @@ const Section = ({ header, rows, rowColor = "primary.main", highlight = false, c
                         </Modal>
                     </Box>
                 </>
-                ) : (<SectionHeader text={header} margin="0" />)}
+                ) : (<SectionHeader text={header} margin="5px 0px 5px 25px" />)}
             {content}
         </Box>)
 }

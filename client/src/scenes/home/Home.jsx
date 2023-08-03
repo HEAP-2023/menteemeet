@@ -6,13 +6,12 @@ import Section from "../../components/home/Section"
 import HomeCarousel from "../../components/home/HomeCarousel"
 // redux
 import { useSelector } from "react-redux"
-
-
+import TransitionScreen from "../../animations/TransitionScreen"
 
 const Home = () => {
     const userType = useSelector((state) => state.user.userBasicDetails.account_type)
     const name = useSelector((state) => state.user.userBasicDetails.name)
-   
+
     return (
     <Box width="100%" height="100%" display="flex" flexDirection="column">
         <PageHeader text={`Welcome, ${name}`}/>
@@ -35,7 +34,11 @@ const Home = () => {
             </Box>
 
         </Box>
-    </Box>)
+        
+        {/* <TransitionScreen/> */}
+    </Box>
+
+    )
 }
 export default Home
 
