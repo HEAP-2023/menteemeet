@@ -27,8 +27,8 @@ function initAssociations() {
   Interest.belongsToMany(User, { foreignKey: 'interest_id', through: UserInterest });
 
   //User and group
-  UserGroup.belongsToMany(User, { foreignKey: 'group_id', through: UserProgramme });
-  User.belongsToMany(UserGroup, { foreignKey: 'user_id', through: UserProgramme });
+  // UserGroup.belongsToMany(User, { foreignKey: 'group_id', through: UserProgramme });
+  // User.belongsToMany(UserGroup, { foreignKey: 'user_id', through: UserProgramme });
 
   //Programme and group
   Programme.hasMany(UserGroup, { foreignKey: "programme_id" });

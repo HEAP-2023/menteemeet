@@ -56,6 +56,7 @@ const CreateProgramme = () => {
     const handleSave = async (data) => {
         console.log(errors)
         console.log("to be submitted")
+        console.log(data["display_image"])
         // const formattedData = {...data, 
         //     // skills : JSON.stringify(data.skills.map(skill => skill.skillName)),
         //     // matching_criteria : JSON.stringify(data.matching_criteria)
@@ -64,6 +65,7 @@ const CreateProgramme = () => {
 
         const formData = new FormData();
         for (const key in data) {
+            console.log(data)
             formData.append(key, data[key]);
         }
 

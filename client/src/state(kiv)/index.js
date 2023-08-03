@@ -6,24 +6,17 @@ import storage from 'redux-persist/lib/storage'
 import {combineReducers} from "redux"; 
 import { persistReducer } from 'redux-persist'
 import thunk from 'redux-thunk'
-//to change userType go to initialState (3 functions below) change account_type
-
-
-
-// const getAccountType = () => {
-//     const jwt = localStorage.getItem("jwt")
-//     if(!jwt){
-//         return;
-//     } 
-//     const details = decodeJWT(jwt)
-//     return details
-// }
 
 const initialState = {
     loginOverlay : false,
     profileOverlay : false,
     programmes : [],
     userBasicDetails :  {name : "default", email : "defaultEmail", account_type : undefined},
+    // applications : {
+    //     approved : [],
+    //     pending : [],
+    //     rejected : [],
+    // },
 // structure after logging in should be
 // account_id
 // account_type
@@ -37,6 +30,7 @@ const initialState = {
 
     disableDrag : true,
     dragParking : [],
+    openNotifs : false,
 }
 
 
@@ -74,6 +68,12 @@ export const userSlice = createSlice({
         },
         updateProgrammes : (state, action) => {
             state.programmes = [...action.payload]
+        },
+        // updateApplications : (state, action) => {
+        //     state.applications = {...state.applications, ...action.payload}
+        // },
+        toggleNotifs : (state) => {
+            state.openNotifs = !state.openNotifs
         }
     }
 })
@@ -83,7 +83,7 @@ export const {loginOverlayToggle ,
     profileOverlayToggle, closeProfileOverlay,
     logOut, updateDetails,
     dragToggle, modifyDetails,
-    updateProgrammes, 
+    updateProgrammes,  updateApplications, toggleNotifs,
     addToParking, removeFromParking} = userSlice.actions;
 
 
@@ -91,7 +91,7 @@ export const {loginOverlayToggle ,
     
     const persistConfig = {
         key: 'user',
-        blacklist : ["dragParking"],
+        blacklist : ["dragParking", "loginOverlay", "profileOverlay", "disableDrag", "openNotifs"],
         storage,
     };
 

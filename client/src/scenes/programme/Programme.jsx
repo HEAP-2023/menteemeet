@@ -16,10 +16,11 @@ import Statistics from "../../components/programme/tabs/Statistics";
 import DeleteProgrammeModal from "../../components/programme/DeleteProgrammeModal";
 
 
-const Programme = ({programme_details}) => {
+const Programme = () => {
     const {id} = useParams();
     const programmes = useSelector((state) => state.user.programmes)
     const programme = programmes.find(program => program.programme_id === Number(id));
+    let userRole = programme.role;
     console.log(programme);
     const [tab, changeTab] = useState("main")
 
@@ -31,13 +32,16 @@ const Programme = ({programme_details}) => {
     const userType = useSelector((state) => state.user.userBasicDetails.account_type);
     const userName = useSelector((state) => state.user.userBasicDetails.name)
 
+    if(userRole === undefined){
+        userRole = "organiser";
+    }
     return (
         <Box>
             <DeleteProgrammeModal id={id} open={deleteModal} setDeleteModal={setDeleteModal} programme_name={programme.name}/>
 
             {/* header */}
             <Box display="flex" justifyContent="space-between">
-                <PageHeader text={`Welcome, ${userName}`}/>
+                <PageHeader text={`Welcome, ${userName} (${userRole})`}/>
                 <PageHeader text={`${programme.name} Mentorship Programme`}/>
             </Box>
             <TabContext value={tab}>
@@ -59,7 +63,10 @@ const Programme = ({programme_details}) => {
                     }
                 </Tabs>
                 {userType === "organiser" &&
-                    <Button variant="contained" color="warning" sx={{mr :"20px", borderRadius:"20px"}}
+                    <Button variant="contained" disableElevation sx={{mr :"20px", borderRadius:"20px", color:"#ffffff", background:"#E44949", '&:hover': {
+                        color: '#ffffff',
+                        backgroundColor: '#E44949',
+                    },}}
                     onClick={() => setDeleteModal(true)}
                     >Delete Programme</Button>
                 }

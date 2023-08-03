@@ -5,6 +5,7 @@ import SectionHeader from "../SectionHeader"
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined"
 
 import Draggable from "../Draggable";
+import NameAvatar from "../NameAvatar";
 
 const DraggableParking = () => {
     const parking = useSelector(state => state.user.dragParking) 
@@ -14,10 +15,11 @@ const DraggableParking = () => {
         <SectionHeader text="Unassigned"/>
         {
             parking.map(user => {
+                console.log(user)
                 return (
-    <Draggable key={user.id} id={user.id} name={user.name} disableDrag={disableDrag}>
+    <Draggable key={user.id} id={user.id} name={user.name} role={user.role} disableDrag={disableDrag}>
         <Box display="flex" sx={{m:"10px 0", borderRadius:"20px", bgcolor:"#EBEBEB"}}>
-                <AccountCircleOutlinedIcon/>
+                <NameAvatar name={user.name} scale={0.5} m="0"/>
                 <Typography>{user.name}</Typography>
         </Box>
     </Draggable>

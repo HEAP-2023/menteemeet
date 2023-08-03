@@ -4,12 +4,14 @@ import PageHeader from "../../components/PageHeader"
 import Header from "../../components/login/start/Header"
 import LoginOverlay from "../../components/login/LoginOverlay"
 import { Link } from "react-router-dom"
+import TransitionScreen from "../../animations/TransitionScreen"
+import {motion} from "framer-motion"
 
 
 const LoginStart = () => {
-    const colors = generateColors();
+    
     return (
-    <Box width="100%" position="relative">
+    <Box width="100%" position="relative" >
         <LoginOverlay/>
         <Box display="grid" gridTemplateRows="1fr 4fr 1fr 4fr 1fr 5fr" gap="20px" width="100%" p="20px">
             <Header></Header>
@@ -49,22 +51,62 @@ const LoginStart = () => {
             
             
         </Box>
-      
+            {/* book stack */}
+
+        <motion.div 
+        style={{position : "absolute", top:"140px", left : "380px"}}
+        animate={{ y: [-200,0] }}
+        transition = {{ duration:1, ease: "easeOut" }}
+        >
             <img src="../images/loginExplore/Untitled design (2).png" 
-                    style={{borderRadius: "80%", width: "600px", height: "600px", position : "absolute", objectFit: "cover", top:"140px", left : "380px"}}>
-            </img>
+                    style={{borderRadius: "80%", width: "600px", height: "600px", objectFit: "cover"}}
+                    />
+        </motion.div>
+
+        <motion.div 
+        style={{ position : "absolute", top:"580px", left : "850px"}}
+        animate={{ x: [500,0] }}
+        transition = {{ duration:1, ease: "easeOut" }}
+        >
             <img src="../images/loginExplore/Untitled design (3).png" 
-                    style={{borderRadius: "80%", width: "400px", height: "400px", position : "absolute", objectFit: "cover", top:"580px", left : "850px"}}>
+                style={{borderRadius: "80%", width: "400px", height: "400px",  objectFit: "cover"}}>
             </img>
+            
+        </motion.div>
+
+        <motion.div 
+        style={{position : "absolute", top:"800px", left : "620px"}}
+        animate={{ x: [-1000,0] }}
+        transition = {{ duration:1, ease: "easeOut" }}
+        >
             <img src="../images/loginExplore/Untitled design (4).png" 
-                    style={{borderRadius: "80%", width: "400px", height: "400px", position : "absolute", objectFit: "cover", top:"800px", left : "620px"}}>
+                    style={{borderRadius: "80%", width: "400px", height: "400px",  objectFit: "cover", }}>
             </img>
-            <img src="../images/loginExplore/Untitled design (5).png" 
-                    style={{borderRadius: "80%", width: "800px", height: "800px", position : "absolute", objectFit: "cover", top:"1086px", left : "620px"}}>
+        </motion.div>
+
+
+        <motion.div 
+        style={{ position : "absolute",  top:"1086px", left : "620px"}}
+        transition = {{ duration:1, ease: "easeOut" }}
+        initial="hidden"
+        whileInView="visible"
+        animate="hidden"
+        variants={{
+            visible: { opacity: 1, scale: 1 ,  },
+            hidden: { opacity: 0, scale: 0 }
+          }}
+        >
+           <img src="../images/loginExplore/Untitled design (5).png" 
+                style={{borderRadius: "80%", width: "800px", height: "800px",objectFit: "cover",}}>
             </img>
+        </motion.div>
+
+        
+            
+            <TransitionScreen/>
     </Box>
+    
     );
 }
 
 export default LoginStart;
-

@@ -10,11 +10,16 @@ import { useState, useEffect } from "react";
 import { ErrorMessage } from "@hookform/error-message";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-
+import { useSelector } from "react-redux";
 const AddEventPopover = ({ isOpen, onRequestClose, selectedDateInfo, addEvent }) => {
-    useEffect(() => setCounter(counter + 1  )); // to generate id of event (can delete later if don't need)
+    const programmes = useSelector((state) => state.user.programmes)
+    // console.log("prog:", programmes);
+
+    const mentorshipProgrammes = programmes.map(item => item.name);
+    // console.log("prog names:", mentorshipProgrammes);    
+
+    useEffect(() => setCounter(counter + 1)); // to generate id of event (can delete later if don't need)
     const [counter, setCounter] = useState(6);
-    const mentorshipProgrammes = fetchMentorshipProgrammes();
     const addEventSchema = yup.object()
         .shape({
             title: yup.string()
@@ -153,7 +158,7 @@ const AddEventPopover = ({ isOpen, onRequestClose, selectedDateInfo, addEvent })
                         <ErrorMessage
                             errors={errors}
                             name="programme"
-                            render={({ message }) => <p style={{ color: "#ff0000", margin: "0px", marginLeft: '10px', display: 'inline-block'}}>{message}</p>}
+                            render={({ message }) => <p style={{ color: "#ff0000", margin: "0px", marginLeft: '10px', display: 'inline-block' }}>{message}</p>}
                         />
 
                         <Box sx={{ mb: '20px' }}>
@@ -203,6 +208,6 @@ const AddEventPopover = ({ isOpen, onRequestClose, selectedDateInfo, addEvent })
 
 export default AddEventPopover
 
-const fetchMentorshipProgrammes = () => {
-    return ['ABC Programme', 'CDE Programme', 'XYZ Programme']
-}
+// const fetchMentorshipProgrammes = () => {
+//     return ['ABC Programme', 'CDE Programme', 'XYZ Programme']
+// }

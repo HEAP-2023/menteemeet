@@ -13,6 +13,22 @@ const userGroup = sequelize.define(
         group_no: {
             type: DataTypes.INTEGER,
             allowNull: true
+        },
+        mentees: {
+          type: DataTypes.STRING(),
+          allowNull: true,
+        },
+        mentors: {
+          type: DataTypes.STRING(),
+          allowNull: true,
+        },
+        common_dt: {
+          type: DataTypes.STRING(),
+          allowNull: true,
+        },
+        programme_id: {
+          type: DataTypes.INTEGER,
+          allowNull: false
         }
     },
     {

@@ -4,6 +4,7 @@ import { logOut, updateProgrammes } from "./state(kiv)"
 import useGetAllProgsInvolved from "./hooks/programmes/useGetAllProgsInvolved"
 import { useEffect } from "react"
 import { useQueryClient } from "@tanstack/react-query"
+import { jwtHasExpired } from "./functions"
 
 
 
@@ -14,14 +15,15 @@ export const ProtectedRoute = () => {
     const navigate = useNavigate()
     const dispatch = useDispatch()
     useEffect(() => {
-        // if(isError){
-        //     if(error.response.status === 400 || error.response.status === 403){
-        //         dispatch(logOut())
-        //         queryClient.clear()
-        //         localStorage.setItem("jwt", "");
-        //         navigate("/login/start")
-        //     }
-        //     }
+        if(jwtHasExpired()){
+                dispatch(logOut())
+                queryClient.clear()
+                localStorage.setItem("jwt", "");
+                navigate("/login/start")
+            }
+        if(isError){
+            console.log(error)
+        }
 
         if(isSuccess){
             dispatch(updateProgrammes(data))

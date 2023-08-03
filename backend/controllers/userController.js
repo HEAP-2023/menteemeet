@@ -121,6 +121,7 @@ const getAllProgByUserID = async (req, res) => {
     //Returns array.
     const getUserProgObj = await User.findAll({ where: { user_id : getUserObj.user_id, /* role: getUserRole */ }, include: { model: Programme, required: true },
       raw: true });
+    // console.log("getUserProgObj:", getUserProgObj);
       
     if (getUserProgObj.length === 0) {
       return res.status(400).json({ message: "User is not enrolled in any programme!" });
@@ -355,7 +356,7 @@ const getAllSessions = async (req, res) => {
     const sessionsWithRole = getAllSessions.map(session => {
       const matchingGroup = groupArray.find(group => group.group_id === session.group_id);
       if (matchingGroup) {
-        return { ...session, role: matchingGroup.role };
+        return { ...session, role: matchingGroup.role, programme_id: matchingGroup.programme_id };
       }
       return session;
     });
