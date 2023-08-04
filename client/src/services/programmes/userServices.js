@@ -23,12 +23,13 @@ export const getSignUpForm = async(id) => {
 }
 
 export const postSignUp = async(signUpForm) => {
-    const res = await axiosInstance({
-        method : "post",
-        url : `users/programmes/`,
-        headers: { Authorization: `Bearer ${localStorage.getItem("jwt")}` },
-        data : signUpForm
-    })
+    // const res = await axiosInstance({
+    //     method : "post",
+    //     url : `users/programmes/`,
+    //     headers: { Authorization: `Bearer ${localStorage.getItem("jwt")}` },
+    //     data : signUpForm
+    // })
+    const res = console.log("HEY BITCH");
     return res;
 }
 
