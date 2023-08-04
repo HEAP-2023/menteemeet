@@ -565,18 +565,6 @@ const signup = async (req, res) => {
 
     const isCapacityMax = checkCapacity(programmeID, role);
     if (isCapacityMax) {
-      //I still choose to create because organiser can change it to approve when some guy might 
-      //decide to open the spot
-      await Application.create({
-        date: formattedDate,
-        availability,
-        skills,
-        interests,
-        role,
-        programme_id: programmeID,
-        is_accepted: 2,
-        user_id: user.user_id
-      })
       return res.status(200).json({ message: "[SYSTEM] Rejected. Application has max capacity." });
     }
 

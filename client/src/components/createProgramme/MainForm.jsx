@@ -67,7 +67,7 @@ const MainForm = () => {
                                 const blob = URL.createObjectURL(file)
                                 imagePreview.current.src = blob
                                 field.onChange(file);
-                                }
+                            }
                         }}
                         />
                         <img ref={imagePreview} alt="Image format is not supported" 
