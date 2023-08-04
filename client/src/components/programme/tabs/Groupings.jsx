@@ -1,4 +1,4 @@
-import { Box, Typography, Button } from "@mui/material"
+import { Box, Typography, Button, Modal } from "@mui/material"
 import GroupingTable from "../tables/GroupingTable"
 import {  useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
@@ -9,6 +9,7 @@ import {DndContext} from '@dnd-kit/core';
 import { dragToggle, removeFromParking } from "../../../state(kiv)";
 import DraggableParking from "../DraggableParking";
 import useGetGrouping from "../../../hooks/algo/useGetGrouping";
+import { useQueryClient } from "@tanstack/react-query";
 const Groupings = ({id}) => {
     //this page cannot have state change that leads to rerender if not everything will go haywire
 
@@ -16,13 +17,16 @@ const Groupings = ({id}) => {
     const api = useGridApiRef();
     const userType = useSelector((state) => state.user.userBasicDetails.account_type);
     const disableDrag = useSelector((state) => state.user.disableDrag)
-
+    const [submitted, setSubmitted] = useState(false)
     const dispatch = useDispatch(); 
-
+    const queryClient = useQueryClient()
     const { data:groupingData , isSuccess, isError, isLoading } = useGetGrouping(id)
     const rows = groupingData.map((group) => ({...group, mentee : JSON.parse(group.mentee), mentor : JSON.parse(group.mentor)}))
-    if(isSuccess){
 
+
+
+    if(isSuccess){
+    const len = rows.reduce((sum, group) => sum + group.mentee.length + group.mentor.length, 0)
     const handleDragEnd = (event) => {
         const {over, active} = event;
         if(!over){return }
@@ -47,9 +51,19 @@ const Groupings = ({id}) => {
 
 
     return (<Box>
+        <Modal open={!!submitted} onClose={() => {
+            setSubmitted(false);
+            window.location.reload()}}
+            sx={{
+                width:"100%", height:"100%",
+                display:"flex", justifyContent:"center",
+                alignItems : "center"}} 
+            >
+            <Box bgcolor="#ffffff" width="20%" p="20px">{submitted}</Box>
+        </Modal>
         <DndContext onDragEnd={handleDragEnd} onDragStart={handleDragStart}>
             <Box width="100%" display="flex">
-                <GroupingTable api={api} rows={rows} columns={columns} mode={disableDrag ? "view" : "edit"}/>
+                <GroupingTable api={api} rows={rows} columns={columns}/>
                 {userType === "organiser" && <DraggableParking/>}
             </Box>
         </DndContext>
@@ -69,9 +83,15 @@ const Groupings = ({id}) => {
             // disabled={remain.length > 0 ? true : false}
             onClick={() => {
                 const updatedData = api.current.getSortedRows();
-                console.log("this will be sent to db")
-                console.log(updatedData);
-                dispatch(dragToggle());
+                const {status, message} = isValid(updatedData, len)
+                if(status){
+                    console.log("submit data", updatedData)
+                    setSubmitted(message)
+                    queryClient.invalidateQueries(["getGroup", id])
+                    dispatch(dragToggle());
+                }else{
+                    setSubmitted(message)
+                }
             }}>
                 save
             </Button>
@@ -176,4 +196,20 @@ const displayDate = (props) => {
 const getRoleFromId = (id) => {
     console.log(id.split('-')[1])
     return id.split('-')[1]
+}
+
+
+const isValid = (data, len) => {
+    data.forEach(group => {
+        console.log(group)
+        if(group.mentee.length < 1){
+            return {status : false, message : "group without mentee"}
+        }
+        if(group.mentor.length < 1){
+            return {status : false, message : "group without mentor"}
+        }
+        len = len - group.mentee.length - group.mentor.length
+    });
+    if(len > 0){return {status : false, message : "There is unassigned participants"}}
+    return {status : true, message : "Successful Submission"};
 }

@@ -4,9 +4,11 @@ import { useCallback } from "react";
 import { generateColors } from "../../../theme";
 import { useSelector } from "react-redux";
 
-const GroupingTable = ({api, rows, columns, editable=false }) => {
+const GroupingTable = ({api, rows, columns }) => {
     const colors = generateColors();
     const acctID = useSelector((state) => state.user.userBasicDetails.account_id)
+    const disableDrag = useSelector((state) => state.user.disableDrag)
+    console.log(disableDrag)
     const getRowSpacing = useCallback((params) => {
         return {
           top: (params.isFirstVisible && params.isLastVisible) ? 0 : 5,
@@ -15,12 +17,7 @@ const GroupingTable = ({api, rows, columns, editable=false }) => {
     
 
     //   --------------------------------------- !!---------------------------------------------------
-    const putInDB = (data) => {
-        console.log("the following will be sent to db"); 
-        console.log(data)
-        console.log("modified by: ")
-        console.log(acctID)
-    }
+    
     const handleDataChange = (newRow, oldRow) => {
         return newRow;
     } 
@@ -45,7 +42,6 @@ const GroupingTable = ({api, rows, columns, editable=false }) => {
         },
         columns: {
             columnVisibilityModel: {
-                // id column invisible
                 id : false,
             },
           },

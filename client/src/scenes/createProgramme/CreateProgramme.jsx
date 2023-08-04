@@ -12,16 +12,19 @@ import MainForm from "../../components/createProgramme/MainForm";
 import PreviewForm from "../../components/createProgramme/PreviewForm";
 import axiosInstance from "../../utils/axiosInstance";
 import { postProgramme } from "../../services/programmes/organiserServices";
-
+import { QueryClient, useQueryClient } from "@tanstack/react-query";
+import { useNavigate } from "react-router-dom";
 
 const Transition = forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
   });
 
 const CreateProgramme = () => {
+    const queryClient = useQueryClient()
     const [confirmSubmission, setConfirmSubmission] = useState(false)
     const [progress, setProgress] = useState(0)
     const [preview, setPreview] = useState(false)
+    const navigate = useNavigate()
     const methods = useForm({
         defaultValues : {
             name : "",
@@ -74,6 +77,8 @@ const CreateProgramme = () => {
 
         try {
             await postProgramme(formData);
+            queryClient.invalidateQueries(["getInvolved"]);
+            navigate("/")
         } catch (err) {
             console.log(err);
         }

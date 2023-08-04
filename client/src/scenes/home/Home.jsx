@@ -11,6 +11,7 @@ import TransitionScreen from "../../animations/TransitionScreen"
 const Home = () => {
     const userType = useSelector((state) => state.user.userBasicDetails.account_type)
     const name = useSelector((state) => state.user.userBasicDetails.name)
+    const programmes = useSelector((state) => state.user.programmes)
 
     return (
     <Box width="100%" height="100%" display="flex" flexDirection="column">
@@ -20,7 +21,11 @@ const Home = () => {
 
         <SectionHeader text={userType === "organiser" ? "My Programmes" : "Featured Programmes"}/>
 
-        <HomeCarousel/>
+        {(!!programmes && programmes.length > 0) ?  <HomeCarousel/> : 
+        
+        <img src="../images/home/no-programmes.png" 
+        style={{ margin : "40px" ,maxHeight : "300px", objectFit : "scale-down"}}
+        />}
 
         <Box display="flex" justifyContent="space-around" width="100%" height="100%">
             <Box width="45%" height="100%" display="flex" flexDirection="column" alignItems="center" > 

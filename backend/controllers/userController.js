@@ -125,7 +125,7 @@ const getAllProgByUserID = async (req, res) => {
     // console.log("getUserProgObj:", getUserProgObj);
       
     if (getUserProgObj.length === 0 || !getUserProgObj) {
-      return res.status(200).json({ message: "User is not enrolled in any programme!" });
+      return res.status(200).json({ message: "User is not enrolled in any programme!" , getUserProgObj});
     }
 
     //bruce
@@ -471,7 +471,15 @@ const updateSessionBySessionID = async (req, res) => {
 const getApps = async (getUserObj, statusOfApp) => {
 
   const getAppObj = await Application.findAll({ where: { user_id: getUserObj.user_id, 
-    is_accepted: statusOfApp } });
+    is_accepted: statusOfApp }, 
+
+    include: [
+        {
+          model: Programme,
+          attributes: ["name"],
+        }
+      ]
+});
   
   if (!getAppObj || getAppObj.length < 1) {
     return false;
@@ -498,7 +506,7 @@ const getApprovedApps = async (req, res) => {
     const appArray = await getApps(getUserObj, pendingStatus);
 
     if (!appArray) {
-      return res.status(200).json({ message: "Application does not exist." })
+      return res.status(200).json({ message: "Application does not exist.", appArray})
     }
     return res.status(200).json({ message: "Retrieved Approved Applications", appArray });
   } catch (err) {
@@ -515,7 +523,7 @@ const getPendingApps = async (req, res) => {
     const appArray = await getApps(getUserObj, pendingStatus);
 
     if (!appArray) {
-      return res.status(200).json({ message: "Application does not exist." })
+      return res.status(200).json({ message: "Application does not exist.", appArray })
     }
     
     return res.status(200).json({ message: "Retrieved Pending Applications", appArray });
@@ -533,7 +541,7 @@ const getRejectedApps = async (req, res) => {
     const appArray = await getApps(getUserObj, pendingStatus);
 
     if (!appArray) {
-      return res.status(200).json({ message: "Application does not exist." })
+      return res.status(200).json({ message: "Application does not exist.", appArray})
     }
     
     return res.status(200).json({ message: "Retrieved Rejected Applications", appArray });
