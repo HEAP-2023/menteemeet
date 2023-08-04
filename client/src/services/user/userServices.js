@@ -1,3 +1,4 @@
+import axios from "axios";
 import axiosInstance from "../../utils/axiosInstance";
 
 export const getUserDetails = async (id) => {
@@ -79,5 +80,16 @@ export const getAllSessions = async () => {
         url: "/users/session",
         headers: { Authorization: `Bearer ${localStorage.getItem("jwt")}` },
     })
+    return res
+}
+
+export const addSessionByGrpID = async (session) => {
+    const res = await axiosInstance({
+        method: "post",
+        url: "/users/session",
+        headers: { Authorization: `Bearer ${localStorage.getItem("jwt")}` },
+        data: session
+    })
+    console.log("SESSION:",session);
     return res
 }

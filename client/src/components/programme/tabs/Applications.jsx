@@ -15,7 +15,7 @@ const Applications = (programmeID) => {
 
     useEffect(() => {
         // If already rendered, do nothing
-        if (!rerender) return;
+        // if (!rerender) return;
 
         // Fetch applications from backend
         getApplicationsByProgID(programmeID.programmeID)
@@ -26,7 +26,7 @@ const Applications = (programmeID) => {
         .catch(err => {
             console.log("ERROR:", err);
         })
-    }, [rerender]) 
+    }, [rerender, programmeID.programmeID]) 
 
     const colors = generateColors();
     const menteeApplications = fetchApplications.filter((item)=> item.role === 'mentee' && item.is_accepted === 0);
@@ -101,7 +101,7 @@ const Applications = (programmeID) => {
         const colors = generateColors();
         const handleClick = async(approval) => {
             putApplicationAcceptance(params.id, {approval: approval})
-            .then(_ => setRerender(true))
+            .then( res => setRerender(true))
             .catch(err => {
                 console.log("ERROR:", err);
             })

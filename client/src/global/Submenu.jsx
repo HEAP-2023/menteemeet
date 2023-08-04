@@ -26,12 +26,13 @@ const Submenu = () => {
                             scrollbarWidth : "none",
                             marginTop: '5px'
                         },
+                        ['& .ps-menuitem-root >.ps-menu-button']:{width: "100%", marginTop: '5px', height: '40px', borderRadius: '15px'}
                     }}>
                 <Box maxHeight="400px" p="20px">
 
                         {programmes.length > 0 && 
                         Object.entries(programmes).map(([key, {programme_id, name}]) => {
-                            return (<MenuItem component={<Link to={`programmes/${programme_id}`} />} key={programme_id} my="10px" rootStyles={{['& .ps-menuitem-root >.ps-menu-button']:{width: "100%"}}}>
+                            return (<MenuItem component={<Link to={`programmes/${programme_id}`} />} key={programme_id} my="10px">
                                 {name}  
                             </MenuItem>
                             );

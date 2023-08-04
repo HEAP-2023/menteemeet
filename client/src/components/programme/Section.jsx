@@ -37,7 +37,7 @@ const Section = ({ header, rows, rowColor = "primary.main", highlight = false, c
     }
     let content;
     if (header === 'Resources') {
-        content = <Box display="inline-flex" flexDirection="column" alignItems="left">
+        content = <Box display="inline-flex" flexDirection="column" alignItems="left" ml="25px" pb="15px">
             <ResourcesRow resources={rows} />
         </Box>
     } else if (header === 'Progress') {
@@ -92,7 +92,7 @@ const Section = ({ header, rows, rowColor = "primary.main", highlight = false, c
             {header === 'Announcements' && userType === "organiser" ?
                 (<>
                     <Box display="flex" width={"95%"} alignItems={"center"}>
-                        <SectionHeader text={header} margin="0" />
+                        <SectionHeader text={header} margin="5px 0px 5px 25px"/>
                         <Button
                             sx={{
                                 color: "white",
