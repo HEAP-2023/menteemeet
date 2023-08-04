@@ -109,6 +109,8 @@ const login = async (req, res) => {
 
     const accessToken = await generateAccessToken(account);
 
+    delete account['password'];
+
     if (account.account_type === 'user'){
       const user = await User.findOne({ where: { account_id: account.account_id }, raw: true });
       return res.status(200).json({
