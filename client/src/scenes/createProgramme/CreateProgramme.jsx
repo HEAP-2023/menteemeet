@@ -81,6 +81,7 @@ const CreateProgramme = () => {
             navigate("/")
         } catch (err) {
             console.log(err);
+            navigate("/")
         }
     }
     return (

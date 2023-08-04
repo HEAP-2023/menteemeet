@@ -12,7 +12,7 @@ const Home = () => {
     const userType = useSelector((state) => state.user.userBasicDetails.account_type)
     const name = useSelector((state) => state.user.userBasicDetails.name)
     const programmes = useSelector((state) => state.user.programmes)
-
+    const hasProgrammes = !!programmes && programmes.length > 0
     return (
     <Box width="100%" height="100%" display="flex" flexDirection="column">
         <PageHeader text={`Welcome, ${name}`}/>
@@ -21,11 +21,14 @@ const Home = () => {
 
         <SectionHeader text={userType === "organiser" ? "My Programmes" : "Featured Programmes"}/>
 
-        {(!!programmes && programmes.length > 0) ?  <HomeCarousel/> : 
-        
+        { (!hasProgrammes && userType === "organiser") ?  
+
         <img src="../images/home/no-programmes.png" 
         style={{ margin : "40px" ,maxHeight : "300px", objectFit : "scale-down"}}
-        />}
+        />
+    
+        : <HomeCarousel/> 
+    }
 
         <Box display="flex" justifyContent="space-around" width="100%" height="100%">
             <Box width="45%" height="100%" display="flex" flexDirection="column" alignItems="center" > 

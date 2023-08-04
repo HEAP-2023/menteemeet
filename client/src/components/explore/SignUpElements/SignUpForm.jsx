@@ -18,9 +18,7 @@ import { yupResolver } from "@hookform/resolvers/yup"
 import { Dialog, DialogContent, DialogActions, DialogTitle } from '@mui/material';
 import React, { useState } from 'react';
 
-const SignUpForm = ({id}) => {
-    const [openDialog, setOpenDialog] = useState(false); // Add this line
-    const [isFormOpen, setIsFormOpen] = useState(true);
+const SignUpForm = ({id, setDialogOpen}) => {
 
     const {error, isError ,isLoading, isSuccess : getDetailsSuccess, data : details} = useGetSignUpForm({id})
     const {account_type, name : userName, email, telegram_username} = useSelector((state) => state.user.userBasicDetails)
@@ -37,7 +35,7 @@ const SignUpForm = ({id}) => {
         resolver : yupResolver(applicationVschema)
     })
     const {control,formState: {errors, defaultValues, dirtyFields, isDirty}, isInitialLoading, handleSubmit, reset} = methods
-    const {mutate : signUp} = usePostSignUpForm(setOpenDialog)
+    const {mutate : signUp} = usePostSignUpForm(setDialogOpen)
 
     const handleSave = (data) => {
         // console.log("to be submitted")
@@ -70,7 +68,7 @@ const SignUpForm = ({id}) => {
         
         return (
             <Box>
-                {isFormOpen && (
+                
                 <FormProvider {...methods}>
                 <form onSubmit={handleSubmit(handleSave)}>
                  <Box>
@@ -141,24 +139,9 @@ const SignUpForm = ({id}) => {
                 <Button type="submit" variant="contained" 
                 color="secondary" sx={{mt : "20px"}} autoFocus
                 onClick={()=> console.log("Hi my name is Bruce")}
-                >Submit</Button>       
+                >Submit</Button>
                 </form>
                 </FormProvider>
-                )}
-
-                {/* Dialog */}
-                <Dialog open={openDialog} onClose={() => setOpenDialog(false)}>
-                    <DialogTitle>Success</DialogTitle>
-                    <DialogContent> <p>Application has been successfully submitted.</p> </DialogContent>
-                    <DialogActions>
-                        <Button onClick={() => { 
-                            setOpenDialog(false);
-                            setIsFormOpen(false); }
-                            }>
-                            OK
-                        </Button>
-                    </DialogActions>
-                </Dialog>
 
                 <DevTool control={control}/>
             </Box>
