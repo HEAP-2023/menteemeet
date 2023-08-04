@@ -442,29 +442,29 @@ const addSessionByGrpID = async (req, res) => {
 
 const updateSessionBySessionID = async (req, res) => {
   try {
-    const { date, startTime, endTime, topic, groupID, sessionID } = req.body;
+    const { date, start_time, end_time, topic, group_id, session_id } = req.body;
 
-    const getUserGroupObj = await UserGroup.findOne({ where: { group_id: groupID }, raw: true });
+    const getUserGroupObj = await UserGroup.findOne({ where: { group_id: group_id }, raw: true });
     if (!getUserGroupObj) {
       return res.status(404).json({ message: "Group ID does not exist."});
     }
 
     const convertDate = moment.tz(date, "Asia/Singapore");
 
-    console.log(groupID);
+    console.log(group_id);
 
     await Session.update({
       date: convertDate,
-      start_time: startTime,
-      end_time: endTime,
+      start_time: start_time,
+      end_time: end_time,
       topic: topic,
-      group_id: groupID
-    }, { where: {session_id: sessionID } })
+      group_id: group_id
+    }, { where: {session_id: session_id } })
 
     return res.status(201).json({ message: "Session successfully updated." });
 
   } catch (err) {
-    return res.status(500).json({ message: "Failed to add session!" });
+    return res.status(500).json({ message: "Failed to edit session!" });
   }
 }
 
