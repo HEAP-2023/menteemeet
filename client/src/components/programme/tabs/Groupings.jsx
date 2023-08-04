@@ -8,36 +8,42 @@ import DisplayUsers from "../DisplayUsers";
 import {DndContext} from '@dnd-kit/core';
 import { dragToggle, removeFromParking } from "../../../state(kiv)";
 import DraggableParking from "../DraggableParking";
+import useGetGrouping from "../../../hooks/algo/useGetGrouping";
+const Groupings = ({id}) => {
+    //this page cannot have state change that leads to rerender if not everything will go haywire
 
-const Groupings = () => {
+    
     const api = useGridApiRef();
     const userType = useSelector((state) => state.user.userBasicDetails.account_type);
+    const disableDrag = useSelector((state) => state.user.disableDrag)
+
     const dispatch = useDispatch(); 
-    const [parent, setParent] = useState(null)
-    const [child, setChild] = useState(null)
-    const [rows, setRows] = useState(fetchGroups());
+
+    const { data:groupingData , isSuccess, isError, isLoading } = useGetGrouping(id)
+    const rows = groupingData.map((group) => ({...group, mentee : JSON.parse(group.mentee), mentor : JSON.parse(group.mentor)}))
+    if(isSuccess){
 
     const handleDragEnd = (event) => {
-        const {over} = event;
-        console.log(`draggable id = ${event.active.id} is dropped into container with id = ${event.over.id}`)
-        const droppingRole = event.active.data.current.role
-        const containerRole = getRoleFromId(event.over.id)
+        const {over, active} = event;
+        if(!over){return }
+        console.log(`draggable id = ${active.id} is dropped into container with id = ${over.id}`)
+        const droppingRole = active.data.current.role
+        const containerRole = getRoleFromId(over.id)
         if(droppingRole != containerRole){
             console.log("not allowed")
             return
         }
-        setParent(over ? over.id : null);
-        const data = event.active.data.current
-        modifyRows(api, event.over.id, data);
 
+        const data = event.active.data.current
+        console.log(data)
+        modifyRows(api, event.over.id, data);
         dispatch(removeFromParking({id : event.active.id}))
     }
     const handleDragStart = (event) => {
-        setChild(event.active.data.current);
+        console.log(event)
     }
     
-    const disableDrag = useSelector((state) => state.user.disableDrag)
-    const columns = structure(parent, child) 
+    const columns = structure() 
 
 
     return (<Box>
@@ -58,7 +64,10 @@ const Groupings = () => {
         }}>{disableDrag ?  "edit" : "cancel" }</Button>
         }
         {
-            !disableDrag && <Button variant="contained" onClick={() => {
+            !disableDrag && 
+            <Button variant="contained" 
+            // disabled={remain.length > 0 ? true : false}
+            onClick={() => {
                 const updatedData = api.current.getSortedRows();
                 console.log("this will be sent to db")
                 console.log(updatedData);
@@ -68,10 +77,12 @@ const Groupings = () => {
             </Button>
         }
     </Box>);
+    }
 }
 export default Groupings
 
 const modifyRows = (api, to, data) => {
+    console.log(to)
     const [containerID, role] = to.split("-");
     console.log(api.current)
     const rows = api.current.getSortedRows()
@@ -104,7 +115,7 @@ const fetchGroups = () => {
     ]
 }
 
-const structure = (parent, child) => {
+const structure = () => {
     return (
         [
             { field: 'id', headerName: 'ID', width: 90 },
@@ -119,14 +130,14 @@ const structure = (parent, child) => {
               headerName: 'Mentor(s)',
               width: 300,
               editable: true,
-              renderCell : (props) => <DisplayUsers props={props} role={"mentor"} parent={parent} child={child}/>
+              renderCell : (props) => <DisplayUsers props={props} role={"mentor"} />
             },
             {
               field: 'mentee',
               headerName: 'Mentees',
               width: 300,
               editable: true,
-              renderCell : (props) => <DisplayUsers props={props} role={"mentee"} parent={parent} child={child}/>
+              renderCell : (props) => <DisplayUsers props={props} role={"mentee"} />
             },
             {
               field: 'commonDT',
@@ -145,6 +156,12 @@ const structure = (parent, child) => {
 
 const displayDate = (props) => {
     const { api, value } = props;
+    if(!value){
+        return (
+        <Box width="100%" display="flex" flexDirection="column" >
+            <Typography>no available date time</Typography>
+        </Box>)
+    }
     return (<Box width="100%" display="flex" flexDirection="column" >
         {value.map((user) => {
             return (

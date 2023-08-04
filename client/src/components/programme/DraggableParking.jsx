@@ -20,7 +20,7 @@ const DraggableParking = () => {
     <Draggable key={user.id} id={user.id} name={user.name} role={user.role} disableDrag={disableDrag}>
         <Box display="flex" sx={{m:"10px 0", borderRadius:"20px", bgcolor:"#EBEBEB"}}>
                 <NameAvatar name={user.name} scale={0.5} m="0"/>
-                <Typography>{user.name}</Typography>
+                <Typography>{user.name} {user.id}</Typography>
         </Box>
     </Draggable>
                 )

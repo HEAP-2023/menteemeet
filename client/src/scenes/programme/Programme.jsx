@@ -1,4 +1,4 @@
-import { Box, Button } from "@mui/material";
+import { Box, Button, CircularProgress, Typography } from "@mui/material";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import { TabPanel, TabContext } from '@mui/lab';
@@ -9,6 +9,9 @@ import Sessions from "../../components/programme/tabs/Sessions";
 import MainPage from "../../components/programme/tabs/MainPage";
 import Feedback from "../../components/programme/tabs/Feedback";
 import Applications from "../../components/programme/tabs/Applications";
+import GenerateGroup from "./GenerateGroup";
+import useGetGrouping from "../../hooks/algo/useGetGrouping";
+
 // redux
 import { useSelector } from "react-redux";
 import Groupings from "../../components/programme/tabs/Groupings";
@@ -32,13 +35,27 @@ const Programme = () => {
     const userType = useSelector((state) => state.user.userBasicDetails.account_type);
     const userName = useSelector((state) => state.user.userBasicDetails.name)
 
+
+    const { data , isSuccess, isError, isLoading } = useGetGrouping(id)
+    console.log(data)
+
     if(userRole === undefined){
         userRole = "organiser";
     }
+
+    if(isLoading) {
+        return (
+            <Box display="flex" justifyContent="center" alignItems="center">
+                <CircularProgress color="secondary"/>
+            </Box>
+        )
+    }
+
+    if(isSuccess){
     return (
         <Box>
             <DeleteProgrammeModal id={id} open={deleteModal} setDeleteModal={setDeleteModal} programme_name={programme.name}/>
-
+    
             {/* header */}
             <Box display="flex" justifyContent="space-between">
                 <PageHeader text={`Welcome, ${userName} (${userRole})`}/>
@@ -78,7 +95,7 @@ const Programme = () => {
                     <Sessions programmeID={id}/>
                 </TabPanel>
                 <TabPanel value="groupings" index={2}>
-                    <Groupings/>
+                    {data.length > 0 ? <Groupings id={id}/> : <GenerateGroup progID={id}/>}
                 </TabPanel>
                 <TabPanel value="feedback" index={3}>
                     <Feedback />
@@ -96,6 +113,7 @@ const Programme = () => {
                 </TabContext>
         </Box>
     )
+            }
 }
 
 export default Programme;

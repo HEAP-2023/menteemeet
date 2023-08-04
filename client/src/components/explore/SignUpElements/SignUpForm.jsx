@@ -21,7 +21,7 @@ const SignUpForm = ({id}) => {
         defaultValues :{
             name : userName,
             email : email, 
-            tele : !!telegram_username ? telegram_username : "none",
+            tele : !!telegram_username ? telegram_username : "",
             role : "mentee",
             skills : [{skill : "-"}, {skill : "-"}, {skill : "-"}],
             interests : [{interest : "-"}, {interest : "-"}, {interest : "-"}],
