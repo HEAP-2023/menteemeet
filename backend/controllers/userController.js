@@ -451,7 +451,7 @@ const updateSessionBySessionID = async (req, res) => {
 
     const convertDate = moment.tz(date, "Asia/Singapore");
 
-    console.log(group_id);
+    // console.log(group_id);
 
     await Session.update({
       date: convertDate,
@@ -465,6 +465,27 @@ const updateSessionBySessionID = async (req, res) => {
 
   } catch (err) {
     return res.status(500).json({ message: "Failed to edit session!" });
+  }
+}
+
+const deleteSessionBySessionID = async (req, res) => {
+  try {
+    //only mentor can delete. 
+    const sessID = req.params.sessID;
+
+    const getSessionObj = await Session.findOne({ where: { session_id: sessID }, raw: true});
+
+    if (!getSessionObj) {
+      return res.status(404).json({ message: "Session does not exist. "});
+    }
+    
+    await Session.destroy({ where: { session_id: sessID }} );
+
+    return res.status(200).json({ message: "Session has been successfully deleted."})
+
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ error: err });
   }
 }
 
@@ -587,5 +608,5 @@ const signup = async (req, res) => {
 }
 
 module.exports = { updateUser, getUser, getAllProgByUserID, getUnsignedProg, getSkill, 
-  addSkill, addInterest, getInterest, getAllSessions, getSessionsByProgID, 
-  addSessionByGrpID, updateSessionBySessionID, getPendingApps, getApprovedApps, getRejectedApps, signup };
+  addSkill, addInterest, getInterest, getAllSessions, getSessionsByProgID, addSessionByGrpID, 
+  updateSessionBySessionID, deleteSessionBySessionID, getPendingApps, getApprovedApps, getRejectedApps, signup };
