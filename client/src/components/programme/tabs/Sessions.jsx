@@ -59,9 +59,11 @@ const Sessions = (programmeID) => {
       <SessionTable rows={upcomingRows} columns={columns}
         checkbox={role === "mentee" ? false : true}
         color={colors.primary[500]}
-        editable={role === "mentee" ? false : true} />
+        editable={role === "mentee" ? false : true}
+        handleRerender={handleRerender} />
       <SectionHeader text="Past Sessions" />
-      <SessionTable rows={pastRows} columns={columns} />
+      <SessionTable rows={pastRows} columns={columns}
+        handleRerender={handleRerender} />
     </Box>
   );
 }
