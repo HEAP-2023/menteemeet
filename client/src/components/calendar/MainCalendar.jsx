@@ -11,8 +11,10 @@ import { format } from 'date-fns';
 import CalendarFilter from './CalendarFilter';
 import { Box } from '@mui/material';
 import { getAllSessions } from '../../services/user/userServices';
+import { useSelector } from 'react-redux';
 const MainCalendar = () => {
-
+    const programmes = useSelector((state) => state.user.programmes);
+    console.log("programmes:", programmes);
     const [events, setEvents] = useState([]);
 
     useEffect(() => {
@@ -21,10 +23,30 @@ const MainCalendar = () => {
             // setEvents(res.data.sessionsWithRole);
             const sessions = res.data.sessionsWithRole;
             console.log("sessions:", res)
+            const eventSessions = sessions.map((session) => {
+                const programme = programmes.find((prog) => prog.programme_id === session.programme_id);
+                const eventTitle = programme.name;
+                
+                return {
+                    id: session.session_id,
+                    title: `${eventTitle} mentoring session`,
+                    start: `${session.date}T${session.start_time}`,
+                    end: `${session.date}T${session.end_time}`,
+                    extendedProps:{
+                        group_id: session.group_id,
+                        role: session.role,
+                        programme_id: session.programme_id,
+                        topic: session.topic,
+                        programme_name: eventTitle
+                    }
+                }
+            })
+            setEvents(eventSessions);
+            console.log("eventSessions:", eventSessions);
         })
         .catch(err => {
             console.log("ERROR:", err);
-          })
+        })
     },[])
 
 
@@ -74,7 +96,7 @@ const MainCalendar = () => {
         initialView: "dayGridMonth",
         firstDay: 1, // first day is a Monday
         headerToolbar: {
-            start: 'dayGridMonth,timeGridWeek,listMonth', // will normally be on the left. if RTL, will be on the right
+            start: 'dayGridMonth,timeGridWeek,listYear', // will normally be on the left. if RTL, will be on the right
             center: 'title',
             end: 'today prev,next' // will normally be on the right. if RTL, will be on the left
         },
@@ -122,10 +144,10 @@ const MainCalendar = () => {
     const handleFiltersChange = (filters) => {
         setSelectedFilters(filters);
         // console.log(`selected filters: ` + selectedFilters);
-        console.log(JSON.stringify(filters));
+        console.log("FILTERS:", JSON.stringify(filters));
         const filteredEvents = events.filter((event) => {
-            console.log(`${event.mentorshipProgramme}: ` + filters[event.mentorshipProgramme]);
-            return filters[event.mentorshipProgramme];
+            // console.log(`${event.extendedProps.programme_name}: ` + filters[event.extendedProps.programme_name]);
+            return filters[event.extendedProps.programme_name];
         })
         setShowEvents(filteredEvents);
     }

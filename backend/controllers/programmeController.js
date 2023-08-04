@@ -4,6 +4,8 @@ const {Op} = require('sequelize');
 const Skill = require("../models/skill");
 const Interest = require("../models/interest");
 const UserProgramme = require("../models/userProgramme");
+const User = require("../models/user");
+const Account = require("../models/account");
 
 const getEachProg = async (req, res) => {
   try {
@@ -239,19 +241,38 @@ const searchProgByName = async (req, res) => {
 const getMenteesMentorsByProgID = async (req, res) => {
   const id = req.params.id;
 
+  //name of the mentee
   const mentees = await UserProgramme.findAll({ where: { programme_id: id, role: "mentee" }, include: { 
     model: Application,
     attributes: ["availability", "skills", "interests"],
   },
     raw: true });
 
+  const combineMentees = mentees.map(async (menteesObj) => {
+    const foundUser = await (User.findOne({
+      where: { user_id: menteesObj.user_id }, include: Account
+    }));
+    menteesObj["name"] = foundUser.Account.name;
+  })
+
+  //name of the mentor
   const mentors = await UserProgramme.findAll({ where: { programme_id: id, role: "mentor" }, include: { 
     model: Application,
     attributes: ["availability", "skills", "interests"],
   },
     raw: true });
 
-  return res.status(400).json({ mentees, mentors });
+  const combineMentors = mentors.map(async (mentorsObj) => {
+    const foundUser = await (User.findOne({
+      where: { user_id: mentorsObj.user_id }, include: Account
+    }));
+    mentorsObj["name"] = foundUser.Account.name;
+  })
+
+  await Promise.all(combineMentees);
+  await Promise.all(combineMentors);
+
+  return res.status(200).json({ mentees, mentors });
 }
 
 const scorer = async (req, res) => {
