@@ -23,16 +23,23 @@ const Sessions = (programmeID) => {
     (objA, objB) => Number(new Date(`${objA.date} ${objA.start_time}`).getTime()) - Number(new Date(`${objB.date} ${objB.start_time}`).getTime())
   )
   console.log(programmeID)
+  const [rerender, setRerender] = useState(true);
+
   useEffect(() => {
     getSessionsByProgID(programmeID.programmeID)
       .then(res => {
         console.log("res", res)
         setRows(res.data.sessionsWithRole);
+        setRerender(false);
       })
       .catch(err => {
         console.log("ERROR:", err);
       })
-  }, [programmeID.programmeID])
+  }, [programmeID.programmeID, rerender])
+
+  const handleRerender = () => {
+    setRerender(true);
+  };
 
   const userType = useSelector((state) => state.user.userBasicDetails.account_type);
   const colors = generateColors();
@@ -45,7 +52,7 @@ const Sessions = (programmeID) => {
 
   return (
     <Box>
-      {role === "mentor" && <NewSessionLog />}
+      {role === "mentor" && <NewSessionLog handleRerender={handleRerender}/>}
       <Box width="100%" display="flex">
         <SectionHeader text="Upcoming Sessions" />
       </Box>
