@@ -15,11 +15,11 @@ const userGroup = sequelize.define(
             allowNull: true
         },
         mentees: {
-          type: DataTypes.STRING(),
+          type: DataTypes.TEXT,
           allowNull: true,
         },
         mentors: {
-          type: DataTypes.STRING(),
+          type: DataTypes.TEXT,
           allowNull: true,
         },
         common_dt: {

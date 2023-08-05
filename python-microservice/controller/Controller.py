@@ -8,7 +8,6 @@ from models.UserGroup import UserGroup, writeToDB
 
 def getGrpsByProgID(progID):
     allGroups = UserGroup.query.filter_by(programme_id=progID).all()
-    # print("DEBUG ALL_GROUPS:", [userGroup.jsonEncoder() for userGroup in allGroups])
     return [userGroup.jsonEncoder() for userGroup in allGroups], 200
 
 
