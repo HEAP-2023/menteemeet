@@ -1,14 +1,31 @@
-import { Box, Accordion, AccordionDetails, AccordionSummary, Typography } from "@mui/material";
+import { Box, Accordion, AccordionDetails, AccordionSummary, Typography, Stack } from "@mui/material";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Header from "../../components/login/start/Header";
+import { generateColors } from "../../theme";
 
 const FAQ = () => {
+    const colors = generateColors()
     return (
     <Box>
     <Header/>
+    <Stack
+    sx={{
+        '&> :nth-child(even)':{
+            '&>div':{
+              backgroundColor: colors.primary[500]
+            }
+          },
+          '&> :nth-child(odd)':{
+            '&>div':{
+              backgroundColor: "#AEAEFF"
+            }
+          },
+    }}
+    >
         {
             faq.map(q => <FaqRow title={q.title} details={q.details}/>)
         }
+    </Stack>
         
     </Box>)
 }
@@ -35,19 +52,20 @@ const FaqRow = ({title, details}) => {
 
 const faq = [
     {
-        title : "title 1",
-        details : "answer 1",
+        title : "Why do i need this webapp?",
+        details : "It is fairly prevalent to have mentors and mentees navigating the tech sector with so many different types of technology out there. Traditionally, pairing of mentors and mentees are done manually and it is a problem for organisers, mentors and mentees to find a suitable team and hence this webapp automates the process for you",
     },
     {
-        title : "title 2",
-        details : "answer 2",
+        title : "What is the TechStack Used here?",
+        details : "SQL Express React Node",
     },
     {
-        title : "title 3",
-        details : "answer 3",
+        title : "FrontEnd libraries used?",
+        details : "1. Material UI \n 2. Tanstack Query (query data from backend) \n 3. React Hook Form \n 4. yup (form validation) \n 5. nivo (charts) \n 6. FramerMotion (animation) \n",
     },
     {
-        title : "title 4",
-        details : "answer 4",
+        title : "Is this app secure?",
+        details : "We have enhanced security through the use of jwt tokens and encryption when storing passwords",
     },
+    
 ]

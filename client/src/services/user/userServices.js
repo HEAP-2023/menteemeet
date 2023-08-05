@@ -55,6 +55,25 @@ export const getApprovedApplications = async ()  => {
     return res.data.appArray
 }
 
+export const getPendingApplications = async ()  => {
+    const res = await axiosInstance({
+        method : "get",
+        url : `/users/pendingApps`,
+        headers: { Authorization: `Bearer ${localStorage.getItem("jwt")}` },
+    })
+    return res.data.appArray
+}
+
+export const getRejectedApplications = async ()  => {
+    const res = await axiosInstance({
+        method : "get",
+        url : `/users/rejectedApps`,
+        headers: { Authorization: `Bearer ${localStorage.getItem("jwt")}` },
+    })
+    return res.data.appArray
+}
+
+
 export const getAllSessions = async () => {
     const res = await axiosInstance({
         method: "get",
@@ -83,5 +102,15 @@ export const updateSessionBySessionID = async(session) => {
         data: session
     })
     console.log("SESSION:",session);
+    return res
+}
+
+export const deleteSessionBySessionID = async(sessID) => {
+    const res = await axiosInstance({
+        method: "delete",
+        url: `/users/session/${sessID}`,
+        headers: { Authorization: `Bearer ${localStorage.getItem("jwt")}` },
+        data: sessID
+    })
     return res
 }

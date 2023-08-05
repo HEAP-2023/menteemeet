@@ -1,0 +1,26 @@
+{
+    "mentees": [
+        {
+            "user_prog_id": 4,
+            "role": "mentee",
+            "user_id": 3,
+            "programme_id": 5,
+            "application_id": null,
+            "Application.availability": null,
+            "Application.skills": null,
+            "Application.interests": null
+        }
+    ],
+    "mentors": [
+        {
+            "user_prog_id": 1,
+            "role": "mentor",
+            "user_id": 2,
+            "programme_id": 5,
+            "application_id": null,
+            "Application.availability": null,
+            "Application.skills": null,
+            "Application.interests": null
+        }
+    ]
+}

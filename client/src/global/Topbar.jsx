@@ -34,7 +34,7 @@ const Topbar = () => {
             </Badge>
         </IconButton>}
 
-        <Notifications />
+        {userType !== "organiser" && <Notifications />}
 
         <ClickAwayListener onClickAway={() => dispatch(closeProfileOverlay())}>
             <Box width="10%" minWidth="200px" display="flex" >

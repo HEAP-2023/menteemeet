@@ -1,49 +1,87 @@
-import { Box, Typography, Button } from "@mui/material"
+import { Box, Typography, Button, Modal } from "@mui/material"
 import GroupingTable from "../tables/GroupingTable"
 import {  useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useGridApiRef } from "@mui/x-data-grid";
+import usePutNewGrouping from "../../../hooks/algo/usePutNewGrouping"
 
 import DisplayUsers from "../DisplayUsers";
 import {DndContext} from '@dnd-kit/core';
 import { dragToggle, removeFromParking } from "../../../state(kiv)";
 import DraggableParking from "../DraggableParking";
+import useGetGrouping from "../../../hooks/algo/useGetGrouping";
+import { useQueryClient } from "@tanstack/react-query";
+const Groupings = ({id}) => {
+    //this page cannot have state change that leads to rerender if not everything will go haywire
 
-const Groupings = () => {
+    
     const api = useGridApiRef();
     const userType = useSelector((state) => state.user.userBasicDetails.account_type);
+    const disableDrag = useSelector((state) => state.user.disableDrag)
+    const [submitted, setSubmitted] = useState(false)
     const dispatch = useDispatch(); 
-    const [parent, setParent] = useState(null)
-    const [child, setChild] = useState(null)
-    const [rows, setRows] = useState(fetchGroups());
+    const queryClient = useQueryClient()
+    const { data:groupingData , isSuccess, isError, isLoading } = useGetGrouping(id)
+    const { mutate : submitGroupEdit } = usePutNewGrouping(id)
+    console.log(groupingData)
+    const rows = groupingData.map((group) => {
+        const {commonDT, groupNo, id, mentee, mentor} = group;
+        const parsedMentee = JSON.parse(mentee).map(m => ({...m, availability : JSON.stringify(m.availability)}))
+        const parsedMentor = JSON.parse(mentor).map(m => ({...m, availability : JSON.stringify(m.availability)}))
+        const parsedDT = JSON.parse(commonDT)
+        console.log(parsedMentee)
 
+        return {
+            commonDT : parsedDT,
+            groupNo : groupNo, 
+            id : id, 
+            mentee : parsedMentee,
+            mentor : parsedMentor,
+        }
+        // return ({...group, mentee : JSON.parse(group.mentee), mentor : JSON.parse(group.mentor), commonDT : JSON.parse(group.commonDT)})
+    })
+
+    console.log(rows)
+
+
+    if(isSuccess){
+    const len = rows.reduce((sum, group) => sum + group.mentee.length + group.mentor.length, 0)
     const handleDragEnd = (event) => {
-        const {over} = event;
-        console.log(`draggable id = ${event.active.id} is dropped into container with id = ${event.over.id}`)
-        const droppingRole = event.active.data.current.role
-        const containerRole = getRoleFromId(event.over.id)
+        const {over, active} = event;
+        if(!over){return }
+        console.log(`draggable id = ${active.id} is dropped into container with id = ${over.id}`)
+        const droppingRole = active.data.current.role
+        const containerRole = getRoleFromId(over.id)
         if(droppingRole != containerRole){
             console.log("not allowed")
             return
         }
-        setParent(over ? over.id : null);
-        const data = event.active.data.current
-        modifyRows(api, event.over.id, data);
 
+        const data = event.active.data.current
+        console.log(data)
+        modifyRows(api, event.over.id, data);
         dispatch(removeFromParking({id : event.active.id}))
     }
     const handleDragStart = (event) => {
-        setChild(event.active.data.current);
+        console.log(event)
     }
-    
-    const disableDrag = useSelector((state) => state.user.disableDrag)
-    const columns = structure(parent, child) 
+    const columns = structure() 
 
 
     return (<Box>
+        <Modal open={!!submitted} onClose={() => {
+            setSubmitted(false);
+            window.location.reload()}}
+            sx={{
+                width:"100%", height:"100%",
+                display:"flex", justifyContent:"center",
+                alignItems : "center"}} 
+            >
+            <Box bgcolor="#ffffff" width="20%" p="20px">{submitted}</Box>
+        </Modal>
         <DndContext onDragEnd={handleDragEnd} onDragStart={handleDragStart}>
             <Box width="100%" display="flex">
-                <GroupingTable api={api} rows={rows} columns={columns} mode={disableDrag ? "view" : "edit"}/>
+                <GroupingTable api={api} rows={rows} columns={columns}/>
                 {userType === "organiser" && <DraggableParking/>}
             </Box>
         </DndContext>
@@ -58,20 +96,31 @@ const Groupings = () => {
         }}>{disableDrag ?  "edit" : "cancel" }</Button>
         }
         {
-            !disableDrag && <Button variant="contained" onClick={() => {
+            !disableDrag && 
+            <Button variant="contained" 
+            // disabled={remain.length > 0 ? true : false}
+            onClick={() => {
                 const updatedData = api.current.getSortedRows();
-                console.log("this will be sent to db")
-                console.log(updatedData);
-                dispatch(dragToggle());
+                const {status, message} = isValid(updatedData, len)
+                if(status){
+                    submitGroupEdit(formatForSubmission(updatedData))
+                    console.log("submit data", formatForSubmission(updatedData)) //----------------------------------------------------submission
+                    setSubmitted(message)
+                    dispatch(dragToggle());
+                }else{
+                    setSubmitted(message)
+                }
             }}>
                 save
             </Button>
         }
     </Box>);
+    }
 }
 export default Groupings
 
 const modifyRows = (api, to, data) => {
+    console.log(to)
     const [containerID, role] = to.split("-");
     console.log(api.current)
     const rows = api.current.getSortedRows()
@@ -104,7 +153,7 @@ const fetchGroups = () => {
     ]
 }
 
-const structure = (parent, child) => {
+const structure = () => {
     return (
         [
             { field: 'id', headerName: 'ID', width: 90 },
@@ -119,14 +168,14 @@ const structure = (parent, child) => {
               headerName: 'Mentor(s)',
               width: 300,
               editable: true,
-              renderCell : (props) => <DisplayUsers props={props} role={"mentor"} parent={parent} child={child}/>
+              renderCell : (props) => <DisplayUsers props={props} role={"mentor"} />
             },
             {
               field: 'mentee',
               headerName: 'Mentees',
               width: 300,
               editable: true,
-              renderCell : (props) => <DisplayUsers props={props} role={"mentee"} parent={parent} child={child}/>
+              renderCell : (props) => <DisplayUsers props={props} role={"mentee"} />
             },
             {
               field: 'commonDT',
@@ -145,6 +194,12 @@ const structure = (parent, child) => {
 
 const displayDate = (props) => {
     const { api, value } = props;
+    if(!value){
+        return (
+        <Box width="100%" display="flex" flexDirection="column" >
+            <Typography>no available date time</Typography>
+        </Box>)
+    }
     return (<Box width="100%" display="flex" flexDirection="column" >
         {value.map((user) => {
             return (
@@ -160,3 +215,40 @@ const getRoleFromId = (id) => {
     console.log(id.split('-')[1])
     return id.split('-')[1]
 }
+
+
+const isValid = (data, len) => {
+    data.forEach(group => {
+        console.log(group)
+        if(group.mentee.length < 1){
+            return {status : false, message : "group without mentee"}
+        }
+        if(group.mentor.length < 1){
+            return {status : false, message : "group without mentor"}
+        }
+        len = len - group.mentee.length - group.mentor.length
+    });
+    if(len > 0){return {status : false, message : "There is unassigned participants"}}
+    return {status : true, message : "Successful Submission"};
+}
+
+
+
+const formatForSubmission = (data) => {
+    console.log(data)
+    const formatted = data.map((group) => {
+        const {commonDT, groupNo, id, mentee, mentor} = group;
+        
+        const parsedMentee = mentee.map(m => ({...m, availability : JSON.parse(m.availability)}))
+        const parsedMentor = mentor.map(m => ({...m, availability : JSON.parse(m.availability)}))
+
+        return {
+            commonDT : commonDT,
+            groupNo : groupNo, 
+            id : id, 
+            mentee : parsedMentee,
+            mentor : parsedMentor,
+        }
+    })
+    return (formatted)
+} 

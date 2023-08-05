@@ -13,9 +13,12 @@ import { useForm, Controller } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { ErrorMessage } from '@hookform/error-message';
-import {format} from "date-fns";
+import { format} from "date-fns";
+import { addAnnouncementByProgID } from "../../services/organiser/organiserServices"
+import { useParams } from 'react-router-dom';
 
-const Section = ({ header, rows, rowColor = "primary.main", highlight = false, checkbox = false, showDTG = false }) => {
+const Section = ({ header, rows, rowColor = "primary.main", highlight = false, checkbox = false, showDTG = false, handleRerender }) => {
+    const {id} = useParams();
     const userType = useSelector((state) => state.user.userBasicDetails.account_type)
     const progress = 90; // to change
     const [announcementModalOpen, setAnnouncementModalOpen] = useState(false);
@@ -24,16 +27,31 @@ const Section = ({ header, rows, rowColor = "primary.main", highlight = false, c
 
     const announcementSchema = yup.object()
         .shape({
-            newAnnouncementContent: yup.string()
-                .required("Content is required")
+            description: yup.string()
+                .required("Required"),
+            title: yup.string()
+                .required("Required"),                
         }).required()
 
     const { control, handleSubmit, reset, formState: { errors } } = useForm({ resolver: yupResolver(announcementSchema) });
     const handleSave = (data) => {
-        console.log(data)
+        console.log("data:",id)
+        const newAnnouncement = {
+            title: data.title,
+            description: data.description,
+            programme_id: id
+        }
+        addAnnouncementByProgID(newAnnouncement)
+            .then(res => {
+            console.log("res", res);
+            handleRerender();
+          })
+            .catch(err => {
+            console.log("ERROR:", err);
+          })
         handleModalClose();
-        reset({ newAnnouncementTitle: "" });
-        reset({ newAnnouncementContent: "" });
+        reset({ title: "" });
+        reset({ description: "" });
     }
     let content;
     if (header === 'Resources') {
@@ -134,18 +152,20 @@ const Section = ({ header, rows, rowColor = "primary.main", highlight = false, c
                                     </Typography>
                                     <Typography>
                                         Title
+                                        <ErrorMessage errors={errors} name="title" render={({ message }) => <p style={{ color: "#ff0000", margin:'0px 10px', display: "inline-block" }}>{message}</p>} />
                                     </Typography>
-                                    <Controller name="newAnnouncementTitle" defaultValue={""} control={control} render={({ field }) =>
+                                    <Controller name="title" defaultValue={""} control={control} render={({ field }) =>
                                         <TextField {...field} sx={{ size: "small", width: "100%" }} />
                                     } />
                                     <Typography>
-                                        Content
+                                        Description
+                                        <ErrorMessage errors={errors} name="description" render={({ message }) => <p style={{ color: "#ff0000", margin:'0px 10px', display: "inline-block" }}>{message}</p>} />
                                     </Typography>
-                                    <Controller name="newAnnouncementContent" defaultValue={""} control={control} render={({ field }) =>
+                                    <Controller name="description" defaultValue={""} control={control} render={({ field }) =>
                                         <TextField {...field} sx={{ size: "small", width: "100%" }} />
                                     } />
                                     <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
-                                        <ErrorMessage errors={errors} name="newAnnouncementContent" render={({ message }) => <p style={{ color: "#ff0000", marginLeft: "35px" }}>{message}</p>} />
+                                        {/* <ErrorMessage errors={errors} name="description" render={({ message }) => <p style={{ color: "#ff0000", marginLeft: "35px" }}>{message}</p>} /> */}
                                         <CustomButton buttonName={"Submit"} />
                                     </Box>
                                 </form>

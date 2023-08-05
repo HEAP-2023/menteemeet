@@ -22,19 +22,22 @@ const MainPage = (programmeID) => {
       })
   },[programmeID.programmeID])
 
-    
-
+    const [rerender, setRerender] = useState(false);
+    const handleRerender = () => {
+        setRerender(true);
+    }
     const [announcements, setAnnouncements] = useState([]);
     useEffect(() => {
         getAnnouncementsByProgID(programmeID.programmeID)
         .then(res => {
             setAnnouncements(res.data.announcementArray)
             console.log("announcements:" ,announcements)
+            setRerender(false);
         })
         .catch(err => {
             console.log("ERROR:", err);
           })
-    }, [programmeID.programmeID])
+    }, [programmeID.programmeID, rerender])
   
     return (
         <Box display="flex" justifyContent="space-around" width="100%" height="100%">
@@ -44,7 +47,7 @@ const MainPage = (programmeID) => {
                 {/* Tasks -- Removed */}
                 {/* <Section header="Tasks" rows={tasks} rowColor="#AEAEFF" checkbox={true}></Section> */}
                 {/* Announcements */}
-                <Section header="Announcements" rows={announcements} rowColor="#AEAEFF" highlight={true}></Section>
+                <Section header="Announcements" rows={announcements} rowColor="#AEAEFF" highlight={true} handleRerender={handleRerender}></Section>
             </Box>
 
             <Box width="45%">
