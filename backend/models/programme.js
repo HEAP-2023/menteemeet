@@ -38,10 +38,6 @@ const Programme = sequelize.define(
           type: DataTypes.DATEONLY,
           allowNull: false,
         },
-        skills: {
-          type: DataTypes.STRING(),
-          allowNull: true
-        },
         display_image: {
             type: DataTypes.STRING(),
             allowNull: true,

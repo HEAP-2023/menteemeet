@@ -16,6 +16,9 @@ router.get('/programmes/', authenticateToken, userController.getUnsignedProg);
 
 router.get('/session', authenticateToken, userController.getAllSessions);
 router.get('/session/:progID', authenticateToken, userController.getSessionsByProgID);
+router.post('/session', authenticateToken, userController.addSessionByGrpID);
+router.put('/session/update', authenticateToken, userController.updateSessionBySessionID);
+router.delete('/session/:sessID', authenticateToken, userController.deleteSessionBySessionID);
 
 router.get('/approvedApps', authenticateToken, userController.getApprovedApps);
 router.get('/pendingApps', authenticateToken, userController.getPendingApps);
@@ -28,7 +31,6 @@ router.post('/:id/skills', authenticateToken, userController.addSkill);
 router.get('/:id/interests', authenticateToken, userController.getInterest);
 router.post('/:id/interests', authenticateToken, userController.addInterest);
 router.get('/:id', authenticateToken, userController.getUser);
-
 
 router.post('/programmes', authenticateToken, userController.signup)
 
