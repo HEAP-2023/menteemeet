@@ -18,6 +18,7 @@ router.get('/session', authenticateToken, userController.getAllSessions);
 router.get('/session/:progID', authenticateToken, userController.getSessionsByProgID);
 router.post('/session', authenticateToken, userController.addSessionByGrpID);
 router.put('/session/update', authenticateToken, userController.updateSessionBySessionID);
+router.delete('/session/:sessID', authenticateToken, userController.deleteSessionBySessionID);
 
 router.get('/approvedApps', authenticateToken, userController.getApprovedApps);
 router.get('/pendingApps', authenticateToken, userController.getPendingApps);

@@ -205,8 +205,8 @@ const getAllProgsByOrgID = async (req, res) => {
 //Check if capacity reached.
 const checkCapacity = async (progID, roleApplied) => {
 
-  const getCapacity = await Application.findAndCountAll({ where: { programme_id: progID, is_accepted: 1}, 
-    raw: true });
+  const getCapacity = await Application.findAndCountAll({ where: { programme_id: progID, is_accepted: 1, 
+    role: roleApplied }, raw: true });
   const getProgramme = await Programme.findOne({ where: {programme_id: progID}, raw: true});
 
   const programme_capacity = roleApplied === "mentor" ? getProgramme.mentorCapacity : getProgramme.menteeCapacity;
@@ -297,7 +297,7 @@ const deleteProg = async (req, res) => {
   const org = await Organiser.findOne({ where: { account_id: account.account_id } });
 
   if (!org) {
-    return res.status(400).json({ message: "Organiser not found!" });
+    return res.status(404).json({ message: "Organiser not found!" });
   }
 
   try {
@@ -430,5 +430,24 @@ const updateAnnouncementByProgID = async (req, res) => {
   }
 }
 
+const deleteAnnouncementsByProgID = async (req, res) => {
+  try {
+    const isValidOrganiser = await checkValidOrganiser(req.account);
+
+    if (!isValidOrganiser) {
+      return res.status(403).json({ message: "You are not allowed to view this page." });
+    }
+
+    const announcementID = req.params.announcementID;
+
+    await Announcement.destroy({ where: { announcement_id: announcementID } })
+    return res.status(200).json({ message: "Announcement has been successfully deleted."})
+  
+  } catch (err) {
+    return res.status(500).json({ error: err });
+  }
+}
+
 module.exports = { getOrg, updateOrg, addProg, getAllProgsByOrgID, checkCapacity, evaluateApp, 
-  getApp, deleteProg, getAnnouncementsByProgID, addAnnouncementByProgID, updateAnnouncementByProgID };
+  getApp, deleteProg, getAnnouncementsByProgID, addAnnouncementByProgID, updateAnnouncementByProgID,
+  deleteAnnouncementsByProgID };

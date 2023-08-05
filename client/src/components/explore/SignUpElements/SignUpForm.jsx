@@ -14,14 +14,21 @@ import usePostSignUpForm from "../../../hooks/user/usePostSignUpForm"
 import { applicationVschema } from "./applicationVschema"
 import { yupResolver } from "@hookform/resolvers/yup"
 
+
+import { Dialog, DialogContent, DialogActions, DialogTitle } from '@mui/material';
+import React, { useState } from 'react';
+
 const SignUpForm = ({id}) => {
+    const [openDialog, setOpenDialog] = useState(false); // Add this line
+    const [isFormOpen, setIsFormOpen] = useState(true);
+
     const {error, isError ,isLoading, isSuccess : getDetailsSuccess, data : details} = useGetSignUpForm({id})
     const {account_type, name : userName, email, telegram_username} = useSelector((state) => state.user.userBasicDetails)
     const methods = useForm({
         defaultValues :{
             name : userName,
             email : email, 
-            tele : !!telegram_username ? telegram_username : "none",
+            tele : !!telegram_username ? telegram_username : "",
             role : "mentee",
             skills : [{skill : "-"}, {skill : "-"}, {skill : "-"}],
             interests : [{interest : "-"}, {interest : "-"}, {interest : "-"}],
@@ -30,9 +37,10 @@ const SignUpForm = ({id}) => {
         resolver : yupResolver(applicationVschema)
     })
     const {control,formState: {errors, defaultValues, dirtyFields, isDirty}, isInitialLoading, handleSubmit, reset} = methods
-    const {mutate : signUp} = usePostSignUpForm()
+    const {mutate : signUp} = usePostSignUpForm(setOpenDialog)
+
     const handleSave = (data) => {
-        console.log("to be submitted")
+        // console.log("to be submitted")
         const formattedData = {
             programmeID : id,
             ...data, 
@@ -40,8 +48,8 @@ const SignUpForm = ({id}) => {
             interests : JSON.stringify(data.interests.map(x => x.interest)),
             skills : JSON.stringify(data.skills.map(x => x.skill)),
         }
-        console.log(formattedData)
-        signUp(formattedData)
+        console.log(formattedData);
+        signUp(formattedData);
     }
 
     if(isLoading){
@@ -50,7 +58,6 @@ const SignUpForm = ({id}) => {
     if(isError){
         alert(error)
     }
-
 
     if(getDetailsSuccess){
         const {
@@ -63,6 +70,7 @@ const SignUpForm = ({id}) => {
         
         return (
             <Box>
+                {isFormOpen && (
                 <FormProvider {...methods}>
                 <form onSubmit={handleSubmit(handleSave)}>
                  <Box>
@@ -131,12 +139,27 @@ const SignUpForm = ({id}) => {
                     <AvailabilityCBox/>
                 </Box>
                 <Button type="submit" variant="contained" 
-                color="secondary" sx={{mt : "20px"}}
-                onClick={()=>{console.log(errors)}}
-                >Submit</Button>
-       
+                color="secondary" sx={{mt : "20px"}} autoFocus
+                onClick={()=> console.log("Hi my name is Bruce")}
+                >Submit</Button>       
                 </form>
                 </FormProvider>
+                )}
+
+                {/* Dialog */}
+                <Dialog open={openDialog} onClose={() => setOpenDialog(false)}>
+                    <DialogTitle>Success</DialogTitle>
+                    <DialogContent> <p>Application has been successfully submitted.</p> </DialogContent>
+                    <DialogActions>
+                        <Button onClick={() => { 
+                            setOpenDialog(false);
+                            setIsFormOpen(false); }
+                            }>
+                            OK
+                        </Button>
+                    </DialogActions>
+                </Dialog>
+
                 <DevTool control={control}/>
             </Box>
         )

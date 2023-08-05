@@ -3,8 +3,9 @@ import { DataGrid  } from '@mui/x-data-grid';
 import { useCallback } from "react";
 import { generateColors } from "../../../theme";
 import { useSelector } from "react-redux";
+import { updateSessionBySessionID } from "../../../services/user/userServices";
 
-const SessionTable = ({rows, columns, checkbox=false, color="#EBEBEB", editable=false }) => {
+const SessionTable = ({rows, columns, checkbox=false, color="#EBEBEB", editable=false, handleRerender }) => {
     // console.log(apiRef)
     const colors = generateColors()
     const hoverColor = (color === "#EBEBEB" ? colors.primary[500] : "#AEAEFF");
@@ -22,6 +23,14 @@ const SessionTable = ({rows, columns, checkbox=false, color="#EBEBEB", editable=
         console.log(data)
         console.log("modified by: ")
         console.log(acctID)
+        updateSessionBySessionID(data)
+        .then(res => {
+          console.log("res", res);
+          handleRerender();
+        })
+        .catch(err => {
+          console.log("ERROR:", err);
+        })
     }
     const handleDataChange = (newRow, oldRow) => {
         if(newRow.action === "save"){
