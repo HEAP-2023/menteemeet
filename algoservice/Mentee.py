@@ -6,7 +6,6 @@ class Mentee:
         self.userID = Mentee.ID
         self.name = name
         self.paired = False
-        self
         
         # { score: [mentor1, mentor2, ...] }
         self.ranking = {}

@@ -32,7 +32,7 @@ const EventPopover = ({ isOpen, onRequestClose, event, anchorEl, deleteEvent }) 
             sx={{ zIndex: '99999' }}>
             <Box sx={{ width: '300px' }}>
                 <Box sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'flex-start' }}>
-                    <DeleteOutlinedIcon onClick={handleDelete} sx={{ cursor: 'pointer', mt: '5px', mx: '5px' }} />
+                    {/* <DeleteOutlinedIcon onClick={handleDelete} sx={{ cursor: 'pointer', mt: '5px', mx: '5px' }} /> */}
                     <CloseIcon onClick={onRequestClose} sx={{ cursor: 'pointer', mt: '5px', mx: '5px' }} />
                 </Box>
                 <Box sx={{ padding: '10px' }}>

@@ -297,7 +297,7 @@ const deleteProg = async (req, res) => {
   const org = await Organiser.findOne({ where: { account_id: account.account_id } });
 
   if (!org) {
-    return res.status(400).json({ message: "Organiser not found!" });
+    return res.status(404).json({ message: "Organiser not found!" });
   }
 
   try {
@@ -391,14 +391,14 @@ const addAnnouncementByProgID = async (req, res) => {
     }
     const getOrganiser = await Organiser.findOne({ where: {account_id: req.account.account_id }, raw: true });
   
-    const { inputMessage, type, programmeID } = req.body;
+    const { title, description, programme_id } = req.body;
     const currDateTime = await getCurrDateTime();
   
     await Announcement.create({ 
-      message: inputMessage,
-      type: type,
+      title: title,
+      description: description,
       createdAt: currDateTime,
-      programme_id: programmeID,
+      programme_id: programme_id,
       organiser_id: getOrganiser.organiser_id
     })
     return res.status(201).json({ message: "Announcement has been successfully added." });
@@ -430,5 +430,24 @@ const updateAnnouncementByProgID = async (req, res) => {
   }
 }
 
+const deleteAnnouncementsByProgID = async (req, res) => {
+  try {
+    const isValidOrganiser = await checkValidOrganiser(req.account);
+
+    if (!isValidOrganiser) {
+      return res.status(403).json({ message: "You are not allowed to view this page." });
+    }
+
+    const announcementID = req.params.announcementID;
+
+    await Announcement.destroy({ where: { announcement_id: announcementID } })
+    return res.status(200).json({ message: "Announcement has been successfully deleted."})
+  
+  } catch (err) {
+    return res.status(500).json({ error: err });
+  }
+}
+
 module.exports = { getOrg, updateOrg, addProg, getAllProgsByOrgID, checkCapacity, evaluateApp, 
-  getApp, deleteProg, getAnnouncementsByProgID, addAnnouncementByProgID, updateAnnouncementByProgID };
+  getApp, deleteProg, getAnnouncementsByProgID, addAnnouncementByProgID, updateAnnouncementByProgID,
+  deleteAnnouncementsByProgID };

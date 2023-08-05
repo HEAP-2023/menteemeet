@@ -20,6 +20,7 @@ router.delete('/programmes/:progID', authenticateToken, organiserController.dele
 router.post('/announcements', authenticateToken, organiserController.addAnnouncementByProgID);
 router.put('/announcements', authenticateToken, organiserController.updateAnnouncementByProgID);
 router.get('/announcements/:progID', authenticateToken, organiserController.getAnnouncementsByProgID);
+router.delete('/announcements/:announcementID', authenticateToken, organiserController.deleteAnnouncementsByProgID);
 
 // router.get('/:id', authenticateToken, organiserController.getOrg);
 
