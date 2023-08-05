@@ -563,7 +563,7 @@ const signup = async (req, res) => {
     }
     // console.log("programmeID: ", programmeID)
 
-    const isCapacityMax = checkCapacity(programmeID, role);
+    const isCapacityMax = await checkCapacity(programmeID, role);
     if (isCapacityMax) {
       return res.status(200).json({ message: "[SYSTEM] Rejected. Application has max capacity." });
     }
