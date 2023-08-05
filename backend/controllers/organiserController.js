@@ -391,14 +391,14 @@ const addAnnouncementByProgID = async (req, res) => {
     }
     const getOrganiser = await Organiser.findOne({ where: {account_id: req.account.account_id }, raw: true });
   
-    const { inputMessage, type, programmeID } = req.body;
+    const { title, description, programme_id } = req.body;
     const currDateTime = await getCurrDateTime();
   
     await Announcement.create({ 
-      message: inputMessage,
-      type: type,
+      title: title,
+      description: description,
       createdAt: currDateTime,
-      programme_id: programmeID,
+      programme_id: programme_id,
       organiser_id: getOrganiser.organiser_id
     })
     return res.status(201).json({ message: "Announcement has been successfully added." });

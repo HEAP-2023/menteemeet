@@ -29,3 +29,13 @@ export const getAnnouncementsByProgID = async (progID) => {
     })
     return res
 }
+
+export const addAnnouncementByProgID = async (data) => {
+    const res = await axiosInstance({
+        method: 'post',
+        url: `/organisers/announcements`,
+        headers: { Authorization: `Bearer ${localStorage.getItem("jwt")}` },
+        data: data
+    })
+    return res
+}
