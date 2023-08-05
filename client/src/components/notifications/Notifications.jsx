@@ -67,7 +67,7 @@ const NotificationExpanded = ({header, apps, status}) => {
                 <Divider/>
                 {
                 apps.map(app => (
-                    <Box>
+                    <Box key={app.application_id}>
                         <Typography>{app.Programme.name}</Typography>
                         <Box display="flex" pl="20px">
                             <HistoryOutlinedIcon/>
