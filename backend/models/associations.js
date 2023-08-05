@@ -48,6 +48,10 @@ function initAssociations() {
   User.hasMany(Review, { foreignKey: 'author_id', as: 'authoredReview' });
   Review.belongsTo(User, { foreignKey: 'author_id', as: 'author' });
 
+  //Programme and review
+  Programme.hasMany(Review, { foreignKey: 'programme_id' });
+  Review.belongsTo(Programme, { foreignKey: 'programme_id' });
+
   //User and application
   User.hasMany(Application, { foreignKey: 'user_id' });
   Application.belongsTo(User, { foreignKey: 'user_id' });

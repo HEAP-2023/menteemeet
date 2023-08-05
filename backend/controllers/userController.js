@@ -17,6 +17,8 @@ const UserGroup = require("../models/userGroup");
 const Session = require("../models/session");
 const moment = require("moment-timezone");
 
+const Review = require("../models/review");
+
 const { checkCapacity } = require('./organiserController');
 
 const updateJWT = async (getObj) => {
@@ -615,6 +617,57 @@ const signup = async (req, res) => {
   }
 }
 
+const addFeedback = async (req, res) => {
+  try {
+    const account = req.account;
+
+    const getUserObj = await User.findOne({ where: { account_id: account.account_id }, raw: true});
+    const { rating, comment, receiverID, programmeID } = req.body;
+
+    moment.tz.setDefault('Asia/Singapore');
+    const createdDateTime = moment().format('YYYY-MM-DD HH:mm:ss');
+
+    await Review.create({ 
+      date: createdDateTime,
+      rating: rating,
+      comment: comment,
+      receiver_id: receiverID,
+      author_id: getUserObj.user_id,
+      programme_id: programmeID,
+    })
+
+    return res.status(201).json({ message: "Reviews created."});
+  } catch (err) {
+    return res.status(500).json({ err });
+  }
+}
+
+const getAllFeedback = async (req, res) => {
+  try {
+    const account = req.account;
+
+    const getUserObj = await User.findOne({ where: { account_id: account.account_id }, raw: true});
+    const getAllReviews = await Review.findAll({ where: { author_id: getUserObj.user_id }, raw: true});
+    
+    const reviewsInLocalTZ = getAllReviews.map(item => ({
+      ...item,
+      date: item.date.toLocaleString('en-SG', { timeZone: 'Asia/Singapore' }),
+    }));
+
+    let feedbackArray = [];
+    for (const item of reviewsInLocalTZ) {
+      if (getAllReviews !== null && getAllReviews !== undefined) {
+        feedbackArray.push(item);
+      }
+    }
+
+    return res.status(200).json({ message: "Reviews retrieved.", feedbackArray});
+  } catch (err) {
+    return res.status(500).json({ err });
+  }
+}
+
 module.exports = { updateUser, getUser, getAllProgByUserID, getUnsignedProg, getSkill, 
   addSkill, addInterest, getInterest, getAllSessions, getSessionsByProgID, addSessionByGrpID, 
-  updateSessionBySessionID, deleteSessionBySessionID, getPendingApps, getApprovedApps, getRejectedApps, signup };
+  updateSessionBySessionID, deleteSessionBySessionID, getPendingApps, getApprovedApps, getRejectedApps, 
+  signup, addFeedback, getAllFeedback };
