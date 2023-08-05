@@ -114,3 +114,12 @@ export const deleteSessionBySessionID = async(sessID) => {
     })
     return res
 }
+
+export const getAllFeedback = async() => {
+    const res = await axiosInstance({
+        method: "get",
+        url: "/users/feedback",
+        headers: { Authorization: `Bearer ${localStorage.getItem("jwt")}` },
+    })
+    return res
+}

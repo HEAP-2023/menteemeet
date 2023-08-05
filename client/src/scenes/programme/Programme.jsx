@@ -95,7 +95,7 @@ const Programme = () => {
                     <Sessions programmeID={id}/>
                 </TabPanel>
                 <TabPanel value="groupings" index={2}>
-                    {data.length > 0 ? <Groupings id={id}/> : <GenerateGroup progID={id}/>}
+                    {data.length > 0 ? <Groupings id={id}/> : userRole === "organiser" ? <GenerateGroup progID={id}/> : <Typography>Waiting for organiser to create groups...</Typography>}
                 </TabPanel>
                 <TabPanel value="feedback" index={3}>
                     <Feedback />
