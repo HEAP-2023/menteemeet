@@ -24,14 +24,18 @@ router.get('/approvedApps', authenticateToken, userController.getApprovedApps);
 router.get('/pendingApps', authenticateToken, userController.getPendingApps);
 router.get('/rejectedApps', authenticateToken, userController.getRejectedApps);
 
+router.get('/feedback', authenticateToken, userController.getAllFeedback);
+router.post('/addFeedback', authenticateToken, userController.addFeedback);
+
+router.get('/feedback', authenticateToken, userController.getAllFeedback);
+
 router.put('/', authenticateToken, userController.updateUser);
+router.post('/programmes', authenticateToken, userController.signup);
 
 router.get('/:id/skills', authenticateToken, userController.getSkill);
 router.post('/:id/skills', authenticateToken, userController.addSkill);
 router.get('/:id/interests', authenticateToken, userController.getInterest);
 router.post('/:id/interests', authenticateToken, userController.addInterest);
 router.get('/:id', authenticateToken, userController.getUser);
-
-router.post('/programmes', authenticateToken, userController.signup)
 
 module.exports = router;
