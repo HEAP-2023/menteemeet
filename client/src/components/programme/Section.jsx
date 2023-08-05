@@ -98,7 +98,7 @@ const Section = ({ header, rows, rowColor = "primary.main", highlight = false, c
                 Object.entries(rows).map((row) => {
                     const [announcement_id, details] = row;
                     return (
-                        <SectionRow key={announcement_id} details={details} rowColor={rowColor} checkbox={checkbox} highlight={highlight} showDTG={showDTG} />
+                        <SectionRow key={announcement_id} details={details} rowColor={rowColor} checkbox={checkbox} highlight={highlight} showDTG={showDTG} handleRerender={handleRerender}/>
                     );
                 })
             }
