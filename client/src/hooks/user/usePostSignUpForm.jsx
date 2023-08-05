@@ -1,16 +1,16 @@
-import { useContext } from "react";
 import { postSignUp } from "../../services/programmes/userServices";
 import { useMutation } from "@tanstack/react-query"
-import { FeedBackContext } from "../../scenes/explore/Explore";
+import { useDispatch } from "react-redux";
+import { setSuccessModal } from "../../state(kiv)";
 
 const usePostSignUpForm = (setDialogOpen) => {
-    const openFeedback = useContext(FeedBackContext)
-    
+    const dispatch = useDispatch()
+
     return useMutation(postSignUp, {
         onSuccess : (data) => {
             console.log(data);
             setDialogOpen(false)
-            openFeedback(true)
+            dispatch(setSuccessModal(true))
         },
         onError : (err)=> {
             console.log(err)

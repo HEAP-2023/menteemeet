@@ -27,12 +27,13 @@ const Topbar = () => {
 
         {/* to be deleted in production */}
         <Typography color="#ff0000" >mode : {userType} (a helper, not part of design)    </Typography>
-
-        {userType !== "organiser" && <IconButton onClick={() => {dispatch(toggleNotifs())}}>
+{/* 
+        {userType !== "organiser" && 
+        <IconButton onClick={() => {dispatch(toggleNotifs())}}>
             <Badge badgeContent={10} color="secondary">
                 <NotificationsOutlinedIcon />
             </Badge>
-        </IconButton>}
+        </IconButton>} */}
 
         {userType !== "organiser" && <Notifications />}
 

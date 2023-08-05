@@ -22,7 +22,6 @@ const AvailabilityCBox = () => {
             const timings = Object.keys(arr).filter((key) => arr[key])
             return {[key] : timings}
         })
-        console.log(formatted)
         return formatted
     })
 

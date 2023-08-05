@@ -10,7 +10,6 @@ const Interests = () => {
         control,
         name: "interests"
     })
-    console.log(errors)
     return (
         <Stack>
         <Typography fontWeight="700">Interest</Typography>

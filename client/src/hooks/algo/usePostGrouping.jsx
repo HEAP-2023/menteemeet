@@ -3,7 +3,10 @@
 import { useMutation } from "@tanstack/react-query"
 import { createGrouping } from "../../services/algo/groupings"
 import { useQueryClient } from "@tanstack/react-query"
+import { setFailureModal } from "../../state(kiv)"
+import { useDispatch } from "react-redux"
 const usePostGrouping = (progID) => {
+    const dispatch = useDispatch()
     const queryClient = useQueryClient()
     return useMutation(createGrouping, {
         onSuccess : (data) => {
@@ -11,8 +14,9 @@ const usePostGrouping = (progID) => {
             console.log(data)
         },
         onError : (err) => {
-            const errorMessage = err.response.data.message 
-            console.log(err)
+            const errorMessage = err.response.data.error
+            console.log(errorMessage)
+            dispatch(setFailureModal(true))
         }, 
     })
 }
