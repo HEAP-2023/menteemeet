@@ -1,5 +1,9 @@
-import { Divider, Dialog, Slide, Stack, Typography, CircularProgress } from "@mui/material";
+import { Box, Divider, Dialog, Slide, Stack, Typography, CircularProgress } from "@mui/material";
 import useGetApprovedApps from "../../hooks/user/useGetApprovedApps";
+import useGetPendingApps from "../../hooks/user/useGetPendingApps";
+import useGetRejectedApps from "../../hooks/user/useGetRejectedApps";
+import HistoryOutlinedIcon from '@mui/icons-material/HistoryOutlined';
+
 import { toggleNotifs, updateApplications } from "../../state(kiv)";
 // redux
 import { useDispatch, useSelector } from "react-redux";
@@ -12,6 +16,9 @@ const Transition = forwardRef(function Transition(props, ref) {
 
 const Notifications = () => {
     const { data : approvedApp, status:approvedStatus  } = useGetApprovedApps();
+    const { data : pendingApp, status:pendingStatus } = useGetPendingApps();
+    const { data : rejectedApp, status:rejectedStatus } = useGetRejectedApps();
+
     const dispatch = useDispatch()
     
 
@@ -24,13 +31,15 @@ const Notifications = () => {
             keepMounted
             onClose = {() => dispatch(toggleNotifs())}
     >
+        <Box sx={{p : "20px"}}>
             <SectionHeader margin="0" text="Applications"/>
             <Stack>
                <NotificationExpanded header="Approved Applications" apps={approvedApp} status={approvedStatus}/>
-               <NotificationExpanded header="Pending Applications"/>
-               <NotificationExpanded header="Rejected Applications"/>
+               <NotificationExpanded header="Pending Applications" apps={pendingApp} status={pendingStatus}/>
+               <NotificationExpanded header="Rejected Applications" apps={rejectedApp} status={rejectedStatus}/>
 
             </Stack>
+        </Box>
           </Dialog>
         )
     
@@ -38,24 +47,36 @@ const Notifications = () => {
 }
 
 
-const NotificationExpanded = ({header, apps=[], status}) => {
-    if(status === "error"){
-        return (
-        <Typography>
-            no applications yet
-        </Typography>
-    )
-    }
+const NotificationExpanded = ({header, apps, status}) => {
     if(status === "loading"){
         return <CircularProgress/>
     }
     if(status === "success"){
+        if(apps === false){
+            return (
+                <Stack p="20px">
+                    <Typography fontWeight="700">{header}</Typography>
+                    <Divider/>
+                        <Typography>No Application</Typography>
+                </Stack>
+            )
+        }
         return (
             <Stack p="20px">
                 <Typography fontWeight="700">{header}</Typography>
                 <Divider/>
                 {
-                apps.map(app => <Typography>{app}</Typography>)
+                apps.map(app => (
+                    <Box key={app.application_id}>
+                        <Typography>{app.Programme.name}</Typography>
+                        <Box display="flex" pl="20px">
+                            <HistoryOutlinedIcon/>
+                            <Typography>applied on : </Typography>
+                            <Typography>{app.date}</Typography>
+                        </Box>
+                    </Box>
+                    
+                ))
                 }
             </Stack>
         )

@@ -17,7 +17,6 @@ function stringToColor(string) {
     color += `00${value.toString(16)}`.slice(-2);
   }
   /* eslint-enable no-bitwise */
-
   return color;
 }
 
@@ -42,7 +41,8 @@ function stringAvatar(name) {
 }
 
 export default function NameAvatar({name, scale=3, m="40px"}) {
+    const {children, sx:{bgcolor}} = stringAvatar(name)
   return (
-      <Avatar {...stringAvatar(name)} sx={{ transform: scale=`scale(${scale})`, margin: m }} />
+      <Avatar children={children} sx={{ transform: scale=`scale(${scale})`, margin: m, bgcolor : bgcolor}} />
   );
 }

@@ -7,7 +7,7 @@ import { Card, Button, CardMedia, Grid } from '@mui/material'
 import { useSelector } from "react-redux";
 import { sliceIntoChunks } from "../../functions";
 import SectionHeader from "../SectionHeader";
-
+import { useEffect } from "react";
 import useGetExploreProgramme from "../../hooks/programmes/users/useGetExploreProgramme"
 import { ImgGetUrl } from "../../functions";
 
@@ -57,8 +57,8 @@ const Banner = ({content}) => {
 const HomeCarousel = () => {
     const userType = useSelector((state) => state.user.userBasicDetails.account_type)
     const programmes = useSelector((state) => state.user.programmes)
-    const {data:exploreProgs, isSuccess, isLoading, isError} = useGetExploreProgramme(9)
-    console.log(exploreProgs)
+    const {data:exploreProgs, hasNextPage, fetchNextPage,isFetching, isSuccess, isLoading, isError} = useGetExploreProgramme(9)
+   
     if(userType === "organiser"){
         const banners = sliceIntoChunks(programmes, 3)
         return (

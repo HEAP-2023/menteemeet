@@ -29,7 +29,7 @@ const Element = ({details}) => {
                     dialogOpen === "findOutMore" && <FindOutMore description={description}/>
                 }
                 {
-                    dialogOpen === "signUp" && <SignUpForm id={programme_id}/>
+                    dialogOpen === "signUp" && <SignUpForm id={programme_id} setDialogOpen={setDialogOpen}/>
                 }
             </DialogContent>
         </Dialog>

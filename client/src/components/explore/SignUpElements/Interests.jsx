@@ -16,7 +16,7 @@ const Interests = () => {
         <Typography fontWeight="700">Interest</Typography>
         <Typography>Select the top 3 areas you are interested </Typography>
 
-        <Box display="flex" gap="20px">
+        <Box display="flex" gap="20px" mt="15px">
         {fields.map((item, index) => (
         <Box key={item.id} width="100%">
             <Controller 

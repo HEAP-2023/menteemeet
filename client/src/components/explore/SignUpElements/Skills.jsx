@@ -3,18 +3,19 @@ import {Controller, useFieldArray, useFormContext } from "react-hook-form"
 import { styled } from '@mui/system';
 
 const Skills = () => {
-    const {control, formState : {errors}} = useFormContext();
+    const {control, formState : {errors}, watch} = useFormContext();
     const { fields } = useFieldArray({
         control,
         name: "skills"
     })
 
+    const roleSelected = watch("role")
     return (
         <Stack>
         <Typography fontWeight="700">Skill</Typography>
-        <Typography>Select the your top 3 skills </Typography>
+        <Typography>Select the your top 3 skills {roleSelected === "mentee" ? "you want" : "you have"}</Typography>
 
-        <Box display="flex" gap="20px">
+        <Box display="flex" gap="20px" mt="15px">
         
         {fields.map((item, index) => (
         <Box key={item.id} width="100%">

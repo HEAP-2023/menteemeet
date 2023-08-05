@@ -1,0 +1,236 @@
+[
+    {
+        "commonDT": [
+            "Monday: Afternoon, Night",
+            "Tuesday: Morning, Night"
+        ],
+        "groupNo": 2,
+        "id": 5,
+        "mentee": [
+            {
+                "availability": {
+                    "Monday": [
+                        "Afternoon",
+                        "Night"
+                    ],
+                    "Tuesday": [
+                        "Morning",
+                        "Night"
+                    ]
+                },
+                "id": 13,
+                "name": "Noah Thomas"
+            },
+            {
+                "availability": {
+                    "Monday": [
+                        "Afternoon",
+                        "Night"
+                    ],
+                    "Tuesday": [
+                        "Morning",
+                        "Night"
+                    ]
+                },
+                "id": 19,
+                "name": "David Lee"
+            },
+            {
+                "availability": {
+                    "Monday": [
+                        "Afternoon",
+                        "Night"
+                    ],
+                    "Tuesday": [
+                        "Morning",
+                        "Night"
+                    ]
+                },
+                "id": 16,
+                "name": "Jane Smith"
+            },
+            {
+                "availability": {
+                    "Monday": [
+                        "Afternoon",
+                        "Night"
+                    ],
+                    "Tuesday": [
+                        "Morning",
+                        "Night"
+                    ]
+                },
+                "id": 15,
+                "name": "John Doe"
+            },
+            {
+                "availability": {
+                    "Monday": [
+                        "Afternoon",
+                        "Night"
+                    ],
+                    "Tuesday": [
+                        "Morning",
+                        "Night"
+                    ]
+                },
+                "id": 17,
+                "name": "Michael Johnson"
+            },
+            {
+                "availability": {
+                    "Monday": [
+                        "Afternoon",
+                        "Night"
+                    ],
+                    "Tuesday": [
+                        "Morning",
+                        "Night"
+                    ]
+                },
+                "id": 10,
+                "name": "Olivia Wilson"
+            }
+        ],
+        "mentor": [
+            {
+                "availability": {
+                    "Monday": [
+                        "Afternoon",
+                        "Night"
+                    ],
+                    "Tuesday": [
+                        "Morning",
+                        "Night"
+                    ]
+                },
+                "id": 6,
+                "name": "Jessica Lee"
+            },
+            {
+                "availability": {
+                    "Monday": [
+                        "Afternoon",
+                        "Night"
+                    ],
+                    "Tuesday": [
+                        "Morning",
+                        "Night"
+                    ]
+                },
+                "id": 5,
+                "name": "Michael Smith"
+            }
+        ]
+    },
+    {
+        "commonDT": [
+            "Monday: Afternoon, Night",
+            "Tuesday: Morning, Night"
+        ],
+        "groupNo": 3,
+        "id": 6,
+        "mentee": [
+            {
+                "availability": {
+                    "Monday": [
+                        "Afternoon",
+                        "Night"
+                    ],
+                    "Tuesday": [
+                        "Morning",
+                        "Night"
+                    ]
+                },
+                "id": 12,
+                "name": "Ava Anderson"
+            },
+            {
+                "availability": {
+                    "Monday": [
+                        "Afternoon",
+                        "Night"
+                    ],
+                    "Tuesday": [
+                        "Morning",
+                        "Night"
+                    ]
+                },
+                "id": 14,
+                "name": "Sophia White"
+            },
+            {
+                "availability": {
+                    "Monday": [
+                        "Afternoon",
+                        "Night"
+                    ],
+                    "Tuesday": [
+                        "Morning",
+                        "Night"
+                    ]
+                },
+                "id": 11,
+                "name": "William Taylor"
+            },
+            {
+                "availability": {
+                    "Monday": [
+                        "Afternoon",
+                        "Night"
+                    ],
+                    "Tuesday": [
+                        "Morning",
+                        "Night"
+                    ]
+                },
+                "id": 9,
+                "name": "Chris Davis"
+            },
+            {
+                "availability": {
+                    "Monday": [
+                        "Afternoon",
+                        "Night"
+                    ],
+                    "Tuesday": [
+                        "Morning",
+                        "Night"
+                    ]
+                },
+                "id": 18,
+                "name": "Emily Brown"
+            },
+            {
+                "availability": {
+                    "Monday": [
+                        "Afternoon",
+                        "Night"
+                    ],
+                    "Tuesday": [
+                        "Morning",
+                        "Night"
+                    ]
+                },
+                "id": 8,
+                "name": "Rachel Brown"
+            }
+        ],
+        "mentor": [
+            {
+                "availability": {
+                    "Monday": [
+                        "Afternoon",
+                        "Night"
+                    ],
+                    "Tuesday": [
+                        "Morning",
+                        "Night"
+                    ]
+                },
+                "id": 7,
+                "name": "David Johnson"
+            }
+        ]
+    }
+]
