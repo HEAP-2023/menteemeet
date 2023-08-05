@@ -11,7 +11,7 @@ class Mentor:
         return cls(userID, name, groupNo, progID)
     
     # Constructor
-    def __init__(self, userID, name, groupNo, progID):
+    def __init__(self, userID, name, groupNo, progID, skills, interests, availability):
         self.userID = userID
         self.name = name
         self.groupNo = groupNo
@@ -19,6 +19,9 @@ class Mentor:
         self.capacity = 0
         self.group = []
         self.isFull = False
+        self.skills = skills
+        self.interests = interests
+        self.availability = availability
 
     # Methods
     def setCapacity(self, newCap):
