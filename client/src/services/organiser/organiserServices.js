@@ -39,3 +39,13 @@ export const addAnnouncementByProgID = async (data) => {
     })
     return res
 }
+
+export const deleteAnnouncementsByProgID = async (announcementID) => {
+    const res = await axiosInstance({
+        method: 'delete',
+        url: `/organisers/announcements/${announcementID}`,
+        headers: { Authorization: `Bearer ${localStorage.getItem("jwt")}` },
+        data: announcementID
+    })
+    return res
+}

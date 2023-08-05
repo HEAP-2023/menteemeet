@@ -75,6 +75,36 @@ def getAvailScore(mentor: Mentor, mentee: Mentee) -> int:
     
 def getInterestsScore(mentor: Mentor, mentee: Mentee) -> int:
     # Insert Scoring logic here
+    tags = {
+        "Negotiation": ["Communication", "Professional"],
+        "Public Speaking": ["Communication", "Professional"],
+        "Networking": ["Communication", "Professional"],
+        "Sales": ["Support", "Professional"],
+        "Marketing": ["Support", "Professional"],
+        "Customer Service": ["Support", "Professional"],
+        "Leadership": ["Team", "Professional"],
+        "Conflict Management": ["Team", "Professional"],
+        "Collaboration": ["Team", "Professional"],
+        "Budgeting": ["Literacy", "Finance"],
+        "Taxation": ["Literacy", "Finance"],
+        "Financial Planning": ["Literacy", "Finance"],
+        "Investment": ["Future", "Finance"],
+        "Retirement": ["Future", "Finance"],
+        "Insurance": ["Future", "Finance"],
+        "Risk Management": ["Future", "Finance"],
+        "Real Estate": ["Assets", "Finance"],
+        "Funds": ["Assets", "Finance"],
+        "Bonds": ["Assets", "Finance"],
+        "Python": ["Programming", "Tech"],
+        "Web Development": ["Programming", "Tech"],
+        "Java": ["Programming", "Tech"],
+        "Data Science": ["Artificial Intelligence", "Tech"],
+        "Machine     Learning": ["Artificial Intelligence", "Tech"],
+        "AI Ethics": ["Artificial Intelligence", "Tech"],
+        "Cloud computing": ["Computing", "Tech"],
+        "Internet of Things": ["Computing", "Tech"],
+        "Cyber security": ["Computing", "Tech"],
+    }
     score = 0
 
     for s1 in mentor.interests:

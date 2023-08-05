@@ -2,7 +2,7 @@ import { Box, TextField, Select, MenuItem, Button, Typography } from "@mui/mater
 import SectionHeader from "../../SectionHeader";
 import { useSelector } from "react-redux";
 import CustomButton from "../CustomButton";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
 import FeedbackTable from "../tables/FeedbackTable";
 import { generateColors } from "../../../theme";
@@ -10,15 +10,20 @@ import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { ErrorMessage } from '@hookform/error-message';
 import { DevTool } from "@hookform/devtools";
-
+import { getAllFeedback } from "../../../services/user/userServices";
 const Feedback = () => {
+    useEffect(() => {
+        getAllFeedback()
+        .then(res => console.log("res:",res))
+        .catch(err => console.log("ERROR:", err))
+    })
     const bgColor = generateColors().primary[500];
     const [person, setPerson] = useState('');
     const handleChange = (event) => {
         setPerson(event.target.value);
     };
     const userType = useSelector((state) => state.user.userBasicDetails.account_type);
-    const rows = fetchPeople(fetchRoleInProg);
+    const rows = fetchPeople(userType);
 
     const acctID = useSelector((state) => state.user.userBasicDetails.account_id);
     const people = ["Organiser"].concat(rows.map((item, index) => item.name));
@@ -168,6 +173,3 @@ const fetchPeople = (role) => {
         return []
     }
 }
-
-
-const fetchRoleInProg = "mentee";
