@@ -16,7 +16,7 @@ const Review = sequelize.define(
         },
         rating: {
             type: DataTypes.INTEGER,
-            allowNull: false,
+            allowNull: true,
         },
         comment: {
             type: DataTypes.STRING(),
