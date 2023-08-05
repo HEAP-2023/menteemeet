@@ -147,7 +147,7 @@ function RowMenuCell(props) {
   const handleDeleteClick = (event) => {
     event.stopPropagation();
     const row = api.getRow(id);
-    console.log("row:", row.session_id)
+    // console.log("row:", row.session_id)
     const session_id = row.session_id;
     deleteSessionBySessionID(session_id);
     api.updateRows([{ session_id, action: 'delete' }]);
