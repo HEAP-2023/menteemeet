@@ -1,11 +1,12 @@
 // send in mentor and mentee to create group
 
 import { useMutation } from "@tanstack/react-query"
-import { createGrouping } from "../../services/algo/groupings"
+import { editGrouping } from "../../services/algo/groupings"
 import { useQueryClient } from "@tanstack/react-query"
-const usePostGrouping = (progID) => {
+const usePutNewGrouping = (progID) => {
+
     const queryClient = useQueryClient()
-    return useMutation(createGrouping, {
+    return useMutation((data) => editGrouping(progID, data), {
         onSuccess : (data) => {
             queryClient.invalidateQueries(["getGroup", progID])
             console.log(data)
@@ -16,4 +17,4 @@ const usePostGrouping = (progID) => {
         }, 
     })
 }
-export default usePostGrouping
+export default usePutNewGrouping

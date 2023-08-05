@@ -3,6 +3,7 @@ import GroupingTable from "../tables/GroupingTable"
 import {  useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useGridApiRef } from "@mui/x-data-grid";
+import usePutNewGrouping from "../../../hooks/algo/usePutNewGrouping"
 
 import DisplayUsers from "../DisplayUsers";
 import {DndContext} from '@dnd-kit/core';
@@ -21,8 +22,26 @@ const Groupings = ({id}) => {
     const dispatch = useDispatch(); 
     const queryClient = useQueryClient()
     const { data:groupingData , isSuccess, isError, isLoading } = useGetGrouping(id)
-    const rows = groupingData.map((group) => ({...group, mentee : JSON.parse(group.mentee), mentor : JSON.parse(group.mentor)}))
+    const { mutate : submitGroupEdit } = usePutNewGrouping(id)
+    console.log(groupingData)
+    const rows = groupingData.map((group) => {
+        const {commonDT, groupNo, id, mentee, mentor} = group;
+        const parsedMentee = JSON.parse(mentee).map(m => ({...m, availability : JSON.stringify(m.availability)}))
+        const parsedMentor = JSON.parse(mentor).map(m => ({...m, availability : JSON.stringify(m.availability)}))
+        const parsedDT = JSON.parse(commonDT)
+        console.log(parsedMentee)
 
+        return {
+            commonDT : parsedDT,
+            groupNo : groupNo, 
+            id : id, 
+            mentee : parsedMentee,
+            mentor : parsedMentor,
+        }
+        // return ({...group, mentee : JSON.parse(group.mentee), mentor : JSON.parse(group.mentor), commonDT : JSON.parse(group.commonDT)})
+    })
+
+    console.log(rows)
 
 
     if(isSuccess){
@@ -46,7 +65,6 @@ const Groupings = ({id}) => {
     const handleDragStart = (event) => {
         console.log(event)
     }
-    
     const columns = structure() 
 
 
@@ -85,9 +103,9 @@ const Groupings = ({id}) => {
                 const updatedData = api.current.getSortedRows();
                 const {status, message} = isValid(updatedData, len)
                 if(status){
-                    console.log("submit data", updatedData)
+                    submitGroupEdit(formatForSubmission(updatedData))
+                    console.log("submit data", formatForSubmission(updatedData)) //----------------------------------------------------submission
                     setSubmitted(message)
-                    queryClient.invalidateQueries(["getGroup", id])
                     dispatch(dragToggle());
                 }else{
                     setSubmitted(message)
@@ -213,3 +231,24 @@ const isValid = (data, len) => {
     if(len > 0){return {status : false, message : "There is unassigned participants"}}
     return {status : true, message : "Successful Submission"};
 }
+
+
+
+const formatForSubmission = (data) => {
+    console.log(data)
+    const formatted = data.map((group) => {
+        const {commonDT, groupNo, id, mentee, mentor} = group;
+        
+        const parsedMentee = mentee.map(m => ({...m, availability : JSON.parse(m.availability)}))
+        const parsedMentor = mentor.map(m => ({...m, availability : JSON.parse(m.availability)}))
+
+        return {
+            commonDT : commonDT,
+            groupNo : groupNo, 
+            id : id, 
+            mentee : parsedMentee,
+            mentor : parsedMentor,
+        }
+    })
+    return (formatted)
+} 

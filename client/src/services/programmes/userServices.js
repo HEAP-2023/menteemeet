@@ -8,7 +8,11 @@ export const getInfiniteProgramme = async(page,size) => {
         headers: { Authorization: `Bearer ${localStorage.getItem("jwt")}` },
     })
 
-    console.log(res.data.response)
+    // const programmes = res.data.response.programmes;
+    // const out = removeExpired(programmes)
+    // console.log(out)
+    // return {...res.data.response, programmes : out}
+
     return res.data.response
 }
 
@@ -49,4 +53,18 @@ export const getSessionsByProgID = async(progID) => {
         headers: { Authorization: `Bearer ${localStorage.getItem("jwt")}` },
     })
     return res;
+}
+
+
+
+
+
+const removeExpired = (programmes) => {
+    console.log(programmes)
+    const today = new Date();
+
+    return programmes.filter(prog => {
+        const deadline = new Date(prog.deadline); 
+        return deadline >= today;
+    })
 }

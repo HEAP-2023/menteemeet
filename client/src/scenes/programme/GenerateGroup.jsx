@@ -5,7 +5,7 @@ import { createGrouping } from "../../services/algo/groupings";
 const GenerateGroup = ({progID}) => {
 
     const {data, isSuccess} = useGetMMByProgID(progID);
-    const { mutate : createGroup } = usePostGrouping()
+    const { mutate : createGroup } = usePostGrouping(progID)
 
     const handleClick = () => {
         if(isSuccess){

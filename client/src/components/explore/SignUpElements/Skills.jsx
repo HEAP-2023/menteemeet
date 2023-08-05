@@ -15,7 +15,7 @@ const Skills = () => {
         <Typography fontWeight="700">Skill</Typography>
         <Typography>Select the your top 3 skills {roleSelected === "mentee" ? "you want" : "you have"}</Typography>
 
-        <Box display="flex" gap="20px">
+        <Box display="flex" gap="20px" mt="15px">
         
         {fields.map((item, index) => (
         <Box key={item.id} width="100%">

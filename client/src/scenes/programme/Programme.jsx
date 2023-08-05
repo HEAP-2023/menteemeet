@@ -24,7 +24,7 @@ const Programme = () => {
     const programmes = useSelector((state) => state.user.programmes)
     const programme = programmes.find(program => program.programme_id === Number(id));
     let userRole = programme.role;
-    console.log(programme);
+    // console.log(programme);
     const [tab, changeTab] = useState("main")
 
     const tabChange = (event, newValue) => {
@@ -37,7 +37,7 @@ const Programme = () => {
 
 
     const { data , isSuccess, isError, isLoading } = useGetGrouping(id)
-    console.log(data)
+    // console.log(data)
 
     if(userRole === undefined){
         userRole = "organiser";

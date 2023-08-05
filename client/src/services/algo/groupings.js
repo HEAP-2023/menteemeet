@@ -5,7 +5,6 @@ const { default: axiosAlgo } = require("../../utils/axiosAlgo")
 
 
 export const getGrouping = async(progID) => {
-    console.log(progID)
     const res = await axiosAlgo({
         method : "get",
         url : `/get-groupings/programme/${progID}`
@@ -32,4 +31,15 @@ export const getMMbyProgID = async(progID) => {
     })
     console.log(res.data)
     return res.data;
+}
+
+
+export const editGrouping = async(progID, data) => {
+    const res = await axiosAlgo({
+        method : "put",
+        url : `/edit-groups/programme/${progID}`,
+        data : data
+    })
+    console.log(res.data)
+    return res.data
 }

@@ -58,6 +58,4 @@ const DisplayProgs = ({userQuery}) => {
         </Box>);
     }
 }
-
 export default DisplayProgs;
-
