@@ -26,8 +26,9 @@ router.get('/rejectedApps', authenticateToken, userController.getRejectedApps);
 
 router.get('/feedback', authenticateToken, userController.getAllFeedback);
 router.post('/addFeedback', authenticateToken, userController.addFeedback);
-
 router.get('/feedback', authenticateToken, userController.getAllFeedback);
+router.get('/listofMentors/:progID', authenticateToken, userController.getListOfMentors);
+router.get('/listofMentees/:progID', authenticateToken, userController.getListOfMentees);
 
 router.put('/', authenticateToken, userController.updateUser);
 router.post('/programmes', authenticateToken, userController.signup);
