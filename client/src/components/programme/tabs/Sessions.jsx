@@ -11,6 +11,7 @@ import NewSessionLog from "./NewSessionLog"
 import { getSessionsByProgID } from "../../../services/programmes/userServices";
 import { useState, useEffect } from "react";    
 import { useParams } from "react-router-dom";
+import { deleteSessionBySessionID } from "../../../services/user/userServices";
 const Sessions = (programmeID) => {
   const [rows, setRows] = useState([]);
   const now = new Date().getTime();
@@ -48,6 +49,63 @@ const Sessions = (programmeID) => {
   const programmes = useSelector((state) => state.user.programmes)
   const programme = programmes.find(program => program.programme_id === Number(id));
   const role = programme.role;
+  const structure = (role) => {
+    return (
+      [
+        { field: 'id', headerName: 'ID', width: 90 },
+        {
+          field: 'group_id',
+          headerName: 'Group No.',
+          width: 100,
+          editable: true,
+        },
+        {
+          field: 'date',
+          headerName: 'Date',
+          width: 150,
+          editable: true,
+        },
+        {
+          field: 'start_time',
+          headerName: 'Start time',
+          width: 150,
+          editable: true,
+        },
+        {
+          field: 'end_time',
+          headerName: 'End time',
+          width: 150,
+          editable: true,
+        },
+        {
+          field: 'topic',
+          headerName: 'Topics / Location',
+          width: 200,
+          editable: true,
+        },
+        // {
+        //   field: 'remarks',
+        //   headerName: 'Remarks For' + (role === "mentee" ? " Mentee" : " Mentor"),
+        //   description: 'This column has a value getter and is not sortable.',
+        //   sortable: false,
+        //   editable: false,
+        //   width: 400
+        // },
+        {
+          field: 'actions',
+          headerName: 'Actions',
+          sortable: false,
+          width: 100,
+          headerAlign: 'center',
+          filterable: false,
+          align: 'center',
+          disableColumnMenu: true,
+          disableReorder: true,
+          renderCell: RowMenuCell,
+        },
+      ]
+    );
+  }
   const columns = structure(role)
 
   return (
@@ -66,67 +124,7 @@ const Sessions = (programmeID) => {
         handleRerender={handleRerender} />
     </Box>
   );
-}
-export default Sessions;
 
-
-const structure = (role) => {
-  return (
-    [
-      { field: 'id', headerName: 'ID', width: 90 },
-      {
-        field: 'group_id',
-        headerName: 'Group No.',
-        width: 100,
-        editable: true,
-      },
-      {
-        field: 'date',
-        headerName: 'Date',
-        width: 150,
-        editable: true,
-      },
-      {
-        field: 'start_time',
-        headerName: 'Start time',
-        width: 150,
-        editable: true,
-      },
-      {
-        field: 'end_time',
-        headerName: 'End time',
-        width: 150,
-        editable: true,
-      },
-      {
-        field: 'topic',
-        headerName: 'Topics / Location',
-        width: 200,
-        editable: true,
-      },
-      // {
-      //   field: 'remarks',
-      //   headerName: 'Remarks For' + (role === "mentee" ? " Mentee" : " Mentor"),
-      //   description: 'This column has a value getter and is not sortable.',
-      //   sortable: false,
-      //   editable: false,
-      //   width: 400
-      // },
-      {
-        field: 'actions',
-        headerName: 'Actions',
-        sortable: false,
-        width: 100,
-        headerAlign: 'center',
-        filterable: false,
-        align: 'center',
-        disableColumnMenu: true,
-        disableReorder: true,
-        renderCell: RowMenuCell,
-      },
-    ]
-  );
-}
 
 function RowMenuCell(props) {
   const { api, id } = props;
@@ -148,7 +146,12 @@ function RowMenuCell(props) {
 
   const handleDeleteClick = (event) => {
     event.stopPropagation();
-    api.updateRows([{ id, _action: 'delete' }]);
+    const row = api.getRow(id);
+    console.log("row:", row.session_id)
+    const session_id = row.session_id;
+    deleteSessionBySessionID(session_id);
+    api.updateRows([{ session_id, action: 'delete' }]);
+    setRerender(true);
   };
 
   const handleCancelClick = (event) => {
@@ -204,4 +207,5 @@ function RowMenuCell(props) {
 
 //   end of tables specification code
 
-
+}
+export default Sessions;

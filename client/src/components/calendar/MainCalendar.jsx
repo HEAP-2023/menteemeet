@@ -161,10 +161,10 @@ const MainCalendar = () => {
             </Box>
             {isPopOpen &&
                 <EventPopover isOpen={isPopOpen} onRequestClose={() => setIsPopOpen(false)} event={selectedEvent} anchorEl={selectedEventElement} deleteEvent={deleteEvent} />}
-            {isDateSelected &&
+            {/* {isDateSelected &&
                 <AddEventPopover isOpen={isDateSelected} onRequestClose={() => setIsDateSelected(false)} selectedDateInfo={selectedDateInfo}
                     addEvent={addEvent}
-                />}
+                />} */}
         </>
     )
 }

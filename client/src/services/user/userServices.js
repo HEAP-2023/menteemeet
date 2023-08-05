@@ -85,3 +85,13 @@ export const updateSessionBySessionID = async(session) => {
     console.log("SESSION:",session);
     return res
 }
+
+export const deleteSessionBySessionID = async(sessID) => {
+    const res = await axiosInstance({
+        method: "delete",
+        url: `/users/session/${sessID}`,
+        headers: { Authorization: `Bearer ${localStorage.getItem("jwt")}` },
+        data: sessID
+    })
+    return res
+}
