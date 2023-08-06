@@ -15,7 +15,7 @@ const Header = () => {
     
     return (
     <Box display="flex" width="100%" alignItems="center">
-       <Button sx={{color : colors.text[500], height : "40%", borderRadius:"20px"}}>Contact</Button>
+       <Button href="/login/contactus" sx={{color : colors.text[500], height : "40%", borderRadius:"20px"}}>Contact</Button>
        <Button href="/login/faq" sx={{color : colors.text[500] ,height : "40%", borderRadius:"20px", mr: "auto"}}>FAQ</Button>
        
        <div onClick={()=> navigate("/login/start")}>
