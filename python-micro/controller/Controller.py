@@ -16,7 +16,8 @@ def generateGroupings(app, data):
     mentors = [Mentor.jsonDecoder(m, i+1) for i, m in enumerate(data["mentors"])]
     mentees = [Mentee.jsonDecoder(m) for m in data["mentees"]]
     # Set group capacity
-    setGroupCap(mentors, mentees)
+    if not setGroupCap(mentors, mentees):
+        return {"error" : "No mentees have signed up!"}, 400
     
     # Get scores for each mentor-mentee pair
     setOverallScore(mentors, mentees)

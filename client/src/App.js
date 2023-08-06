@@ -21,7 +21,6 @@ import AccountSettings from "./scenes/accountSettings/AccountSettings";
 import { AnimatePresence } from "framer-motion";
 
 
-
 function App() {
     const userType = useSelector((state) => state.user.userBasicDetails.account_type)
     return (

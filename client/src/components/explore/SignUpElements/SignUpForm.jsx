@@ -138,7 +138,6 @@ const SignUpForm = ({id, setDialogOpen}) => {
                 </Box>
                 <Button type="submit" variant="contained" 
                 color="secondary" sx={{mt : "20px"}} autoFocus
-                onClick={()=> console.log("Hi my name is Bruce")}
                 >Submit</Button>
                 </form>
                 </FormProvider>
