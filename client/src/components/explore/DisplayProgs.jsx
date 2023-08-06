@@ -37,7 +37,9 @@ const DisplayProgs = ({userQuery}) => {
         }) 
         
         // console.log(programmes)
-        // console.log(filteredProgrammes)
+        const sortedProgrammes = sortProgrammes(filteredProgrammes)
+        // console.log(sortedProgrammes)
+
         if(filteredProgrammes.length === 0){
             return (
             <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center">
@@ -48,7 +50,7 @@ const DisplayProgs = ({userQuery}) => {
         <Box display="flex" flexDirection="column">
             {/* programme should have overflowY */}
             {
-                filteredProgrammes.map((p) => <Element key={p.programme_id} details={p} />)
+                sortedProgrammes.map((p) => <Element key={p.programme_id} details={p} />)
             }
 
             {/* bottom */}
@@ -59,3 +61,18 @@ const DisplayProgs = ({userQuery}) => {
     }
 }
 export default DisplayProgs;
+
+
+const sortProgrammes = (programmes) => {
+    const today = new Date()
+    const applicable = programmes.filter(p => {
+        const deadline = new Date(p.deadline)
+        return deadline >= today;
+    }).sort((a,b) => new Date(a.deadline) - new Date(b.deadline))
+    
+    const expired = programmes.filter(p => {
+        const deadline = new Date(p.deadline)
+        return deadline < today;
+    }).sort((a,b) => new Date(b.deadline) - new Date(a.deadline))
+    return applicable.concat(expired)
+}

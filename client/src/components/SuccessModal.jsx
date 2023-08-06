@@ -2,7 +2,7 @@ import { Dialog, DialogActions, DialogContent, Button, DialogTitle } from "@mui/
 import { useSelector, useDispatch } from "react-redux";
 import { setSuccessModal, setFailureModal } from "../state(kiv)";
 
-export const SuccessModal = ({info="Application has been successfully submitted."}) => {
+export const SuccessModal = ({info="Application has been successfully submitted.", actions=()=> {}}) => {
     const openDialog = useSelector((state) => state.user.successModal)
     const dispatch = useDispatch()
     return (
@@ -14,6 +14,7 @@ export const SuccessModal = ({info="Application has been successfully submitted.
                 color="secondary"
                 onClick={() => { 
                     dispatch(setSuccessModal(false))
+                    actions()
                 }
                     }>
                     OK
@@ -23,7 +24,7 @@ export const SuccessModal = ({info="Application has been successfully submitted.
     )
 }
 
-export const FailureModal = ({info="Failed to submit."}) => {
+export const FailureModal = ({info="Failed to submit.",  actions=()=> {}}) => {
     const openDialog = useSelector((state) => state.user.failureModal)
     const dispatch = useDispatch()
     return (
@@ -35,6 +36,7 @@ export const FailureModal = ({info="Failed to submit."}) => {
                 color="secondary"
                 onClick={() => { 
                     dispatch(setFailureModal(false))
+                    actions()
                 }
                     }>
                     OK

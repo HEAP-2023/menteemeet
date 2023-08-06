@@ -4,14 +4,14 @@ import Tab from "@mui/material/Tab";
 import { TabPanel, TabContext } from '@mui/lab';
 import { useState } from "react";
 import PageHeader  from "../../components/PageHeader"
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import Sessions from "../../components/programme/tabs/Sessions";
 import MainPage from "../../components/programme/tabs/MainPage";
 import Feedback from "../../components/programme/tabs/Feedback";
 import Applications from "../../components/programme/tabs/Applications";
 import GenerateGroup from "./GenerateGroup";
 import useGetGrouping from "../../hooks/algo/useGetGrouping";
-
+import { SuccessModal, FailureModal } from "../../components/SuccessModal";
 // redux
 import { useSelector } from "react-redux";
 import Groupings from "../../components/programme/tabs/Groupings";
@@ -23,6 +23,7 @@ const Programme = () => {
     const {id} = useParams();
     const programmes = useSelector((state) => state.user.programmes)
     const programme = programmes.find(program => program.programme_id === Number(id));
+    const navigate = useNavigate()
     let userRole = programme.role;
     // console.log(programme);
     const [tab, changeTab] = useState("main")
@@ -54,6 +55,8 @@ const Programme = () => {
     if(isSuccess){
     return (
         <Box>
+            <SuccessModal info={"successfully delete programme"} actions={() => {navigate("/")}}/>
+            <FailureModal info={"failed to delete programme"}/>
             <DeleteProgrammeModal id={id} open={deleteModal} setDeleteModal={setDeleteModal} programme_name={programme.name}/>
     
             {/* header */}

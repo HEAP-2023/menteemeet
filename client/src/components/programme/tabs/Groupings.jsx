@@ -11,6 +11,8 @@ import { dragToggle, removeFromParking } from "../../../state(kiv)";
 import DraggableParking from "../DraggableParking";
 import useGetGrouping from "../../../hooks/algo/useGetGrouping";
 import { useQueryClient } from "@tanstack/react-query";
+import { FailureModal, SuccessModal } from "../../SuccessModal";
+import { setFailureModal } from "../../../state(kiv)";
 const Groupings = ({id}) => {
     //this page cannot have state change that leads to rerender if not everything will go haywire
 
@@ -67,16 +69,8 @@ const Groupings = ({id}) => {
 
 
     return (<Box>
-        <Modal open={!!submitted} onClose={() => {
-            setSubmitted(false);
-            window.location.reload()}}
-            sx={{
-                width:"100%", height:"100%",
-                display:"flex", justifyContent:"center",
-                alignItems : "center"}} 
-            >
-            <Box bgcolor="#ffffff" width="20%" p="20px">{submitted}</Box>
-        </Modal>
+        <SuccessModal info={"successfully changed groupings"} actions={() => {window.location.reload()}}/>
+        <FailureModal info={submitted} actions={() => {window.location.reload()}}/>
         <DndContext onDragEnd={handleDragEnd} onDragStart={handleDragStart}>
             <Box width="100%" display="flex">
                 <GroupingTable api={api} rows={rows} columns={columns}/>
@@ -107,6 +101,9 @@ const Groupings = ({id}) => {
                     dispatch(dragToggle());
                 }else{
                     setSubmitted(message)
+                    dispatch(dragToggle());
+                    dispatch(setFailureModal(true))
+                    console.log(message)
                 }
             }}>
                 save
