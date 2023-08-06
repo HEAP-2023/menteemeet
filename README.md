@@ -19,7 +19,7 @@ Go to `client` folder via the following command:
 cd backend
 ```
 For first time users, create a dotenv file with the following details:
-(You must have a working MYSQL Workbench)
+(You must have a working MYSQL Workbench, WAMP/MAMP Server installed)
 ```
 PORT=5001
 API_VER=/api/v1
