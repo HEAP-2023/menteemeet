@@ -69,10 +69,13 @@ const sortProgrammes = (programmes) => {
         const deadline = new Date(p.deadline)
         return deadline >= today;
     }).sort((a,b) => new Date(a.deadline) - new Date(b.deadline))
+    .map(p => ({...p, expired:false}))
     
     const expired = programmes.filter(p => {
         const deadline = new Date(p.deadline)
         return deadline < today;
     }).sort((a,b) => new Date(b.deadline) - new Date(a.deadline))
+    .map(p => ({...p, expired:true}))
+    
     return applicable.concat(expired)
 }

@@ -14,6 +14,9 @@ import axiosInstance from "../../utils/axiosInstance";
 import { postProgramme } from "../../services/programmes/organiserServices";
 import { QueryClient, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
+import { FailureModal, SuccessModal } from "../../components/SuccessModal";
+import { useDispatch } from "react-redux";
+import { setFailureModal, setSuccessModal } from "../../state(kiv)";
 
 const Transition = forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
@@ -25,6 +28,7 @@ const CreateProgramme = () => {
     const [progress, setProgress] = useState(0)
     const [preview, setPreview] = useState(false)
     const navigate = useNavigate()
+    const dispatch = useDispatch()
     const methods = useForm({
         defaultValues : {
             name : "",
@@ -78,14 +82,16 @@ const CreateProgramme = () => {
         try {
             await postProgramme(formData);
             queryClient.invalidateQueries(["getInvolved"]);
-            navigate("/")
+            dispatch(setSuccessModal(true))
         } catch (err) {
             console.log(err);
-            navigate("/")
+            dispatch(setFailureModal(true))
         }
     }
     return (
     <Box width="100%" p="40px" display="flex" flexDirection="column">
+        <SuccessModal info={"created programme successfully"} actions={() => {navigate("/")}} />
+        <FailureModal info={"failed to create programme"}/>
         {/* progress bar */}
         <ProgressBar progress={progress}/>
 
