@@ -61,7 +61,7 @@ def getAvailScore(mentor: Mentor, mentee: Mentee) -> float:
     if denominator == 0:
         return 0
     
-    return numerator/denominator;
+    return numerator/denominator
     
 def getInterestsScore(mentorArr: List[str], menteeArr: List[str]) -> float:
     # Insert Scoring logic here

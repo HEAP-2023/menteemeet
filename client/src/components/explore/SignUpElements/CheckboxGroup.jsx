@@ -15,9 +15,9 @@ const CheckboxGroup = ({pLabel, state, setState}) => {
             [pLabel] : {
             dirty : true,
             children : {
-                morning : checked[0],
-                afternoon : checked[1],
-                evening : checked[2]
+                Morning : checked[0],
+                Afternoon : checked[1],
+                Evening : checked[2]
             }
           }
         })
@@ -28,9 +28,9 @@ const CheckboxGroup = ({pLabel, state, setState}) => {
             [pLabel] : {
             dirty : false,
             children : {
-                morning : checked[0],
-                afternoon : checked[1],
-                evening : checked[2]
+                Morning : checked[0],
+                Afternoon : checked[1],
+                Evening : checked[2]
                 }
             }
         })

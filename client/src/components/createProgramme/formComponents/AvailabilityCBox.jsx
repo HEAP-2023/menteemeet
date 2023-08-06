@@ -18,5 +18,5 @@ const AvailabilityCBox = () => {
     )
 }
 
-const days = ["MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY", "SUNDAY"]
+const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
 export default AvailabilityCBox
