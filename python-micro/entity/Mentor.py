@@ -28,10 +28,10 @@ class Mentor:
         for day in mentors[0].availability:
                 
             # Get a list of time slots for that day for every mentee
-            allMenteesAvail = [mentee.availability[day] for mentee in mentees]
+            allMenteesAvail = [mentee.availability.get(day, []) for mentee in mentees]
             
             # Get a list of time slots for that day for every mentor
-            allMentorsAvail = [mentor.availability[day] for mentor in mentors[1:]]
+            allMentorsAvail = [mentor.availability.get(day, []) for mentor in mentors[1:]]
             
             # Extend the 2 lists into 1
             allMenteesAvail.extend(allMentorsAvail)
