@@ -679,36 +679,29 @@ const getOrganiserName = async (getProgID) => {
 const getListOfMentors = async (req, res) => {
   try {
     const getProgID = req.params.progID;
-
     const account = req.account;
 
+    // This is the mentee
     const getUserObj = await User.findOne({ where: { account_id: account.account_id }, raw: true});
-    const getAllGroups = await UserGroup.findOne({ where: { programme_id: getProgID }, raw: true});
 
-    let isMenteeValid = false;
+    // Get all groups
+    const getAllGroups = await UserGroup.findAll({ where: { programme_id: getProgID }, raw: true});
 
-    const JSONMentees = JSON.parse(getAllGroups.mentees);
-    JSONMentees.map(eachMentee => {
-      if (eachMentee.id === getUserObj.user_id) {
-        isMenteeValid = true;
-      }
+    let mentorsToReturn = [];
+
+    getAllGroups.map((group) => {
+
+      // Idenitfy group that mentee is in
+      const allMentees = JSON.parse(group['mentees']);
+
+      // Retrieve the list of mentors
+      allMentees.map(mentee => {
+        if (mentee['id'] == getUserObj['user_id'])
+          mentorsToReturn = JSON.parse(group['mentors']);
+      })
     });
 
-    const JSONMentors = JSON.parse(getAllGroups.mentors);
-    if (isMenteeValid) { 
-      const mentorName = JSONMentors.map(eachMentor => eachMentor.name);
-      
-      const orgName = await getOrganiserName(getProgID);
-      return res.status(200).json({ message: "List of Mentors retrieved.", mentorName, orgName});
-    }
-
-    // let mentorsArray = [];
-    // for (const item of reviewsInLocalTZ) {
-    //   if (getAllReviews !== null && getAllReviews !== undefined) {
-    //     mentorsArray.push(item);
-    //   }
-    // }
-    return res.status(400).json({ message: "Mentee is not in the correct program."});    
+    return res.status(200).json(mentorsToReturn);   
 
   } catch (err) {
     return res.status(500).json({ err });
@@ -718,30 +711,46 @@ const getListOfMentors = async (req, res) => {
 const getListOfMentees = async (req, res) => {
   try {
     const getProgID = req.params.progID;
-
     const account = req.account;
 
+    //mentor
     const getUserObj = await User.findOne({ where: { account_id: account.account_id }, raw: true});
+    //get all groups under prog id
     const getAllGroups = await UserGroup.findOne({ where: { programme_id: getProgID }, raw: true});
 
-    let isMentorValid = false;
+    let menteesToReturn = [];
 
-    const JSONMentors = JSON.parse(getAllGroups.mentors);
-    JSONMentors.map(eachMentor => {
-      if (eachMentor.id === getUserObj.user_id) {
-        isMentorValid = true;
-      }
+    getAllGroups.map((group) => {
+
+      // Idenitfy group that mentor is in
+      const allMentors = JSON.parse(group['mentors']);
+
+      // Retrieve the list of mentees
+      allMentors.map(mentor => {
+        if (mentor['id'] == getUserObj['user_id'])
+          menteesToReturn = JSON.parse(group['mentees']);
+      })
     });
 
-    const JSONMentees = JSON.parse(getAllGroups.mentees);
-    if (isMentorValid) { 
-      const menteesName = JSONMentees.map(eachMentor => eachMentor.name);
+    return res.status(200).json(menteesToReturn);   
+    // let isMentorValid = false;
 
-      const orgName = await getOrganiserName(getProgID);
-      return res.status(200).json({ message: "List of Mentees retrieved.", menteesName, orgName });
-    }
+    // const JSONMentors = JSON.parse(getAllGroups.mentors);
+    // JSONMentors.map(eachMentor => {
+    //   if (eachMentor.id === getUserObj.user_id) {
+    //     isMentorValid = true;
+    //   }
+    // });
 
-    return res.status(400).json({ message: "Mentor is not in the correct program."});    
+    // const JSONMentees = JSON.parse(getAllGroups.mentees);
+    // if (isMentorValid) { 
+    //   const menteesName = JSONMentees.map(eachMentor => eachMentor.name);
+
+    //   const orgName = await getOrganiserName(getProgID);
+    //   return res.status(200).json({ message: "List of Mentees retrieved.", menteesName, orgName });
+    // }
+
+    // return res.status(400).json({ message: "Mentor is not in the correct program."});    
 
   } catch (err) {
     return res.status(500).json({ err });
