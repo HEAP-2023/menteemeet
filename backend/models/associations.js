@@ -15,6 +15,7 @@ const UserSkill = require('./userSkill');
 const UserInterest = require('./userInterest');
 const UserProgramme = require('./userProgramme');
 const Account = require('./account');
+const OrganiserReview = require('./organiserReview');
 
 //Define the relationships between the entities
 function initAssociations() {
@@ -47,6 +48,16 @@ function initAssociations() {
   Review.belongsTo(User, { foreignKey: 'receiver_id', as: 'receiver' });
   User.hasMany(Review, { foreignKey: 'author_id', as: 'authoredReview' });
   Review.belongsTo(User, { foreignKey: 'author_id', as: 'author' });
+
+  // Organiser and review
+  Organiser.hasMany(Review, { foreignKey: 'receiver_id', as: 'receivedOrgReviews' });
+  OrganiserReview.belongsTo(Organiser, { foreignKey: 'receiver_id', as: 'receiverOrg' });
+  User.hasMany(Review, { foreignKey: 'author_id', as: 'authoredUserReview' });
+  OrganiserReview.belongsTo(User, { foreignKey: 'author_id', as: 'authorUser' });
+
+  //Programme and ORGreview
+  Programme.hasMany(OrganiserReview, { foreignKey: 'programme_id' });
+  OrganiserReview.belongsTo(Programme, { foreignKey: 'programme_id' });
 
   //Programme and review
   Programme.hasMany(Review, { foreignKey: 'programme_id' });

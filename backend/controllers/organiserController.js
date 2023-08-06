@@ -13,6 +13,8 @@ const moment = require("moment-timezone");
 const { generateAccessToken } = require('./accountController');
 const { getPagination, getPagingData } = require('./programmeController');
 const User = require("../models/user");
+const OrganiserReview = require("../models/organiserReview");
+const UserGroup = require("../models/userGroup");
 
 const updateJWT = async (updatedAcc) => {
   try {
@@ -30,15 +32,17 @@ const getOrg = async (req, res) => {
 
   try {
     const organiser = await Organiser.findOne(
-      { where: { organiser_id: id }, 
-      include: [
-        {
-          model: Account,
-          attributes: {
-            exclude: ['password', 'account_id', 'json_tokenID'], // Exclude the 'password','json_tokenID' and 'account_id' field from the Account model
-          },
-        }
-      ], raw: true });
+      {
+        where: { organiser_id: id },
+        include: [
+          {
+            model: Account,
+            attributes: {
+              exclude: ['password', 'account_id', 'json_tokenID'], // Exclude the 'password','json_tokenID' and 'account_id' field from the Account model
+            },
+          }
+        ], raw: true
+      });
 
     if (!organiser) {
       return res.status(404).json({ message: 'Organiser not found!' })
@@ -59,49 +63,49 @@ const checkValidOrganiser = async (req) => {
 }
 
 const updateOrg = async (req, res) => {
-    const account = req.account
+  const account = req.account
 
-    try {
-        if (req.body === undefined || Object.keys(req.body).length === 0) {
-          return res.status(400).json({ message: "Fields are empty."});
-        }
-
-        if (account.account_type != "organiser") {
-          return res.status(403).json({ message: "You are not an organiser." });
-        } 
-
-        const getOrgObj = await Organiser.findOne({ where: { account_id : account.account_id }, raw: true });
-        if (!getOrgObj) {
-          return res.status(403).json({ message: "No such organiser." });
-        }
-
-        const email = req.body.email;
-        const name = req.body.name;
-        const contact = req.body.contact_no;
-
-        const description = req.body.description;
-
-        await Account.update(
-          { email: email, name: name, contact_no: contact },
-          { where: { account_id: getOrgObj.account_id }} );
-
-        const updatedAcc = await Account.findOne({ where: { account_id: getOrgObj.account_id }, raw: true });
-        const accessToken = await updateJWT(updatedAcc);
-
-        await Organiser.update(
-          { description: description },
-          { where: { account_id : getOrgObj.account_id }} );
-
-        //Ensure that the current organiser is authorised to update details
-        // if (account.account_id !== getOrgObj.account_id) {
-        //   return res.status(403).json({ message: "Not authorised!" })
-        // }
-        return res.status(200).json({ message: "Successfully updated for all tables!", accessToken });
-
-    } catch (err) {
-        console.log(err);
-        return res.status(500).json({ error: err });
+  try {
+    if (req.body === undefined || Object.keys(req.body).length === 0) {
+      return res.status(400).json({ message: "Fields are empty." });
     }
+
+    if (account.account_type != "organiser") {
+      return res.status(403).json({ message: "You are not an organiser." });
+    }
+
+    const getOrgObj = await Organiser.findOne({ where: { account_id: account.account_id }, raw: true });
+    if (!getOrgObj) {
+      return res.status(403).json({ message: "No such organiser." });
+    }
+
+    const email = req.body.email;
+    const name = req.body.name;
+    const contact = req.body.contact_no;
+
+    const description = req.body.description;
+
+    await Account.update(
+      { email: email, name: name, contact_no: contact },
+      { where: { account_id: getOrgObj.account_id } });
+
+    const updatedAcc = await Account.findOne({ where: { account_id: getOrgObj.account_id }, raw: true });
+    const accessToken = await updateJWT(updatedAcc);
+
+    await Organiser.update(
+      { description: description },
+      { where: { account_id: getOrgObj.account_id } });
+
+    //Ensure that the current organiser is authorised to update details
+    // if (account.account_id !== getOrgObj.account_id) {
+    //   return res.status(403).json({ message: "Not authorised!" })
+    // }
+    return res.status(200).json({ message: "Successfully updated for all tables!", accessToken });
+
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({ error: err });
+  }
 }
 
 const addProg = async (req, res) => {
@@ -122,8 +126,8 @@ const addProg = async (req, res) => {
 
   try {
     const newProg = await Programme.create({
-      name, 
-      description, 
+      name,
+      description,
       category,
       programmeStart,
       programmeEnd,
@@ -139,7 +143,7 @@ const addProg = async (req, res) => {
     const uploadFile = await awsS3Controller.uploadToS3(req.file, newProg.programme_id);
 
     if (uploadFile) {
-      const prog = await Programme.update({ display_image: JSON.stringify(uploadFile) },{ where: { programme_id: newProg.programme_id } });
+      const prog = await Programme.update({ display_image: JSON.stringify(uploadFile) }, { where: { programme_id: newProg.programme_id } });
       const progToReturn = {
         ...newProg.dataValues,
         display_image: JSON.stringify(uploadFile)
@@ -147,10 +151,10 @@ const addProg = async (req, res) => {
       console.log("created programme but image failed")
       return res.status(200).json({ message: 'Successfully created programme!', programme: progToReturn });
     } else {
-      await Programme.destroy({ where: { programme_id: newProg.programme_id }});
+      await Programme.destroy({ where: { programme_id: newProg.programme_id } });
       res.status(500).json({ message: 'Failed to upload display image!' });
     }
-    
+
   } catch (err) {
     console.error(err);
     return res.status(500).json({ message: "Failed to create programme!" });
@@ -167,9 +171,11 @@ const getAllProgsByOrgID = async (req, res) => {
     const getOrgObj = await Organiser.findOne({ where: { account_id: account.account_id }, raw: true });
 
     //Returns array.
-    const getOrgProgObj = await Programme.findAll({ where: { organiser_id : getOrgObj.organiser_id},
-      raw: true });
-      
+    const getOrgProgObj = await Programme.findAll({
+      where: { organiser_id: getOrgObj.organiser_id },
+      raw: true
+    });
+
     if (!getOrgProgObj) {
       return res.status(200).json({ message: "Organiser has not created any programmes." });
     }
@@ -193,7 +199,7 @@ const getAllProgsByOrgID = async (req, res) => {
     //     }
     //   return res.status(200).json({ message: "All programmes have been retrieved for Organiser No: " + getOrgObj.organiser_id + ".", response }) 
     //   });
-      
+
 
     //bruce
   } catch (err) {
@@ -205,9 +211,13 @@ const getAllProgsByOrgID = async (req, res) => {
 //Check if capacity reached.
 const checkCapacity = async (progID, roleApplied) => {
 
-  const getCapacity = await Application.findAndCountAll({ where: { programme_id: progID, is_accepted: 1, 
-    role: roleApplied }, raw: true });
-  const getProgramme = await Programme.findOne({ where: {programme_id: progID}, raw: true});
+  const getCapacity = await Application.findAndCountAll({
+    where: {
+      programme_id: progID, is_accepted: 1,
+      role: roleApplied
+    }, raw: true
+  });
+  const getProgramme = await Programme.findOne({ where: { programme_id: progID }, raw: true });
 
   const programme_capacity = roleApplied === "mentor" ? getProgramme.mentorCapacity : getProgramme.menteeCapacity;
   if (getCapacity.count >= programme_capacity) {
@@ -215,10 +225,10 @@ const checkCapacity = async (progID, roleApplied) => {
   }
 
   return false;
-  
+
 }
 
-const evaluateApp = async (req, res) => { 
+const evaluateApp = async (req, res) => {
   try {
     const account = req.account;
     if (account.account_type !== 'organiser') {
@@ -244,16 +254,18 @@ const evaluateApp = async (req, res) => {
       return res.status(200).json({ message: "Capacity reached. No approvals allowed." });
     }
 
-    await Application.update({ is_accepted: approval }, { where: { application_id: getAppID }} );
+    await Application.update({ is_accepted: approval }, { where: { application_id: getAppID } });
 
     if (approval === 1) {
-      await UserProgramme.create({ role: getApplication.role, user_id: getApplication.user_id, 
-        programme_id: getApplication.programme_id, application_id: getAppID });
+      await UserProgramme.create({
+        role: getApplication.role, user_id: getApplication.user_id,
+        programme_id: getApplication.programme_id, application_id: getAppID
+      });
     } else {
       await UserProgramme.destroy({ where: { programme_id: getApplication.programme_id } });
     }
-    
-    return res.status(200).json({ message: "Application and UserProgramme have been updated." });
+
+    return res.status(201).json({ message: "Application and UserProgramme have been updated." });
 
   } catch (err) {
     return res.status(500).json({ error: err });
@@ -276,7 +288,7 @@ const getApp = async (req, res) => {
 
     const combine = getApplication.map(async (app) => {
       const foundUser = await (User.findOne(
-        { where: { user_id: app.user_id }, include: Account}
+        { where: { user_id: app.user_id }, include: Account }
       ));
       app["name"] = foundUser.Account.name;
     })
@@ -302,9 +314,9 @@ const deleteProg = async (req, res) => {
 
   try {
     await Programme.destroy(
-          { where: { programme_id: getProgID }} );
+      { where: { programme_id: getProgID } });
 
-    return res.status(200).json({ message: "Programme has been successfully deleted."})
+    return res.status(200).json({ message: "Programme has been successfully deleted." })
 
   } catch (err) {
     console.error(err);
@@ -315,19 +327,19 @@ const deleteProg = async (req, res) => {
 function customSort(a, b) {
   if (a.updatedAt !== null && b.updatedAt !== null) {
     // Sort based on updatedAt timestamps
-    return b.updatedAt - a.updatedAt; 
-    
+    return b.updatedAt - a.updatedAt;
+
   } else if (a.updatedAt === null && b.updatedAt !== null) {
     // A has no updatedAt, compare A.createdAt with B.updatedAt
-    return b.updatedAt - a.createdAt; 
+    return b.updatedAt - a.createdAt;
 
   } else if (a.updatedAt !== null && b.updatedAt === null) {
     // B has no updatedAt, compare B.createdAt with A.updatedAt
-    return b.createdAt - a.updatedAt; 
+    return b.createdAt - a.updatedAt;
 
   } else {
     // Both have null updatedAt, sort based on createdAt
-    return b.createdAt - a.createdAt; 
+    return b.createdAt - a.createdAt;
   }
 }
 
@@ -363,7 +375,7 @@ const getAnnouncementsByProgID = async (req, res) => {
 
     let announcementArray = [];
     for (const item of announcementsInLocalTimezone) {
-        announcementArray.push(item);
+      announcementArray.push(item);
     }
     // if (announcementArray.length > 3) {
     // }
@@ -372,7 +384,7 @@ const getAnnouncementsByProgID = async (req, res) => {
   } catch (err) {
     return res.status(500).json({ message: "Error getting announcements.", err });
   }
-  
+
 }
 
 const getCurrDateTime = async () => {
@@ -389,12 +401,12 @@ const addAnnouncementByProgID = async (req, res) => {
     if (!isValidOrganiser) {
       return res.status(403).json({ message: "You are not allowed to view this page." });
     }
-    const getOrganiser = await Organiser.findOne({ where: {account_id: req.account.account_id }, raw: true });
-  
+    const getOrganiser = await Organiser.findOne({ where: { account_id: req.account.account_id }, raw: true });
+
     const { title, description, programme_id } = req.body;
     const currDateTime = await getCurrDateTime();
-  
-    await Announcement.create({ 
+
+    await Announcement.create({
       title: title,
       description: description,
       createdAt: currDateTime,
@@ -418,7 +430,7 @@ const updateAnnouncementByProgID = async (req, res) => {
     const { inputMessage, type, announcementID } = req.body;
     const currDateTime = await getCurrDateTime();
 
-    await Announcement.update({ 
+    await Announcement.update({
       message: inputMessage,
       type: type,
       updatedAt: currDateTime,
@@ -441,13 +453,112 @@ const deleteAnnouncementsByProgID = async (req, res) => {
     const announcementID = req.params.announcementID;
 
     await Announcement.destroy({ where: { announcement_id: announcementID } })
-    return res.status(200).json({ message: "Announcement has been successfully deleted."})
-  
+    return res.status(200).json({ message: "Announcement has been successfully deleted." })
+
   } catch (err) {
     return res.status(500).json({ error: err });
   }
 }
 
-module.exports = { getOrg, updateOrg, addProg, getAllProgsByOrgID, checkCapacity, evaluateApp, 
+const addOrgFeedback = async (req, res) => {
+  try {
+    const account = req.account;
+
+    const getUserObj = await User.findOne({ where: { account_id: account.account_id }, raw: true });
+    const { rating, comment, receiverID, programmeID } = req.body;
+
+    const orgObj = await Organiser.findOne({ where: { organiser_id: receiverID }, raw: true });
+    if (!orgObj) {
+      return res.status(400).json({ message: "Not an organiser." });
+    }
+
+    moment.tz.setDefault('Asia/Singapore');
+    const createdDateTime = moment().format('YYYY-MM-DD HH:mm:ss');
+
+    await OrganiserReview.create({
+      date: createdDateTime,
+      rating: rating,
+      comment: comment,
+      receiver_id: receiverID,
+      author_id: getUserObj.user_id,
+      programme_id: programmeID,
+    })
+
+    return res.status(201).json({ message: "Organiser reviews created." });
+  } catch (err) {
+    return res.status(500).json({ err });
+  }
+}
+
+const getAllFeedbackByUsers = async (req, res) => {
+  try {
+    // const account = req.account;
+
+    const getProgID = req.params.progID;
+    const getOrgReviews = await OrganiserReview.findAll({ where: { programme_id: getProgID }, raw: true });
+
+    if (getOrgReviews == null || getOrgReviews.length == 0) {
+      return res.status(400).json({ message: "No reviews found for you." });
+    }
+
+    let authorIDArr = [];
+    getOrgReviews.map(eachOrgReview => {
+      authorIDArr.push(eachOrgReview.author_id);
+    });
+
+    const getAllGroups = await UserGroup.findAll({ 
+      where: { programme_id: getProgID }, raw: true
+      });
+
+
+    let usersObjArr = [];
+
+    for (const eachGroup of getAllGroups) {
+      const JSONMentees = JSON.parse(eachGroup.mentees);
+      for (const eachMentee of JSONMentees) {
+        for (const eachAuthor of authorIDArr) {
+          if (eachMentee.id === eachAuthor) {
+
+            const userProgObj = await UserProgramme.findOne({ where: { user_id: eachAuthor, programme_id: getProgID}, raw: true});
+
+            usersObjArr.push({
+              id: eachAuthor,
+              name: eachMentee.name,
+              groupNo: eachGroup.group_no,
+              role: userProgObj.role
+            });
+          }
+        }
+      }
+    }
+
+    const reviewFeedbackObj = getOrgReviews.map(eachOrgReview => {
+      
+      const addOn = usersObjArr.find(item => item.id === eachOrgReview.author_id);
+      const formattedDate = eachOrgReview.date.toLocaleString('en-SG', { timeZone: 'Asia/Singapore' });
+
+      //remove ID property in AddOn as duplicate with author_id
+      const { id, ...restOfAddOn } = addOn;
+
+      return {
+        ...eachOrgReview,
+        date: formattedDate,
+        ...restOfAddOn,
+      };
+    });
+
+    // console.log(reviewFeedbackObj);
+    
+    return res.status(200).json({ message: "Organiser reviews retrieved." , reviewFeedbackObj})
+
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ error: err });
+  }
+}
+
+module.exports = {
+  getOrg, updateOrg, addProg, getAllProgsByOrgID, checkCapacity, evaluateApp,
   getApp, deleteProg, getAnnouncementsByProgID, addAnnouncementByProgID, updateAnnouncementByProgID,
-  deleteAnnouncementsByProgID };
+  deleteAnnouncementsByProgID, addOrgFeedback, getAllFeedbackByUsers
+};
