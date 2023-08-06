@@ -42,20 +42,24 @@ const ContactUs = () => {
     <Box>
       <LoginOverlay />
       <Header />
-      <StyledContactForm>
-        {submissionStatus === 'success' && (
-          <PopoutMessage>Message sent</PopoutMessage>
-        )}
-        <form ref={form} onSubmit={sendEmail}>
-          <label>Name</label>
-          <input type="text" name="user_name" />
-          <label>Email</label>
-          <input type="email" name="user_email" />
-          <label>Message</label>
-          <textarea name="message" />
-          <input type="submit" value="Send" />
-        </form>
-      </StyledContactForm>
+      <Box
+        paddingLeft={"50px"}>
+      <StyledContactForm margin="20px">
+            {submissionStatus === 'success' && (
+            <PopoutMessage>Message sent</PopoutMessage>
+            )}
+            <form ref={form} onSubmit={sendEmail}>
+            <label>Name</label>
+            <input type="text" name="user_name" />
+            <label>Email</label>
+            <input type="email" name="user_email" />
+            <label>Message</label>
+            <textarea name="message" />
+            <input type="submit" value="Send" />
+            </form>
+        </StyledContactForm>
+      </Box>
+        
     </Box>
   );
 };
@@ -68,12 +72,12 @@ const StyledContactForm = styled.div`
     align-items: flex-start;
     flex-direction: column;
     width: 100%;
-    font-size: 16px;
+    font-size: 20px;
 
     input {
       width: 100%;
       height: 35px;
-      padding: 7px;
+      padding: 20px;
       outline: none;
       border-radius: 5px;
       border: 1px solid rgb(220, 220, 220);
