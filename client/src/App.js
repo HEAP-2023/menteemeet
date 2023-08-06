@@ -15,6 +15,7 @@ import Test from "./scenes/testingGrounds/Test";
 import CreateProgramme from "./scenes/createProgramme/CreateProgramme";
 import Calendar from "./scenes/calendar/Calendar";
 import FAQ from "./scenes/login/FAQ";
+import ContactUs from "./scenes/login/ContactUs";
 import { useSelector } from "react-redux";
 import { ProtectedRoute, UnprotectedRoute } from "./ProtectedRoute"
 import AccountSettings from "./scenes/accountSettings/AccountSettings";
@@ -39,6 +40,7 @@ function App() {
                         <Route path="/login/start" element={<LoginStart/>}></Route>
                         <Route path="/login/explore" element={<LoginExplore/>}></Route>
                         <Route path="/login/faq" element={<FAQ/>}></Route>
+                        <Route path="/login/contactus" element={<ContactUs/>}></Route>
                     </Route>
 
                     {/* private routes */}
