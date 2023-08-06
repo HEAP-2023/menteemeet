@@ -1,13 +1,15 @@
 import { Box, Accordion, AccordionDetails, AccordionSummary, Typography, Stack } from "@mui/material";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Header from "../../components/login/start/Header";
+import LoginOverlay from "../../components/login/LoginOverlay";
 import { generateColors } from "../../theme";
 
 const FAQ = () => {
     const colors = generateColors()
     return (
     <Box>
-    <Header/>
+      <LoginOverlay />
+      <Header/>
     <Stack
     sx={{
         '&> :nth-child(even)':{
