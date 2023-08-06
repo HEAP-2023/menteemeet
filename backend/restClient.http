@@ -1,8 +1,8 @@
 ### Get Application
-GET http://localhost:5001/api/v1/users/session/3
+GET http://localhost:5001/api/v1/users/listofMentees/3
 Accept: application/json
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50X2lkIjo0LCJuYW1lIjoiRGF2aWQgSGFzc2VsaG9yZiIsImVtYWlsIjoidGVzdDEyMzQ1QGdtYWlsLmNvbSIsImNvbnRhY3Rfbm8iOm51bGwsImFjY291bnRfdHlwZSI6InVzZXIiLCJqc29uX3Rva2VuSUQiOiJ3MjBWWlp6VVMwMk5peXJiTDdDYlFBIiwiaWF0IjoxNjkxMDY2ODA5LCJleHAiOjE2OTExMjY4MDksImp0aSI6IncyMFZaWnpVUzAyTml5cmJMN0NiUUEifQ.uRsfwXK1kpFChYKYJhv-awo4MznPHJrWttAKdsbSDM8
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50X2lkIjo0LCJuYW1lIjoiRGF2aWQgSGFzc2VsaG9yZiIsImVtYWlsIjoidGVzdDEyMzQ1QGdtYWlsLmNvbSIsImNvbnRhY3Rfbm8iOm51bGwsImFjY291bnRfdHlwZSI6InVzZXIiLCJqc29uX3Rva2VuSUQiOiJoZThHUmpJYlJnT3dtT1N0Tm9qM2JnIiwiaWF0IjoxNjkxMzI5Njg2LCJleHAiOjE2OTEzODk2ODYsImp0aSI6ImhlOEdSakliUmdPd21PU3ROb2ozYmcifQ.gleH3Ux4UUycbcODKXg59twyX2ubhZEnar17Yx0lkh8
 
 ### Login
 POST http://localhost:5001/api/v1/login
@@ -10,8 +10,8 @@ Accept: application/json
 Content-Type: application/json
 
 {
-    "email": "test1234567@gmail.com",
-    "password": "123457"
+    "email": "john.doe@example.com",
+    "password": "password123"
 }
 
 ### Get User

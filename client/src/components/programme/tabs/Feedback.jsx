@@ -11,22 +11,50 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { ErrorMessage } from '@hookform/error-message';
 import { DevTool } from "@hookform/devtools";
 import { getAllFeedback } from "../../../services/user/userServices";
+import { useParams } from 'react-router-dom';
+import { getListOfMentees, getListOfMentors } from "../../../services/user/userServices";
 const Feedback = () => {
+    const {id} = useParams(); // progID
+    const programmes = useSelector((state) => state.user.programmes)
+    const programme = programmes.find(program => program.programme_id === Number(id));
+    const userRole = programme.role;
+    const [reviewees, setReviewees] = useState([]);
     useEffect(() => {
         getAllFeedback()
-        .then(res => console.log("res:",res))
+        .then(res => {console.log("res:",res);
+        setStore(res.data.feedbackArray);})
         .catch(err => console.log("ERROR:", err))
-    })
+    },[])
+
+    useEffect(() => {
+        if(userRole === "mentee"){
+            getListOfMentors(id)
+            .then(res => {
+                console.log("res getList:", res.data);
+                setReviewees(res.data);
+            })
+            .catch(err => console.log("ERRORS:", err));
+        }else if (userRole === "mentor"){
+            getListOfMentees(id)
+            .then(res => {
+                console.log("res getList:", res.data);
+                setReviewees(res.data);
+            })
+            .catch(err => console.log("ERRORS:", err));
+        }
+    },[])
     const bgColor = generateColors().primary[500];
     const [person, setPerson] = useState('');
     const handleChange = (event) => {
         setPerson(event.target.value);
     };
     const userType = useSelector((state) => state.user.userBasicDetails.account_type);
-    const rows = fetchPeople(userType);
-
+    
+    
+    // const rows = fetchPeople(userRole);
+    
     const acctID = useSelector((state) => state.user.userBasicDetails.account_id);
-    const people = ["Organiser"].concat(rows.map((item, index) => item.name));
+    const people = ["Organiser"].concat(reviewees.map((item, index) => item.name));
     
     const feedbackSchema = yup.object()
         .shape({
@@ -46,9 +74,9 @@ const Feedback = () => {
     const [store, setStore] = useState([]);
     const handleSave = (data) => {
         let feedbackEntry = {
-            feedback: data.feedback,
-            from: acctID,
-            to: person ? person : "none",
+            content: data.feedback,
+            author_id: acctID,
+            receiver_id: person ? person : "none",
         };
         setStore((prevStore) => [...prevStore, feedbackEntry]);
         // Save or process the feedback entry as needed
@@ -82,7 +110,7 @@ const Feedback = () => {
                         <MenuItem value="Organiser">
                             Organiser
                         </MenuItem>
-                        {rows.map((item, index) => (
+                        {reviewees.map((item, index) => (
                             <MenuItem value={item.name} key={index}>
                                 {item.name}
                             </MenuItem>
@@ -129,9 +157,9 @@ const Feedback = () => {
 
                         {hasContent ? (store.map((value, index) => (
                             <Box key={index}>
-                                <Typography my="10px">Feedback to {value.to}</Typography>
+                                <Typography my="10px">Feedback to {value.receiver_id}</Typography>
                                 <Box bgcolor="#FFFFFF" borderRadius="10px" height="60%" p="10px" display="inline-block" minWidth="100%">
-                                    <Typography>{value.feedback}</Typography>
+                                    <Typography>{value.comment}</Typography>
                                 </Box>
                             </Box>
                         ))) : <></>}
@@ -154,22 +182,22 @@ const Feedback = () => {
 
 export default Feedback;
 
-const fetchPeople = (role) => {
-    if (role === "mentor") {
-        return [{
-            name: "Olivia"
-        }, {
-            name: "Axel"
-        }, {
-            name: "Bruce"
-        }]
-    } else if (role === "mentee") {
-        return [{
-            name: "Hong Yao"
-        }, {
-            name: "Gabriel"
-        }]
-    } else{
-        return []
-    }
-}
+// const fetchPeople = (role) => {
+//     if (role === "mentor") {
+//         return [{
+//             name: "Olivia"
+//         }, {
+//             name: "Axel"
+//         }, {
+//             name: "Bruce"
+//         }]
+//     } else if (role === "mentee") {
+//         return [{
+//             name: "Hong Yao"
+//         }, {
+//             name: "Gabriel"
+//         }]
+//     } else{
+//         return []
+//     }
+// }
