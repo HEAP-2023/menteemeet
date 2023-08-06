@@ -31,6 +31,8 @@ const initialState = {
     disableDrag : true,
     dragParking : [],
     openNotifs : false,
+    successModal : false,
+    failureModal : false,
 }
 
 
@@ -74,17 +76,25 @@ export const userSlice = createSlice({
         // },
         toggleNotifs : (state) => {
             state.openNotifs = !state.openNotifs
-        }
+        },
+        setSuccessModal : (state, action) => {
+            state.successModal = action.payload
+        },
+        setFailureModal : (state, action) => {
+            state.failureModal = action.payload
+        },
     }
 })
 
 
-export const {loginOverlayToggle ,
+export const {loginOverlayToggle , 
     profileOverlayToggle, closeProfileOverlay,
     logOut, updateDetails,
     dragToggle, modifyDetails,
     updateProgrammes,  updateApplications, toggleNotifs,
-    addToParking, removeFromParking} = userSlice.actions;
+    addToParking, removeFromParking, 
+    setSuccessModal, setFailureModal,
+} = userSlice.actions;
 
 
 

@@ -58,7 +58,10 @@ def getAvailScore(mentor: Mentor, mentee: Mentee) -> float:
     for char in mentorString:
         denominator += int(char)
 
-    return numerator/denominator;
+    if denominator == 0:
+        return 0
+    
+    return numerator/denominator
     
 def getInterestsScore(mentorArr: List[str], menteeArr: List[str]) -> float:
     # Insert Scoring logic here

@@ -23,13 +23,11 @@ const Groupings = ({id}) => {
     const queryClient = useQueryClient()
     const { data:groupingData , isSuccess, isError, isLoading } = useGetGrouping(id)
     const { mutate : submitGroupEdit } = usePutNewGrouping(id)
-    console.log(groupingData)
     const rows = groupingData.map((group) => {
         const {commonDT, groupNo, id, mentee, mentor} = group;
         const parsedMentee = JSON.parse(mentee).map(m => ({...m, availability : JSON.stringify(m.availability)}))
         const parsedMentor = JSON.parse(mentor).map(m => ({...m, availability : JSON.stringify(m.availability)}))
         const parsedDT = JSON.parse(commonDT)
-        console.log(parsedMentee)
 
         return {
             commonDT : parsedDT,

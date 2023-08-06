@@ -101,13 +101,13 @@ export default WeekSelectionCalendarSubmitable;
 const getStartLabelText = (start) => {
     
     if(start === 8){
-        return "morning"
+        return "Morning"
     }
     if(start === 12){
-        return "afternoon"
+        return "Afternoon"
     }
     if(start === 16){
-        return "evening"
+        return "Evening"
     }
     return "undefined"
 }
@@ -115,13 +115,13 @@ const getStartLabelText = (start) => {
 const getEndLabelText = (end) => {
     
     if(end === 12){
-        return "morning"
+        return "Morning"
     }
     if(end === 16){
-        return "afternoon"
+        return "Afternoon"
     }
     if(end === 20){
-        return "evening"
+        return "Evening"
     }
     return "undefined"
 }
@@ -131,44 +131,44 @@ const getEndLabelText = (end) => {
 // {
 //    day :  {
 //         mon : {
-//             morning : false,
-//             afternoon : false, 
-//             evening : false,
+//             Morning : false,
+//             Afternoon : false, 
+//             Evening : false,
 //         },
 //         tue : {
-//             morning : false,
-//             afternoon : false, 
-//             evening : false,
+//             Morning : false,
+//             Afternoon : false, 
+//             Evening : false,
 //         },
 //         wed : {
-//             morning : false,
-//             afternoon : false, 
-//             evening : false,
+//             Morning : false,
+//             Afternoon : false, 
+//             Evening : false,
 //         },
 //         thu : {
-//             morning : false,
-//             afternoon : false, 
-//             evening : false,
+//             Morning : false,
+//             Afternoon : false, 
+//             Evening : false,
 //         },
 //         fri : {
-//             morning : false,
-//             afternoon : false, 
-//             evening : false,
+//             Morning : false,
+//             Afternoon : false, 
+//             Evening : false,
 //         },
 //         sat : {
-//             morning : false,
-//             afternoon : false, 
-//             evening : false,
+//             Morning : false,
+//             Afternoon : false, 
+//             Evening : false,
 //         },
 //         sun : {
-//             morning : false,
-//             afternoon : false, 
-//             evening : false,
+//             Morning : false,
+//             Afternoon : false, 
+//             Evening : false,
 //         },
 //         mon : {
-//             morning : false,
-//             afternoon : false, 
-//             evening : false,
+//             Morning : false,
+//             Afternoon : false, 
+//             Evening : false,
 //         },
 //     }
 // }

@@ -1,5 +1,6 @@
 import os
-
+import pymysql
+pymysql.install_as_MySQLdb()
 from dotenv import load_dotenv
 from flask import Flask, request
 from db import db

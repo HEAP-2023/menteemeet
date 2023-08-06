@@ -3,13 +3,17 @@ from entity.Mentor import Mentor
 from entity.Mentee import Mentee
 
 def setGroupCap(mentors, mentees):
-    # Divide the mentees by mentors
-    CAPACITY = len(mentees) // len(mentors)
-    [mentor.setCapacity(CAPACITY) for mentor in mentors]
-    
-    # If unable to divide fully, add extra members for some first n groups
-    REMAINDER = len(mentees) % len(mentors)
-    [mentors[i].incrementCap() for i in range(REMAINDER)]
+    try:
+        # Divide the mentees by mentors
+        CAPACITY = len(mentees) // len(mentors)
+        [mentor.setCapacity(CAPACITY) for mentor in mentors]
+        
+        # If unable to divide fully, add extra members for some first n groups
+        REMAINDER = len(mentees) % len(mentors)
+        [mentors[i].incrementCap() for i in range(REMAINDER)]
+        return True
+    except:
+        return False
 
 
 def pairToMentor(mentees, score):

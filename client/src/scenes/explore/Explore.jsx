@@ -4,13 +4,12 @@ import { createContext, useState } from "react"
 import DisplayProgs from "../../components/explore/DisplayProgs"
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 import { useNavigate, useParams } from "react-router-dom";
+import {SuccessModal} from "../../components/SuccessModal";
 
 
-export const FeedBackContext = createContext()
 
 const Explore = () => {
     const [userQuery, setUserQuery] = useState("");
-    const [openDialog, setOpenDialog] = useState(false); // Add this line
 
     const prog_id = useParams();
     const navigate = useNavigate()
@@ -36,23 +35,8 @@ const Explore = () => {
                 sx:{borderRadius: "20px"}
               }}
             />
-        <FeedBackContext.Provider value={setOpenDialog}>
             <DisplayProgs userQuery={userQuery}/>
-        </FeedBackContext.Provider>
-            
-            {/* Dialog */}
-            <Dialog open={openDialog} onClose={() => setOpenDialog(false)}>
-                    <DialogTitle>Success</DialogTitle>
-                    <DialogContent> <p>Application has been successfully submitted.</p> </DialogContent>
-                    <DialogActions>
-                        <Button onClick={() => { 
-                            setOpenDialog(false);
-                        }
-                            }>
-                            OK
-                        </Button>
-                    </DialogActions>
-                </Dialog>
+            <SuccessModal/>
         </Box>);
     
 }
