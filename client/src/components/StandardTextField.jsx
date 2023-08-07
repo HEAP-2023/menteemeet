@@ -1,7 +1,7 @@
 import { TextField } from "@mui/material";
 import InputAdornment from '@mui/material/InputAdornment';
 
-const StandardTextField = ({errors, field, name, label, type="text", adornment="", multiline=false, rows=1}) => {
+const StandardTextField = ({errors, field, name, label, type="text", adornment="", multiline=false, rows=1, inputRef=null}) => {
     return (
         <TextField {...field} 
                 label={label}
@@ -9,6 +9,7 @@ const StandardTextField = ({errors, field, name, label, type="text", adornment="
                 variant="outlined" 
                 multiline={multiline}
                 rows={rows}
+                inputRef={inputRef}
                 InputProps={{
                     endAdornment: <InputAdornment position="end">{adornment}</InputAdornment>,
                 }}

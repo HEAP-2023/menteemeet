@@ -15,7 +15,9 @@ const DeleteProgrammeModal = ({id, open, setDeleteModal, programme_name}) => {
     const handleSave = (data) => {
         console.log("to be deleted: ", id)
         console.log(data)
+        setDeleteModal(false); 
         deleteProgramme(id)
+
     }
     return (
         <Modal

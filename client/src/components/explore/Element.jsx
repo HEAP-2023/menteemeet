@@ -14,6 +14,7 @@ const Element = ({details}) => {
         description,
         display_image,
         deadline,
+        expired,
     } = details
 
     const [dialogOpen, setDialogOpen] = useState(null)
@@ -47,7 +48,9 @@ const Element = ({details}) => {
                 <Button variant="contained" sx={{borderRadius:"20px"}} 
                 onClick={() => setDialogOpen("findOutMore")}
                 >Find Out More</Button>
-                <Button variant="contained" sx={{borderRadius:"20px", bgcolor: `${colors.text[500]}` ,color:"#ffffff"}}
+                <Button variant="contained" 
+                disabled={expired}
+                sx={{borderRadius:"20px", bgcolor: `${colors.text[500]}` ,color:"#ffffff"}}
                 onClick={() => setDialogOpen("signUp")}
                 >Sign Up</Button>
             </Box>

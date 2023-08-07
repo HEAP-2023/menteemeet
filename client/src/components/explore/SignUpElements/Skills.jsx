@@ -23,7 +23,7 @@ const Skills = () => {
             <Controller 
             name={`skills.${index}.skill`}
             control={control} 
-            render={({field}) =>
+            render={({field: { ref, ...field }, fieldState}) =>
                
                 <Autocomplete
                 sx={{ width: "100%" }}
@@ -39,6 +39,7 @@ const Skills = () => {
             }
                 renderInput={(params) => 
                     <TextField {...params} 
+                        inputRef={ref}
                         value={field.value}
                         label={`skill ${index + 1}`} 
                         name={`skills.${index}.skill`} 

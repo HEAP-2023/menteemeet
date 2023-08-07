@@ -10,9 +10,10 @@ const Intro = () => {
         <Controller
         name="description"
         control={control}
-        render={({field}) => 
+        render={({field: { ref, ...field }, fieldState}) => 
     <TextField error={errors["description"] !== undefined} 
     {...field} multiline rows={4}
+    inputRef={ref}
         name="description" label="Introduction Paragraph / description of programme" 
         helperText={errors["description"]?.message}
         sx={{

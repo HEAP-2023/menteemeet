@@ -13,8 +13,8 @@ const Capacity = () => {
                 <Controller
                 name="mentorCapacity"
                 control={control}
-                render={({field}) => 
-                <StandardTextField errors={errors} field={field} type="number"
+                render={({field: {ref, ...field }, fieldState}) => 
+                <StandardTextField errors={errors} field={field} inputRef={ref} type="number"
                 name="mentorCapacity" label="Mentor Capacity" />
             }
                 />
@@ -24,8 +24,8 @@ const Capacity = () => {
                 <Controller
                 name="menteeCapacity"
                 control={control}
-                render={({field}) => 
-                <StandardTextField errors={errors} field={field} type="number"
+                render={({field: {ref, ...field }, fieldState}) => 
+                <StandardTextField errors={errors} field={field} inputRef={ref} type="number"
                 name="menteeCapacity" label="Mentee Capacity" />
             }
                 />

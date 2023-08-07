@@ -1,11 +1,15 @@
-import { Box, Button, Typography } from "@mui/material"
+import { Box, Button, Typography, Dialog, DialogTitle, DialogActions, DialogContent } from "@mui/material"
 import useGetMMByProgID from "../../hooks/programmes/organiser_authorised/useGetMMByProgID"
 import usePostGrouping from "../../hooks/algo/usePostGrouping"
 import { useSelector } from "react-redux";
+import { useState } from "react";
+
+
 const GenerateGroup = ({progID}) => {
 
+    const [failed, setFailGenerate] = useState(false)
     const {data, isSuccess} = useGetMMByProgID(progID);
-    const { mutate : createGroup } = usePostGrouping(progID)
+    const { mutate : createGroup } = usePostGrouping(progID, setFailGenerate)
     const userType = useSelector((state) => state.user.userBasicDetails.account_type)
     const handleClick = () => {
         if(isSuccess){
@@ -21,6 +25,20 @@ const GenerateGroup = ({progID}) => {
 
     return (
     <Box width="100%" display="flex" justifyContent="center" alignItems="center">
+        <Dialog open={!!failed} onClose={() => setFailGenerate(false)} >
+            <DialogTitle>Failed</DialogTitle>
+            <DialogContent> <p>{failed}</p> </DialogContent>
+            <DialogActions>
+                <Button 
+                color="secondary"
+                onClick={() => { 
+                   setFailGenerate(false)
+                }
+                    }>
+                    OK
+                </Button>
+            </DialogActions>
+        </Dialog>
         {
             userType === "organiser" ? 
             
