@@ -5,13 +5,13 @@ import { useFormContext } from "react-hook-form"
 const AvailabilityCBox = () => {
     const {control, setValue, formState : {errors}} = useFormContext();
     const [state, setState] = useState({
-        MONDAY : eachDay,
-        TUESDAY : eachDay,
-        WEDNESDAY : eachDay,
-        THURSDAY : eachDay,
-        FRIDAY : eachDay,
-        SATURDAY : eachDay,
-        SUNDAY : eachDay,
+        Monday : eachDay,
+        Tuesday : eachDay,
+        Wednesday : eachDay,
+        Thursday : eachDay,
+        Friday : eachDay,
+        Saturday : eachDay,
+        Sunday : eachDay,
     })
 
     const filterFn = useCallback((input) => {
@@ -44,14 +44,14 @@ const AvailabilityCBox = () => {
     )
 }
 
-const days = ["MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY", "SUNDAY"]
+const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
 export default AvailabilityCBox
 
 const eachDay = {
     dirty : false,
     children : { 
-        morning : false,
-        afternoon : false,
-        evening : false,
+        Morning : false,
+        Afternoon : false,
+        Evening : false,
     }
 }

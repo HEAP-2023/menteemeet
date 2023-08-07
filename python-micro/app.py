@@ -1,5 +1,6 @@
 import os
-
+import pymysql
+pymysql.install_as_MySQLdb()
 from dotenv import load_dotenv
 from flask import Flask, request
 from db import db
@@ -51,4 +52,4 @@ def editGroupings(progID):
 
 
 if __name__ == '__main__':
-    app.run(debug=True, port=5100)
+    app.run(debug=True, port=5100, host='0.0.0.0')

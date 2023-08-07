@@ -262,7 +262,7 @@ const evaluateApp = async (req, res) => {
         programme_id: getApplication.programme_id, application_id: getAppID
       });
     } else {
-      await UserProgramme.destroy({ where: { programme_id: getApplication.programme_id } });
+      await UserProgramme.destroy({ where: { programme_id: getApplication.programme_id, user_id: getApplication.user_id } });
     }
 
     return res.status(201).json({ message: "Application and UserProgramme have been updated." });

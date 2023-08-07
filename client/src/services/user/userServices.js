@@ -123,3 +123,21 @@ export const getAllFeedback = async() => {
     })
     return res
 }
+
+export const getListOfMentors = async(progID) => {
+    const res = await axiosInstance({
+        method: "get",
+        url: `/users/listofMentors/${progID}`,
+        headers: { Authorization: `Bearer ${localStorage.getItem("jwt")}` },
+    })
+    return res
+}
+
+export const getListOfMentees = async(progID) => {
+    const res = await axiosInstance({
+        method: "get",
+        url: `/users/listofMentees/${progID}`,
+        headers: { Authorization: `Bearer ${localStorage.getItem("jwt")}` },
+    })
+    return res
+}
