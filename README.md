@@ -2,6 +2,8 @@
 <p align="center">
   <img height="300px" src="client/public/images/global/menteemeet (1).png" />
 </p>
+Project Website: https://menteemeet.com/login/start
+
 Project Documentation: 
 
 ## Project Introduction
@@ -63,7 +65,20 @@ Following this, install necessary node packages:
  pip install Flask-SQLAlchemy --user  
 ```
 ```
- pip install mysqlclient --user 
+ pip install mysqlclient --user
+```
+```
+pip install pymysql --user
+```
+```
+pip install Flask-Cors --user
+```
+For first time users, create a dotenv file with the following details:
+```
+DB_USERNAME=
+DB_PASSWORD= 
+DB_HOSTNAME=
+DB_SCHEMA=
 ```
 Start the application:
 
@@ -90,3 +105,10 @@ Start the application:
 ```
 npm start
 ```
+
+
+## Codebase Structure
+
+### client Folder
+
+
