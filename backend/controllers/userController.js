@@ -21,6 +21,7 @@ const Review = require("../models/review");
 const Organiser = require("../models/organiser");
 
 const { checkCapacity } = require('./organiserController');
+const OrganiserReview = require("../models/organiserReview");
 
 const updateJWT = async (getObj) => {
   try {
@@ -649,8 +650,13 @@ const getAllFeedback = async (req, res) => {
 
     const getUserObj = await User.findOne({ where: { account_id: account.account_id }, raw: true});
     const getAllReviews = await Review.findAll({ where: { author_id: getUserObj.user_id }, raw: true});
-    
+    const getAllReviewsForOrg = await OrganiserReview.findAll({where: {author_id: getUserObj.user_id}})
     const reviewsInLocalTZ = getAllReviews.map(item => ({
+      ...item,
+      date: item.date.toLocaleString('en-SG', { timeZone: 'Asia/Singapore' }),
+    }));
+
+    const reviewsOrg = getAllReviewsForOrg.map(item => ({
       ...item,
       date: item.date.toLocaleString('en-SG', { timeZone: 'Asia/Singapore' }),
     }));
@@ -658,6 +664,11 @@ const getAllFeedback = async (req, res) => {
     let feedbackArray = [];
     for (const item of reviewsInLocalTZ) {
       if (getAllReviews !== null && getAllReviews !== undefined) {
+        feedbackArray.push(item);
+      }
+    }
+    for (const item of reviewsOrg) {
+      if(getAllReviewsForOrg !== null && getAllReviewsForOrg !== undefined){
         feedbackArray.push(item);
       }
     }
@@ -716,7 +727,7 @@ const getListOfMentees = async (req, res) => {
     //mentor
     const getUserObj = await User.findOne({ where: { account_id: account.account_id }, raw: true});
     //get all groups under prog id
-    const getAllGroups = await UserGroup.findOne({ where: { programme_id: getProgID }, raw: true});
+    const getAllGroups = await UserGroup.findAll({ where: { programme_id: getProgID }, raw: true});
 
     let menteesToReturn = [];
 
@@ -731,26 +742,8 @@ const getListOfMentees = async (req, res) => {
           menteesToReturn = JSON.parse(group['mentees']);
       })
     });
-
-    return res.status(200).json(menteesToReturn);   
-    // let isMentorValid = false;
-
-    // const JSONMentors = JSON.parse(getAllGroups.mentors);
-    // JSONMentors.map(eachMentor => {
-    //   if (eachMentor.id === getUserObj.user_id) {
-    //     isMentorValid = true;
-    //   }
-    // });
-
-    // const JSONMentees = JSON.parse(getAllGroups.mentees);
-    // if (isMentorValid) { 
-    //   const menteesName = JSONMentees.map(eachMentor => eachMentor.name);
-
-    //   const orgName = await getOrganiserName(getProgID);
-    //   return res.status(200).json({ message: "List of Mentees retrieved.", menteesName, orgName });
-    // }
-
-    // return res.status(400).json({ message: "Mentor is not in the correct program."});    
+    // console.log("mentees to return:", menteesToReturn);
+    return res.status(200).json(menteesToReturn);     
 
   } catch (err) {
     return res.status(500).json({ err });
@@ -760,4 +753,4 @@ const getListOfMentees = async (req, res) => {
 module.exports = { updateUser, getUser, getAllProgByUserID, getUnsignedProg, getSkill, 
   addSkill, addInterest, getInterest, getAllSessions, getSessionsByProgID, addSessionByGrpID, 
   updateSessionBySessionID, deleteSessionBySessionID, getPendingApps, getApprovedApps, getRejectedApps, 
-  signup, addFeedback, getAllFeedback, getListOfMentors, getListOfMentees };
+  signup, addFeedback, getAllFeedback, getListOfMentors, getListOfMentees, getOrganiserName };

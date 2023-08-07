@@ -124,6 +124,16 @@ export const getAllFeedback = async() => {
     return res
 }
 
+export const addFeedback = async(feedback) => {
+    const res = await axiosInstance({
+        method: 'post',
+        url: "/users/addFeedback",
+        headers: { Authorization: `Bearer ${localStorage.getItem("jwt")}` },
+        data: feedback
+    })
+    return res
+}
+
 export const getListOfMentors = async(progID) => {
     const res = await axiosInstance({
         method: "get",

@@ -49,3 +49,22 @@ export const deleteAnnouncementsByProgID = async (announcementID) => {
     })
     return res
 }
+
+export const addOrgFeedback = async(feedback) => {
+    const res = await axiosInstance({
+        method: 'post',
+        url: `/organisers/addOrgFeedback`,
+        headers: { Authorization: `Bearer ${localStorage.getItem("jwt")}` },
+        data: feedback
+    })
+    return res
+}
+
+export const getAllFeedbackByUsers = async(progID) => {
+    const res = await axiosInstance({
+        method: 'get',
+        url: `/organisers/getAllFeedback/${progID}`,
+        headers: { Authorization: `Bearer ${localStorage.getItem("jwt")}` },
+    })
+    return res
+}
