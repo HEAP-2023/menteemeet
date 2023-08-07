@@ -56,9 +56,6 @@ export const getSessionsByProgID = async(progID) => {
 }
 
 
-
-
-
 const removeExpired = (programmes) => {
     console.log(programmes)
     const today = new Date();

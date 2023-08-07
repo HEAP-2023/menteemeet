@@ -532,20 +532,47 @@ const getAllFeedbackByUsers = async (req, res) => {
       }
     }
 
+    for (const eachGroup of getAllGroups) {
+      const JSONMentors = JSON.parse(eachGroup.mentors);
+      for (const eachMentor of JSONMentors) {
+        for (const eachAuthor of authorIDArr) {
+          if (eachMentor.id === eachAuthor) {
+
+            const userProgObj = await UserProgramme.findOne({ where: { user_id: eachAuthor, programme_id: getProgID}, raw: true});
+
+            usersObjArr.push({
+              id: eachAuthor,
+              name: eachMentor.name,
+              groupNo: eachGroup.group_no,
+              role: userProgObj.role
+            });
+          }
+        }
+      }
+    }
+
+
     const reviewFeedbackObj = getOrgReviews.map(eachOrgReview => {
       
-      const addOn = usersObjArr.find(item => item.id === eachOrgReview.author_id);
-      const formattedDate = eachOrgReview.date.toLocaleString('en-SG', { timeZone: 'Asia/Singapore' });
-
-      //remove ID property in AddOn as duplicate with author_id
-      const { id, ...restOfAddOn } = addOn;
-
-      return {
-        ...eachOrgReview,
-        date: formattedDate,
-        ...restOfAddOn,
-      };
-    });
+      const addOn = usersObjArr.find(item => {
+        return item.id === eachOrgReview.author_id
+      });
+      console.log(addOn)
+      if(addOn){
+        const formattedDate = eachOrgReview.date.toLocaleString('en-SG', { timeZone: 'Asia/Singapore' });
+  
+        //remove ID property in AddOn as duplicate with author_id
+        const { id, ...restOfAddOn } = addOn;
+  
+        return {
+          ...eachOrgReview,
+          date: formattedDate,
+          ...restOfAddOn,
+        };
+      }
+      
+    }
+    ).filter(x => !!x);
 
     // console.log(reviewFeedbackObj);
     

@@ -17,6 +17,7 @@ router.post('/programmes', authenticateToken, upload.single('display_image'), or
 router.delete('/programmes/:progID', authenticateToken, organiserController.deleteProg);
 
 router.get('/getAllFeedback/:progID', authenticateToken, organiserController.getAllFeedbackByUsers);
+router.post(`/addOrgFeedback`, authenticateToken, organiserController.addOrgFeedback);
 
 router.post('/announcements', authenticateToken, organiserController.addAnnouncementByProgID);
 router.put('/announcements', authenticateToken, organiserController.updateAnnouncementByProgID);
