@@ -5,7 +5,6 @@ import { createGrouping } from "../../services/algo/groupings"
 import { useQueryClient } from "@tanstack/react-query"
 import { useDispatch } from "react-redux"
 const usePostGrouping = (progID, setFailGenerate) => {
-    const dispatch = useDispatch()
     const queryClient = useQueryClient()
     return useMutation(createGrouping, {
         onSuccess : (data) => {

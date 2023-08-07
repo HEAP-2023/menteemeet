@@ -6,6 +6,7 @@ const Interest = require("../models/interest");
 const UserProgramme = require("../models/userProgramme");
 const User = require("../models/user");
 const Account = require("../models/account");
+const Sequelize = require('sequelize');
 
 const getEachProg = async (req, res) => {
   try {
@@ -47,9 +48,18 @@ const getAllProg = (req, res) => {
   const { limit, offset } = getPagination(page, size);
 
   try {
-    Programme.findAndCountAll({  limit, offset, raw: true })
+    Programme.findAndCountAll({  limit, offset, raw: true,
+        //BRUCE
+        order: [
+            Sequelize.literal(`CASE WHEN deadline >= CURDATE() THEN 1 ELSE 2 END`),
+            ['deadline', 'ASC'],  // Sort upcoming deadlines in ascending order
+            ['deadline', 'DESC'] //IDK WHY THIS PART NOT RUNNING
+        ],
+        //BRUCE
+    })
 
       .then(data => {
+        console.log("programme: ", data)
         const response = getPagingData(data, (Number(page) + 1), limit);
 
         if (response.currentPage > response.totalPages) {
