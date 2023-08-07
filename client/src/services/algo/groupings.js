@@ -9,7 +9,6 @@ export const getGrouping = async(progID) => {
         method : "get",
         url : `/get-groupings/programme/${progID}`
     })
-    console.log(res.data)
     return res.data
 }
 

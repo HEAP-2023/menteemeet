@@ -14,6 +14,9 @@ import axiosInstance from "../../utils/axiosInstance";
 import { postProgramme } from "../../services/programmes/organiserServices";
 import { QueryClient, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
+import { FailureModal, SuccessModal } from "../../components/SuccessModal";
+import { useDispatch } from "react-redux";
+import { setFailureModal, setSuccessModal } from "../../state(kiv)";
 
 const Transition = forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
@@ -25,6 +28,7 @@ const CreateProgramme = () => {
     const [progress, setProgress] = useState(0)
     const [preview, setPreview] = useState(false)
     const navigate = useNavigate()
+    const dispatch = useDispatch()
     const methods = useForm({
         defaultValues : {
             name : "",
@@ -34,12 +38,13 @@ const CreateProgramme = () => {
             display_image : "",
             mentorCapacity : "",
             menteeCapacity : "",
-            // matching_criteria : [],
             description : "",
         },
-        resolver : yupResolver(createProgrammeSchema)
+        resolver : yupResolver(createProgrammeSchema),
+        shouldFocusError : true,
     })
-    const {control,formState: {errors, defaultValues, dirtyFields, isDirty} , handleSubmit, reset, getValues, watch} = methods
+    const {control,formState: {errors, defaultValues, dirtyFields, isDirty} , handleSubmit, reset, getValues} = methods
+    
     let done = Object.keys(dirtyFields);
 
     useEffect(() => {
@@ -60,11 +65,7 @@ const CreateProgramme = () => {
         console.log(errors)
         console.log("to be submitted")
         console.log(data["display_image"])
-        // const formattedData = {...data, 
-        //     // skills : JSON.stringify(data.skills.map(skill => skill.skillName)),
-        //     // matching_criteria : JSON.stringify(data.matching_criteria)
-        // }
-        // console.log(formattedData)
+        
 
         const formData = new FormData();
         for (const key in data) {
@@ -78,14 +79,16 @@ const CreateProgramme = () => {
         try {
             await postProgramme(formData);
             queryClient.invalidateQueries(["getInvolved"]);
-            navigate("/")
+            dispatch(setSuccessModal(true))
         } catch (err) {
             console.log(err);
-            navigate("/")
+            dispatch(setFailureModal(true))
         }
     }
     return (
     <Box width="100%" p="40px" display="flex" flexDirection="column">
+        <SuccessModal info={"created programme successfully"} actions={() => {navigate("/")}} />
+        <FailureModal info={"failed to create programme"}/>
         {/* progress bar */}
         <ProgressBar progress={progress}/>
 

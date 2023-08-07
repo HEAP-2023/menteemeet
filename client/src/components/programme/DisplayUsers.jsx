@@ -30,7 +30,7 @@ const DisplayUsers = ({props, role}) => {
         <Box width="100%" display="flex" flexDirection="column" >
 
     {value.map((user) => {
-    return (<Box key={user.id} display="flex" sx={{m:"10px 0", borderRadius:"20px", bgcolor:"#EBEBEB"}}>
+    return (<Box key={user.id} display="flex"  alignItems="center" sx={{m:"10px 0", borderRadius:"20px", bgcolor:"#EBEBEB"}}>
             <NameAvatar name={user.name} scale={0.5} m="0"/>
             <Typography>{user.name}  {user.id}</Typography>
             {

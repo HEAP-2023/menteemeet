@@ -3,17 +3,25 @@ import SectionHeader from "../SectionHeader";
 import { Controller } from "react-hook-form";
 import StandardTextField from "../StandardTextField";
 import UploadFileIcon from "@mui/icons-material/UploadFile";
-import { useRef } from "react";
+import { useRef, useEffect } from "react";
 import { useFormContext } from "react-hook-form";
 import Duration from "./formComponents/Duration"
 import Capacity from "./formComponents/Capacity";
 import Deadline from "./formComponents/Deadline";
 import Intro from "./formComponents/Intro";
 // import MatchingCriterias from "./formComponents/MatchingCriterias";
+import useActiveElement from "../../hooks/non-route/useActiveElement";
 
 const MainForm = () => {
     const {control, watch, formState : {errors}} = useFormContext();
     const imagePreview = useRef();
+    const focusedElement = useActiveElement()
+    useEffect(() => {
+        if (focusedElement) {
+            focusedElement.scrollIntoView({block : "center", behavior: "smooth"})
+        }
+     }, [focusedElement])
+
     const imgUploaded = watch("display_image", false)
     return (
     <Box width="100%" p="40px" m="20px 0" display="flex" flexDirection="column" bgcolor="#F1F1F1" >
@@ -25,8 +33,8 @@ const MainForm = () => {
                         <Controller
                         name="name"
                         control={control}
-                        render={({field}) => 
-                    <StandardTextField errors={errors} field={field} 
+                        render={({field: { ref, ...field }, fieldState}) => 
+                    <StandardTextField errors={errors} field={field} inputRef={ref}
                     name="name" label="Programme Name" />
                     }
                         />

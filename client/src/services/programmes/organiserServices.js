@@ -15,7 +15,7 @@ export const delProgramme = async(org_id, programme_id) => {
     const res = await axiosInstance({
         method : "delete",
         headers: { Authorization: `Bearer ${localStorage.getItem("jwt")}` },
-        url : `/organisers/${org_id}/programmes/${programme_id}`
+        url : `/organisers/programmes/${programme_id}`
     })
 }
 

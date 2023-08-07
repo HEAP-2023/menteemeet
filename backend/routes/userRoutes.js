@@ -38,4 +38,6 @@ router.get('/:id/interests', authenticateToken, userController.getInterest);
 router.post('/:id/interests', authenticateToken, userController.addInterest);
 router.get('/:id', authenticateToken, userController.getUser);
 
+router.get('/getOrganiserName/:progID', authenticateToken, userController.getOrganiserName);
+
 module.exports = router;

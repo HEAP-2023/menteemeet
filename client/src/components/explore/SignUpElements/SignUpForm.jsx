@@ -16,10 +16,17 @@ import { yupResolver } from "@hookform/resolvers/yup"
 
 
 import { Dialog, DialogContent, DialogActions, DialogTitle } from '@mui/material';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import useActiveElement from "../../../hooks/non-route/useActiveElement"
 
 const SignUpForm = ({id, setDialogOpen}) => {
 
+    const focusedElement = useActiveElement()
+    useEffect(() => {
+        if (focusedElement) {
+            focusedElement.scrollIntoView({block : "center", behavior: "smooth"})
+        }
+     }, [focusedElement])
     const {error, isError ,isLoading, isSuccess : getDetailsSuccess, data : details} = useGetSignUpForm({id})
     const {account_type, name : userName, email, telegram_username} = useSelector((state) => state.user.userBasicDetails)
     const methods = useForm({
@@ -96,20 +103,20 @@ const SignUpForm = ({id, setDialogOpen}) => {
                     <Controller
                             name="name"
                             control={control}
-                            render={({field}) => 
-                        <StandardTextField errors={errors} field={field} name="name" label="Name"/>
+                            render={({field: { ref, ...field }, fieldState}) => 
+                        <StandardTextField errors={errors} field={field} inputRef={ref} name="name" label="Name"/>
                     }/>
                     <Controller
                             name="email"
                             control={control}
-                            render={({field}) => 
-                        <StandardTextField errors={errors} field={field} name="email" label="Email"/>
+                            render={({field: { ref, ...field }, fieldState}) => 
+                        <StandardTextField errors={errors} field={field} inputRef={ref} name="email" label="Email"/>
                     }/>
                     <Controller
                             name="tele"
                             control={control}
-                            render={({field}) => 
-                        <StandardTextField errors={errors} field={field} name="tele" label="Telegram handle"/>
+                            render={({field: { ref, ...field }, fieldState}) => 
+                        <StandardTextField errors={errors} field={field} inputRef={ref} name="tele" label="Telegram handle"/>
                     }/>
                     </Stack>
                     
@@ -118,9 +125,10 @@ const SignUpForm = ({id, setDialogOpen}) => {
                         <Controller
                                 name="role"
                                 control={control}
-                                render={({field}) => 
+                                render={({field: { ref, ...field }, fieldState}) => 
                                 <RadioGroup
                                 row
+                                ref={ref}
                                 {...field}>
                                 <FormControlLabel value="mentee" control={<Radio color="secondary"/>} label="mentee" />
                                 <FormControlLabel value="mentor" control={<Radio color="secondary"/>} label="mentor" />

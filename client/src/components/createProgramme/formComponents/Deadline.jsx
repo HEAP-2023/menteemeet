@@ -15,12 +15,12 @@ const Deadline = () => {
                     <Controller
                     name="deadline"
                     control={control}
-                    render={({field}) => 
+                    render={({field: { value, ref, ...field }, fieldState}) => 
                     {
-                const {value, ...others} = field; 
                 return (<LocalizationProvider dateAdapter={AdapterDayjs} >
                         <DatePicker 
-                        {...others}
+                        {...field}
+                        inputRef={ref}
                         disablePast
                         format="DD-MM-YYYY"
                         onChange={(e) => {

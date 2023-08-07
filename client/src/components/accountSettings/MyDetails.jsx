@@ -10,6 +10,7 @@ import { useDetails } from '../../hooks/useDetails';
 import { useEffect } from 'react';
 import { usePutDetails } from '../../hooks/usePutDetails';
 import { modifyDetails } from '../../state(kiv)';
+import { FailureModal, SuccessModal } from '../SuccessModal';
 const MyDetails = () => {
     const defaultValues = {
             name: "",
@@ -87,6 +88,8 @@ const MyDetails = () => {
 
     return (
         <>
+            <SuccessModal info={"successfully changed details"}/>
+            <FailureModal info={"failed to change details"}/>
             <form onSubmit={handleSubmit(handleSave)} noValidate>
                 <Box display="flex" p="20px" alignItems={"center"}>
                     <Box>
