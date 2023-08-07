@@ -62,7 +62,7 @@ const MainForm = () => {
                     const {value, ...others} = field; 
                     return (
                     <Stack width="50%">
-                        <Typography fontWeight="bold" m="10px 0">Add a cover image for your programme</Typography>
+                        <Typography fontWeight="bold" m="10px 0">Add a cover image for your programme (200 x 200)</Typography>
                         <TextField {...others} type="file" 
                         inputProps={{accept : "image/*"}} 
                         InputProps={{endAdornment:<UploadFileIcon/>}} 

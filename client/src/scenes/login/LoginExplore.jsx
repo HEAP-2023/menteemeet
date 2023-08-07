@@ -23,7 +23,6 @@ const LoginExplore = () => {
                     backgroundImage: "url('../images/loginExplore/SMU BUDDY PROGRAMME (1).png')", backgroundSize:"cover",
                     backgroundPosition:"centre"}} width="100%" height="600px" paddingTop="480px" paddingLeft="140px">
                     <Button
-                        borderTop="100px" borderLeft="100px"
                         sx={{bgcolor: "#fcac3d", color : "#000000", height : "50px", width: "20%", variant:"h4",
                         borderRadius:"20px", "&:hover":{bgcolor: "#fcac3d",opacity: 0.8}}}
                         >
@@ -54,7 +53,8 @@ const LoginExplore = () => {
                 backgroundSize: "cover" ,color: "#FFFFFF", height : "80%", width: "18%", borderRadius:"20px", mt: "30px", ml:"20px",
                 alignItems:"flex-start", padding:"30px", textTransform:"none"}}>
                     <Typography fontFamily="prompt" fontWeight="500" variant="h5">Industry Insights</Typography>
-                </Button><Button sx={{backgroundImage: "url('../images/loginExplore/categories (5).png')", backgroundPosition: "centre",
+                </Button>
+                <Button sx={{backgroundImage: "url('../images/loginExplore/categories (5).png')", backgroundPosition: "centre",
                 backgroundSize: "cover" ,color: "#FFFFFF", height : "80%", width: "18%", borderRadius:"20px", mt: "30px", ml:"20px",
                 alignItems:"flex-start", padding:"30px", textTransform:"none"}}>
                     <Typography fontFamily="prompt" fontWeight="500" variant="h5">Goal Setting</Typography>

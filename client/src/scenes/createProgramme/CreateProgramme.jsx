@@ -80,9 +80,13 @@ const CreateProgramme = () => {
             await postProgramme(formData);
             queryClient.invalidateQueries(["getInvolved"]);
             dispatch(setSuccessModal(true))
+            queryClient.invalidateQueries(["getInvolved"])
         } catch (err) {
             console.log(err);
             dispatch(setFailureModal(true))
+            
+            //here shouldn't need
+            // queryClient.invalidateQueries(["getInvolved"])
         }
     }
     return (
