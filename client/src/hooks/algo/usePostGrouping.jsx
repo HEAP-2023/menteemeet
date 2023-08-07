@@ -3,9 +3,8 @@
 import { useMutation } from "@tanstack/react-query"
 import { createGrouping } from "../../services/algo/groupings"
 import { useQueryClient } from "@tanstack/react-query"
-import { setFailureModal } from "../../state(kiv)"
 import { useDispatch } from "react-redux"
-const usePostGrouping = (progID) => {
+const usePostGrouping = (progID, setFailGenerate) => {
     const dispatch = useDispatch()
     const queryClient = useQueryClient()
     return useMutation(createGrouping, {
@@ -15,8 +14,7 @@ const usePostGrouping = (progID) => {
         },
         onError : (err) => {
             const errorMessage = err.response.data.error
-            console.log(errorMessage)
-            dispatch(setFailureModal(true))
+            setFailGenerate("Insufficient mentors / mentees")
         }, 
     })
 }
