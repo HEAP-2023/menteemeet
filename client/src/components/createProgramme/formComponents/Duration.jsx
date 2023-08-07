@@ -16,14 +16,15 @@ const Duration = () => {
                 <Controller
                 name="programmeStart"
                 control={control}
-                render={({field}) => 
+                render={({field: { value, ref, ...field }, fieldState}) => 
             {
-            const {value, ...others} = field; 
             return (<LocalizationProvider dateAdapter={AdapterDayjs} >
                     <DatePicker 
-                    {...others}
+                    {...field}
+                    inputRef={ref}
                     disablePast
                     format="DD-MM-YYYY"
+                    // inputRef={}
                     onChange={(e) => {
                         const formattedDate = dayjs(e.$d).format("YYYY-MM-DD")
                         field.onChange(formattedDate)
@@ -44,12 +45,12 @@ const Duration = () => {
                 <Controller
                 name="programmeEnd"
                 control={control}
-                render={({field}) => 
+                render={({field: { value, ref, ...field }, fieldState}) => 
                 {
-                    const {value, ...others} = field; 
                     return (<LocalizationProvider dateAdapter={AdapterDayjs} >
                             <DatePicker 
-                            {...others}
+                            {...field}
+                            inputRef={ref}
                             disablePast
                             format="DD-MM-YYYY"
                             onChange={(e) => {

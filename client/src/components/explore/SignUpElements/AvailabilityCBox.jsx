@@ -2,6 +2,8 @@ import { Box, Grid, Typography} from "@mui/material"
 import CheckboxGroup from "./CheckboxGroup"
 import { useCallback, useEffect, useMemo, useState } from "react"
 import { useFormContext } from "react-hook-form"
+import { ErrorMessage } from "@hookform/error-message"
+
 const AvailabilityCBox = () => {
     const {control, setValue, formState : {errors}} = useFormContext();
     const [state, setState] = useState({
@@ -31,6 +33,14 @@ const AvailabilityCBox = () => {
     return (
         <Box mt="20px">
             <Typography fontWeight="700">Availability</Typography>
+            <ErrorMessage errors={errors} name="availability"
+            render={({message}) => {
+                return <Typography sx={{color: "#ff0000"}}>
+                                {message}
+                            </Typography>
+                        }
+                    }
+            />
             <Grid container columns={12}>
                 {
                     days.map(day => (

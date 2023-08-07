@@ -21,7 +21,7 @@ const Interests = () => {
             <Controller 
             name={`interests.${index}.interest`}
             control={control} 
-            render={({field}) =>
+            render={({field: { ref, ...field }, fieldState}) =>
                 <Autocomplete
                 disableClearable
                 sx={{ width: "100%" }}
@@ -37,6 +37,7 @@ const Interests = () => {
             }
                 renderInput={(params) => 
                     <TextField {...params} 
+                        inputRef={ref}
                         value={field.value}
                         label={`interest ${index + 1}`} 
                         name={`interests.${index}.interest`} 

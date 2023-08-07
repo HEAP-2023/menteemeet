@@ -38,12 +38,13 @@ const CreateProgramme = () => {
             display_image : "",
             mentorCapacity : "",
             menteeCapacity : "",
-            // matching_criteria : [],
             description : "",
         },
-        resolver : yupResolver(createProgrammeSchema)
+        resolver : yupResolver(createProgrammeSchema),
+        shouldFocusError : true,
     })
-    const {control,formState: {errors, defaultValues, dirtyFields, isDirty} , handleSubmit, reset, getValues, watch} = methods
+    const {control,formState: {errors, defaultValues, dirtyFields, isDirty} , handleSubmit, reset, getValues} = methods
+    
     let done = Object.keys(dirtyFields);
 
     useEffect(() => {
@@ -64,11 +65,7 @@ const CreateProgramme = () => {
         console.log(errors)
         console.log("to be submitted")
         console.log(data["display_image"])
-        // const formattedData = {...data, 
-        //     // skills : JSON.stringify(data.skills.map(skill => skill.skillName)),
-        //     // matching_criteria : JSON.stringify(data.matching_criteria)
-        // }
-        // console.log(formattedData)
+        
 
         const formData = new FormData();
         for (const key in data) {

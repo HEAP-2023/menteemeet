@@ -8,7 +8,6 @@ const CheckboxGroup = ({pLabel, state, setState}) => {
   const [checked, setChecked] = useState([false, false, false]);
 
   useEffect(() => {
-      console.log("hey")
       if(checked.includes(true)){
           setState(
             {...state,

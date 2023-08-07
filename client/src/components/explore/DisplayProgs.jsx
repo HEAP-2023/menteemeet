@@ -64,18 +64,19 @@ export default DisplayProgs;
 
 
 const sortProgrammes = (programmes) => {
-    const today = new Date()
+    const ytd = new Date(+new Date() - 86400000)
     const applicable = programmes.filter(p => {
         const deadline = new Date(p.deadline)
-        return deadline >= today;
+        return deadline >= ytd;
     }).sort((a,b) => new Date(a.deadline) - new Date(b.deadline))
     .map(p => ({...p, expired:false}))
-    
+    console.log(applicable)
     const expired = programmes.filter(p => {
         const deadline = new Date(p.deadline)
-        return deadline < today;
+        return deadline < ytd;
     }).sort((a,b) => new Date(b.deadline) - new Date(a.deadline))
     .map(p => ({...p, expired:true}))
+    console.log(expired)
     
     return applicable.concat(expired)
 }

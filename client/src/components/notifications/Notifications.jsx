@@ -33,15 +33,15 @@ const Notifications = () => {
             count += rejectedApp.length
         }
         return count;
-    },[approvedSuccess, pendingSuccess, rejectedSuccess])
+    },[approvedSuccess, pendingSuccess, rejectedSuccess, pendingApp])
 
     const dispatch = useDispatch()
     const openNotifs = useSelector((state)=> state.user.openNotifs)
     
         return (
-        <Box>
+        <Box key={notificationNo}>
             <IconButton onClick={() => {dispatch(toggleNotifs())}}>
-            <Badge badgeContent={notificationNo} color="secondary">
+            <Badge badgeContent={notificationNo}  color="secondary">
                 <NotificationsOutlinedIcon />
             </Badge>
         </IconButton>
