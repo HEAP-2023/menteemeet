@@ -657,8 +657,13 @@ const getAllFeedback = async (req, res) => {
     }));
 
     const reviewsOrg = getAllReviewsForOrg.map(item => ({
-      ...item,
+      organiser_review_id: item.dataValues.organiser_review_id,
       date: item.date.toLocaleString('en-SG', { timeZone: 'Asia/Singapore' }),
+      rating: item.dataValues.rating,
+      comment: item.dataValues.comment,
+      receiver_id: item.dataValues.receiver_id,
+      author_id: item.dataValues.author_id,
+      programme_id: item.dataValues.programme_id
     }));
 
     let feedbackArray = [];

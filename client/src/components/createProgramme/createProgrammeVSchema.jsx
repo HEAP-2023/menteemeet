@@ -6,38 +6,38 @@ export const createProgrammeSchema = yup.object()
     .shape(
         {
             name : yup.string()
-                            .required("this field is required"),
+                            .required("This field is required"),
             programmeStart : yup.date()
                                 .typeError("Invalid Date") 
-                                .required("this field is required"),
+                                .required("This field is required"),
             programmeEnd : yup.date()
                             .typeError("Invalid Date") 
                             .min(
                                 yup.ref('programmeStart'),
-                                "end date can't be before start date"
+                                "End date cannot be before start date"
                             )
-                            .required("this field is required"),
+                            .required("This field is required"),
             mentorCapacity : yup.string()
-                            .required("this field is required"),
+                            .required("This field is required"),
             menteeCapacity : yup.string()
-                            .required("this field is required"),
+                            .required("This field is required"),
             // matching_criteria : yup.array()
             //                         .of(yup.string())
             //                         .min(1, "this field is required"),
             description : yup.string()
-                            .required("this field is required"),
+                            .required("This field is required"),
 
             deadline : yup.date()
                             .typeError("Invalid Date") 
                             .max(
                                 yup.ref('programmeStart'),
-                                "application deadline can't be after start date"
+                                "application deadline cannot be after start date"
                             )
-                            .required("this field is required"),
+                            .required("This field is required"),
             // display_image : yup.string()
             //             .required("this field is required"),
         }
-    ).required("form not filled in yet") 
+    ).required("Form not filled in yet") 
 
 
 
