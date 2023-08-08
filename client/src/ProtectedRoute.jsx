@@ -30,7 +30,7 @@ export const ProtectedRoute = () => {
             const programmes = data
             console.log(programmes)
         }
-    },[isSuccess, isError])
+    },[isSuccess, isError, data])
     return (
         userType ? 
         <Outlet/> :

@@ -16,15 +16,15 @@ const Item = ({ content }) => {
     const { programme_id, name, display_image } = content;
     const link = userType === "organiser" ? `/programmes/${programme_id}` : `/explore/${programme_id}`
     const img = ImgGetUrl(display_image)
-
     return (
         <Card sx={{ height: "100%", display: "flex", flexDirection: "column" }}>
             <SectionHeader text={name} margin="0"/>
             <CardContent sx={{display:"flex",flexDirection: "column", alignItems: "center"}}>
                 <CardMedia
-                    sx={{ height: "85%", alt: "unable to display", objectFit: "contain" }}
+                    sx={{ height: "200px", width:"200px", alt: "unable to display", objectFit: "contain" }}
                     component="img"
                     src={!!img ? img : "../images/explore/noImageAvailable.jpeg"}
+                    // src={display_image}
                 />
 
                 {userType !== "organiser" ?  (
