@@ -18,7 +18,7 @@ const Feedback = () => {
     const { id } = useParams(); // progID
     const programmes = useSelector((state) => state.user.programmes)
     const programme = programmes.find(program => program.programme_id === Number(id));
-    console.log(programme);
+    // console.log(programme);
     const userRole = programme.role;
     const [reviewees, setReviewees] = useState([]);
     const [rerender, setRerender] = useState(true);
@@ -39,14 +39,14 @@ const Feedback = () => {
         if (userRole === "mentee") {
             getListOfMentors(id)
                 .then(res => {
-                    console.log("res getList:", res.data);
+                    // console.log("res getList:", res.data);
                     setReviewees(res.data); // adding list of mentors to list of reviewees
                 })
                 .catch(err => console.log("ERRORS:", err));
         } else if (userRole === "mentor") {
             getListOfMentees(id)
                 .then(res => {
-                    console.log("res getList:", res.data);
+                    // console.log("res getList:", res.data);
                     setReviewees(res.data); // adding list of mentees to list of reviewees
                 })
                 .catch(err => console.log("ERRORS:", err));
@@ -55,13 +55,13 @@ const Feedback = () => {
     //to select the person
     const [person, setPerson] = useState('');
     const handleChange = (event) => {
-        console.log("event.target.value:", event.target.value)
+        // console.log("event.target.value:", event.target.value)
         setPerson(event.target.value);
     };
     const userType = useSelector((state) => state.user.userBasicDetails.account_type);
     const acctID = useSelector((state) => state.user.userBasicDetails.account_id);
     const people = ["Organiser"].concat(reviewees.map((item, index) => `${item.id}`)); // adding Organiser and list of people to select from
-    console.log("people:", people);
+    // console.log("people:", people);
 
     //Feedback Schema
     const feedbackSchema = yup.object()
@@ -81,7 +81,6 @@ const Feedback = () => {
     });
 
     const handleSave = (data) => {
-        console.log("receiver_id:", person);
         if (person !== "Organiser") { // if feedback is given to mentee/mentor
             const feedbackEntry = {
                 comment: data.feedback,
@@ -119,7 +118,7 @@ const Feedback = () => {
     }
 
     let content;
-    console.log("store:", store)
+    // console.log("store:", store)
     let hasContent = store.length > 0 ? true : false;
     // console.log(hasContent);
     if (userType === "user") {
@@ -191,11 +190,9 @@ const Feedback = () => {
                         {hasContent ? (store.map((value, index) => {
                             let revieweeName;
                             if('organiser_review_id' in value){
-                                console.log("org:",value.organiser_review_id);
                                 revieweeName = "Organiser"
                             }
                             if('receiver_id' in value){
-                                console.log("rec:" ,value.receiver_id);
                                 const reviewee = reviewees.find((item) => item.id === value.receiver_id)
                                 if(reviewee !== undefined){
                                     revieweeName = reviewee.name

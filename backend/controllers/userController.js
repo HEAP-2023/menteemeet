@@ -22,6 +22,7 @@ const Organiser = require("../models/organiser");
 
 const { checkCapacity } = require('./organiserController');
 const OrganiserReview = require("../models/organiserReview");
+const Announcement = require("../models/announcement");
 
 const updateJWT = async (getObj) => {
   try {
@@ -402,7 +403,7 @@ const getSessionsByProgID = async (req, res) => {
     const sessionsWithRole = getAllSessions.map(session => {
       const matchingGroup = groupArray.find(group => group.group_id === session.group_id);
       if (matchingGroup) {
-        return { ...session, role: matchingGroup.role };
+        return { ...session, role: matchingGroup.role, group_no: matchingGroup.group_no };
       }
       return session;
     });
@@ -415,14 +416,38 @@ const getSessionsByProgID = async (req, res) => {
 }
 
 const addSessionByGrpID = async (req, res) => {
-  try {
-    const { date, startTime, endTime, topic, userRole, groupID } = req.body;
 
-    if (userRole !== "mentor") {
-      return res.status(401).json({ message: "Only mentors are allowed to add sessions."});
+  const progID = req.params.progID;
+  try {
+    const { date, startTime, endTime, topic, userRole, userID} = req.body;
+    // Select all groups where programme ID = progID
+    const allGroupsByProgID = await UserGroup.findAll({ where: { programme_id: progID }});
+
+    // create a variable called groupNo
+    let groupNo = -1;
+
+    // For each group, parse the mentors list into JSON
+    allGroupsByProgID.map(group => {
+      const mentors = JSON.parse(group.mentors);
+
+      // IF userID in the mentor list
+      mentors.map(mentor => {
+        if (mentor.id == userID) {
+          groupNo = group.group_no;
+        }
+      });    
+    });
+
+    // If no group found, exit
+    if (groupNo === -1) {
+      return res.status(404).json({ error: `No group found for user ID ${userID}`});
     }
 
-    const getUserGroupObj = await UserGroup.findOne({ where: { group_id: groupID }, raw: true });
+    if (userRole !== "mentor") {
+      return res.status(403).json({ message: "Only mentors are allowed to add sessions."});
+    }
+
+    const getUserGroupObj = await UserGroup.findOne({ where: { group_no: groupNo, programme_id: progID }, raw: true });
     if (!getUserGroupObj) {
       return res.status(404).json({ message: "Group ID does not exist."});
     }
@@ -434,7 +459,7 @@ const addSessionByGrpID = async (req, res) => {
       start_time: startTime,
       end_time: endTime,
       topic: topic,
-      group_id: groupID,
+      group_id: getUserGroupObj.group_id,
     })
 
     return res.status(201).json({ message: "Session successfully created." });
@@ -684,6 +709,46 @@ const getAllFeedback = async (req, res) => {
   }
 }
 
+const getAllAnnouncements = async (req, res) => {
+  try {
+
+    const account = req.account;
+
+    const getUserObj = await User.findOne({ where: {account_id: account.account_id}, raw: true});
+    const getUserProgObj = await UserProgramme.findAll({ where: {user_id: getUserObj.user_id}, raw: true});
+
+    const promiseAnnouncements = getUserProgObj.map(async (userProg) => {
+      const getAllAnnouncement = Announcement.findAll({ where: {programme_id: userProg.programme_id}, raw: true });
+      return getAllAnnouncement;
+    })
+
+    let getAnnouncementsArr = await Promise.all(promiseAnnouncements);
+    getAnnouncementsArr = getAnnouncementsArr.flat(); 
+    
+    const modifiedAnnouncements = getAnnouncementsArr.map(announcement => {
+      let updatedDate;
+      let createdDate;
+      
+      if (announcement.updatedAt !== null) {
+        updatedDate = announcement.updatedAt.toLocaleString('en-SG', { timeZone: 'Asia/Singapore' });
+      } else {
+        createdDate = announcement.createdAt.toLocaleString('en-SG', { timeZone: 'Asia/Singapore' });
+      }
+    
+      return {
+        ...announcement,
+        createdAt: createdDate,
+        updatedAt: updatedDate,
+      };
+    });
+
+    return res.status(200).json({ message: "Retrieved all announcements for you.", modifiedAnnouncements });
+
+  } catch (err) {
+    return res.status(500).json({ err });
+  }
+}
+
 const getOrganiserName = async (getProgID) => {
   const programmeObj = await Programme.findOne({ where: {programme_id: getProgID }, raw: true });
   const getOrganiser = await Organiser.findOne({ where: {organiser_id: programmeObj.organiser_id }, raw: true});
@@ -758,4 +823,4 @@ const getListOfMentees = async (req, res) => {
 module.exports = { updateUser, getUser, getAllProgByUserID, getUnsignedProg, getSkill, 
   addSkill, addInterest, getInterest, getAllSessions, getSessionsByProgID, addSessionByGrpID, 
   updateSessionBySessionID, deleteSessionBySessionID, getPendingApps, getApprovedApps, getRejectedApps, 
-  signup, addFeedback, getAllFeedback, getListOfMentors, getListOfMentees, getOrganiserName };
+  signup, addFeedback, getAllFeedback, getAllAnnouncements, getListOfMentors, getListOfMentees, getOrganiserName };

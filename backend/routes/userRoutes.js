@@ -16,7 +16,7 @@ router.get('/programmes/', authenticateToken, userController.getUnsignedProg);
 
 router.get('/session', authenticateToken, userController.getAllSessions);
 router.get('/session/:progID', authenticateToken, userController.getSessionsByProgID);
-router.post('/session', authenticateToken, userController.addSessionByGrpID);
+router.post('/session/:progID', authenticateToken, userController.addSessionByGrpID);
 router.put('/session/update', authenticateToken, userController.updateSessionBySessionID);
 router.delete('/session/:sessID', authenticateToken, userController.deleteSessionBySessionID);
 
@@ -36,8 +36,10 @@ router.get('/:id/skills', authenticateToken, userController.getSkill);
 router.post('/:id/skills', authenticateToken, userController.addSkill);
 router.get('/:id/interests', authenticateToken, userController.getInterest);
 router.post('/:id/interests', authenticateToken, userController.addInterest);
-router.get('/:id', authenticateToken, userController.getUser);
 
 router.get('/getOrganiserName/:progID', authenticateToken, userController.getOrganiserName);
+router.get('/announcements', authenticateToken, userController.getAllAnnouncements);
+
+router.get('/:id', authenticateToken, userController.getUser);
 
 module.exports = router;
