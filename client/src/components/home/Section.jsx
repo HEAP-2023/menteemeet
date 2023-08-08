@@ -1,7 +1,8 @@
 import { Box, Typography } from "@mui/material"
 import { generateColors } from "../../theme"
 import SectionHeader from "../../components/SectionHeader"
-import SectionRow from "./SectionRow"
+// import SectionRow from "./SectionRow"
+import SectionRow from './SectionRow'
 
 
 const Section = ({header, rows, rowColor="primary.main", highlight=false, checkbox=false, showDTG=false}) => {
@@ -13,9 +14,9 @@ const Section = ({header, rows, rowColor="primary.main", highlight=false, checkb
         <Box display="inline-flex" flexDirection="column" alignItems="center">
             {
                 Object.entries(rows).map((row) => {
-                    const [key, details] = row
+                    const [announcement_id, details] = row
                     return (
-                        <SectionRow key={`${details.title}-${details.dtg}`} details={details} rowColor={rowColor} checkbox={checkbox} highlight={highlight} showDTG={showDTG}/>
+                        <SectionRow key={announcement_id} details={details} rowColor={rowColor} checkbox={checkbox} highlight={highlight} showDTG={showDTG}/>
                     );
                 })
             }

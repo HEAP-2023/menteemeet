@@ -34,7 +34,7 @@ const FeedbackTable = () => {
         { field: 'groupNo', headerName: 'Group No.', width: 90 },
         { field: 'name', headerName: 'Name', width: 300 },
         { field: 'role', headerName: 'Role', width: 100 },
-        { field: 'comment', headerName: 'Feedback', width: feedbackWidth * 7 }
+        { field: 'comment', headerName: 'Feedback', minWidth: 700, width: feedbackWidth * 7 }
     ]
     return (
         <Box>
@@ -43,7 +43,8 @@ const FeedbackTable = () => {
                 columns={columns}
                 getRowSpacing={getRowSpacing}
                 getRowId={(row) => row.organiser_review_id}
-                getRowHeight={() => 'auto'}
+                // getRowHeight={() => 'auto'}
+                rowHeight={50}
                 disableRowSelectionOnClick
                 initialState={{
                     pagination: {

@@ -21,6 +21,15 @@ export const getOrganiserDetails = async (id) => {
     return res.data.organiser;
 }
 
+export const getAllAnnouncements = async () => {
+    const res = await axiosInstance({
+        method: "get",
+        url: '/organisers/announcements',
+        headers: { Authorization: `Bearer ${localStorage.getItem("jwt")}` },
+    })
+    return res
+}
+
 export const getAnnouncementsByProgID = async (progID) => {
     const res = await axiosInstance({
         method: "get",
