@@ -113,7 +113,10 @@ const StyledContactForm = styled.div`
       cursor: pointer;
       background: #AEAEFF;
       color: black;
-      border: none;
+      border: auto;
+      text-align: center;
+      line-height: 0
+
     }
   }
 `;
