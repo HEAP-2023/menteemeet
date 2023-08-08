@@ -41,10 +41,10 @@ const ProfileOverlayTab = () => {
  
         <ListParent>
             <ListItem>
-                <IconButton component={Link} to={"/profile"}>
+                {/* <IconButton component={Link} to={"/profile"}> */}
                     {/* <AccountCircleOutlinedIcon fontSize="large" sx={{transform : "scale(2)"}}/> */}
                     <NameAvatar name={name} scale={2} m="0"/>
-                </IconButton>
+                {/* </IconButton> */}
             </ListItem>
 
 <ListItem>

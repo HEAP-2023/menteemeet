@@ -11,6 +11,8 @@ import { useEffect } from 'react';
 import { usePutDetails } from '../../hooks/usePutDetails';
 import { modifyDetails } from '../../state(kiv)';
 import { FailureModal, SuccessModal } from '../SuccessModal';
+import NameAvatar from '../NameAvatar';
+
 const MyDetails = () => {
     const defaultValues = {
             name: "",
@@ -19,7 +21,8 @@ const MyDetails = () => {
             telegram_username:  "", 
             description: "",
         }
-    
+    const acctName = useSelector((state) => state.user.userBasicDetails.name) 
+
     const userType = useSelector((state) => state.user.userBasicDetails.account_type)
     const dispatch = useDispatch()
     const myDetailsSchema = yup.object()
@@ -93,11 +96,12 @@ const MyDetails = () => {
             <form onSubmit={handleSubmit(handleSave)} noValidate>
                 <Box display="flex" p="20px" alignItems={"center"}>
                     <Box>
-                        <AccountCircleOutlinedIcon fontSize="large" sx={{ transform: "scale(4)", margin: "40px" }} />
+                        {/* <AccountCircleOutlinedIcon fontSize="large" sx={{ transform: "scale(4)", margin: "40px" }} /> */}
+                        <NameAvatar name={acctName} scale={2} m="20px"/>
                     </Box>
-                    <Box sx={{ marginLeft: "20px" }}>
+                    {/* <Box sx={{ marginLeft: "20px" }}>
                         <CustomButton buttonName={"Change"} />
-                    </Box>
+                    </Box> */}
                 </Box>
 
                 <Box display="flex" p="20px" pb="10px" >

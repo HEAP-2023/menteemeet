@@ -56,23 +56,9 @@ cd python-micro
 Following this, install necessary node packages:
 
 ```
- pip install python-dotenv --user
+pip install -r requirements.txt
 ```
-```
- pip install Flask --user
-```
-```
- pip install Flask-SQLAlchemy --user  
-```
-```
- pip install mysqlclient --user
-```
-```
-pip install pymysql --user
-```
-```
-pip install Flask-Cors --user
-```
+
 For first time users, create a dotenv file with the following details:
 ```
 DB_USERNAME=
@@ -109,6 +95,21 @@ npm start
 
 ## Codebase Structure
 
-### client Folder
+### Client Folder
+**public directory**
+`images`: image repository
+
+
+**src directory**
+`animations`: Transition animations abstracted out
+`components`: Folder containing smaller components of each page
+`global`: Containing components that are used in every page of the app
+`hooks`: Contain all custom hooks especially for query calls to the backend using tanstack query
+`scenes`: Contains each frontend endpoint of the app
+`services`: Contains all the api calls to the backend
+`state`: Contains the code required for the redux store
+`utils`: Contains the axios instances to all the servers
+`theme`: Theme settings for colors and typography
+`ProtectedRoute`: Contains code to limit access to pages based on user role and redirect to relevant pages
 
 

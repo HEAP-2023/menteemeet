@@ -58,11 +58,11 @@ const faq = [
         details : "It is fairly prevalent to have mentors and mentees navigating the tech sector with so many different types of technology out there. Traditionally, pairing of mentors and mentees are done manually and it is a problem for organisers, mentors and mentees to find a suitable team and hence this webapp automates the process for you",
     },
     {
-        title : "What is the TechStack Used here?",
+        title : "What is the tech stack used here?",
         details : "SQL Express React Node",
     },
     {
-        title : "FrontEnd libraries used?",
+        title : "What are some of the frontend libraries used?",
         details : "1. Material UI \n 2. Tanstack Query (query data from backend) \n 3. React Hook Form \n 4. yup (form validation) \n 5. nivo (charts) \n 6. FramerMotion (animation) \n",
     },
     {
