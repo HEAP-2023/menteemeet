@@ -13,6 +13,9 @@ import { ErrorMessage } from '@hookform/error-message';
 import { getAllFeedback, getListOfMentees, getListOfMentors, addFeedback } from "../../../services/user/userServices";
 import { addOrgFeedback, getAllFeedbackByUsers } from "../../../services/organiser/organiserServices";
 import { useParams } from 'react-router-dom';
+import { deleteReview } from "../../../services/programmes/userServices";
+import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
+
 const Feedback = () => {
     const bgColor = generateColors().primary[500];
     const { id } = useParams(); // progID
@@ -28,7 +31,7 @@ const Feedback = () => {
             .then(res => {
                 console.log("res:", res);
                 const allFeedback = res.data.feedbackArray;
-                const feedbackByProgID = allFeedback.filter((item) =>item.programme_id === Number(id))
+                const feedbackByProgID = allFeedback.filter((item) => item.programme_id === Number(id))
                 setStore(feedbackByProgID)
                 setRerender(false);
             })
@@ -188,26 +191,40 @@ const Feedback = () => {
                     <Box display="flex" flexDirection="column" width="90%" bgcolor={bgColor} marginX="30px" p="10px" minHeight="100px" borderRadius="20px" >
 
                         {hasContent ? (store.map((value, index) => {
+                            console.log("value:", value)
                             let revieweeName;
-                            if('organiser_review_id' in value){
+                            let receiverID;
+                            if ('organiser_review_id' in value) {
                                 revieweeName = "Organiser"
-                            }
-                            if('receiver_id' in value){
+                            }else if ('receiver_id' in value) {
                                 const reviewee = reviewees.find((item) => item.id === value.receiver_id)
-                                if(reviewee !== undefined){
+                                if (reviewee !== undefined) {
                                     revieweeName = reviewee.name
                                 }
+                                receiverID = value.review_id
+                            }
+                            
+                            const handleDeleteFeedback = () => {
+                                deleteReview(receiverID)
+                                .then(res => {
+                                    console.log("res delete:", res);
+                                    setRerender(true);
+                                })
+                                .catch(err => console.log("ERROR:", err));
                             }
                             return (
                                 <Box key={index}>
-                                    <Typography my="10px">Feedback to {revieweeName}</Typography>
-                                    <Box bgcolor="#FFFFFF" borderRadius="10px" height="60%" p="10px" display="inline-block" minWidth="100%">
+                                    <Box display="flex" justifyContent="space-between" alignItems="center">
+                                        <Typography my="10px">Feedback to {revieweeName}</Typography>
+                                        <DeleteOutlinedIcon sx={{ cursor: 'pointer' }} onClick={handleDeleteFeedback}/>
+                                    </Box>
+                                    <Box bgcolor="#FFFFFF" borderRadius="5px" height="60%" p="10px" display="inline-block" minWidth="100%">
                                         <Typography>{value.comment}</Typography>
                                     </Box>
                                 </Box>
                             )
                         })) : <></>}
-                                                                    
+
                     </Box>
 
                 </Box>
