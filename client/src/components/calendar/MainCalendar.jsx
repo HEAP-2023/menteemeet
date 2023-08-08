@@ -60,7 +60,7 @@ const MainCalendar = () => {
                     const eventTitle = programme.name;
 
                     return {
-                        // id: session.session_id,
+                        id: session.session_id,
                         title: `${eventTitle} mentoring session`,
                         start: `${session.date}T${session.start_time}`,
                         end: `${session.date}T${session.end_time}`,
