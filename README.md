@@ -97,19 +97,30 @@ npm start
 
 ### Client Folder
 **public directory**
+
 `images`: image repository
 
 
 **src directory**
+
 `animations`: Transition animations abstracted out
+
 `components`: Folder containing smaller components of each page
+
 `global`: Containing components that are used in every page of the app
+
 `hooks`: Contain all custom hooks especially for query calls to the backend using tanstack query
+
 `scenes`: Contains each frontend endpoint of the app
+
 `services`: Contains all the api calls to the backend
+
 `state`: Contains the code required for the redux store
+
 `utils`: Contains the axios instances to all the servers
+
 `theme`: Theme settings for colors and typography
+
 `ProtectedRoute`: Contains code to limit access to pages based on user role and redirect to relevant pages
 
 
