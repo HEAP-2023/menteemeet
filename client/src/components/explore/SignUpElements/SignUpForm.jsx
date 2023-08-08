@@ -5,7 +5,7 @@ import SectionHeader from "../../SectionHeader"
 import StandardTextField from "../../StandardTextField"
 import { useForm, Controller, FormProvider } from "react-hook-form"
 
-import { DevTool } from "@hookform/devtools";
+// import { DevTool } from "@hookform/devtools";
 import useGetSignUpForm from "../../../hooks/programmes/users/useGetSignUpForm"
 import Interests from "./Interests"
 import Skills from "./Skills"
@@ -150,7 +150,7 @@ const SignUpForm = ({id, setDialogOpen}) => {
                 </form>
                 </FormProvider>
 
-                <DevTool control={control}/>
+                {/* <DevTool control={control}/> */}
             </Box>
         )
     

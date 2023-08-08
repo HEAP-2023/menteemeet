@@ -23,6 +23,8 @@ router.post('/announcements', authenticateToken, organiserController.addAnnounce
 router.put('/announcements', authenticateToken, organiserController.updateAnnouncementByProgID);
 router.get('/announcements', authenticateToken, organiserController.getAllAnnouncements);
 
+router.get('/sessions', authenticateToken, organiserController.getAllSessions);
+
 router.get('/announcements/:progID', authenticateToken, organiserController.getAnnouncementsByProgID);
 router.delete('/announcements/:announcementID', authenticateToken, organiserController.deleteAnnouncementsByProgID);
 

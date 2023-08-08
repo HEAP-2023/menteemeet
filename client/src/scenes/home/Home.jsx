@@ -12,7 +12,8 @@ import { useNavigate } from "react-router-dom"
 import { SuccessModal, FailureModal } from "../../components/SuccessModal";
 import { getAllAnnouncements } from "../../services/organiser/organiserServices"
 import { useEffect, useState } from "react"
-
+import { getAllAnnouncementsUser, getAllSessions } from "../../services/user/userServices"
+import SmallCalendar from "../../components/calendar/SmallCalendar"
 const Home = () => {
     const userType = useSelector((state) => state.user.userBasicDetails.account_type)
     const name = useSelector((state) => state.user.userBasicDetails.name)
@@ -20,157 +21,75 @@ const Home = () => {
     const hasProgrammes = !!programmes && programmes.length > 0
     const queryClient = useQueryClient()
     const [announcements, setAnnouncements] = useState([]);
+    const [sessions, setSessions] = useState([]);
     useEffect(() => {
-        if(userType === "organiser"){    
+        if (userType === "organiser") {
             getAllAnnouncements()
-            .then(res => {
-                console.log("res:", res);
-                setAnnouncements(res.data.allAnnouncements);
-            })
-            .catch(err => console.log("ERROR:", err));
+                .then(res => {
+                    console.log("res:", res);
+                    setAnnouncements(res.data.allAnnouncements);
+                })  
+                .catch(err => console.log("ERROR:", err));
+        } else {
+            getAllAnnouncementsUser()
+                .then(res => {
+                    console.log("res:", res);
+                    setAnnouncements(res.data.modifiedAnnouncements)
+                })
+                .catch(err => console.log("ERROR:", err));
+
+            getAllSessions()
+                .then(res => {
+                    console.log("res getAllSessions:", res)
+                    setSessions(res.data.sessionsWithRole)
+                })
+                .catch(err => console.log("ERROR:", err));
         }
-    },[])
+    }, [])
     return (
-    <Box width="100%" height="100%" display="flex" flexDirection="column">
-        <SuccessModal info={"successfully delete programme"} actions={() => {queryClient.invalidateQueries(["getInvolved"]);
-}}/>
-        <FailureModal info={"failed to delete programme"}/>
+        <Box width="100%" height="100%" display="flex" flexDirection="column">
+            <SuccessModal info={"successfully delete programme"} actions={() => {
+                queryClient.invalidateQueries(["getInvolved"]);
+            }} />
+            <FailureModal info={"failed to delete programme"} />
 
-        <PageHeader text={`Welcome, ${name}`}/>
-        
-        {/* carousel */}
+            <PageHeader text={`Welcome, ${name}`} />
 
-        <SectionHeader text={userType === "organiser" ? "My Programmes" : "Featured Programmes"}/>
+            {/* carousel */}
 
-        { (!hasProgrammes && userType === "organiser") ?  
+            <SectionHeader text={userType === "organiser" ? "My Programmes" : "Featured Programmes"} />
 
-        <img src="../images/home/no-programmes.png" 
-        style={{ margin : "40px" ,maxHeight : "300px", objectFit : "scale-down"}}
-        />
-    
-        : <HomeCarousel/> 
-    }
+            {(!hasProgrammes && userType === "organiser") ?
 
-        <Box display="flex" justifyContent="space-around" width="100%" height="100%">
-            <Box width="45%" height="100%" display="flex" flexDirection="column" alignItems="center" > 
-                {/* announcements */}
-                <Section header="Announcements" rows={announcements} rowColor="#AEAEFF" highlight={true}></Section>
+                <img src="../images/home/no-programmes.png"
+                    style={{ margin: "40px", maxHeight: "300px", objectFit: "scale-down" }}
+                />
+
+                : <HomeCarousel />
+            }
+
+            <Box display="flex" justifyContent="left" width="100%" height="100%">
+                {userType === "organiser" ? (
+                    <Box width="30%">
+                        <SmallCalendar/>
+                    </Box>
+                ) : (<></>)}
+
+                <Box width="65%" height="100%" display="flex" flexDirection="column" alignItems="center" >
+                    {/* announcements */}
+                    <Section header="Announcements" rows={announcements} rowColor="#AEAEFF" highlight={true}></Section>
+                </Box>
+
+                {userType !== "organiser" ? (<Box width="45%">
+                    {/* events */}
+                    <Section header="Upcoming Sessions" rows={sessions} rowColor="#AEAEFF" highlight={true}></Section>
+                </Box>) : (<></>)}
             </Box>
 
-            <Box width="45%">
-                {/* events */}
-                {/* <Section header="Upcoming Sessions" rows={events} rowColor="#AEAEFF" highlight={true} showDTG={true}></Section> */}
-            </Box>
-
+            {/* <TransitionScreen/> */}
         </Box>
-        
-        {/* <TransitionScreen/> */}
-    </Box>
 
     )
 }
 export default Home
 
-
-
-
-
-
-
-
-
-
-
-// hardcoded content to be fetched maybe tanstack query aka react query
-
-// const announcements = {
-//     announcement_1 : {
-//         title : "announcement header1",
-//         body : "announcement body1",
-//         dtg : "dtg1",
-//     },
-//     announcement_2 : {
-//         title : "announcement header2",
-//         body : "announcement body2",
-//         dtg : "dtg2",
-//     },
-    
-// }
-
-const events = {
-    event_1 : {
-        title : "event header1",
-        body : "event body1",
-        dtg : "dtg1",
-    },
-    event_2 : {
-        title : "event header2",
-        body : "event body2",
-        dtg : "dtg2",
-    },
-    event_3 : {
-        title : "event header3",
-        body : "event body3",
-        dtg : "dtg3",
-    },
-}
-
-const recommended_programmes = {
-    programID_1 : {
-        id : 1,
-        name : "programme_1",
-        img : "../../images/home/mentorship_1.jpg",
-        link : "https://youtu.be/dQw4w9WgXcQ",
-    },
-    programID_2 : {
-        id : 2,
-        name : "programme_2",
-        img : "../../images/home/mentorship_2.png",
-        link : "/mentorshipPrograms/available/2",
-    },
-    programID_3 : {
-        id : 3,
-        name : "programme_3",
-        img : "../../images/home/mentorship_3.jpg",
-        link : "/mentorshipPrograms/available/3",
-    },
-    programID_4 : {
-        id : 4,
-        name : "programme_4",
-        img : "../../images/home/mentorship_4.png",
-        link : "/mentorshipPrograms/available/4",
-    },
-    programID_5 : {
-        id : 5,
-        name : "programme_5",
-        img : "../../images/home/mentorship_5.png",
-        link : "/mentorshipPrograms/available/5",
-    },
-    programID_6 : {
-        id : 6,
-        name : "programme_6",
-        img : "../../images/home/mentorship_6.jpg",
-        link : "/mentorshipPrograms/available/6",
-    },
-}
-
-const programmes_enrolled = [
-    {
-        id : 1,
-        name : "program_1",
-        img : "../../images/home/mentorship_1.jpg",
-        link: "/programmes/1"
-    },
-    {
-        id : 2,
-        name : "program_2",
-        img: "../../images/home/mentorship_2.png",
-        link : "/programmes/2",
-    },
-    {
-        id : 3,
-        name : "program_3",
-        img : "../../images/home/mentorship_3.jpg",
-        link: "/programmes/3"
-    },
-]

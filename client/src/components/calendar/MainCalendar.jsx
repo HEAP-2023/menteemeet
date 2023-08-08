@@ -11,43 +11,74 @@ import { format } from 'date-fns';
 import CalendarFilter from './CalendarFilter';
 import { Box } from '@mui/material';
 import { getAllSessions } from '../../services/user/userServices';
+import { getAllSessionsOrganiser } from '../../services/programmes/organiserServices';
 import { useSelector } from 'react-redux';
 const MainCalendar = () => {
+    const userType = useSelector((state) => state.user.userBasicDetails.account_type)
     const programmes = useSelector((state) => state.user.programmes);
     console.log("programmes:", programmes);
     const [events, setEvents] = useState([]);
 
     useEffect(() => {
-        getAllSessions()
-        .then(res => {
-            // setEvents(res.data.sessionsWithRole);
-            const sessions = res.data.sessionsWithRole;
-            console.log("sessions:", res)
-            const eventSessions = sessions.map((session) => {
-                const programme = programmes.find((prog) => prog.programme_id === session.programme_id);
-                const eventTitle = programme.name;
-                
-                return {
-                    id: session.session_id,
-                    title: `${eventTitle} mentoring session`,
-                    start: `${session.date}T${session.start_time}`,
-                    end: `${session.date}T${session.end_time}`,
-                    extendedProps:{
-                        group_id: session.group_id,
-                        role: session.role,
-                        programme_id: session.programme_id,
-                        topic: session.topic,
-                        programme_name: eventTitle
+        if (userType !== "organiser") {
+            getAllSessions()
+                .then(res => {
+                    // setEvents(res.data.sessionsWithRole);
+                    const sessions = res.data.sessionsWithRole;
+                    console.log("sessions:", res)
+                    const eventSessions = sessions.map((session) => {
+                        const programme = programmes.find((prog) => prog.programme_id === session.programme_id);
+                        const eventTitle = programme.name;
+
+                        return {
+                            id: session.session_id,
+                            title: `${eventTitle} mentoring session`,
+                            start: `${session.date}T${session.start_time}`,
+                            end: `${session.date}T${session.end_time}`,
+                            extendedProps: {
+                                group_id: session.group_id,
+                                role: session.role,
+                                programme_id: session.programme_id,
+                                topic: session.topic,
+                                programme_name: eventTitle
+                            }
+                        }
+                    })
+                    setEvents(eventSessions);
+                    console.log("eventSessions:", eventSessions);
+                })
+                .catch(err => {
+                    console.log("ERROR:", err);
+                })
+        }else{
+            getAllSessionsOrganiser()
+            .then(res => {
+                console.log("res:", res)
+                const sessions = res.data.sessionsArr;
+                const eventSessions = sessions.map((session) => {
+                    const programme = programmes.find((prog) => prog.programme_id === session.programme_id);
+                    const eventTitle = programme.name;
+
+                    return {
+                        id: session.session_id,
+                        title: `${eventTitle} mentoring session`,
+                        start: `${session.date}T${session.start_time}`,
+                        end: `${session.date}T${session.end_time}`,
+                        extendedProps: {
+                            group_id: session.group_no,
+                            role: session.role,
+                            programme_id: session.programme_id,
+                            topic: session.topic,
+                            programme_name: eventTitle
+                        }
                     }
-                }
+                })
+                setEvents(eventSessions);
+                console.log("eventSessions:", eventSessions);
             })
-            setEvents(eventSessions);
-            console.log("eventSessions:", eventSessions);
-        })
-        .catch(err => {
-            console.log("ERROR:", err);
-        })
-    },[])
+            .catch(err => console.log("ERROR:", err));
+        }
+    }, [])
 
 
     const [showEvents, setShowEvents] = useState(events);
@@ -102,7 +133,7 @@ const MainCalendar = () => {
         },
         selectMirror: true,
         selectable: true,
-        dateClick: function(info){
+        dateClick: function (info) {
             setSelectedDateInfo(info);
             setIsDateSelected(true);
             // https://fullcalendar.io/docs/dateClick
