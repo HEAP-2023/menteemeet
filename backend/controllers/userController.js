@@ -830,13 +830,25 @@ const deleteReview = async (req, res) => {
     return res.status(200).json({ message: "Review has been successfully deleted." })
 
   } catch (err) {
-    console.error(err);
     return res.status(500).json({ error: err });
   }
 }
 
+const deleteOrgReview = async (req, res) => {
+  try {
+    const reviewID = req.params.reviewID;
+
+    await OrganiserReview.destroy(
+      { where: { organiser_review_id: reviewID } });
+
+    return res.status(200).json({ message: "Organiser review has been successfully deleted." })
+
+  } catch (err) {
+    return res.status(500).json({ error: err });
+  }
+}
 module.exports = { updateUser, getUser, getAllProgByUserID, getUnsignedProg, getSkill, 
   addSkill, addInterest, getInterest, getAllSessions, getSessionsByProgID, addSessionByGrpID, 
   updateSessionBySessionID, deleteSessionBySessionID, getPendingApps, getApprovedApps, getRejectedApps, 
   signup, addFeedback, getAllFeedback, getAllAnnouncements, getListOfMentors, getListOfMentees, getOrganiserName,
-  deleteReview };
+  deleteReview, deleteOrgReview };
