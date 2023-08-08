@@ -7,6 +7,7 @@ import ProgrammeCards from './ProgrammeCards';
 
 const RSearchBox = () => {
   const [userQuery, setUserQuery] = useState("");
+  const [debQuery, setDebQuery] = useState("");
   const [progsFound, setProgsFound] = useState([]);
   
   const onchange = (e) => {
@@ -14,17 +15,28 @@ const RSearchBox = () => {
   }
 
   useEffect(() => {
-    console.log(userQuery);
-    if (!userQuery) {
+    console.log("SENDING REQ:", debQuery);
+    if (!debQuery) {
       setProgsFound([]);
       return;
     }
-    getProgsByName(userQuery)
-      .then(
-        (res) => setProgsFound(res.data)
-      ).catch(
-        err => console.log(err)
-      )
+    getProgsByName(debQuery)
+    .then(
+      (res) => {
+        console.log("RES DATA:", res.data);
+        setProgsFound(res.data);
+      }
+    ).catch(
+      err => console.log(err)
+    )
+  }, [debQuery])
+
+  useEffect(() => {
+   const timeout = setTimeout(() => {
+    setDebQuery(userQuery);
+   }, 700);
+
+   return () => clearTimeout(timeout);
   }, [userQuery])
 
   return (

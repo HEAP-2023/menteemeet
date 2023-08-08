@@ -65,3 +65,21 @@ const removeExpired = (programmes) => {
         return deadline >= today;
     })
 }
+
+export const deleteReview = async(reviewID) => {
+    const res = await axiosInstance({
+        method: 'delete',
+        url: `/users/reviews/${reviewID}`,
+        headers: { Authorization: `Bearer ${localStorage.getItem("jwt")}` },
+    })
+    return res
+}
+
+export const deleteOrgReview = async(reviewID) => {
+    const res = await axiosInstance({
+        method: 'delete',
+        url: `/users/orgReviews/${reviewID}`,
+        headers: { Authorization: `Bearer ${localStorage.getItem("jwt")}` },
+    })
+    return res
+}

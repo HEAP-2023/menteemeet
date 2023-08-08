@@ -28,7 +28,7 @@ const Home = () => {
                 .then(res => {
                     console.log("res:", res);
                     setAnnouncements(res.data.allAnnouncements);
-                })  
+                })
                 .catch(err => console.log("ERROR:", err));
         } else {
             getAllAnnouncementsUser()
@@ -68,23 +68,30 @@ const Home = () => {
                 : <HomeCarousel />
             }
 
-            <Box display="flex" justifyContent="left" width="100%" height="100%">
-                {userType === "organiser" ? (
+            
+                {userType === "organiser" ? (<>
+                    <Box display="flex" justifyContent="left" width="100%" height="100%">
                     <Box width="30%">
-                        <SmallCalendar/>
+                        <SmallCalendar />
                     </Box>
-                ) : (<></>)}
-
-                <Box width="65%" height="100%" display="flex" flexDirection="column" alignItems="center" >
-                    {/* announcements */}
-                    <Section header="Announcements" rows={announcements} rowColor="#AEAEFF" highlight={true}></Section>
-                </Box>
-
-                {userType !== "organiser" ? (<Box width="45%">
-                    {/* events */}
-                    <Section header="Upcoming Sessions" rows={sessions} rowColor="#AEAEFF" highlight={true}></Section>
-                </Box>) : (<></>)}
-            </Box>
+                    <Box width="65%" height="100%" display="flex" flexDirection="column" alignItems="center"mb="30px" >
+                        {/* announcements */}
+                        <Section header="Announcements" rows={announcements} rowColor="#AEAEFF" highlight={true}></Section>
+                    </Box>
+                    </Box>
+                </>) : (<>
+                    <Box display="flex" justifyContent="space-around" width="100%" height="100%">
+                    <Box width="45%" height="100%" display="flex" flexDirection="column" alignItems="center" mb="30px">
+                        {/* announcements */}
+                        <Section header="Announcements" rows={announcements} rowColor="#AEAEFF" highlight={true}></Section>
+                    </Box>
+                    <Box width="45%" mb="30px">
+                        {/* events */}
+                        <Section header="Upcoming Sessions" rows={sessions} rowColor="#AEAEFF" highlight={true}></Section>
+                    </Box>
+                    </Box>
+                </>)}
+            
 
             {/* <TransitionScreen/> */}
         </Box>

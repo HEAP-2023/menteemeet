@@ -44,7 +44,7 @@ const Section = ({ header, rows, rowColor = "primary.main", highlight = false, c
     }
     return (
         <Box display="inline-flex" flexDirection="column" bgcolor="primary.main" width="100%" p="10px" borderRadius="20px" mt="20px">
-            <SectionHeader text={header} margin="0" />
+            <SectionHeader text={header} margin="0px 0px 0px 30px" />
             <Box display="inline-flex" flexDirection="column" alignItems="center">
                 {
                     Object.entries(rows).map((row) => {

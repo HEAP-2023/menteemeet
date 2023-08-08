@@ -96,6 +96,7 @@ npm start
 ## Codebase Structure
 
 ### Client Folder
+
 **public directory**
 
 `images`: image repository
@@ -107,20 +108,53 @@ npm start
 
 `components`: Folder containing smaller components of each page
 
-`global`: Containing components that are used in every page of the app
+`global`: Containing components that are used on every page of the app
 
-`hooks`: Contain all custom hooks especially for query calls to the backend using tanstack query
+`hooks`: Contain all custom hooks, especially for query calls to the backend using tanstack query
 
 `scenes`: Contains each frontend endpoint of the app
 
-`services`: Contains all the api calls to the backend
+`services`: Contains all the API calls to the backend
 
 `state`: Contains the code required for the redux store
 
 `utils`: Contains the axios instances to all the servers
 
-`theme`: Theme settings for colors and typography
+`theme`: Theme settings for colours and typography
 
 `ProtectedRoute`: Contains code to limit access to pages based on user role and redirect to relevant pages
+
+
+### Backend Folder
+
+`config`: Contains files to connect the backend to the DB
+
+`controllers`: Contains controller files managing interactions between routes and data operations within the web application
+
+`middlewares`: Contains middleware files implementing JWT authentication
+
+`models`: Contains model files defining the structure and behaviour of data entities
+
+`routes`: Contains route files defining and mapping URL endpoints to controller functions
+
+`utils`: Contains configuration files
+
+### Python-micro Folder
+
+Our microservice programme to assist with the algorithm of sorting groups
+
+`controller`: Contains files managing the logic for sorting operations within the service
+
+`entity`: Contains files storing data structures and classes representing objects or data entities
+
+`models`: Contains files connecting to DB
+
+`util`: Contains files for scoring in the algorithm
+
+
+
+
+
+
 
 
