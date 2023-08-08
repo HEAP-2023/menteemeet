@@ -26,7 +26,7 @@ const Topbar = () => {
         {/* original 82.5% position fixed */}
 
         {/* to be deleted in production */}
-        <Typography color="#ff0000" >mode : {userType} (a helper, not part of design)    </Typography>
+        {/* <Typography color="#ff0000" >mode : {userType} (a helper, not part of design)    </Typography> */}
 {/* 
         {userType !== "organiser" && 
         <IconButton onClick={() => {dispatch(toggleNotifs())}}>

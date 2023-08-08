@@ -5,7 +5,7 @@ import { useForm, Controller } from "react-hook-form";
 
 import { yupResolver } from "@hookform/resolvers/yup"
 import { loginSchema } from "./validationSchema";
-import { DevTool } from "@hookform/devtools";
+// import { DevTool } from "@hookform/devtools";
 import useLogin from "../../hooks/auth/useLogin";
 
 const LoginForm = () => {
@@ -58,7 +58,7 @@ const LoginForm = () => {
                 <Button type="submit" variant="contained" color="secondary" sx={{width:"100%"}}>Log In</Button>
             </Box>
         </form>
-        <DevTool control={control} /> 
+        {/* <DevTool control={control} />  */}
     </Box>
 }
 
