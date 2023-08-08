@@ -331,10 +331,10 @@ const getAllSessions = async (req, res) => {
     const account = req.account;
     const getUser = await User.findOne({ 
       where: { account_id: account.account_id }, raw: true });
-
+    console.log("getUser:", getUser);
     const userProgObj = await UserProgramme.findAll({
       where: { user_id: getUser.user_id }, raw: true });
-
+    console.log("userProgObj:",userProgObj)
     let getGroup = null;
     let groupArray = [];
 

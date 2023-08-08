@@ -5,7 +5,7 @@ import { DateCalendar } from '@mui/x-date-pickers/DateCalendar';
 const SmallCalendar = () => {
     return(
         <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <DateCalendar views={['day']} showDaysOutsideCurrentMonth fixedWeekNumber={6}/>
+            <DateCalendar views={['day']} showDaysOutsideCurrentMonth fixedWeekNumber={6}/>
         </LocalizationProvider>
     )
 }
