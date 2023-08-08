@@ -36,8 +36,10 @@ router.get('/:id/skills', authenticateToken, userController.getSkill);
 router.post('/:id/skills', authenticateToken, userController.addSkill);
 router.get('/:id/interests', authenticateToken, userController.getInterest);
 router.post('/:id/interests', authenticateToken, userController.addInterest);
-router.get('/:id', authenticateToken, userController.getUser);
 
 router.get('/getOrganiserName/:progID', authenticateToken, userController.getOrganiserName);
+router.get('/announcements', authenticateToken, userController.getAllAnnouncements);
+
+router.get('/:id', authenticateToken, userController.getUser);
 
 module.exports = router;

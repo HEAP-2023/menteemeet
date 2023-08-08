@@ -17,7 +17,7 @@ const Item = ({ content }) => {
     const link = userType === "organiser" ? `/programmes/${programme_id}` : `/explore/${programme_id}`
     const img = ImgGetUrl(display_image)
     return (
-        <Card sx={{ height: "100%", display: "flex", flexDirection: "column" }}>
+        <Card sx={{ height: "100%", display: "flex", flexDirection: "column", p:"10px"}}>
             <SectionHeader text={name} margin="0"/>
             <CardContent sx={{display:"flex",flexDirection: "column", alignItems: "center"}}>
                 <CardMedia

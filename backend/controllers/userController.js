@@ -22,6 +22,7 @@ const Organiser = require("../models/organiser");
 
 const { checkCapacity } = require('./organiserController');
 const OrganiserReview = require("../models/organiserReview");
+const Announcement = require("../models/announcement");
 
 const updateJWT = async (getObj) => {
   try {
@@ -708,6 +709,46 @@ const getAllFeedback = async (req, res) => {
   }
 }
 
+const getAllAnnouncements = async (req, res) => {
+  try {
+
+    const account = req.account;
+
+    const getUserObj = await User.findOne({ where: {account_id: account.account_id}, raw: true});
+    const getUserProgObj = await UserProgramme.findAll({ where: {user_id: getUserObj.user_id}, raw: true});
+
+    const promiseAnnouncements = getUserProgObj.map(async (userProg) => {
+      const getAllAnnouncement = Announcement.findAll({ where: {programme_id: userProg.programme_id}, raw: true });
+      return getAllAnnouncement;
+    })
+
+    let getAnnouncementsArr = await Promise.all(promiseAnnouncements);
+    getAnnouncementsArr = getAnnouncementsArr.flat(); 
+    
+    const modifiedAnnouncements = getAnnouncementsArr.map(announcement => {
+      let updatedDate;
+      let createdDate;
+      
+      if (announcement.updatedAt !== null) {
+        updatedDate = announcement.updatedAt.toLocaleString('en-SG', { timeZone: 'Asia/Singapore' });
+      } else {
+        createdDate = announcement.createdAt.toLocaleString('en-SG', { timeZone: 'Asia/Singapore' });
+      }
+    
+      return {
+        ...announcement,
+        createdAt: createdDate,
+        updatedAt: updatedDate,
+      };
+    });
+
+    return res.status(200).json({ message: "Retrieved all announcements for you.", modifiedAnnouncements });
+
+  } catch (err) {
+    return res.status(500).json({ err });
+  }
+}
+
 const getOrganiserName = async (getProgID) => {
   const programmeObj = await Programme.findOne({ where: {programme_id: getProgID }, raw: true });
   const getOrganiser = await Organiser.findOne({ where: {organiser_id: programmeObj.organiser_id }, raw: true});
@@ -782,4 +823,4 @@ const getListOfMentees = async (req, res) => {
 module.exports = { updateUser, getUser, getAllProgByUserID, getUnsignedProg, getSkill, 
   addSkill, addInterest, getInterest, getAllSessions, getSessionsByProgID, addSessionByGrpID, 
   updateSessionBySessionID, deleteSessionBySessionID, getPendingApps, getApprovedApps, getRejectedApps, 
-  signup, addFeedback, getAllFeedback, getListOfMentors, getListOfMentees, getOrganiserName };
+  signup, addFeedback, getAllFeedback, getAllAnnouncements, getListOfMentors, getListOfMentees, getOrganiserName };
