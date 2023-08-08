@@ -387,6 +387,46 @@ const getAnnouncementsByProgID = async (req, res) => {
 
 }
 
+const getAllAnnouncements = async (req, res) => {
+  const account = req.account;
+
+  const getOrgObj = await Organiser.findOne({ where: { account_id: account.account_id }, raw: true });
+  const announcementObj = await Announcement.findAll({ where: { organiser_id: getOrgObj.organiser_id}, raw: true });
+
+  let announcementArr = []
+  for (const item of announcementObj) {
+    const progObj = await Programme.findOne({ 
+      attributes: ['programme_id', 'name'],
+      where: { programme_id: item.programme_id }, raw: true});
+
+    announcementArr.push(progObj);
+  }
+
+  let allAnnouncements = [];
+  announcementObj.forEach(announcement => {
+    const matchingAnnouncement = announcementArr.find(announcementArr => announcementArr.programme_id === announcement.programme_id);
+    
+    let updatedDate;
+    let createdDate;
+
+    if (announcement.updatedAt !== null && matchingAnnouncement) {
+      updatedDate = announcement.updatedAt.toLocaleString('en-SG', { timeZone: 'Asia/Singapore' });
+    } else if (matchingAnnouncement) {
+      createdDate = announcement.createdAt.toLocaleString('en-SG', { timeZone: 'Asia/Singapore' });
+    }
+
+    allAnnouncements.push({
+      ...announcement,
+      createdAt: createdDate,
+      updatedAt: updatedDate,
+      ...matchingAnnouncement
+    });
+
+  });
+
+  return res.status(200).json({ message: "Retrieved feedback.", allAnnouncements });
+}
+
 const getCurrDateTime = async () => {
   moment.tz.setDefault('Asia/Singapore');
   const createdDateTime = moment().format('YYYY-MM-DD HH:mm:ss');
@@ -586,6 +626,6 @@ const getAllFeedbackByUsers = async (req, res) => {
 
 module.exports = {
   getOrg, updateOrg, addProg, getAllProgsByOrgID, checkCapacity, evaluateApp,
-  getApp, deleteProg, getAnnouncementsByProgID, addAnnouncementByProgID, updateAnnouncementByProgID,
+  getApp, deleteProg, getAnnouncementsByProgID, getAllAnnouncements, addAnnouncementByProgID, updateAnnouncementByProgID,
   deleteAnnouncementsByProgID, addOrgFeedback, getAllFeedbackByUsers
 };

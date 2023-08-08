@@ -21,6 +21,8 @@ router.post(`/addOrgFeedback`, authenticateToken, organiserController.addOrgFeed
 
 router.post('/announcements', authenticateToken, organiserController.addAnnouncementByProgID);
 router.put('/announcements', authenticateToken, organiserController.updateAnnouncementByProgID);
+router.get('/announcements', authenticateToken, organiserController.getAllAnnouncements);
+
 router.get('/announcements/:progID', authenticateToken, organiserController.getAnnouncementsByProgID);
 router.delete('/announcements/:announcementID', authenticateToken, organiserController.deleteAnnouncementsByProgID);
 
