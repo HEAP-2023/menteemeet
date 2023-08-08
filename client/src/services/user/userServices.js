@@ -151,3 +151,13 @@ export const getListOfMentees = async(progID) => {
     })
     return res
 }
+
+export const getAllAnnouncementsUser = async () => {
+    const res = await axiosInstance({
+        method: "get",
+        url: '/users/announcements',
+        headers: { Authorization: `Bearer ${localStorage.getItem("jwt")}` },
+    })
+    return res
+}
+
