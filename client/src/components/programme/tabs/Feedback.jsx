@@ -22,43 +22,45 @@ const Feedback = () => {
     const userRole = programme.role;
     const [reviewees, setReviewees] = useState([]);
     const [rerender, setRerender] = useState(true);
-    
+    const [store, setStore] = useState([]); // storing feedback given by user
     useEffect(() => {
         getAllFeedback()
             .then(res => {
                 console.log("res:", res);
-                setStore(res.data.feedbackArray);
+                const allFeedback = res.data.feedbackArray;
+                const feedbackByProgID = allFeedback.filter((item) =>item.programme_id === Number(id))
+                setStore(feedbackByProgID)
                 setRerender(false);
             })
             .catch(err => console.log("ERROR:", err))
-    }, [rerender])
+    }, [rerender, id])
 
     useEffect(() => {
         if (userRole === "mentee") {
             getListOfMentors(id)
                 .then(res => {
                     console.log("res getList:", res.data);
-                    setReviewees(res.data);
+                    setReviewees(res.data); // adding list of mentors to list of reviewees
                 })
                 .catch(err => console.log("ERRORS:", err));
         } else if (userRole === "mentor") {
             getListOfMentees(id)
                 .then(res => {
                     console.log("res getList:", res.data);
-                    setReviewees(res.data);
+                    setReviewees(res.data); // adding list of mentees to list of reviewees
                 })
                 .catch(err => console.log("ERRORS:", err));
         }
     }, [])
+    //to select the person
     const [person, setPerson] = useState('');
     const handleChange = (event) => {
         console.log("event.target.value:", event.target.value)
         setPerson(event.target.value);
     };
     const userType = useSelector((state) => state.user.userBasicDetails.account_type);
-
     const acctID = useSelector((state) => state.user.userBasicDetails.account_id);
-    const people = ["Organiser"].concat(reviewees.map((item, index) => `${item.id}`)); // list of people to select from
+    const people = ["Organiser"].concat(reviewees.map((item, index) => `${item.id}`)); // adding Organiser and list of people to select from
     console.log("people:", people);
 
     //Feedback Schema
@@ -77,10 +79,10 @@ const Feedback = () => {
             to: ""
         }, resolver: yupResolver(feedbackSchema)
     });
-    const [store, setStore] = useState([]);
+
     const handleSave = (data) => {
         console.log("receiver_id:", person);
-        if (person !== "Organiser") {
+        if (person !== "Organiser") { // if feedback is given to mentee/mentor
             const feedbackEntry = {
                 comment: data.feedback,
                 receiverID: person ? person : "none",
@@ -97,7 +99,7 @@ const Feedback = () => {
                     setRerender(true);
                 })
                 .catch(err => console.log("ERROR:", err));
-        } else {
+        } else { // if feedback is given to the organiser
             const feedbackEntry = {
                 comment: data.feedback,
                 receiverID: programme.organiser_id,
@@ -187,15 +189,23 @@ const Feedback = () => {
                     <Box display="flex" flexDirection="column" width="90%" bgcolor={bgColor} marginX="30px" p="10px" minHeight="100px" borderRadius="20px" >
 
                         {hasContent ? (store.map((value, index) => {
-                            const reviewee = reviewees.find((item) => item.id === value.receiver_id)
                             let revieweeName;
-                            console.log("reviewee:", reviewee)
-                            { reviewee !== undefined ? revieweeName = reviewee.name : revieweeName = "Organiser" }
+                            if('organiser_review_id' in value){
+                                console.log("org:",value.organiser_review_id);
+                                revieweeName = "Organiser"
+                            }
+                            if('receiver_id' in value){
+                                console.log("rec:" ,value.receiver_id);
+                                const reviewee = reviewees.find((item) => item.id === value.receiver_id)
+                                if(reviewee !== undefined){
+                                    revieweeName = reviewee.name
+                                }
+                            }
                             return (
                                 <Box key={index}>
                                     <Typography my="10px">Feedback to {revieweeName}</Typography>
                                     <Box bgcolor="#FFFFFF" borderRadius="10px" height="60%" p="10px" display="inline-block" minWidth="100%">
-                                        {reviewee !== undefined ? (<Typography>{value.comment}</Typography>) : value.dataValues !== undefined ? (<Typography>{value.dataValues.comment}</Typography>) : (<></>)}
+                                        <Typography>{value.comment}</Typography>
                                     </Box>
                                 </Box>
                             )

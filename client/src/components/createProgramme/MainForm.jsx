@@ -11,7 +11,6 @@ import Deadline from "./formComponents/Deadline";
 import Intro from "./formComponents/Intro";
 // import MatchingCriterias from "./formComponents/MatchingCriterias";
 import useActiveElement from "../../hooks/non-route/useActiveElement";
-
 const MainForm = () => {
     const {control, watch, formState : {errors}} = useFormContext();
     const imagePreview = useRef();
@@ -24,11 +23,12 @@ const MainForm = () => {
 
     const imgUploaded = watch("display_image", false)
     return (
-    <Box width="100%" p="40px" m="20px 0" display="flex" flexDirection="column" bgcolor="#F1F1F1" >
-        <SectionHeader margin="0 20px" text="Tell us about the basic information of the program"/>
+    <Box width="100%" p="40px" m="20px 0" display="flex" flexDirection="column" pt="0px">
+        {/* <SectionHeader margin="0 20px" text="Tell us the basic information of your program"/> */}
             
             {/* name */}
             <Box display="flex" flexDirection="column" width="100%" gap="20px" p="20px">
+            <Typography fontWeight="bold" mb="10px">Tell us the basic information of your program</Typography>
                 <Box display="flex" width="100%">
                         <Controller
                         name="name"
