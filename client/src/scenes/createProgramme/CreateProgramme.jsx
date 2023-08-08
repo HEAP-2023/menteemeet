@@ -104,7 +104,7 @@ const CreateProgramme = () => {
         <MainForm />
 
         <Box display="flex" gap="10px" ml="60px">
-            <Button variant="contained" color="secondary" onClick={() => setConfirmSubmission(true)}>Submit</Button>
+            <Button disabled={progress < 100} variant="contained" color="secondary" onClick={() => setConfirmSubmission(true)}>Submit</Button>
             <Button disabled={progress < 100}  variant="contained" color="secondary" onClick={() => {setPreview(!preview)}}>Preview Form </Button>
         </Box>
 
