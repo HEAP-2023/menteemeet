@@ -18,6 +18,17 @@ const LoginExplore = () => {
         <Box gap="20px" width="100%" p="20px">
             <Header></Header>
             <Box
+                borderRadius="20px" bgcolor="#8091FF"
+                paddingTop="60px" padding="60px" color = "#000000">
+                <Typography
+                    fontFamily="prompt" fontWeight="500" variant="h5" paddingBottom="7px">
+                    All Programmes
+                </Typography>
+                <RSearchBox />
+            </Box>
+            <Box
+                height="50px"></Box>
+            <Box
                 onClick={() => dispatch(loginOverlayToggle())}
                 sx={{
                     backgroundImage: "url('../images/loginExplore/SMU BUDDY PROGRAMME (1).png')", backgroundSize:"cover",
@@ -60,17 +71,8 @@ const LoginExplore = () => {
                     <Typography fontFamily="prompt" fontWeight="500" variant="h5">Goal Setting</Typography>
                 </Button>
             </Box>
-            <Box
-                height="50px"></Box>
-            <Box
-                borderRadius="20px" bgcolor="#8091FF"
-                paddingTop="60px" padding="60px" color = "#000000">
-                <Typography
-                    fontFamily="prompt" fontWeight="500" variant="h5" paddingBottom="7px">
-                    All Programmes
-                </Typography>
-                <RSearchBox />
-            </Box>
+            
+            
         </Box>
 
 

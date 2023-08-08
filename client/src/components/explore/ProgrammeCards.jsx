@@ -1,6 +1,7 @@
 import React from 'react'
 import { Card, Typography, CardMedia } from '@mui/material'
 import {Box} from '@mui/material';
+import { ImgGetUrl } from '../../functions';
 
 
 
@@ -10,6 +11,13 @@ export default function ProgrammeCards({
     progDesc,
     progDL,
 }) {
+
+  // useEffect(() => {
+  //   console.log("PROGIMG:", progImg);
+  // }, [])
+
+  const img = ImgGetUrl(progImg);
+  if (img) console.log("PROGIMG:", img);
 
     // return (
     //       <Card
@@ -37,16 +45,16 @@ export default function ProgrammeCards({
       <Box
         sx={{
           width:"100px", height:"100px", marginBottom:"20px", borderRadius:"15px", backgroundPosition:"center",
-          backgroundImage: `url('${progImg}')`,
+          backgroundImage: `url('${img}')`,
           position:"relative", overflow:"hidden", backgroundSize:"cover"
         }}>
       </Box>
       <div>
         <Typography fontFamily="prompt" fontWeight="400">
-          Programme Name: {progName}
+          Name: {progName}
         </Typography>
         <Typography fontFamily="prompt" fontWeight="400">
-          Programme Description: {progDesc}
+          Description: {progDesc}
         </Typography>
         <Typography fontFamily="prompt" fontWeight="400">
           Deadline: {progDL}
