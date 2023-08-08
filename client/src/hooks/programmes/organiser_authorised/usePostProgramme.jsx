@@ -7,7 +7,7 @@ const usePostProgramme = () => {
     return useMutation(postProgramme, {
         onSuccess : (data) =>  {
             console.log(data)
-            navigate("/");
+            navigate("/home");
             alert("successfully added programmes")
         },
         onError : (err) => {

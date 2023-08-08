@@ -73,11 +73,11 @@ const ChangePassword = () => {
     }
     return (
         <>
-            <SuccessModal info={"successfully changed details"} actions={() => { 
+            <SuccessModal info={"Successfully changed details!"} actions={() => { 
             dispatch(logOut());
             localStorage.setItem("jwt", "");
             }}/>
-            <FailureModal info={"failed to change details"}/>
+            <FailureModal info={"Failed to change details"}/>
 
             <Typography p="20px">Please enter your current password to change your password</Typography>
             <form onSubmit={handleSubmit(handleSave)} noValidate>

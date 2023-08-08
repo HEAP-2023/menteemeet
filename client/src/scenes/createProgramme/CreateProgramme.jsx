@@ -91,8 +91,8 @@ const CreateProgramme = () => {
     }
     return (
     <Box width="100%" p="40px" display="flex" flexDirection="column">
-        <SuccessModal info={"created programme successfully"} actions={() => {navigate("/")}} />
-        <FailureModal info={"failed to create programme"}/>
+        <SuccessModal info={"Programme created successfully!"} actions={() => {navigate("/home")}} />
+        <FailureModal info={"Failed to create programme"}/>
         {/* progress bar */}
         <ProgressBar progress={progress}/>
 

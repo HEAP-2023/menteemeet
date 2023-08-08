@@ -38,7 +38,7 @@ const LoginStart = () => {
                 <Typography fontFamily="prompt" fontWeight="200" variant="h4" mt="3.5px" lineHeight = "1px">both as a mentor and mentee.</Typography>
                 <Button 
                     sx={{bgcolor: "#fcac3d", color : "#000000", height : "20%", width: "20%", borderRadius:"20px", mt: "30px", "&:hover":{bgcolor: "#fcac3d",opacity: 0.8}}}
-                    href="/login/explore"
+                    href="/explore-programmes"
                     >EXPLORE</Button>
             </Box>
             <Box></Box>

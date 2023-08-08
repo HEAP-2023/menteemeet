@@ -195,7 +195,7 @@ const Applications = (programmeID) => {
         <Box width="100%" height="100%" display="flex" flexDirection={"column"}>
             <Box>
                 <Typography sx={{ mt: '20px' }}>Mentee Applications</Typography>
-                <DataGrid rows={menteeApplications} columns={columnHeading} slots={{ toolbar: GridToolbar }} sx={{
+                <DataGrid getRowHeight={() => 'auto'} rows={menteeApplications} columns={columnHeading} slots={{ toolbar: GridToolbar }} sx={{
                     width: '100%', "& .css-j337ty-MuiButtonBase-root-MuiButton-root": {
                         color: colors.text[500],
                         // bgcolor: colors.primary[500]

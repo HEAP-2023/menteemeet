@@ -37,22 +37,22 @@ function App() {
                 <Routes>
                     {/* public routes */}
                     <Route element={<UnprotectedRoute/>}>
-                        <Route path="/login/start" element={<LoginStart/>}></Route>
-                        <Route path="/login/explore" element={<LoginExplore/>}></Route>
-                        <Route path="/login/faq" element={<FAQ/>}></Route>
-                        <Route path="/login/contactus" element={<ContactUs/>}></Route>
+                        <Route path="/" element={<LoginStart/>}></Route>
+                        <Route path="/explore-programmes" element={<LoginExplore/>}></Route>
+                        <Route path="/faq" element={<FAQ/>}></Route>
+                        <Route path="/contact" element={<ContactUs/>}></Route>
                     </Route>
 
                     {/* private routes */}
                         <Route element={<ProtectedRoute/>}>
-                            <Route path="/" element={<Home/>} role={userType}/>                        
+                            <Route path="/home" element={<Home/>} role={userType}/>                        
                             <Route path="/explore/:id?" element={<Explore />}></Route>
                             <Route path="/profile" element={<Profile peerReviews={peerReviews} history={history}/>}></Route>
                             {userType === "organiser" 
                                 && <Route path="/programme/create" element={<CreateProgramme/>}/>}
                             <Route path="/programmes/:id" element={<Programme/>}></Route>
                             <Route path="/test" element={<Test/>} />
-                            <Route path="/accountSettings" element={<AccountSettings/>} />
+                            <Route path="/account-settings" element={<AccountSettings/>} />
                             <Route path="/calendar" element={<Calendar />} />
                         </Route>
                 </Routes>
