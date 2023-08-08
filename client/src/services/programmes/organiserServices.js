@@ -48,3 +48,12 @@ export const putApplicationAcceptance = async(appID, approval) => {
     console.log("res:", res);
     return res
 }
+
+export const getAllSessionsOrganiser = async() => {
+    const res = await axiosInstance({
+        method:'get',
+        url: '/organisers/sessions',
+        headers: { Authorization: `Bearer ${localStorage.getItem("jwt")}` },
+    })
+    return res
+}
