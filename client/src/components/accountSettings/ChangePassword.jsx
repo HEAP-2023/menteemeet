@@ -9,9 +9,11 @@ import { yupResolver } from "@hookform/resolvers/yup"
 import { ErrorMessage } from '@hookform/error-message';
 import * as yup from "yup"
 import useChangePW from '../../hooks/auth/useChangePW';
-
+import { logOut } from "../../state(kiv)";
+import { SuccessModal, FailureModal } from '../SuccessModal';
+import { useDispatch } from 'react-redux';
 const ChangePassword = () => {
-
+    const dispatch = useDispatch()
     const getCharacterValidationError = (str) => {
         return `Your password must have at least 1 ${str} character`;
     };
@@ -71,6 +73,12 @@ const ChangePassword = () => {
     }
     return (
         <>
+            <SuccessModal info={"successfully changed details"} actions={() => { 
+            dispatch(logOut());
+            localStorage.setItem("jwt", "");
+            }}/>
+            <FailureModal info={"failed to change details"}/>
+
             <Typography p="20px">Please enter your current password to change your password</Typography>
             <form onSubmit={handleSubmit(handleSave)} noValidate>
                 <FormControl sx={{ ml: "20px", width: '25ch', display: "block" }} variant="outlined">

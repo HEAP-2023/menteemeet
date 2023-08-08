@@ -22,7 +22,7 @@ const ProfileNav = () => {
                    transition: { duration: 0.3 }
                 }}
                 whileTap={{ scale: 0.9 }}>
-                    <AccountCircleOutlinedIcon color={colors.text[500]} />                    
+                    {/* <AccountCircleOutlinedIcon color={colors.text[500]} />                     */}
                     <Typography variant="h6">{acctName}</Typography>
                 </Button>
     </Box>);
