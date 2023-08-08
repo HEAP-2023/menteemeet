@@ -6,8 +6,8 @@ const ProgressBar = ({progress}) => {
     return (
     <Box display="flex" m="20px" position="sticky" top="50px">
         <LinearProgress variant="determinate" value={progress} 
-        sx={{height : "20px", width:"80%",
-        borderRadius: 5,
+        sx={{height : "20px", width:"95%",
+        borderRadius: 5, ml:"40px",
         [`&.${linearProgressClasses.colorPrimary}`]: {
             backgroundColor: "#CFCFCF",
             },
@@ -16,7 +16,7 @@ const ProgressBar = ({progress}) => {
             backgroundColor: "#AEAEFF",
             }
         }}/>
-        <Typography>{progress}%</Typography>
+        <Typography ml="10px">{progress}%</Typography>
     </Box>
     );
 }

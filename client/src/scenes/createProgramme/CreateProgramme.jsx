@@ -80,9 +80,13 @@ const CreateProgramme = () => {
             await postProgramme(formData);
             queryClient.invalidateQueries(["getInvolved"]);
             dispatch(setSuccessModal(true))
+            queryClient.invalidateQueries(["getInvolved"])
         } catch (err) {
             console.log(err);
             dispatch(setFailureModal(true))
+            
+            //here shouldn't need
+            // queryClient.invalidateQueries(["getInvolved"])
         }
     }
     return (
@@ -92,17 +96,17 @@ const CreateProgramme = () => {
         {/* progress bar */}
         <ProgressBar progress={progress}/>
 
-        <SectionHeader margin="20px" text="Welcome organiser, let’s start to create your mentoring programme." />
+        <SectionHeader margin="20px 20px 20px 60px"  text="Let&apos;s start to create your mentoring programme." />
 
     <FormProvider {...methods}>
         <form onSubmit={handleSubmit(handleSave)} width="100%" id="createProgForm">
        
         <MainForm />
 
-        {/* <Box display="flex" gap="20px"> */}
+        <Box display="flex" gap="10px" ml="60px">
             <Button variant="contained" color="secondary" onClick={() => setConfirmSubmission(true)}>Submit</Button>
             <Button disabled={progress < 100}  variant="contained" color="secondary" onClick={() => {setPreview(!preview)}}>Preview Form </Button>
-        {/* </Box> */}
+        </Box>
 
         <PreviewForm open={preview} setPreview={setPreview} getValues={getValues}/>
         <Dialog
