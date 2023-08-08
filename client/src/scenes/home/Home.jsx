@@ -7,14 +7,24 @@ import HomeCarousel from "../../components/home/HomeCarousel"
 // redux
 import { useSelector } from "react-redux"
 import TransitionScreen from "../../animations/TransitionScreen"
+import { useQueryClient } from "@tanstack/react-query"
+import { useNavigate } from "react-router-dom"
+import { SuccessModal, FailureModal } from "../../components/SuccessModal";
+
 
 const Home = () => {
     const userType = useSelector((state) => state.user.userBasicDetails.account_type)
     const name = useSelector((state) => state.user.userBasicDetails.name)
     const programmes = useSelector((state) => state.user.programmes)
     const hasProgrammes = !!programmes && programmes.length > 0
+    const queryClient = useQueryClient()
+
     return (
     <Box width="100%" height="100%" display="flex" flexDirection="column">
+        <SuccessModal info={"successfully delete programme"} actions={() => {queryClient.invalidateQueries(["getInvolved"]);
+}}/>
+        <FailureModal info={"failed to delete programme"}/>
+
         <PageHeader text={`Welcome, ${name}`}/>
         
         {/* carousel */}
