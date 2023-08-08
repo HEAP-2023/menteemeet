@@ -41,5 +41,6 @@ router.get('/getOrganiserName/:progID', authenticateToken, userController.getOrg
 router.get('/announcements', authenticateToken, userController.getAllAnnouncements);
 
 router.get('/:id', authenticateToken, userController.getUser);
+router.delete('/reviews/:reviewID', authenticateToken, userController.deleteReview);
 
 module.exports = router;

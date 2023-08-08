@@ -20,7 +20,8 @@ import { useParams } from 'react-router-dom';
 const Section = ({ header, rows, rowColor = "primary.main", highlight = false, checkbox = false, showDTG = false, handleRerender }) => {
     const {id} = useParams();
     const userType = useSelector((state) => state.user.userBasicDetails.account_type)
-    const progress = 90; // to change
+    // const progress = 90; // to change
+    const programmes = useSelector((state) => state.user.programmes);
     const [announcementModalOpen, setAnnouncementModalOpen] = useState(false);
     const handleModalOpen = () => setAnnouncementModalOpen(true);
     const handleModalClose = () => setAnnouncementModalOpen(false);
@@ -59,6 +60,23 @@ const Section = ({ header, rows, rowColor = "primary.main", highlight = false, c
             <ResourcesRow resources={rows} />
         </Box>
     } else if (header === 'Progress') {
+        const programme = programmes.find(program => program.programme_id === Number(id));
+        const end = new Date(programme.programmeEnd)
+        const start = new Date(programme.programmeStart)
+        const today = new Date();
+        const remain = Math.ceil(Math.abs(end - today) / (1000 * 60 * 60 * 24)); 
+        const total = Math.ceil(Math.abs(end - start) / (1000 * 60 * 60 * 24));
+
+        let progress = 0;
+        if(today < start){
+            progress = 0;
+        }
+        else if(today > end){
+            progress = 100;
+        }else {
+            progress = Math.round(remain / total * 100);
+        }
+        
         content = <>
             <Box display="inline-flex" flexDirection="column" alignItems="center"></Box>
             <ProgressBar progress={progress} />

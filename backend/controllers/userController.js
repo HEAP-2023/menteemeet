@@ -331,10 +331,10 @@ const getAllSessions = async (req, res) => {
     const account = req.account;
     const getUser = await User.findOne({ 
       where: { account_id: account.account_id }, raw: true });
-
+    console.log("getUser:", getUser);
     const userProgObj = await UserProgramme.findAll({
       where: { user_id: getUser.user_id }, raw: true });
-
+    console.log("userProgObj:",userProgObj)
     let getGroup = null;
     let groupArray = [];
 
@@ -820,7 +820,23 @@ const getListOfMentees = async (req, res) => {
   }
 }
 
+const deleteReview = async (req, res) => {
+  try {
+    const reviewID = req.params.reviewID;
+
+    await Review.destroy(
+      { where: { review_id: reviewID } });
+
+    return res.status(200).json({ message: "Review has been successfully deleted." })
+
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ error: err });
+  }
+}
+
 module.exports = { updateUser, getUser, getAllProgByUserID, getUnsignedProg, getSkill, 
   addSkill, addInterest, getInterest, getAllSessions, getSessionsByProgID, addSessionByGrpID, 
   updateSessionBySessionID, deleteSessionBySessionID, getPendingApps, getApprovedApps, getRejectedApps, 
-  signup, addFeedback, getAllFeedback, getAllAnnouncements, getListOfMentors, getListOfMentees, getOrganiserName };
+  signup, addFeedback, getAllFeedback, getAllAnnouncements, getListOfMentors, getListOfMentees, getOrganiserName,
+  deleteReview };

@@ -57,7 +57,7 @@ const ProfileOverlayTab = () => {
 
 <ListItem>
                 <Box display="flex" onClick={() => {
-                    navigate("/accountSettings");
+                    navigate("/account-settings");
                 }}>
                     <ManageAccountsOutlinedIcon sx={{":hover":{cursor:"pointer"}}}/>
                     <Typography sx={{":hover":{cursor:"pointer"}}}>
@@ -74,7 +74,7 @@ const ProfileOverlayTab = () => {
                     dispatch(logOut())
                     localStorage.setItem("jwt", "");
                     queryClient.clear()
-                    navigate("/login/start") //--> should be auto since home is protected except for org create prog
+                    navigate("/") //--> should be auto since home is protected except for org create prog
                 }}>
                     <LogoutOutlinedIcon sx={{":hover":{cursor:"pointer"}}}/>
                     <Typography sx={{":hover":{cursor:"pointer"}}}>

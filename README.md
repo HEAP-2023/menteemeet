@@ -2,7 +2,7 @@
 <p align="center">
   <img height="300px" src="client/public/images/global/menteemeet (1).png" />
 </p>
-Project Website: https://menteemeet.com/login/start
+Project Website: https://menteemeet.com/
 
 Project Documentation: 
 

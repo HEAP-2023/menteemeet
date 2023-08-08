@@ -19,7 +19,7 @@ export const ProtectedRoute = () => {
                 dispatch(logOut())
                 queryClient.clear()
                 localStorage.setItem("jwt", "");
-                navigate("/login/start")
+                navigate("/")
             }
         if(isError){
             console.log(error)
@@ -34,7 +34,7 @@ export const ProtectedRoute = () => {
     return (
         userType ? 
         <Outlet/> :
-        <Navigate to="/login/start"></Navigate>
+        <Navigate to="/"></Navigate>
     )
 }
 
@@ -43,7 +43,7 @@ export const UnprotectedRoute = () => {
 
     return (
         userType ? 
-        <Navigate to="/"></Navigate> :
+        <Navigate to="/home"></Navigate> :
         <Outlet/>
     )
 }

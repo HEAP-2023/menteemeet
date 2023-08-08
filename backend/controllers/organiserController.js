@@ -15,6 +15,7 @@ const { getPagination, getPagingData } = require('./programmeController');
 const User = require("../models/user");
 const OrganiserReview = require("../models/organiserReview");
 const UserGroup = require("../models/userGroup");
+const Session = require("../models/session");
 
 const updateJWT = async (updatedAcc) => {
   try {
@@ -620,8 +621,45 @@ const getAllFeedbackByUsers = async (req, res) => {
   }
 }
 
+const getAllSessions = async (req, res) => {
+  try {
+    const account = req.account;
+
+    const getOrgObj = await Organiser.findOne({ where: {account_id: account.account_id}, raw: true});
+    const getProgObj = await Programme.findAll({ where: { organiser_id: getOrgObj.organiser_id}, raw: true});
+
+    let sessionsArr = [];
+
+    await Promise.all(getProgObj.map(async progObj => {
+      const getUserGroup = await UserGroup.findAll({ where: { programme_id: progObj.programme_id}, raw: true });
+
+      for (const eachGroup of getUserGroup) {
+        const getSessions = await Session.findAll({ where: { group_id: eachGroup.group_id }, raw: true });
+
+        for (const eachSess of getSessions) {
+          sessionsArr.push({
+            programme_id: progObj.programme_id,
+            name: progObj.name,
+            group_no: eachGroup.group_no,
+            date: eachSess.date,
+            start_time: eachSess.start_time,
+            end_time: eachSess.end_time,
+            session_id: eachSess.session_id,
+          });
+        }
+      }
+    }));
+
+    return res.status(200).json({ message: "Sessions retrieved. ", sessionsArr});
+      
+  } catch (err) {
+    return res.status(500).json({ err });
+  }
+
+}
+
 module.exports = {
   getOrg, updateOrg, addProg, getAllProgsByOrgID, checkCapacity, evaluateApp,
   getApp, deleteProg, getAnnouncementsByProgID, getAllAnnouncements, addAnnouncementByProgID, updateAnnouncementByProgID,
-  deleteAnnouncementsByProgID, addOrgFeedback, getAllFeedbackByUsers
+  deleteAnnouncementsByProgID, addOrgFeedback, getAllFeedbackByUsers, getAllSessions
 };

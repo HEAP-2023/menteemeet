@@ -9,7 +9,7 @@ import { generateColors } from "../../../theme";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { ErrorMessage } from '@hookform/error-message';
-import { DevTool } from "@hookform/devtools";
+// import { DevTool } from "@hookform/devtools";
 import { getAllFeedback, getListOfMentees, getListOfMentors, addFeedback } from "../../../services/user/userServices";
 import { addOrgFeedback, getAllFeedbackByUsers } from "../../../services/organiser/organiserServices";
 import { useParams } from 'react-router-dom';
@@ -211,7 +211,7 @@ const Feedback = () => {
                     </Box>
 
                 </Box>
-                <DevTool control={control} />
+                {/* <DevTool control={control} /> */}
             </Box>
 
     } else if (userType === "organiser") {

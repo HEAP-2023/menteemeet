@@ -27,7 +27,7 @@ const Profile = ({ peerReviews, history }) => {
 
         {/* account settings button */}
         <Box p="20px">
-            <Button variant="contained" onClick={() => { navigate("/accountSettings") }}>
+            <Button variant="contained" onClick={() => { navigate("/account-settings") }}>
                 <ManageAccountsOutlinedIcon />
                 <Typography >Account Settings</Typography>
             </Button>

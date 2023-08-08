@@ -29,7 +29,7 @@ const Submenu = () => {
                         },
                         ['& .ps-menuitem-root >.ps-menu-button']:{width: "100%", marginTop: '5px', height: '40px', borderRadius: '15px'}
                     }}>
-                <Box maxHeight="400px" p="20px">
+                <Box maxHeight="400px" p="20px" maxWidth="200px">
 
                         {programmes.length > 0 && 
                         Object.entries(programmes).map(([key, {programme_id, name}]) => {

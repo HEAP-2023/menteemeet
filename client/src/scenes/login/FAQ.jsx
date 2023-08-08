@@ -54,7 +54,7 @@ const FaqRow = ({title, details}) => {
 
 const faq = [
     {
-        title : "Why do i need this webapp?",
+        title : "Why do I need this webapp?",
         details : "It is fairly prevalent to have mentors and mentees navigating the tech sector with so many different types of technology out there. Traditionally, pairing of mentors and mentees are done manually and it is a problem for organisers, mentors and mentees to find a suitable team and hence this webapp automates the process for you",
     },
     {
