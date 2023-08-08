@@ -7,9 +7,11 @@ import { TimePicker } from '@mui/x-date-pickers/TimePicker';
 import { useSelector } from "react-redux";
 import { format } from 'date-fns';
 import { addSessionByGrpID } from "../../../services/user/userServices";
-
+import {useParams} from 'react-router-dom';
 const SessionForms = ({handleRerender}) => {
+    const {id} = useParams();
     const acctID = useSelector((state) => state.user.userBasicDetails.account_id)
+    const userID = useSelector((state) => state.user.userBasicDetails.user_id)
     const { control, handleSubmit, reset } = useForm({
         defaultValues: {
             groupID: '',
@@ -23,17 +25,18 @@ const SessionForms = ({handleRerender}) => {
     const handleSave = (data) => {
         console.log("to be submitted")
         const newSession = {
-            groupID: data.groupID,
+            groupNo: data.groupID,
             date: format(data.date.$d, 'yyyy-MM-dd'),
             startTime: format(data.startTime.$d, 'HH:mm:ss'),
             endTime: format(data.endTime.$d, 'HH:mm:ss'),
             topic: data.topic,
-            userRole: "mentor"
+            userRole: "mentor",
+            userID: userID
         }
         console.log("newsession:", newSession)
         console.log("submitted by")
         console.log(acctID);
-        addSessionByGrpID(newSession)
+        addSessionByGrpID(newSession, id)
             .then(res => {
                 console.log('Session created:', res);
                 console.log('Rerender set to true');
@@ -54,7 +57,7 @@ const SessionForms = ({handleRerender}) => {
 
 
                 <Box display="flex" flexDirection="column" width="45%" justifyContent="space-evenly">
-                    <Box display="flex" alignItems="center">
+                    {/* <Box display="flex" alignItems="center">
                         <Box width="150px">
                             <label>Group No: </label>
                         </Box>
@@ -63,10 +66,10 @@ const SessionForms = ({handleRerender}) => {
                             control={control}
                             render={({ field }) => <TextField {...field} variant="outlined" sx={{ width: "20%" }} />}
                         />
-                    </Box>
+                    </Box> */}
 
                     <Box display="flex" alignItems="center" >
-                        <Box width="150px">
+                        <Box width="100px">
                             <label>Date </label>
                         </Box>
                         <Controller
@@ -81,7 +84,7 @@ const SessionForms = ({handleRerender}) => {
                     </Box>
 
                     <Box display="flex" alignItems="center">
-                        <Box width="150px">
+                        <Box width="100px">
                             <label>Time </label>
                         </Box>
                         <Controller
@@ -109,7 +112,7 @@ const SessionForms = ({handleRerender}) => {
 
 
                 <Box display="flex" flexDirection="column" width="45%">
-                    <Box display="flex" justifyContent="space-between" mb="20px">
+                    <Box display="flex" justifyContent="space-between" mb="20px" mt="40px">
                         <label> Topic / Location</label>
                         <Controller
                             name="topic"

@@ -54,7 +54,7 @@ const Sessions = (programmeID) => {
       [
         { field: 'id', headerName: 'ID', width: 90 },
         {
-          field: 'group_id',
+          field: 'group_no',
           headerName: 'Group No.',
           width: 100,
           editable: true,

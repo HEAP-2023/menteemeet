@@ -1,4 +1,4 @@
-import { Box } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import Section from "../Section"
 import {useEffect, useState} from "react";
 import { getSessionsByProgID } from "../../../services/programmes/userServices";
@@ -21,24 +21,27 @@ const MainPage = (programmeID) => {
         // console.log("ERROR:", err);
       })
   },[programmeID.programmeID])
-
+    
+    //Announcements
     const [rerender, setRerender] = useState(false);
     const handleRerender = () => {
+        console.log("rerender set to true")
         setRerender(true);
     }
     const [announcements, setAnnouncements] = useState([]);
     useEffect(() => {
         getAnnouncementsByProgID(programmeID.programmeID)
         .then(res => {
-            setAnnouncements(res.data.announcementArray)
-            console.log("announcements:" ,announcements)
-            setRerender(false);
+            setAnnouncements(res.data.announcementArray);
+            // console.log("announcements:" ,announcements);
         })
         .catch(err => {
+            setAnnouncements([]);
             console.log("ERROR:", err);
-          })
+        })
+        .finally(_ => setRerender(false))
     }, [programmeID.programmeID, rerender])
-  
+    
     return (
         <Box display="flex" justifyContent="space-around" width="100%" height="100%">
             <Box width="45%" height="100%" display="flex" flexDirection="column" alignItems="center" >

@@ -325,22 +325,20 @@ const deleteProg = async (req, res) => {
 }
 
 function customSort(a, b) {
-  if (a.updatedAt !== null && b.updatedAt !== null) {
+  if (a.updatedAt !== null && b.updatedAt !== null)
     // Sort based on updatedAt timestamps
     return b.updatedAt - a.updatedAt;
 
-  } else if (a.updatedAt === null && b.updatedAt !== null) {
+  if (a.updatedAt === null && b.updatedAt !== null)
     // A has no updatedAt, compare A.createdAt with B.updatedAt
     return b.updatedAt - a.createdAt;
 
-  } else if (a.updatedAt !== null && b.updatedAt === null) {
+  if (a.updatedAt !== null && b.updatedAt === null)
     // B has no updatedAt, compare B.createdAt with A.updatedAt
     return b.createdAt - a.updatedAt;
 
-  } else {
-    // Both have null updatedAt, sort based on createdAt
-    return b.createdAt - a.createdAt;
-  }
+  // Both have null updatedAt, sort based on createdAt
+  return b.createdAt - a.createdAt;
 }
 
 /* Announcements */
@@ -351,12 +349,11 @@ const getAnnouncementsByProgID = async (req, res) => {
     // if (!isValidOrganiser) {
     //   return res.status(403).json({ message: "You are not allowed to view this page." });
     // }
-
     const getProgID = req.params.progID;
     const getAnnouncementObj = await Announcement.findAll({ where: { programme_id: getProgID }, raw: true });
 
     if (!getAnnouncementObj || getAnnouncementObj.length < 1) {
-      return false;
+      return res.status(404).json({ error: `No annoucements for ${getProgID}!` });
     }
 
     if (getAnnouncementObj !== null && getAnnouncementObj !== undefined) {
@@ -377,8 +374,7 @@ const getAnnouncementsByProgID = async (req, res) => {
     for (const item of announcementsInLocalTimezone) {
       announcementArray.push(item);
     }
-    // if (announcementArray.length > 3) {
-    // }
+    
     return res.status(200).json({ message: "Successfully retrieved all announcements.", announcementArray });
 
   } catch (err) {
