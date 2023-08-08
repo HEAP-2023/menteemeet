@@ -5,7 +5,7 @@ import SectionHeader from "../../components/SectionHeader";
 import { useForm, Controller, FormProvider } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup"
 import { createProgrammeSchema } from "../../components/createProgramme/createProgrammeVSchema";
-import { DevTool } from "@hookform/devtools";
+// import { DevTool } from "@hookform/devtools";
 import usePostProgramme from "../../hooks/programmes/organiser_authorised/usePostProgramme";
 
 import MainForm from "../../components/createProgramme/MainForm";
@@ -129,7 +129,7 @@ const CreateProgramme = () => {
       </Dialog>
         </form>
     </FormProvider>
-        <DevTool control={control}/>
+        {/* <DevTool control={control}/> */}
     </Box>);
 }
 
