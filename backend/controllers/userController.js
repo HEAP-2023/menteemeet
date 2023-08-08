@@ -838,8 +838,11 @@ const deleteOrgReview = async (req, res) => {
   try {
     const reviewID = req.params.reviewID;
 
-    await OrganiserReview.destroy(
+    console.log("ENTERED DELETE ORG REVIEW FUNCTION");
+    const deletedRow = await OrganiserReview.destroy(
       { where: { organiser_review_id: reviewID } });
+
+    console.log("DELETED ROW:", deletedRow);
 
     return res.status(200).json({ message: "Organiser review has been successfully deleted." })
 

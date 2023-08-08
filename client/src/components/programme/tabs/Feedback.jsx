@@ -13,7 +13,7 @@ import { ErrorMessage } from '@hookform/error-message';
 import { getAllFeedback, getListOfMentees, getListOfMentors, addFeedback } from "../../../services/user/userServices";
 import { addOrgFeedback, getAllFeedbackByUsers } from "../../../services/organiser/organiserServices";
 import { useParams } from 'react-router-dom';
-import { deleteReview } from "../../../services/programmes/userServices";
+import { deleteReview, deleteOrgReview } from "../../../services/programmes/userServices";
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
 
 const Feedback = () => {
@@ -196,27 +196,39 @@ const Feedback = () => {
                             let receiverID;
                             if ('organiser_review_id' in value) {
                                 revieweeName = "Organiser"
-                            }else if ('receiver_id' in value) {
+                                receiverID = value.organiser_review_id
+                            } else if ('receiver_id' in value) {
                                 const reviewee = reviewees.find((item) => item.id === value.receiver_id)
                                 if (reviewee !== undefined) {
                                     revieweeName = reviewee.name
                                 }
                                 receiverID = value.review_id
                             }
-                            
+
                             const handleDeleteFeedback = () => {
-                                deleteReview(receiverID)
-                                .then(res => {
-                                    console.log("res delete:", res);
-                                    setRerender(true);
-                                })
-                                .catch(err => console.log("ERROR:", err));
+                                if ('organiser_review_id' in value) {
+                                    console.log("receiverID:", receiverID)
+                                    deleteOrgReview(receiverID)
+                                        .then(res => {
+                                            console.log("res delete org:", res);
+                                            setRerender(true);
+                                        })
+                                        .catch(err => console.log("ERROR:", err));
+                                } else if ('receiver_id' in value) {
+                                    deleteReview(receiverID)
+                                        .then(res => {
+                                            console.log("res delete:", res);
+                                            setRerender(true);
+                                        })
+                                        .catch(err => console.log("ERROR:", err));
+                                }
+
                             }
                             return (
                                 <Box key={index}>
                                     <Box display="flex" justifyContent="space-between" alignItems="center">
                                         <Typography my="10px">Feedback to {revieweeName}</Typography>
-                                        <DeleteOutlinedIcon sx={{ cursor: 'pointer' }} onClick={handleDeleteFeedback}/>
+                                        <DeleteOutlinedIcon sx={{ cursor: 'pointer' }} onClick={handleDeleteFeedback} />
                                     </Box>
                                     <Box bgcolor="#FFFFFF" borderRadius="5px" height="60%" p="10px" display="inline-block" minWidth="100%">
                                         <Typography>{value.comment}</Typography>
