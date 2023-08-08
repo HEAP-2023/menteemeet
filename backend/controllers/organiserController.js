@@ -374,7 +374,7 @@ const getAnnouncementsByProgID = async (req, res) => {
     for (const item of announcementsInLocalTimezone) {
       announcementArray.push(item);
     }
-    
+
     return res.status(200).json({ message: "Successfully retrieved all announcements.", announcementArray });
 
   } catch (err) {
@@ -420,7 +420,7 @@ const getAllAnnouncements = async (req, res) => {
 
   });
 
-  return res.status(200).json({ message: "Retrieved feedback.", allAnnouncements });
+  return res.status(200).json({ message: "Retrieved all announcements.", allAnnouncements });
 }
 
 const getCurrDateTime = async () => {

@@ -10,7 +10,8 @@ import TransitionScreen from "../../animations/TransitionScreen"
 import { useQueryClient } from "@tanstack/react-query"
 import { useNavigate } from "react-router-dom"
 import { SuccessModal, FailureModal } from "../../components/SuccessModal";
-
+import { getAllAnnouncements } from "../../services/organiser/organiserServices"
+import { useEffect, useState } from "react"
 
 const Home = () => {
     const userType = useSelector((state) => state.user.userBasicDetails.account_type)
@@ -18,7 +19,17 @@ const Home = () => {
     const programmes = useSelector((state) => state.user.programmes)
     const hasProgrammes = !!programmes && programmes.length > 0
     const queryClient = useQueryClient()
-
+    const [announcements, setAnnouncements] = useState([]);
+    useEffect(() => {
+        if(userType === "organiser"){    
+            getAllAnnouncements()
+            .then(res => {
+                console.log("res:", res);
+                setAnnouncements(res.data.allAnnouncements);
+            })
+            .catch(err => console.log("ERROR:", err));
+        }
+    },[])
     return (
     <Box width="100%" height="100%" display="flex" flexDirection="column">
         <SuccessModal info={"successfully delete programme"} actions={() => {queryClient.invalidateQueries(["getInvolved"]);
@@ -43,12 +54,12 @@ const Home = () => {
         <Box display="flex" justifyContent="space-around" width="100%" height="100%">
             <Box width="45%" height="100%" display="flex" flexDirection="column" alignItems="center" > 
                 {/* announcements */}
-                <Section header="Announcement" rows={announcements} rowColor="#AEAEFF" highlight={true}></Section>
+                <Section header="Announcements" rows={announcements} rowColor="#AEAEFF" highlight={true}></Section>
             </Box>
 
             <Box width="45%">
                 {/* events */}
-                <Section header="Events" rows={events} showDTG={true}></Section>
+                {/* <Section header="Upcoming Sessions" rows={events} rowColor="#AEAEFF" highlight={true} showDTG={true}></Section> */}
             </Box>
 
         </Box>
@@ -72,19 +83,19 @@ export default Home
 
 // hardcoded content to be fetched maybe tanstack query aka react query
 
-const announcements = {
-    announcement_1 : {
-        title : "announcement header1",
-        body : "announcement body1",
-        dtg : "dtg1",
-    },
-    announcement_2 : {
-        title : "announcement header2",
-        body : "announcement body2",
-        dtg : "dtg2",
-    },
+// const announcements = {
+//     announcement_1 : {
+//         title : "announcement header1",
+//         body : "announcement body1",
+//         dtg : "dtg1",
+//     },
+//     announcement_2 : {
+//         title : "announcement header2",
+//         body : "announcement body2",
+//         dtg : "dtg2",
+//     },
     
-}
+// }
 
 const events = {
     event_1 : {

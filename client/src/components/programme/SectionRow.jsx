@@ -32,7 +32,6 @@ const SectionRow = ({ details, rowColor, checkbox, highlight, showDTG, handleRer
                         <DeleteOutlinedIcon sx={{ cursor: 'pointer' }} onClick={handleDeleteAnnouncement} />
                     </Box>
                 ) : (<></>)}
-
             </Box>
         </Box>)
 }
