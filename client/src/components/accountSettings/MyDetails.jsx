@@ -91,8 +91,8 @@ const MyDetails = () => {
 
     return (
         <>
-            <SuccessModal info={"successfully changed details"}/>
-            <FailureModal info={"failed to change details"}/>
+            <SuccessModal info={"Successfully changed details!"}/>
+            <FailureModal info={"Failed to change details"}/>
             <form onSubmit={handleSubmit(handleSave)} noValidate>
                 <Box display="flex" p="20px" alignItems={"center"}>
                     <Box>

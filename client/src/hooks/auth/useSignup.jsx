@@ -13,7 +13,7 @@ const useSignup = (reset) => {
         onSuccess : (data) => {
             console.log(data)
             dispatch(updateDetails({...data}))
-            navigate("/");
+            navigate("/home");
         },
         onError : (err)=> {
             const errorMessage = err.response.data.message 

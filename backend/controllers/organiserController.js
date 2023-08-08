@@ -644,6 +644,7 @@ const getAllSessions = async (req, res) => {
             date: eachSess.date,
             start_time: eachSess.start_time,
             end_time: eachSess.end_time,
+            session_id: eachSess.session_id,
           });
         }
       }
