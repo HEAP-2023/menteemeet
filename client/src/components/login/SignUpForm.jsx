@@ -4,7 +4,7 @@ import StandardTextField from "../StandardTextField";
 
 import { yupResolver } from "@hookform/resolvers/yup"
 import { signUpSchema } from "./validationSchema";
-import { DevTool } from "@hookform/devtools";
+// import { DevTool } from "@hookform/devtools";
 import useSignup from "../../hooks/auth/useSignup"
 
 
@@ -129,7 +129,7 @@ const SignUpForm = () => {
                 <Button type="submit" variant="contained" color="secondary" sx={{width:"100%"}}>Sign Up</Button>
             </Box>
         </form>
-        <DevTool control={control} /> 
+        {/* <DevTool control={control} />  */}
     </Box>
 }
 
