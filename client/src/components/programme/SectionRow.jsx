@@ -1,5 +1,6 @@
 import { Box, Typography, Divider } from "@mui/material"
-import { parse, format } from "date-fns"
+import { parse, format } from "date-fns";
+import { utcToZonedTime } from "date-fns-tz"
 import { useSelector } from "react-redux";
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
 import { deleteAnnouncementsByProgID } from "../../services/organiser/organiserServices";
@@ -7,7 +8,8 @@ const SectionRow = ({ details, rowColor, checkbox, highlight, showDTG, handleRer
     const userType = useSelector((state) => state.user.userBasicDetails.account_type)
     const { title, description, createdAt, announcement_id } = details;
     const parsedDate = parse(createdAt, 'dd/MM/yyyy, h:mm:ss a', new Date());
-    const date = format(parsedDate, 'yyyy MMM dd p')
+    const zonedDate = utcToZonedTime(parsedDate, 'Asia/Singapore');
+    const date = format(zonedDate, 'yyyy MMM dd p', {timezone: 'Asia/Singapore'});
     const handleDeleteAnnouncement = () => {
         deleteAnnouncementsByProgID(announcement_id)
         .then(res => {
