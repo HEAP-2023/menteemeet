@@ -16,7 +16,7 @@ router.get('/programmes/', authenticateToken, userController.getUnsignedProg);
 
 router.get('/session', authenticateToken, userController.getAllSessions);
 router.get('/session/:progID', authenticateToken, userController.getSessionsByProgID);
-router.post('/session', authenticateToken, userController.addSessionByGrpID);
+router.post('/session/:progID', authenticateToken, userController.addSessionByGrpID);
 router.put('/session/update', authenticateToken, userController.updateSessionBySessionID);
 router.delete('/session/:sessID', authenticateToken, userController.deleteSessionBySessionID);
 

@@ -83,10 +83,10 @@ export const getAllSessions = async () => {
     return res
 }
 
-export const addSessionByGrpID = async (session) => {
+export const addSessionByGrpID = async (session, progID) => {
     const res = await axiosInstance({
         method: "post",
-        url: "/users/session",
+        url: `/users/session/${progID}`,
         headers: { Authorization: `Bearer ${localStorage.getItem("jwt")}` },
         data: session
     })

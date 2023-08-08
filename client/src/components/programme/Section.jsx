@@ -67,12 +67,12 @@ const Section = ({ header, rows, rowColor = "primary.main", highlight = false, c
     else if (header === 'Upcoming Sessions') {
         content = <Box display="inline-flex" flexDirection="column" alignItems="center">
             {
-                rows.map((item) => {
+                rows.map((item, index) => {
                     const day = format(new Date(item.date), "EEE");
                     const dayOfMonth = format(new Date(item.date), 'dd');
                     const month = format(new Date(item.date), 'MMM');
                     return (
-                        <Box display="flex" flexDirection="row" width="95%" bgcolor="background.main" mt="5px" mb="18px" p="10px" minHeight="100px" borderRadius="5px"  >
+                        <Box key={index} display="flex" flexDirection="row" width="95%" bgcolor="background.main" mt="5px" mb="18px" p="10px" minHeight="100px" borderRadius="5px"  >
                             <Box p="5px" display="flex" flexDirection="column" alignItems="center" justifyContent="center">
                                 <Typography>{day}</Typography>
                                 <Typography sx={{fontSize: '24px', fontWeight: '700'}}>{dayOfMonth}</Typography>

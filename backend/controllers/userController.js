@@ -402,7 +402,7 @@ const getSessionsByProgID = async (req, res) => {
     const sessionsWithRole = getAllSessions.map(session => {
       const matchingGroup = groupArray.find(group => group.group_id === session.group_id);
       if (matchingGroup) {
-        return { ...session, role: matchingGroup.role };
+        return { ...session, role: matchingGroup.role, group_no: matchingGroup.group_no };
       }
       return session;
     });
@@ -415,14 +415,38 @@ const getSessionsByProgID = async (req, res) => {
 }
 
 const addSessionByGrpID = async (req, res) => {
-  try {
-    const { date, startTime, endTime, topic, userRole, groupID } = req.body;
 
-    if (userRole !== "mentor") {
-      return res.status(401).json({ message: "Only mentors are allowed to add sessions."});
+  const progID = req.params.progID;
+  try {
+    const { date, startTime, endTime, topic, userRole, userID} = req.body;
+    // Select all groups where programme ID = progID
+    const allGroupsByProgID = await UserGroup.findAll({ where: { programme_id: progID }});
+
+    // create a variable called groupNo
+    let groupNo = -1;
+
+    // For each group, parse the mentors list into JSON
+    allGroupsByProgID.map(group => {
+      const mentors = JSON.parse(group.mentors);
+
+      // IF userID in the mentor list
+      mentors.map(mentor => {
+        if (mentor.id == userID) {
+          groupNo = group.group_no;
+        }
+      });    
+    });
+
+    // If no group found, exit
+    if (groupNo === -1) {
+      return res.status(404).json({ error: `No group found for user ID ${userID}`});
     }
 
-    const getUserGroupObj = await UserGroup.findOne({ where: { group_id: groupID }, raw: true });
+    if (userRole !== "mentor") {
+      return res.status(403).json({ message: "Only mentors are allowed to add sessions."});
+    }
+
+    const getUserGroupObj = await UserGroup.findOne({ where: { group_no: groupNo, programme_id: progID }, raw: true });
     if (!getUserGroupObj) {
       return res.status(404).json({ message: "Group ID does not exist."});
     }
@@ -434,7 +458,7 @@ const addSessionByGrpID = async (req, res) => {
       start_time: startTime,
       end_time: endTime,
       topic: topic,
-      group_id: groupID,
+      group_id: getUserGroupObj.group_id,
     })
 
     return res.status(201).json({ message: "Session successfully created." });
