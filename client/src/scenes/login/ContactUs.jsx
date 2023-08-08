@@ -5,6 +5,7 @@ import LoginOverlay from "../../components/login/LoginOverlay";
 import emailjs from '@emailjs/browser';
 import styled from 'styled-components'
 
+
 const ContactUs = () => {
   const form = useRef();
   const [submissionStatus, setSubmissionStatus] = useState(null);
@@ -12,7 +13,7 @@ const ContactUs = () => {
   const sendEmail = (e) => {
     e.preventDefault();
 
-    emailjs.sendForm('service_mm', 'template_99mtl2p', form.current, '0-oGwSIJsRRisDUzi')
+    emailjs.sendForm(process.env.REACT_APP_SERVICE_KEY, process.env.REACT_APP_TEMPLATE_KEY, form.current, process.env.REACT_APP_API_KEY)
       .then((result) => {
         console.log(result.text);
         setSubmissionStatus('success'); // Set submission status to success
