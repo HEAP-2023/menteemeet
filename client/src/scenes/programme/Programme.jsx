@@ -12,6 +12,8 @@ import Applications from "../../components/programme/tabs/Applications";
 import GenerateGroup from "./GenerateGroup";
 import useGetGrouping from "../../hooks/algo/useGetGrouping";
 import { SuccessModal, FailureModal } from "../../components/SuccessModal";
+import { useQueryClient } from "@tanstack/react-query";
+
 // redux
 import { useSelector } from "react-redux";
 import Groupings from "../../components/programme/tabs/Groupings";
@@ -24,8 +26,8 @@ const Programme = () => {
     const programmes = useSelector((state) => state.user.programmes)
     const programme = programmes.find(program => program.programme_id === Number(id));
     const navigate = useNavigate()
-    let userRole = programme.role;
-    // console.log(programme);
+    console.log(programme);
+    let userRole = programme?.role;
     const [tab, changeTab] = useState("main")
 
     const tabChange = (event, newValue) => {
@@ -35,6 +37,7 @@ const Programme = () => {
 
     const userType = useSelector((state) => state.user.userBasicDetails.account_type);
     const userName = useSelector((state) => state.user.userBasicDetails.name)
+    const queryClient = useQueryClient()
 
 
     const { data , isSuccess, isError, isLoading } = useGetGrouping(id)
@@ -55,7 +58,11 @@ const Programme = () => {
     if(isSuccess){
     return (
         <Box>
-            <SuccessModal info={"successfully delete programme"} actions={() => {navigate("/")}}/>
+            <SuccessModal info={"successfully delete programme"} actions={() => {
+                navigate("/")
+                queryClient.invalidateQueries(["getInvolved"]);
+                window.location.reload()
+                }}/>
             <FailureModal info={"failed to delete programme"}/>
             <DeleteProgrammeModal id={id} open={deleteModal} setDeleteModal={setDeleteModal} programme_name={programme.name}/>
     

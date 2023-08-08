@@ -1,8 +1,7 @@
-import {useMutation} from "@tanstack/react-query"
+import {useMutation, useQueryClient} from "@tanstack/react-query"
 import { delProgramme } from "../../../services/programmes/organiserServices";
 import { useDispatch, useSelector } from "react-redux";
 import { setFailureModal, setSuccessModal } from "../../../state(kiv)";
-
 const useDeleteProgramme = () => {
     const id = useSelector((state) => state.user.userBasicDetails.user_id)
     const dispatch = useDispatch()
