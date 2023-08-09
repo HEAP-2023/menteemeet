@@ -4,7 +4,7 @@
 </p>
 Project Website: https://menteemeet.com/
 
-Project Documentation: 
+Project Documentation: https://docs.google.com/document/d/1yRY8ssULnl-imoLY9DMqQ0q-o2ywdAyCfqBzPIUACK4/edit?usp=sharing
 
 ## Project Introduction
 
