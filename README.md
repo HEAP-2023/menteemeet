@@ -15,7 +15,7 @@ Project Documentation: https://docs.google.com/document/d/1yRY8ssULnl-imoLY9DMqQ
 
  ### Backend Server ###
 
-Go to `client` folder via the following command:
+Go to `backend` folder via the following command:
 
 ```
 cd backend
