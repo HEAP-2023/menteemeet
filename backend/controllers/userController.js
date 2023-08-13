@@ -376,25 +376,50 @@ const getAllSessions = async (req, res) => {
 
 const getSessionsByProgID = async (req, res) => {
   try {
+    //user that is accessing
+    const account = req.account;
+    const getUser = await User.findOne({ where: {account_id: account.account_id }, raw: true});
+
     const progID = req.params.progID;
 
-    let groupArray = [];
-    const getGroup = await UserGroup.findOne({
+    const getGroup = await UserGroup.findAll({
       where: { programme_id: progID }, raw: true });
 
-    const userProgObj = await UserProgramme.findAll({
-      where: { programme_id: progID }, raw: true });
-
-    for (const item of userProgObj) {
-      if (getGroup !== null && getGroup !== undefined) {
-        groupArray.push({...getGroup, role: item.role });
-      }
-    }
-
-    if (!getGroup) {
+    if (!getGroup || getGroup.length < 1) {
       return res.status(404).json({ message: "Grouping does not exist for programme ID: " + progID });
     }
+
+    const userProgObj = await UserProgramme.findOne({
+      where: { programme_id: progID, user_id: getUser.user_id }, raw: true });
     
+    let groupArray = [];
+    for (const eachGroup of getGroup) {
+
+      if (userProgObj.role === 'mentee') {
+        const mentees = JSON.parse(eachGroup.mentees);
+
+        for (const eachMentee of mentees) {
+          if (eachMentee.id === getUser.user_id) {
+            groupArray.push({
+              ...eachGroup,
+              role: userProgObj.role,
+            });
+          }
+        }
+      } else {
+        const mentors = JSON.parse(eachGroup.mentors);
+
+        for (const eachMentor of mentors) {
+          if (eachMentor.id === getUser.user_id) {
+            groupArray.push({
+              ...eachGroup,
+              role: userProgObj.role,
+            });
+          }
+        }
+      }
+    }
+   
     const getAllSessions = await Session.findAll({
       where: { group_id: { [Op.in]: groupArray.map(group => group.group_id) }},
       raw: true
